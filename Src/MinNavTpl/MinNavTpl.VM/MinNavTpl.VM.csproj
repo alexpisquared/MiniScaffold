@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />
+    <ProjectReference Include="..\..\SharedLib\CI.SecurityEnforcement.Mok\CI.SecurityEnforcement.Mok.csproj" />
+    <ProjectReference Include="..\..\SharedLib\CI.Standard.Lib\CI.Standard.Lib.csproj" />
+    <ProjectReference Include="..\..\SharedLib\CI.Visual.Lib\CI.Visual.Lib.csproj" />
+    <ProjectReference Include="..\..\SharedLib\DB.BR\DB.BR.csproj" />
+    <ProjectReference Include="..\..\SharedLib\EF.DbHelper.Lib\EF.DbHelper.Lib.csproj" />
+    <ProjectReference Include="..\..\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
+    <ProjectReference Include="..\MinimalNavTemplate.Contract\MinimalNavTemplate.Contract.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Contracts\" />
+  </ItemGroup>
+
+</Project>

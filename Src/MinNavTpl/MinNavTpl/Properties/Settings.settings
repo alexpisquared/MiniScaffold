@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MinimalNavTemplate.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LogLevels" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">+Verbose -Info +Warning +Error -ErNT -11mb -Infi</Value>
+    </Setting>
+    <Setting Name="LogFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Z:\Dev\_Redis_MTDEV\BMS\IncomePaymentManagement\Logs</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

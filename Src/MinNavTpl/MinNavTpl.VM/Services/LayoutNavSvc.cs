@@ -1,0 +1,30 @@
+﻿namespace MinimalNavTemplate.Services;
+public class LayoutNavSvc<TVM> : INavSvc where TVM : BaseMinVM
+{
+  readonly NavigationStore _navigationStore;
+  readonly Func<NavBarVM> _createNavBarVM;
+  readonly Func<TVM> _createVM;
+
+  public LayoutNavSvc(NavigationStore navigationStore, Func<TVM> createVM, Func<NavBarVM> createNavBarVM)
+  {
+    _navigationStore = navigationStore;
+    _createVM = createVM;
+    _createNavBarVM = createNavBarVM;
+  }
+
+  public async void Navigate()
+  {
+    if (_navigationStore.CurrentVM is not null && 
+      ((LayoutVM)_navigationStore.CurrentVM).ContentVM is not null &&
+      await ((LayoutVM)_navigationStore.CurrentVM).ContentVM.WrapAsync() == false)
+      return;
+
+    _navigationStore.CurrentVM = new LayoutVM(_createNavBarVM(), _createVM());
+    await ((LayoutVM)_navigationStore.CurrentVM).ContentVM.InitAsync();
+  }
+}
+
+public class Page00NavSvc : LayoutNavSvc<Page00VM> { public Page00NavSvc(NavigationStore ns, Func<Page00VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
+public class Page01NavSvc : LayoutNavSvc<Page01VM> { public Page01NavSvc(NavigationStore ns, Func<Page01VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
+public class Page02NavSvc : LayoutNavSvc<Page02VM> { public Page02NavSvc(NavigationStore ns, Func<Page02VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
+public class Page03NavSvc : LayoutNavSvc<Page03VM> { public Page03NavSvc(NavigationStore ns, Func<Page03VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }

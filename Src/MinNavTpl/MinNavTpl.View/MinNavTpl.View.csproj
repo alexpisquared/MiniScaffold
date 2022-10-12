@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <LangVersion>latest</LangVersion>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\CheckYesNo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    -->
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.2" />
+    <PackageReference Include="SimpleModal.WPF" Version="1.0.0" />
+    <PackageReference Include="PasswordBoxMVVM" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharedLib\CI.Visual.Lib\CI.Visual.Lib.csproj" />
+    <ProjectReference Include="..\..\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
+    <ProjectReference Include="..\MinimalNavTemplate.Contract\MinimalNavTemplate.Contract.csproj" />
+    <ProjectReference Include="..\MinimalNavTemplate.VM\MinimalNavTemplate.VM.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\CheckYesNo.ico" />
+  </ItemGroup>
+
+</Project>
