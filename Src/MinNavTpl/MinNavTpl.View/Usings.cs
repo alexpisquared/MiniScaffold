@@ -15,6 +15,6 @@ global using StandardLib.Helpers;
 global using WpfUserControlLib.Extensions;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.Logging;
-global using StandardContracts.Lib;
+global using StandardContractsLib;
 global using static System.Diagnostics.Trace;
 global using static System.Media.SystemSounds;

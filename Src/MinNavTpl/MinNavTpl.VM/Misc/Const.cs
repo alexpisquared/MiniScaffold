@@ -1,4 +1,4 @@
-﻿using StandardContracts.Lib;
+﻿using StandardContractsLib;
 
 namespace BE.IP.ViewModel.Helpers;
 

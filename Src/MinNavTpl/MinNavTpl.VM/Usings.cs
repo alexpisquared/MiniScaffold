@@ -40,6 +40,6 @@ global using MinNavTpl.VM.Misc;
 global using MinNavTpl.VM.Services;
 global using MinNavTpl.VM.Stores;
 global using MinNavTpl.VM.VMs;
-global using StandardContracts.Lib;
+global using StandardContractsLib;
 global using static System.Diagnostics.Trace;
 global using Application = System.Windows.Application;

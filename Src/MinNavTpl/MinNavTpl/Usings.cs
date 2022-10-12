@@ -12,5 +12,5 @@ global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using MinNavTpl.Properties;
-global using StandardContracts.Lib;
+global using StandardContractsLib;
 

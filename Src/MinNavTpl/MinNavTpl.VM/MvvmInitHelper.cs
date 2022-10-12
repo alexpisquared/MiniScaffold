@@ -34,7 +34,7 @@ public static class MvvmInitHelper
     _ = services.AddTransient<Page03VM>();
     _ = services.AddTransient<Page02VM>();
 
-    _ = services.AddTransient<ISecForcer, CI.SecurityEnforcement.Mok.SecForcer>();
+ //!!!   _ = services.AddTransient<ISecForcer, CI.SecurityEnforcement.Mok.SecForcer>();
     _ = services.AddTransient<SqlPermissionsManager>();
     _ = services.AddTransient<BmsPermissionsManager>();
 
