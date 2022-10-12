@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\EfDbHelperLib\EfDbHelperLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />

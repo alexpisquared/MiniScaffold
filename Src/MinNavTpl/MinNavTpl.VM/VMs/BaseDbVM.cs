@@ -1,4 +1,5 @@
 ﻿using MinNavTpl.VM.Stores;
+using EF.DbHelper.Lib;
 
 namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM

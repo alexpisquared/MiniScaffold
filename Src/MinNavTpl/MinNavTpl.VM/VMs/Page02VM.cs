@@ -126,4 +126,5 @@ public class Page02VM : BaseDbVM, IPage02VMLtd
   }
 
   void IPage02VMLtd.CheckDb() => throw new NotImplementedException();
+  StandardContractsLib.IBpr IPage02VMLtd.Bpr => throw new NotImplementedException();
 }

@@ -5,7 +5,7 @@ global using System.Threading.Tasks;
 global using System.Windows;
 global using System.Windows.Controls;
 global using System.Windows.Markup;
-global using Ambience.Lib;
+global using AmbienceLib;
 global using StandardLib.Helpers;
 global using WpfUserControlLib.Helpers;
 global using Microsoft.Extensions.Configuration;
