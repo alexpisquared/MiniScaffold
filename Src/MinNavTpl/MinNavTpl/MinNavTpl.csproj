@@ -14,11 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SharedLib\Ambience.Lib\Ambience.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\CI.Visual.Lib\CI.Visual.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\EF.DbHelper.Lib\EF.DbHelper.Lib.csproj" />
-    <ProjectReference Include="..\MinimalNavTemplate.View\MinimalNavTemplate.View.csproj" />
-    <ProjectReference Include="..\MinimalNavTemplate.VM\MinimalNavTemplate.VM.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\Ambience\Ambience.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\EF.DbHelper.Lib\EF.DbHelper.Lib.csproj" />
+    <ProjectReference Include="..\MinNavTpl.View\MinNavTpl.View.csproj" />
+    <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>
 
   <ItemGroup>

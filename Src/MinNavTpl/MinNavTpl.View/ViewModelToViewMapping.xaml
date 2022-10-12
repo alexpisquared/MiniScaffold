@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"  
-                    xmlns:vm="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinimalNavTemplate.VM" 
-                    xmlns:vv="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinimalNavTemplate.VM" 
+                    xmlns:vm="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinNavTpl.VM" 
+                    xmlns:vv="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinNavTpl.VM" 
                     xmlns:view___________________________="clr-namespace:MinimalNavTemplate.View" >
   <DataTemplate DataType="{x:Type vm:LayoutVM}">
     <view___________________________:Layout />

@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SharedLib\DB.Inventory\DB.Inventory.csproj" />
-    <ProjectReference Include="..\..\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\DB.Inventory\DB.Inventory.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
   </ItemGroup>
 
 </Project>

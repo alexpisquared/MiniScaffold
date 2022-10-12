@@ -23,10 +23,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SharedLib\CI.Visual.Lib\CI.Visual.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
-    <ProjectReference Include="..\MinimalNavTemplate.Contract\MinimalNavTemplate.Contract.csproj" />
-    <ProjectReference Include="..\MinimalNavTemplate.VM\MinimalNavTemplate.VM.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
+    <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
+    <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>
 
   <ItemGroup>

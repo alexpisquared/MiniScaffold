@@ -35,7 +35,7 @@ internal static class Page01VMHelpers
 
       foreach (ADUser u in allUsers)
       {
-        //if (rows.Contains(u.DomainUsername, new IgnoreCaseComparer()))          WriteLine($"**** {u.DomainUsername,-32} --- {rows.Contains(u.DomainUsername, new IgnoreCaseComparer())}");
+        //if (rows.Contains(u.DomainUsername, new IgnoreCaseComparer_()))          WriteLine($"**** {u.DomainUsername,-32} --- {rows.Contains(u.DomainUsername, new IgnoreCaseComparer_())}");
         u.IsMemberOfGivenRole = rows.Contains(u.DomainUsername, new IgnoreCaseComparer());
       }
     });

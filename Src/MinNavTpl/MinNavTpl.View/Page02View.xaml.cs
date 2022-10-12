@@ -192,7 +192,7 @@ public partial class Page02View : UserControl
           UpdateCrosRefTable();
         }
 
-#if SaveForDevOnly //         if (true)// DevOps.IsDevMachineH || new[] { ".", @"mtUATsqldb" }.Contains(cbxSrvr.SelectedValue))
+#if SaveForDevOnly //         if (true)// DevOps_.IsDevMachineH || new[] { ".", @"mtUATsqldb" }.Contains(cbxSrvr.SelectedValue))
       MessageBox.Show(this, "Press any key to continue...\n\n\t...or any other key to quit", "Changes Saved ...NOT!!! (SaveForDevOnly is ON) :(", MessageBoxButton.OK, MessageBoxImage.Information);
 #else
         ArgumentNullException.ThrowIfNull(_vm, nameof(_vm));

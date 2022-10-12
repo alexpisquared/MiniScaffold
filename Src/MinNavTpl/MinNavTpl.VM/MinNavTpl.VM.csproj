@@ -16,14 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\CI.SecurityEnforcement.Mok\CI.SecurityEnforcement.Mok.csproj" />
-    <ProjectReference Include="..\..\SharedLib\CI.Standard.Lib\CI.Standard.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\CI.Visual.Lib\CI.Visual.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\DB.BR\DB.BR.csproj" />
-    <ProjectReference Include="..\..\SharedLib\EF.DbHelper.Lib\EF.DbHelper.Lib.csproj" />
-    <ProjectReference Include="..\..\SharedLib\StandardContracts.Lib\StandardContracts.Lib.csproj" />
-    <ProjectReference Include="..\MinimalNavTemplate.Contract\MinimalNavTemplate.Contract.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\CI.SecurityEnforcement.Mok\CI.SecurityEnforcement.Mok.csproj" />
+    <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\EF.DbHelper.Lib\EF.DbHelper.Lib.csproj" />
+    <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
   </ItemGroup>
 
   <ItemGroup>
