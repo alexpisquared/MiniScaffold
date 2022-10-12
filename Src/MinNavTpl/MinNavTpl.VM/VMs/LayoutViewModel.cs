@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 
 public class LayoutVM : BaseMinVM
 {

@@ -1,6 +1,6 @@
-﻿using MinimalNavTemplate.VM.Stores;
+﻿using MinNavTpl.VM.Stores;
 
-namespace MinimalNavTemplate.VM.VMs;
+namespace MinNavTpl.VM.VMs;
 public class Page00VM : BaseDbVM
 {
   public Page00VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110) => _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Logger); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
@@ -12,7 +12,7 @@ public class Page00VM : BaseDbVM
       IsBusy = true;
       await Task.Delay(2000);
       var sw = Stopwatch.StartNew();
-      await new CI.Visual.Lib.Services.ClickOnceUpdater(Logger).CopyAndLaunch(ReportProgress);
+      await new WpfUserControlLib.Services.ClickOnceUpdater(Logger).CopyAndLaunch(ReportProgress);
       Logger.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UserSetgs.PrefSrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
     }

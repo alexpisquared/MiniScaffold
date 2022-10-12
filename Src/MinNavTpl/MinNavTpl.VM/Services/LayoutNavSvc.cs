@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.Services;
+﻿namespace MinNavTpl.Services;
 public class LayoutNavSvc<TVM> : INavSvc where TVM : BaseMinVM
 {
   readonly NavigationStore _navigationStore;

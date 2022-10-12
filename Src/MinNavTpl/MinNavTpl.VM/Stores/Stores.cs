@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.Stores;
+﻿namespace MinNavTpl.Stores;
 
 public class SrvrStore
 {

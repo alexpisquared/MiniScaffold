@@ -1,4 +1,6 @@
-﻿namespace MinimalNavTemplate.VM.Misc;
+﻿using EF.DbHelper.Lib;
+
+namespace MinNavTpl.VM.Misc;
 
 internal static class Page01VMHelpers
 {
@@ -35,7 +37,7 @@ internal static class Page01VMHelpers
 
       foreach (ADUser u in allUsers)
       {
-        //if (rows.Contains(u.DomainUsername, new IgnoreCaseComparer_()))          WriteLine($"**** {u.DomainUsername,-32} --- {rows.Contains(u.DomainUsername, new IgnoreCaseComparer_())}");
+        //if (rows.Contains(u.DomainUsername, new IgnoreCaseComparer()))          WriteLine($"**** {u.DomainUsername,-32} --- {rows.Contains(u.DomainUsername, new IgnoreCaseComparer())}");
         u.IsMemberOfGivenRole = rows.Contains(u.DomainUsername, new IgnoreCaseComparer());
       }
     });

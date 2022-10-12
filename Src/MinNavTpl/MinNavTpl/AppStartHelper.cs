@@ -1,8 +1,8 @@
 ﻿using DB.Inventory.Models;
 using EF.DbHelper.Lib;
-using MinimalNavTemplate.View;
+using MinNavTpl.View;
 
-namespace MinimalNavTemplate;
+namespace MinNavTpl;
 public static class AppStartHelper
 {
   public static void InitAppSvcs(IServiceCollection services)

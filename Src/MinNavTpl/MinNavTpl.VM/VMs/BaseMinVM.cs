@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public class BaseMinVM : ObservableValidator, IDisposable
 {
   public virtual async Task<bool> InitAsync() { WriteLine($"::> Init of {GetType().Name}"); await Task.Yield(); return true; }

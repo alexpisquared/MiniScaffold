@@ -1,8 +1,8 @@
 ﻿using DB.Inventory.Models;
 using Microsoft.EntityFrameworkCore;
-using MinimalNavTemplate.Contract;
+using MinNavTpl.Contract;
 
-namespace MinimalNavTemplate.View;
+namespace MinNavTpl.View;
 public partial class Page02View : UserControl
 {
   const int _maxFrames = 25 * 60; // prevent from running forever 

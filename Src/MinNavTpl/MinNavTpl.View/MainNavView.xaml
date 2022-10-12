@@ -1,11 +1,11 @@
-﻿<lnk:WindowBase x:Class="MinimalNavTemplate.View.MainNavView" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-                xmlns:cnv="clr-namespace:CI.Visual.Lib.Converters;assembly=WpfUserControlLib" 
+﻿<lnk:WindowBase x:Class="MinNavTpl.View.MainNavView" x:Name="wnd" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+                xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib" 
                 xmlns:sys="clr-namespace:System;assembly=mscorlib" 
                 xmlns:mdl="clr-namespace:ModalControl;assembly=ModalControl" 
-                xmlns:xui="clr-namespace:CI.Standard.Lib.Views;assembly=WpfUserControlLib"                 
-                xmlns:lnk="clr-namespace:CI.Visual.Lib.Base;assembly=WpfUserControlLib"         
-                xmlns:anm="clr-namespace:CI.Visual.Lib.Anime;assembly=WpfUserControlLib" 
-                xmlns:vms="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:MainVM}"       
+                xmlns:xui="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"                 
+                xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib"         
+                xmlns:anm="clr-namespace:WpfUserControlLib.Anime;assembly=WpfUserControlLib" 
+                xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:MainVM}"       
                 Title="CI Permission Managers" MinWidth="400" MinHeight="160" Style="{DynamicResource WindowStyle_Aav0}" Loaded="OnLoaded">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
@@ -13,17 +13,17 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/BasicDefaultsLayout.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/Anime.Base.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Anime/IsObsoleteBurronStyle.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/IsObsoleteBurronStyle.xaml" />
         <!--
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/ComboBox.Base.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/DataGrid.Base.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/DataGrid.Anime.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
         -->
-        <ResourceDictionary Source="/CI.Visual.Lib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
-        <ResourceDictionary Source="/MinimalNavTemplate.View;component/ViewModelToViewMapping.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
+        <ResourceDictionary Source="/MinNavTpl.View;component/ViewModelToViewMapping.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <sys:Double x:Key="blur">0</sys:Double>

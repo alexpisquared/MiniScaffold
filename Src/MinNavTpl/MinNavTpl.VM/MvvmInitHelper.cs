@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.VM;
+﻿namespace MinNavTpl.VM;
 public static class MvvmInitHelper
 {
   public static void InitMVVM(IServiceCollection services)

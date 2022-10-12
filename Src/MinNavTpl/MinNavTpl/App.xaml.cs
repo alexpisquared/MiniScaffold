@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using DB.Inventory.Models;
 using EF.DbHelper.Lib;
-using MinimalNavTemplate.View;
-using MinimalNavTemplate.VM;
-using MinimalNavTemplate.VM.Services;
-using MinimalNavTemplate.VM.VMs;
+using MinNavTpl.View;
+using MinNavTpl.VM;
+using MinNavTpl.VM.Services;
+using MinNavTpl.VM.VMs;
 
-namespace MinimalNavTemplate;
+namespace MinNavTpl;
 public partial class App : System.Windows.Application
 {
   readonly DateTimeOffset _appStarted = DateTimeOffset.Now;

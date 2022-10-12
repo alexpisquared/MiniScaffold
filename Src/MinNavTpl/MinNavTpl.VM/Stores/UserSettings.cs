@@ -1,5 +1,5 @@
-﻿namespace MinimalNavTemplate.VM.Stores;
-public class UserSettings : CI.Standard.Lib.Base.UserSettingsStore_ // ..actually, not a store/store - just a concidence in naming.
+﻿namespace MinNavTpl.VM.Stores;
+public class UserSettings : StandardLib.Base.UserSettingsStore_ // ..actually, not a store/store - just a concidence in naming.
 {
   readonly bool _loaded;
   readonly ILogger? _logger;

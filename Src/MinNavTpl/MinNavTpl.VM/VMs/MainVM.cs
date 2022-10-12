@@ -1,6 +1,6 @@
-﻿using MinimalNavTemplate.VM.Stores;
+﻿using MinNavTpl.VM.Stores;
 
-namespace MinimalNavTemplate.VM.VMs;
+namespace MinNavTpl.VM.VMs;
 public partial class MainVM : BaseMinVM
 {
   readonly bool _ctored;

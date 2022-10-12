@@ -1,8 +1,8 @@
-﻿using MinimalNavTemplate.Stores;
-using MinimalNavTemplate.VM.Services;
-using MinimalNavTemplate.VM.VMs;
+﻿using MinNavTpl.Stores;
+using MinNavTpl.VM.Services;
+using MinNavTpl.VM.VMs;
 
-namespace MinimalNavTemplate.Services;
+namespace MinNavTpl.Services;
 
 public class NavSvc<TVM> : INavSvc where TVM : BaseMinVM
 {

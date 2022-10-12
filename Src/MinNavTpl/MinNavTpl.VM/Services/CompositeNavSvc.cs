@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.VM.Services;
+﻿namespace MinNavTpl.VM.Services;
 
 public interface ICompositeNavSvc : INavSvc { }
 

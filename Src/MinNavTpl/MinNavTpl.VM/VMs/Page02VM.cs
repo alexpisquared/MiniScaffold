@@ -1,7 +1,8 @@
-﻿using MinimalNavTemplate.Contract;
-using MinimalNavTemplate.VM.Stores;
+﻿using EF.DbHelper.Lib;
+using MinNavTpl.Contract;
+using MinNavTpl.VM.Stores;
 
-namespace MinimalNavTemplate.VM.VMs;
+namespace MinNavTpl.VM.VMs;
 public class Page02VM : BaseDbVM, IPage02VMLtd
 {
   readonly SqlPermissionsManager _spm;

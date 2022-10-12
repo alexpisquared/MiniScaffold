@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate.Commands;
+﻿namespace MinNavTpl.Commands;
 
 public class NavigateCommand : CommandBase
 {

@@ -1,5 +1,5 @@
-﻿namespace MinimalNavTemplate.View;
-public partial class MainNavView : CI.Visual.Lib.Base.WindowBase
+﻿namespace MinNavTpl.View;
+public partial class MainNavView : WpfUserControlLib.Base.WindowBase
 {
 
   public MainNavView(ILogger logger) : this((ILogger<Window>)logger) { }

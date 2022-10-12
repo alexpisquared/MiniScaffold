@@ -1,18 +1,18 @@
-﻿<UserControl x:Class="MinimalNavTemplate.View.Page01View"     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:stb="clr-namespace:CI.Visual.Lib.Helpers;assembly=WpfUserControlLib" 
-             xmlns:cnv="clr-namespace:CI.Visual.Lib.Converters;assembly=WpfUserControlLib"
-             xmlns:vms="clr-namespace:MinimalNavTemplate.VM.VMs;assembly=MinimalNavTemplate.VM" d:DataContext="{d:DesignInstance Type=vms:Page01VM}" 
+﻿<UserControl x:Class="MinNavTpl.View.Page01View"     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
+             xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page01VM}" 
              d:DesignHeight="250"     d:DesignWidth="800"   Padding="8" Background="#100f" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/BasicDefaultsLayout.xaml" />
-        <!--<ResourceDictionary Source="/CI.Visual.Lib;component/Base/ComboBox.Base.xaml" />-->
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/DataGrid.Base.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/DataGrid.Anime.xaml" />
-        <ResourceDictionary Source="/CI.Visual.Lib;component/Base/Anime.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <!--<ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />-->
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
         <!--
-        <ResourceDictionary Source="/CI.Visual.Lib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
         -->
 
       </ResourceDictionary.MergedDictionaries>

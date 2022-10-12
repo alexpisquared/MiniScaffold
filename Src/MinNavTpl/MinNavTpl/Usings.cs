@@ -6,11 +6,11 @@ global using System.Windows;
 global using System.Windows.Controls;
 global using System.Windows.Markup;
 global using Ambience.Lib;
-global using CI.Standard.Lib.Helpers;
-global using CI.Visual.Lib.Helpers;
+global using StandardLib.Helpers;
+global using WpfUserControlLib.Helpers;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
-global using MinimalNavTemplate.Properties;
+global using MinNavTpl.Properties;
 global using StandardContracts.Lib;
 

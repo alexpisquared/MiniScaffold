@@ -1,4 +1,4 @@
-﻿namespace MinimalNavTemplate;
+﻿namespace MinNavTpl;
 
 public partial class Page00View : UserControl
 {

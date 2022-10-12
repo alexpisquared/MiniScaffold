@@ -1,8 +1,8 @@
 ﻿using System.Runtime.CompilerServices;
 using DB.Inventory.Models;
-using StandardContracts.Lib;
+using StandardContractsLib;
 
-namespace MinimalNavTemplate.Contract;
+namespace MinNavTpl.Contract;
 
 public interface IPage02VMLtd
 {
