@@ -72,7 +72,7 @@ public partial class MainVM : BaseMinVM
     catch (Exception ex) { Logger.LogError(ex, "│   ▄─▀─▄─▀─▄ -- Ignore"); }
   }
 
-  string? _ds; public string DeploymntSrcExe { get => _ds ?? DeplConstSpm.DeplSrcExe; set => _ds = value; }
+  string? _ds; public string DeploymntSrcExe { get => _ds ?? Deployment.DeplSrcExe; set => _ds = value; }
   public IBpr Bpr { get; }
   public ILogger Logger { get; }
   public UserSettings UsrStgns { get; }
@@ -128,7 +128,7 @@ public partial class MainVM : BaseMinVM
         StartInfo = new ProcessStartInfo()
         {
           FileName = DeploymntSrcExe,
-          Arguments = $"{new WindowInteropHelper(_mainWin).Handle} {DeplConstSpm.DeplSrcDir} {DeplConstSpm.DeplTrgDir} {DeplConstSpm.DeplTrgExe}",
+          Arguments = $"{new WindowInteropHelper(_mainWin).Handle} {Deployment.DeplSrcDir} {Deployment.DeplTrgDir} {Deployment.DeplTrgExe}",
           UseShellExecute = true
         }
       };
