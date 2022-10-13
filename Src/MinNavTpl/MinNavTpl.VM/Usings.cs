@@ -43,3 +43,4 @@ global using MinNavTpl.VM.VMs;
 global using StandardContractsLib;
 global using static System.Diagnostics.Trace;
 global using Application = System.Windows.Application;
+global using MinNavTpl.Contract;

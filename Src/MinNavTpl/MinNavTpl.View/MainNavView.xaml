@@ -72,10 +72,6 @@
           <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
         </Grid.LayoutTransform>
 
-        <mdl:Modal Panel.ZIndex="1" IsOpen="{Binding IsOpen}">
-          <ContentControl Content="{Binding CurrentModalVM}" />
-        </mdl:Modal>
-
         <ContentControl   Content="{Binding CurrentVM}" />
 
         <!-- BE-194: -->

@@ -1,6 +1,4 @@
-﻿using EF.DbHelper.Lib;
-
-namespace MinNavTpl.VM;
+﻿namespace MinNavTpl.VM;
 public static class MvvmInitHelper
 {
   public static void InitMVVM(IServiceCollection services)

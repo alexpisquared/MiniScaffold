@@ -1,5 +1,5 @@
 ﻿namespace MinNavTpl.VM.Stores;
-public class UserSettings : StandardLib.Base.UserSettingsStore_ // ..actually, not a store/store - just a concidence in naming.
+public class UserSettings : UserSettingsBase // ..actually, not a store/store - just a concidence in naming.
 {
   readonly bool _loaded;
   readonly ILogger? _logger;
@@ -8,7 +8,6 @@ public class UserSettings : StandardLib.Base.UserSettingsStore_ // ..actually, n
   public UserSettings(ILogger lgr)
   {
     _logger = lgr;
-
     _logger.LogInformation("    UserSettings.Ctor(): Supplied by the DI => Loading here now...");
 
     if (_loaded) return;

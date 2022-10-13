@@ -1,15 +1,11 @@
-﻿using EF.DbHelper.Lib;
-using MinNavTpl.Contract;
-using MinNavTpl.VM.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public class Page02VM : BaseDbVM, IPage02VMLtd
 {
   readonly DbConnection _dbConnection;
   public Page02VM(MainVM mainVM, INavSvc loginNavSvc, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110)
   {
     NavigateLoginCommand = new NavigateCommand(loginNavSvc);
-    _dbConnection = new SqlConnection(string.Format(Config[GenConst.SqlVerSpm] ?? "!d", UserSetgs.PrefSrvrName, UserSetgs.PrefDtBsName));
+    _dbConnection = new SqlConnection(string.Format(Config[GenConst.SqlVerSpm] ?? "!d", UserSetgs.PrefSrvrName, UserSetgs.PrefDtBsName));    
   }
   public override async Task<bool> InitAsync()
   {
@@ -111,6 +107,5 @@ public class Page02VM : BaseDbVM, IPage02VMLtd
   public async Task<int> SyncToSqlAdd(PermissionAssignment pa) { await Task.Yield(); return -9871; }
   public async Task<int> SyncToSqlRmv(PermissionAssignment pa) { await Task.Yield(); return -9871; }
 
-  void IPage02VMLtd.CheckDb() => throw new NotImplementedException();
-  StandardContractsLib.IBpr IPage02VMLtd.Bpr => throw new NotImplementedException();
+  void IPage02VMLtd.CheckDb() => Logger.LogTrace(" CheckDb -- NotImplementedException");
 }
