@@ -5,13 +5,11 @@ using MinNavTpl.VM.Stores;
 namespace MinNavTpl.VM.VMs;
 public class Page02VM : BaseDbVM, IPage02VMLtd
 {
-  readonly SqlPermissionsManager _spm;
   readonly DbConnection _dbConnection;
-  public Page02VM(MainVM mainVM, INavSvc loginNavSvc, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, UserSettings usrStgns, SqlPermissionsManager spm, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110)
+  public Page02VM(MainVM mainVM, INavSvc loginNavSvc, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110)
   {
     NavigateLoginCommand = new NavigateCommand(loginNavSvc);
     _dbConnection = new SqlConnection(string.Format(Config[GenConst.SqlVerSpm] ?? "!d", UserSetgs.PrefSrvrName, UserSetgs.PrefDtBsName));
-    _spm = spm;
   }
   public override async Task<bool> InitAsync()
   {
@@ -20,7 +18,7 @@ public class Page02VM : BaseDbVM, IPage02VMLtd
       IsBusy = true;
 
       PrefAplctnId = UserSetgs.PrefAplctnId;
-      
+
       await LoadEF();
 
       return await base.InitAsync();
@@ -110,20 +108,8 @@ public class Page02VM : BaseDbVM, IPage02VMLtd
     await Task.Yield(); ;
   }
 
-  public async Task<int> SyncToSqlAdd(PermissionAssignment pa)
-  {
-    if (AutoSyncToSqlRoles)
-      return await _spm.AddUserToRole(pa.User?.UserId ?? throw new ArgumentNullException(nameof(pa)), $"{pa.Permission.App.AppName}.{pa.Permission.Name}", _dbConnection);
-    else
-      return -9871;
-  }
-  public async Task<int> SyncToSqlRmv(PermissionAssignment pa)
-  {
-    if (AutoSyncToSqlRoles)
-      return await _spm.RmvUserFrRole(pa.User?.UserId ?? throw new ArgumentNullException(nameof(pa)), $"{pa.Permission.App.AppName}.{pa.Permission.Name}", _dbConnection);
-    else
-      return -9871;
-  }
+  public async Task<int> SyncToSqlAdd(PermissionAssignment pa) { await Task.Yield(); return -9871; }
+  public async Task<int> SyncToSqlRmv(PermissionAssignment pa) { await Task.Yield(); return -9871; }
 
   void IPage02VMLtd.CheckDb() => throw new NotImplementedException();
   StandardContractsLib.IBpr IPage02VMLtd.Bpr => throw new NotImplementedException();
