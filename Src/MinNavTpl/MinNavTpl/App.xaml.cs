@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using DB.Inventory.Models;
-using EF.DbHelper.Lib;
-using MinNavTpl.View;
-using MinNavTpl.VM;
-using MinNavTpl.VM.Services;
-using MinNavTpl.VM.VMs;
-
-namespace MinNavTpl;
+﻿namespace MinNavTpl;
 public partial class App : System.Windows.Application
 {
   readonly DateTimeOffset _appStarted = DateTimeOffset.Now;

@@ -25,7 +25,7 @@ namespace MinNavTpl.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("+Verbose -Info +Warning +Error -ErNT -11mb -Infi")]
+        [global::System.Configuration.DefaultSettingValueAttribute("+Verbose -Info -Warning +Error -ErNT -11mb -Infi")]
         public string LogLevels {
             get {
                 return ((string)(this["LogLevels"]));
@@ -34,7 +34,7 @@ namespace MinNavTpl.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Z:\\Dev\\_Redis_MTDEV\\BMS\\IncomePaymentManagement\\Logs")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\temp\\Logs")]
         public string LogFolder {
             get {
                 return ((string)(this["LogFolder"]));

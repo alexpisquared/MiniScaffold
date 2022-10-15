@@ -3,10 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="LogLevels" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">+Verbose -Info +Warning +Error -ErNT -11mb -Infi</Value>
+      <Value Profile="(Default)">+Verbose -Info -Warning +Error -ErNT -11mb -Infi</Value>
     </Setting>
     <Setting Name="LogFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Z:\Dev\_Redis_MTDEV\BMS\IncomePaymentManagement\Logs</Value>
+      <Value Profile="(Default)">C:\temp\Logs</Value>
     </Setting>
   </Settings>
 </SettingsFile>
