@@ -6,6 +6,6 @@ public partial class Page01View : UserControl
   {
     InitializeComponent();
 
-    Loaded += async (s, e) => { await Task.Delay(1500)/*!!.ConfigureAwait(false)*/; _ = S.Focus(); };
+    Loaded += async (s, e) => { await Task.Delay(1500)/*!!.ConfigureAwait(false)*/; /*_ = S.Focus();*/ };
   }
 }

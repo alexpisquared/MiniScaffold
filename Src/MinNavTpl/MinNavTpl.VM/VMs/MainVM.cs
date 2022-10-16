@@ -1,6 +1,4 @@
-﻿using MinNavTpl.VM.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class MainVM : BaseMinVM
 {
   readonly bool _ctored;
@@ -65,7 +63,7 @@ public partial class MainVM : BaseMinVM
 
       (IsObsolete, var setupExeTime) = VersionHelper.CheckForNewVersion(DeploymntSrcExe);
       Logger.Log(IsObsolete ? LogLevel.Warning : LogLevel.Information, $"│   Version check this/depl {VersionHelper.TimedVer:MMdd·HHmm}{(IsObsolete ? "!=" : "==")}{setupExeTime:MMdd·HHmm}   {(IsObsolete ? "Obsolete    ▀▄▀▄▀▄▀▄▀▄▀▄▀" : "The latest  ─╬─  ─╬─  ─╬─")}   .n:{(logNetVer ? VersionHelper.DotNetCoreVersionCmd() : "[skipped]")}   ");
-            
+
       UpgradeUrgency = .6 + Math.Abs((VersionHelper.TimedVer - setupExeTime).TotalDays);
       AppVerToolTip = IsObsolete ? $" New version is available:   0.{setupExeTime:M.d.HHmm} \n\t         from  {setupExeTime:yyyy-MM-dd HH:mm}.\n Click to update. " : $" This is the latest version  {VersionHelper.CurVerStrYYMMDD} \n\t               from  {VersionHelper.TimedVer:yyyy-MM-dd HH:mm}. ";
     }
@@ -79,11 +77,11 @@ public partial class MainVM : BaseMinVM
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
 
   [ObservableProperty] double upgradeUrgency = 1;         // in days
-  [ObservableProperty] string appVerNumber = "0.0";       
-  [ObservableProperty] object appVerToolTip = "Old";      
-  [ObservableProperty] string busyMessage = "Loading..."; 
-  [ObservableProperty] bool isDevDbg;                     
-  [ObservableProperty] bool isObsolete;                   
+  [ObservableProperty] string appVerNumber = "0.0";
+  [ObservableProperty] object appVerToolTip = "Old";
+  [ObservableProperty] string busyMessage = "Loading...";
+  [ObservableProperty] bool isDevDbg;
+  [ObservableProperty] bool isObsolete;
   bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├──   MainVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); } } /*BusyBlur = value ? 8 : 0;*/  }
   bool _au; public bool IsAudible
   {
