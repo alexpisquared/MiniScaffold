@@ -3,7 +3,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib" 
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page02VM}" 
-             d:DesignHeight="200" d:DesignWidth="800" Padding="8" Background="#1f00" Loaded="OnLoaded">
+             d:DesignHeight="200" d:DesignWidth="800" Padding="8" Background="#1f00">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -196,181 +196,13 @@
         <Grid          Background="{Binding Granted, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToColorConverter}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                           Content="{Binding Granted, UpdateSourceTrigger=PropertyChanged}"
           -->
-          <ToggleButton IsChecked="{Binding Granted, UpdateSourceTrigger=PropertyChanged}" Click="OnTogglePermission" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock       Text="{Binding Granted, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToCharConverter}}" FontFamily="Wingdings" FontSize="26"
-                       Foreground="{Binding Granted, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToColorConverter}}" />
-          </ToggleButton>
         </Grid>
       </DataTemplate>
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid>
-    <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style.">
-      <Grid.Resources>
-        <Style TargetType="{x:Type Border}">
-          <Setter Property="CornerRadius"     Value="4"/>
-          <Setter Property="Padding"          Value="5"/>
-          <Setter Property="Background"       Value="{StaticResource BackBackgroundBrush}" />
-          <Setter Property="Opacity"          Value=".9002" />
-        </Style>
-      </Grid.Resources>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="40"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-        <RowDefinition Height="2"/>
-        <RowDefinition Height="0"/>
-        <RowDefinition Height="Auto"/>
-      </Grid.RowDefinitions>
-
-      <Grid Grid.Row="3" Grid.RowSpan="2" Margin="8">
-        <Border>
-          <Border.Effect>
-            <DropShadowEffect ShadowDepth="2" Color="#000" BlurRadius="6" />
-          </Border.Effect>
-        </Border>
-        <Border>
-          <Border.Effect>
-            <DropShadowEffect ShadowDepth="2" Color="#fff" BlurRadius="6" Direction="135" />
-          </Border.Effect>
-        </Border>
-      </Grid>
-      <Rectangle Grid.Row="3" Margin="8 8 8 0" >
-        <Rectangle.Fill>
-          <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-            <GradientStop Color="#2fff" Offset="0"/>
-            <GradientStop Color="#2000" Offset="1"/>
-          </LinearGradientBrush>
-        </Rectangle.Fill>
-      </Rectangle>
-      <Grid Grid.Row="6" Grid.RowSpan="1" Margin="8">
-        <Border>
-          <Border.Effect>
-            <DropShadowEffect ShadowDepth="2" Color="#000" BlurRadius="6" />
-          </Border.Effect>
-        </Border>
-        <Border>
-          <Border.Effect>
-            <DropShadowEffect ShadowDepth="2" Color="#fff" BlurRadius="6" Direction="135" />
-          </Border.Effect>
-        </Border>
-      </Grid>
-
-      <TextBlock Text="BMS Original" FontSize="20" Margin="19 0"/>
-      <TextBlock Text="{Binding Report}" FontSize="11" Foreground="{StaticResource MainForegroundBrush}" HorizontalAlignment="Center" VerticalAlignment="Top" d:Text="Hello. Is everything OK?" Margin="0" Visibility="{Binding Report, Converter={cnv:ReportToVisibilityConverter InvertValue=False}}" />
-      <!--<TextBlock Text="{Binding AllowWriteDB,        StringFormat='{}Db Wr: {0}'}"  HorizontalAlignment="Center" />-->
-
-      <Menu  Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0 12 12 0">
-        <Grid>
-          <Button   Width="120" Margin="8 0" Content="             _Refresh" IsDefault="True" Command="{Binding RefreshFromDbCommand}"/>
-          <CheckBox Width="70" Margin="16 2 0 0"  Content="A_uto"    x:Name="chkIsPlaying" Checked="ChkIsPlaying_Checked" Unchecked="ChkIsPlaying_Unchecked"/>
-        </Grid>
-        <CheckBox Content="SQL Synchrony"    IsChecked="{Binding AutoSyncToSqlRoles}" ToolTip="Auto-Synchronize to native SQL DB Roles" />
-        <MenuItem Header="  ° ° °  "  VerticalAlignment="Bottom" >
-          <MenuItem Header="_Chk  DB MVVM" Height="26" Command="{Binding CheckDbCommand}" />
-          <MenuItem Header="_Save DB MVVM" Height="26" Command="{Binding Save2DbCommand}" />
-          <MenuItem Header="_Chk  DB CoBe" Height="26" Click="OnChkDb"/>
-          <MenuItem Header="_Save DB CoBe" Height="26" Click="OnSave"  ToolTip="Save to DB if dirty" />
-          <MenuItem Header="_Add me"       Height="26" Click="OnAddMe" ToolTip="Add me to the list of users" x:Name="btnAddMe" />
-        </MenuItem>
-      </Menu>
-
-      <Grid Grid.Row="3" Margin="18 8 8 4" x:Name="spc1" HorizontalAlignment="Stretch" Visibility="Visible">
-        <Grid.Effect>
-          <BlurEffect Radius="{Binding IsBusy, Converter={cnv:UniConverter InvertValue=False}}" d:Radius="0" />
-        </Grid.Effect>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="3*" />
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="Auto" />
-          <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        <Label    Grid.Column="1" Content="_Application " Target="{Binding ElementName=cbxApps}" FontSize="14"/>
-        <ComboBox Grid.Column="2" FontSize="18" BorderThickness=".5" Height="30" x:Name="cbxApps" Margin="14 8" 
-                  ItemsSource="{Binding AplnViewSource}" SelectedValue="{Binding PrefAplctnId}" SelectedValuePath="AppId" DisplayMemberPath="AppName" />
-      </Grid>
-
-      <Grid Grid.Row="4" Margin="10">
-        <Grid.Effect>
-          <BlurEffect Radius="{Binding IsBusy, Converter={cnv:UniConverter InvertValue=False}}" d:Radius="0" />
-        </Grid.Effect>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="1"/>
-          <ColumnDefinition Width="2*"/>
-          <ColumnDefinition Width="10"/>
-          <ColumnDefinition Width="3*"/>
-          <ColumnDefinition Width="1"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid.RowDefinitions>
-          <RowDefinition Height="1"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!--<TextBlock Grid.Column="1" x:Name="pfu" d:Text="Perm for User" Foreground="Blue" FontWeight="Medium" FontSize="18" HorizontalAlignment="Center" />
-          <TextBlock Grid.Column="3" x:Name="ufp" d:Text="user for perm" Foreground="Blue" FontWeight="Medium" FontSize="18" HorizontalAlignment="Center" />-->
-
-        <DataGrid Grid.Row="3" Grid.Column="1" ItemsSource="{Binding PermViewSource}" SelectionUnit="Cell" SelectedCellsChanged="DgPerm_SelectedCellsChanged" CanUserAddRows="True" x:Name="dgPerm" >
-          <DataGrid.Columns>
-            <DataGridTextColumn     Header="Permission Name" Binding="{Binding Name}"  Width="*"/>
-            <DataGridTemplateColumn Header="Granted" CellTemplate="{StaticResource LookTemplate}" x:Name="colPG"/>
-          </DataGrid.Columns>
-        </DataGrid>
-
-        <DataGrid Grid.Row="3" Grid.Column="3" ItemsSource="{Binding UserViewSource}" SelectionUnit="Cell" SelectedCellsChanged="DgUser_SelectedCellsChanged" CanUserAddRows="True" x:Name="dgUser" >
-          <DataGrid.Columns>
-            <!--
-              <DataGridTextColumn     Header="***" Width="32"/>
-              <DataGridTextColumn     Header="User Name" Binding="{Binding UserId}"      Width="*"/>
-              <DataGridTemplateColumn Header="Granted" CellTemplate="{StaticResource LookTemplate}" x:Name="colUG"/>              -->
-            <DataGridTextColumn     Header="User Name" Binding="{Binding UserId}"      Width="*">
-              <DataGridTextColumn.HeaderTemplate>
-                <DataTemplate>
-                  <StackPanel Orientation="Horizontal" Margin="4 0" >
-                    <Label    Content="_Search " Target="{Binding ElementName=sch}"/>
-                    <TextBox  Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.SearchText, UpdateSourceTrigger=PropertyChanged}" Width="100" x:Name="sch" />
-                  </StackPanel>
-                </DataTemplate>
-              </DataGridTextColumn.HeaderTemplate>
-              <!--<DataGridTemplateColumn.CellTemplate>
-                  <DataTemplate>
-                    <stb:HighlightableTextBlock Text="{Binding UserId}" SearchText="{Binding Text, ElementName=tbxUsrSearch}" ToolTip="{Binding Notes}" />
-                  </DataTemplate>
-                </DataGridTemplateColumn.CellTemplate>-->
-            </DataGridTextColumn>
-
-            <DataGridTemplateColumn                                       x:Name="colUG" >
-              <DataGridTemplateColumn.HeaderTemplate>
-                <DataTemplate>
-                  <StackPanel Orientation="Horizontal" Margin="4 0" HorizontalAlignment="Right">
-                    <CheckBox Content="Members _Only" IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.MemberFilter}" ToolTip="Show Members Only"       />
-                  </StackPanel>
-                </DataTemplate>
-              </DataGridTemplateColumn.HeaderTemplate>
-              <DataGridTemplateColumn.CellTemplate>
-                <DataTemplate>
-                  <Grid >
-                    <ToggleButton IsChecked="{Binding Granted, UpdateSourceTrigger=PropertyChanged}" Click="OnTogglePermission" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                  IsEnabled="{Binding RelativeSource={RelativeSource AncestorType={x:Type UserControl}}, Path=DataContext.AllowWriteDB}">
-                      <TextBlock       Text="{Binding Granted, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToCharConverter}}" FontFamily="Wingdings" FontSize="26"
-                                 Foreground="{Binding Granted, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToColorConverter}}" />
-                    </ToggleButton>
-                  </Grid>
-                </DataTemplate>
-              </DataGridTemplateColumn.CellTemplate>
-            </DataGridTemplateColumn>
-          </DataGrid.Columns>
-        </DataGrid>
-
-        <GridSplitter Grid.Column="2" Grid.RowSpan="2" />
-
-      </Grid>
-    </Grid>
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
+    <Label  Content="Page 02" FontSize="60" Margin="100 0" />
+    <TextBlock Text="Page 02" FontSize="60" Margin="400 0" />
   </Grid>
-</UserControl>
+</UserControl> 

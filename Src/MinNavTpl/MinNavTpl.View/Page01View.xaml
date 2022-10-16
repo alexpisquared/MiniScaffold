@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page01VM}" 
-             d:DesignHeight="250"     d:DesignWidth="800"   Padding="8" Background="#100f" >
+             d:DesignHeight="50"     d:DesignWidth="800"   Padding="8" Background="#100f" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -20,33 +20,8 @@
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid>
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="6*"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="6*"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="6*"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="1*"/>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
-    <Grid.RowDefinitions>
-      <RowDefinition Height="40" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="10" />
-      <RowDefinition Height="Auto" />
-      <RowDefinition Height="10" />
-      <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-
-    <TextBlock Text="SQL Native" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
-    <TextBlock Grid.Column="5" Text="{Binding CurentUser.FullName, StringFormat='{} User: {0}'}"  />
-
-
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
+    <Label  Content="Page 01" FontSize="60" Margin="100 0" />
+    <TextBlock Text="Page 01" FontSize="60" Margin="400 0" />
   </Grid>
 </UserControl> 
