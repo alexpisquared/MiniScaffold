@@ -1,13 +1,6 @@
-﻿using EF.DbHelper.Lib;
-using MinNavTpl.VM.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public class Page01VM : BaseDbVM
 {
-  const string _startUpDB = "Inventory";
-  readonly string _constr;
-  bool _isDbsLoaded;
-
   public Page01VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, SrvrStore srvrStore, DtBsStore dtbsStore, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110)
   {
     SrvrStore = srvrStore; SrvrStore.CurrentSrvrChanged += SrvrStore_SrvrChngd;
@@ -82,7 +75,7 @@ public class Page01VM : BaseDbVM
   {
     get => _cd; set
     {
-      if (SetProperty(ref _cd, value) && value is not null && _isDbsLoaded && _inited)
+      if (SetProperty(ref _cd, value) && value is not null && _inited)
       {
         Bpr.Click();
         UserSetgs.PrefDtBsName = value.Name;
@@ -95,7 +88,7 @@ public class Page01VM : BaseDbVM
   {
     get => _cr; set
     {
-      if (SetProperty(ref _cr, value) && value is not null && _isDbsLoaded)
+      if (SetProperty(ref _cr, value) && value is not null)
       {
         Bpr.Click();
         UserSetgs.PrefDtBsRole = value.Name;
@@ -114,7 +107,7 @@ public class Page01VM : BaseDbVM
   async Task<int> SetToRole(object? isAddObj, string dbRole)
   {
     await Task.Yield();
-      return 0;
+    return 0;
   }
 
   public override void Dispose()
