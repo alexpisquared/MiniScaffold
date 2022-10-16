@@ -1,6 +1,4 @@
-﻿using MinNavTpl.VM.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public class NavBarVM : BaseMinVM
 {
   readonly SrvrStore _srvrStore;
@@ -13,7 +11,7 @@ public class NavBarVM : BaseMinVM
     _b = "BR";
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;
-    _allowWriteDBStore = allowWriteDBStore; 
+    _allowWriteDBStore = allowWriteDBStore;
 
     _srvrStore.CurrentSrvrChanged += OnCurrentSrvrChanged;
     _dtbsStore.CurrentDtbsChanged += OnCurrentDtbsChanged;
@@ -37,7 +35,6 @@ public class NavBarVM : BaseMinVM
       UsrStgns.PrefSrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
       UsrStgns.AllowWriteDB);
   }
-
 
   void _allowWriteDBStore_AllowWriteDBChanged(bool val) { AllowWriteDB = val; ; }
   //void OnCurrentAcntChanged() => OnPropertyChanged(nameof(IsLoggedIn));
@@ -63,17 +60,9 @@ public class NavBarVM : BaseMinVM
   public UserSettings UsrStgns { get; }
 
   public ICommand NavigatePage01Command { get; }
-  public ICommand NavigateAcntCommand { get; }
-  public ICommand NavigateZeroCommand { get; }
-  public ICommand NavigateLoginCommand { get; }
-  public ICommand NavigateCloseCommand { get; }
   public ICommand NavigatePage02Command { get; }
-  public ICommand NavigateSrvrListingCommand { get; }
-  public ICommand NavigateDtBsListingCommand { get; }
-  public ICommand? NavigateRoleListingCommand { get; } 
-  public ICommand NavigateUserListingCommand { get; }
   public ICommand NavigatePage03Command { get; }
-  public ICommand LogoutCommand { get; }
+  public ICommand NavigateLoginCommand { get; }
 
   IRelayCommand? _sq; public IRelayCommand SwtchSqlSvrCmd => _sq ??= new AsyncRelayCommand<object>(SwitchSqlServer); async Task SwitchSqlServer(object? sqlServerTLA)
   {
@@ -94,5 +83,4 @@ public class NavBarVM : BaseMinVM
 
     base.Dispose();
   }
-
 }

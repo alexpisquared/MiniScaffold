@@ -2,9 +2,9 @@
 
 public class LayoutVM : BaseMinVM
 {
-  public LayoutVM(NavBarVM navigationBarVM, BaseMinVM contentVM)
+  public LayoutVM(NavBarVM navBarVM, BaseMinVM contentVM)
   {
-    NavBarVM = navigationBarVM;
+    NavBarVM = navBarVM;
     ContentVM = contentVM;
   }
 

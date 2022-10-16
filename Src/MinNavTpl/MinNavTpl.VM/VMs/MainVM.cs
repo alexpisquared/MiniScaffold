@@ -4,8 +4,10 @@ public partial class MainVM : BaseMinVM
   readonly bool _ctored;
   readonly NavigationStore _navigationStore;
   readonly Window _mainWin;
-  public MainVM(NavigationStore navigationStore, ILogger lgr, IBpr bpr, UserSettings usrStgns, IAddChild wnd)
+  public MainVM(NavBarVM navBarVM, /*BaseMinVM contentVM,*/ NavigationStore navigationStore, ILogger lgr, IBpr bpr, UserSettings usrStgns, IAddChild wnd)
   {
+    NavBarVM = navBarVM;
+    //ContentVM = contentVM;
     _navigationStore = navigationStore;
     Logger = lgr;
     Bpr = bpr;
@@ -74,6 +76,8 @@ public partial class MainVM : BaseMinVM
   public IBpr Bpr { get; }
   public ILogger Logger { get; }
   public UserSettings UsrStgns { get; }
+  public NavBarVM NavBarVM { get; }
+  //public BaseMinVM ContentVM { get; } // not used here (see LayoutViewModel.xs)
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
 
   [ObservableProperty] double upgradeUrgency = 1;         // in days
@@ -152,5 +156,14 @@ public partial class MainVM : BaseMinVM
       IsBusy = false;
       IsObsolete = true;
     }
+  }
+
+  
+  public override void Dispose()
+  {
+    NavBarVM.Dispose();
+    //ContentVM.Dispose();
+
+    base.Dispose();
   }
 }

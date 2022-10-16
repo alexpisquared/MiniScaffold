@@ -9,7 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Box-blue-Info.ico" />
+    <None Remove="Assets\Box-blue.ico" />
+    <None Remove="Assets\Box-green.ico" />
+    <None Remove="Assets\Box-grey.ico" />
+    <None Remove="Assets\Box-orange.ico" />
+    <None Remove="Assets\Box-red.ico" />
+    <None Remove="Assets\Box-yellow.ico" />
     <None Remove="Assets\CheckYesNo.ico" />
+    <None Remove="Assets\Excel_16x16.png" />
+    <None Remove="Assets\Save.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +40,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Box-blue-Info.ico" />
+    <Resource Include="Assets\Box-blue.ico" />
+    <Resource Include="Assets\Box-green.ico" />
+    <Resource Include="Assets\Box-grey.ico" />
+    <Resource Include="Assets\Box-orange.ico" />
+    <Resource Include="Assets\Box-red.ico" />
+    <Resource Include="Assets\Box-yellow.ico" />
     <Resource Include="Assets\CheckYesNo.ico" />
+    <Resource Include="Assets\Excel_16x16.png" />
+    <Resource Include="Assets\Save.png" />
   </ItemGroup>
 
 </Project>
