@@ -37,7 +37,6 @@ public class NavBarVM : BaseMinVM
   }
 
   void _allowWriteDBStore_AllowWriteDBChanged(bool val) { AllowWriteDB = val; ; }
-  //void OnCurrentAcntChanged() => OnPropertyChanged(nameof(IsLoggedIn));
   void OnCurrentSrvrChanged(ADSrvr srvr) => PrefSrvrName = srvr.Name;  //OnPropertyChanged(nameof(PrefSrvrName)); }
   void OnCurrentDtbsChanged(ADDtBs dtbs) => PrefDtBsName = dtbs.Name;  //OnPropertyChanged(nameof(PrefDtBsName)); }
 
