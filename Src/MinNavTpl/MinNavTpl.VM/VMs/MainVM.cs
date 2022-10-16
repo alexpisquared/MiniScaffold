@@ -86,6 +86,7 @@ public partial class MainVM : BaseMinVM
   [ObservableProperty] string busyMessage = "Loading...";
   [ObservableProperty] bool isDevDbg;
   [ObservableProperty] bool isObsolete;
+  [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible; 
   bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├──   MainVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); } } /*BusyBlur = value ? 8 : 0;*/  }
   bool _au; public bool IsAudible
   {
@@ -166,4 +167,5 @@ public partial class MainVM : BaseMinVM
 
     base.Dispose();
   }
+
 }

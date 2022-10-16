@@ -62,7 +62,6 @@ public class NavBarVM : BaseMinVM
   public ICommand NavigatePage01Command { get; }
   public ICommand NavigatePage02Command { get; }
   public ICommand NavigatePage03Command { get; }
-  public ICommand NavigateLoginCommand { get; }
 
   IRelayCommand? _sq; public IRelayCommand SwtchSqlSvrCmd => _sq ??= new AsyncRelayCommand<object>(SwitchSqlServer); async Task SwitchSqlServer(object? sqlServerTLA)
   {

@@ -17,6 +17,7 @@
     <None Remove="Assets\Box-red.ico" />
     <None Remove="Assets\Box-yellow.ico" />
     <None Remove="Assets\CheckYesNo.ico" />
+    <None Remove="Assets\Cog-BlackOnTransp.png" />
     <None Remove="Assets\Excel_16x16.png" />
     <None Remove="Assets\Save.png" />
   </ItemGroup>
@@ -48,6 +49,7 @@
     <Resource Include="Assets\Box-red.ico" />
     <Resource Include="Assets\Box-yellow.ico" />
     <Resource Include="Assets\CheckYesNo.ico" />
+    <Resource Include="Assets\Cog-BlackOnTransp.png" />
     <Resource Include="Assets\Excel_16x16.png" />
     <Resource Include="Assets\Save.png" />
   </ItemGroup>

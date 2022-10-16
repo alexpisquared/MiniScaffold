@@ -7,7 +7,9 @@
       <RowDefinition Height="Auto" />
       <RowDefinition Height="*" />
     </Grid.RowDefinitions>
+    <!--
     <vws:NavigationBar Grid.Row="0" DataContext="{Binding NavBarVM}" />
+    -->
     <ContentControl    Grid.Row="1" Content="{Binding ContentVM}" Padding="8" Background="#0f0" />
   </Grid>
 </UserControl> 
