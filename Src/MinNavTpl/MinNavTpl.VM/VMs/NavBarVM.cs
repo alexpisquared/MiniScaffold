@@ -1,5 +1,5 @@
 ﻿namespace MinNavTpl.VM.VMs;
-public class NavBarVM : BaseMinVM
+public partial class NavBarVM : BaseMinVM
 {
   readonly SrvrStore _srvrStore;
   readonly DtBsStore _dtbsStore;
@@ -7,8 +7,6 @@ public class NavBarVM : BaseMinVM
 
   public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, UserSettings usrStgns)
   {
-    _r = Consts.SqlServerList.First();
-    _b = "BR";
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;
     _allowWriteDBStore = allowWriteDBStore;
@@ -40,21 +38,12 @@ public class NavBarVM : BaseMinVM
   void OnCurrentSrvrChanged(ADSrvr srvr) => PrefSrvrName = srvr.Name;  //OnPropertyChanged(nameof(PrefSrvrName)); }
   void OnCurrentDtbsChanged(ADDtBs dtbs) => PrefDtBsName = dtbs.Name;  //OnPropertyChanged(nameof(PrefDtBsName)); }
 
-  bool _dev; public bool IsDevDbg { get => _dev; set => SetProperty(ref _dev, value); }
-  bool _awd; public bool AllowWriteDB
-  {
-    get => _awd; set
-    {
-      if (SetProperty(ref _awd, value))
-      {
-        UsrStgns.AllowWriteDB = value;
-        _allowWriteDBStore.ChangAllowWriteDB(value);
-      }
-    }
-  }
-  bool _iea; public bool IsEnabledAllowWriteDB { get => _iea; set => SetProperty(ref _iea, value); }
-  string _r; public string PrefSrvrName { get => _r; set => SetProperty(ref _r, value); }
-  string _b; public string PrefDtBsName { get => _b; set => SetProperty(ref _b, value); }
+  bool _awd; public bool AllowWriteDB { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.AllowWriteDB = value; _allowWriteDBStore.ChangAllowWriteDB(value); } } }
+  [ObservableProperty] bool isEnabledAllowWriteDB;
+  [ObservableProperty] string prefSrvrName = Consts.SqlServerList.First();
+  [ObservableProperty] string prefDtBsName = ".\\SqlExpress";
+  [ObservableProperty] bool isDevDbg;
+  [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible;
 
   public UserSettings UsrStgns { get; }
 
