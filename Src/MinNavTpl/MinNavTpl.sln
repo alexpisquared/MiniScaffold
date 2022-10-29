@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardContractsLib", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavigationDrawerControl", "..\..\..\AAV.Shared\Src\Net.CI\NavigationDrawerControl\NavigationDrawerControl.csproj", "{CFCABE52-E796-4D2E-971D-EB30BC2D48E6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinNavTpl.View.Spec", "MinNavTpl.View.Spec\MinNavTpl.View.Spec.csproj", "{AED54F27-AE33-48AB-9937-E95F143D70A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -255,6 +257,22 @@ Global
 		{CFCABE52-E796-4D2E-971D-EB30BC2D48E6}.Release|x64.Build.0 = Release|x64
 		{CFCABE52-E796-4D2E-971D-EB30BC2D48E6}.Release|x86.ActiveCfg = Release|Any CPU
 		{CFCABE52-E796-4D2E-971D-EB30BC2D48E6}.Release|x86.Build.0 = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|ARM32.ActiveCfg = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|ARM32.Build.0 = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|x64.Build.0 = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Debug|x86.Build.0 = Debug|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|ARM32.ActiveCfg = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|ARM32.Build.0 = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|x64.ActiveCfg = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|x64.Build.0 = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|x86.ActiveCfg = Release|Any CPU
+		{AED54F27-AE33-48AB-9937-E95F143D70A4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -272,6 +290,7 @@ Global
 		{B37BF666-5581-46DA-A294-80D7D27F103F} = {A1E7E944-EBE5-4304-8EF7-0FCFBF03D555}
 		{C847B5A9-E732-4154-9020-73CCA436188E} = {A1E7E944-EBE5-4304-8EF7-0FCFBF03D555}
 		{CFCABE52-E796-4D2E-971D-EB30BC2D48E6} = {A1E7E944-EBE5-4304-8EF7-0FCFBF03D555}
+		{AED54F27-AE33-48AB-9937-E95F143D70A4} = {E5A68C32-30EC-47D1-A33E-D1D3DE95FCFF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D0D953C8-0F01-43F9-8965-513356E2F73D}
