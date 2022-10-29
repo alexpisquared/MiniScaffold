@@ -1,20 +1,22 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:vm="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" 
                     xmlns:vv="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" 
-                    xmlns:view___________________________="clr-namespace:MinNavTpl.View" >
+                    xmlns:view_Main______________________="clr-namespace:MinNavTpl.View.Main"
+                    xmlns:view_Spec______________________="clr-namespace:MinNavTpl.View.Spec;assembly=MinNavTpl.View.Spec"
+                    >
   <DataTemplate DataType="{x:Type vm:LayoutVM}">
-    <view___________________________:Layout />
+    <view_Main______________________:Layout />
   </DataTemplate>
   <DataTemplate DataType="{x:Type vm:Page00VM}">
-    <view___________________________:Page00View />
+    <view_Spec______________________:Page00View />
   </DataTemplate>
   <DataTemplate DataType="{x:Type vm:Page01VM}">
-    <view___________________________:Page01View />
+    <view_Spec______________________:Page01View />
   </DataTemplate>
   <DataTemplate DataType="{x:Type vm:Page02VM}">
-    <view___________________________:Page02View />
+    <view_Spec______________________:Page02View />
   </DataTemplate>
   <DataTemplate DataType="{x:Type vv:Page03VM}">
-    <view___________________________:Page03View/>
+    <view_Spec______________________:Page03View/>
   </DataTemplate>
 </ResourceDictionary>

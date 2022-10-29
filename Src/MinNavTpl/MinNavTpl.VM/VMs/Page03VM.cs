@@ -5,4 +5,6 @@ public class Page03VM : BaseDbVM
   {
   }
   public override async Task<bool> InitAsync() { await InitAsyncLocal(); _ = await base.InitAsync(); return true; }  async Task InitAsyncLocal() => await Task.Yield();
+
+  private string reportMessage;  public string ReportMessage { get => reportMessage; set => SetProperty(ref reportMessage, value); }
 }

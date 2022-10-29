@@ -37,6 +37,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
+    <ProjectReference Include="..\MinNavTpl.View.Spec\MinNavTpl.View.Spec.csproj" />
     <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>
 
@@ -52,6 +53,10 @@
     <Resource Include="Assets\Cog-BlackOnTransp.png" />
     <Resource Include="Assets\Excel_16x16.png" />
     <Resource Include="Assets\Save.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Spec\" />
   </ItemGroup>
 
 </Project>

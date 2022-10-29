@@ -1,4 +1,4 @@
-﻿namespace MinNavTpl.View;
+﻿namespace MinNavTpl.View.Main;
 
 public partial class NavigationBar : UserControl
 {

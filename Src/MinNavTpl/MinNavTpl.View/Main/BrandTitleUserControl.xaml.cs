@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MinNavTpl.View;
+namespace MinNavTpl.View.Main;
 /// <summary>
 /// Interaction logic for BrandTitleUserControl.xaml
 /// </summary>
