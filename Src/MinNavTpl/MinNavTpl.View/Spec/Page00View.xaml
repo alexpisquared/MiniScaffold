@@ -5,23 +5,20 @@
              d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4888" >
   <UserControl.Resources>
     <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
+      <!--<ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
-        <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />
-        -->
-
-      </ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+      </ResourceDictionary.MergedDictionaries>-->
 
       <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid>
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
     </Grid.ColumnDefinitions>
@@ -32,10 +29,13 @@
       <RowDefinition Height="30" />
     </Grid.RowDefinitions>
 
-    <TextBlock Text="Application Updater" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
+    <TextBlock Grid.Row="1" Text="Page00" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
+    
     <Viewbox Grid.Row="2" >
-      <TextBlock Text="{Binding ReportMessage}" Foreground="#888" d:Text="Hang on..."/>
+      <TextBlock Text="{Binding ReportMessage}" d:Text="Page00" />
     </Viewbox>
+
+    <Label Grid.Row="3" Content="{Binding ReportMessage}" d:Content="Page00" />
 
   </Grid>
 </UserControl> 

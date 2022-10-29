@@ -13,7 +13,7 @@
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
         <!--
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBoxStyle_IsEditable.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Gray.xaml" />-->
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />-->
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
