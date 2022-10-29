@@ -7,9 +7,9 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml"       />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml"       />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml"      />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml"  />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml"  />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type CheckBox}"		  BasedOn="{StaticResource ChkBase}" >
@@ -17,14 +17,14 @@
       </Style>
 
       <Style TargetType="{x:Type DatePicker}"		BasedOn="{StaticResource DPrBase}" >
-        <Setter Property="BorderThickness"      Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Width"						    Value="120" />
       </Style>
 
       <Style TargetType="{x:Type Image}"			  BasedOn="{StaticResource imgCS}" x:Key="h20" />
 
       <Style TargetType="Grid" x:Key="gi">
-        <Setter Property="FocusVisualStyle"           Value="{x:Null}"                      />
+        <Setter Property="FocusVisualStyle"      Value="{x:Null}"                 />
         <Setter Property="Background" Value="#40c0" />
         <Style.Triggers>
           <DataTrigger Binding="{Binding ScheduleCount}" Value="0">
@@ -44,20 +44,20 @@
       <Style TargetType="Border" BasedOn="{StaticResource BorderStyle_Aav0}" >
         <Setter Property="CornerRadius" Value="6" />
         <Setter Property="BorderBrush" Value="#8888" />
-        <Setter Property="Background"  Value="{StaticResource VaguerGradientGridBackground}" />
+        <Setter Property="Background" Value="{StaticResource VaguerGradientGridBackground}" />
       </Style>
 
-      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <Style TargetType="{x:Type DataGridRow}" x:Key="NotUsed_______________">
         <Setter Property="DetailsVisibility" Value="Collapsed" />
         <!--<Setter Property="Background" Value="Lavender" />-->
         <Style.Triggers>
           <DataTrigger Binding="{Binding Status}" Value="Passed">
-            <Setter Property="ToolTip"    Value="Status - Passed." />
+            <Setter Property="ToolTip" Value="Status - Passed." />
           </DataTrigger>
           <DataTrigger Binding="{Binding Status}" Value="Failed">
-            <Setter Property="ToolTip"    Value="Status - Failed." />
+            <Setter Property="ToolTip" Value="Status - Failed." />
             <Setter Property="Background" Value="#2f00" />
           </DataTrigger>
         </Style.Triggers>
@@ -121,6 +121,6 @@
   </UserControl.Resources>
   <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
     <Label  Content="Page 03" FontSize="60" Margin="100 0" />
-    <TextBlock Text="Page 03" FontSize="60" Margin="400 0" />
+    <TextBlock Text="Page 03" FontSize="60" Margin="200 0" />
   </Grid>
 </UserControl> 

@@ -6,29 +6,20 @@
              d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f00">
   <UserControl.Resources>
     <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-        <!--<ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />-->
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
-        <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBoxStyle_IsEditable.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />-->
-      </ResourceDictionary.MergedDictionaries>
 
-      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
       <Style TargetType="ToggleButton">
-        <Setter Property="VerticalAlignment"          Value="Center"  />
-        <Setter Property="HorizontalAlignment"        Value="Center"  />
-        <Setter Property="BorderThickness"            Value="0"  />
-        <Setter Property="Height"                     Value="20"  />
-        <Setter Property="Margin"                     Value="0"  />
-        <Setter Property="Padding"                    Value="-22"  />
-        <Setter Property="Background"                 Value="#aaa"  />
+        <Setter Property="VerticalAlignment"     Value="Center" />
+        <Setter Property="HorizontalAlignment"   Value="Center" />
+        <Setter Property="BorderThickness"       Value="0" />
+        <Setter Property="Height"                Value="20" />
+        <Setter Property="Margin"                Value="0" />
+        <Setter Property="Padding"               Value="-22" />
+        <Setter Property="Background"            Value="#aaa" />
         <Style.Resources>
           <Style TargetType="Border">
-            <Setter Property="CornerRadius"     Value="8" />
+            <Setter Property="CornerRadius" Value="8" />
           </Style>
         </Style.Resources>
       </Style>
@@ -41,34 +32,34 @@
 
       <CollectionViewSource x:Key="_accountRequestViewSource"/>
 
-      <Style x:Key="RightAlignStyle"   TargetType="{x:Type TextBlock}">
+      <Style x:Key="RightAlignStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="TextAlignment" Value="Right"	/>
       </Style>
-      <Style x:Key="CenterAlignStyle"  TargetType="{x:Type TextBlock}">
+      <Style x:Key="CenterAlignStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="TextAlignment" Value="Center" />
       </Style>
       <Style x:Key="CenterAlignChkBox" TargetType="{x:Type CheckBox}">
         <Setter Property="HorizontalAlignment" Value="Center" />
       </Style>
 
-      <SineEase    x:Key="si"     EasingMode="EaseIn" />
-      <SineEase    x:Key="so"     EasingMode="EaseOut" />
-      <SineEase    x:Key="sb"     EasingMode="EaseInOut" />
-      <CubicEase   x:Key="co"     EasingMode="EaseOut" />
-      <CubicEase   x:Key="ci"     EasingMode="EaseIn" />
-      <CubicEase   x:Key="cb"     EasingMode="EaseInOut" />
-      <QuarticEase x:Key="qo"     EasingMode="EaseOut" />
-      <QuarticEase x:Key="qi"     EasingMode="EaseIn" />
-      <QuarticEase x:Key="qb"     EasingMode="EaseInOut" />
-      <BackEase    x:Key="ko"     EasingMode="EaseOut" />
-      <BackEase    x:Key="ki"     EasingMode="EaseIn" />
-      <BackEase    x:Key="kb"     EasingMode="EaseInOut" />
-      <ElasticEase x:Key="ei"     EasingMode="EaseIn" />
-      <ElasticEase x:Key="eo"     EasingMode="EaseOut" />
-      <ElasticEase x:Key="eb"     EasingMode="EaseInOut" />
-      <ElasticEase x:Key="eo0s5"  EasingMode="EaseOut" Oscillations="0" Springiness="5" />
-      <ElasticEase x:Key="eo2s5"  EasingMode="EaseOut" Oscillations="2" Springiness="5" />
-      <BounceEase  x:Key="bo"     EasingMode="EaseOut" />
+      <SineEase    x:Key="si" EasingMode="EaseIn" />
+      <SineEase    x:Key="so" EasingMode="EaseOut" />
+      <SineEase    x:Key="sb" EasingMode="EaseInOut" />
+      <CubicEase   x:Key="co" EasingMode="EaseOut" />
+      <CubicEase   x:Key="ci" EasingMode="EaseIn" />
+      <CubicEase   x:Key="cb" EasingMode="EaseInOut" />
+      <QuarticEase x:Key="qo" EasingMode="EaseOut" />
+      <QuarticEase x:Key="qi" EasingMode="EaseIn" />
+      <QuarticEase x:Key="qb" EasingMode="EaseInOut" />
+      <BackEase    x:Key="ko" EasingMode="EaseOut" />
+      <BackEase    x:Key="ki" EasingMode="EaseIn" />
+      <BackEase    x:Key="kb" EasingMode="EaseInOut" />
+      <ElasticEase x:Key="ei" EasingMode="EaseIn" />
+      <ElasticEase x:Key="eo" EasingMode="EaseOut" />
+      <ElasticEase x:Key="eb" EasingMode="EaseInOut" />
+      <ElasticEase x:Key="eo0s5" EasingMode="EaseOut" Oscillations="0" Springiness="5" />
+      <ElasticEase x:Key="eo2s5" EasingMode="EaseOut" Oscillations="2" Springiness="5" />
+      <BounceEase  x:Key="bo" EasingMode="EaseOut" />
       <Color x:Key="c">#1f00</Color>
       <Color x:Key="a">#3f00</Color>
       <Color x:Key="b">#1f00</Color>
@@ -77,7 +68,7 @@
       <LinearGradientBrush x:Key="rf1" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop x:Name="GradientStop1a" Color="{StaticResource c}" Offset="0.0" />
         <GradientStop x:Name="GradientStop2a" Color="{StaticResource a}" Offset="0.50" />
-        <GradientStop x:Name="GradientStop3"  Color="{StaticResource b}" Offset="1.0" />
+        <GradientStop x:Name="GradientStop3" Color="{StaticResource b}" Offset="1.0" />
       </LinearGradientBrush>
       <LinearGradientBrush x:Key="rf2" EndPoint="0.5,1" StartPoint="0.5,0">
         <GradientStop x:Name="GradientStop3a" Color="{StaticResource f}" Offset="0.0" />
@@ -85,25 +76,25 @@
         <GradientStop x:Name="GradientStop3d" Color="{StaticResource f}" Offset="1.0" />
       </LinearGradientBrush>
 
-      <Storyboard x:Key="CompositeFlashing"   Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
+      <Storyboard x:Key="CompositeFlashing" Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
         <ColorAnimation  Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" From="Red" To="Yellow" EasingFunction="{StaticResource eo}"/>
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                              From="0.3" To="1"      EasingFunction="{StaticResource eo}"/>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                         From="0.3" To="1" EasingFunction="{StaticResource eo}"/>
       </Storyboard>
-      <Storyboard x:Key="ColorFlashing"       Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
+      <Storyboard x:Key="ColorFlashing"  Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
         <ColorAnimation  Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" From="Orange" To="Yellow" EasingFunction="{StaticResource so}"/>
       </Storyboard>
-      <Storyboard x:Key="OpacityFlashing"     Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                              From="0.3" To="1"      EasingFunction="{StaticResource sb}"/>
+      <Storyboard x:Key="OpacityFlashing" Duration="0:0:0.5" AutoReverse="True" RepeatBehavior="Forever" >
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                         From="0.3" To="1" EasingFunction="{StaticResource sb}"/>
       </Storyboard>
-      <Storyboard x:Key="CompositeRestored"   Duration="0:0:1" FillBehavior="Stop" >
+      <Storyboard x:Key="CompositeRestored" Duration="0:0:1" FillBehavior="Stop" >
         <ColorAnimation  Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" To="Transparent" />
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                              To="1"           />
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                         To="1"      />
       </Storyboard>
-      <Storyboard x:Key="ColorRestored"       Duration="0:0:1" FillBehavior="Stop">
+      <Storyboard x:Key="ColorRestored"  Duration="0:0:1" FillBehavior="Stop">
         <ColorAnimation  Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)" To="Transparent" />
       </Storyboard>
-      <Storyboard x:Key="OpacityRestored"     Duration="0:0:1" FillBehavior="Stop">
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                              To="1"           />
+      <Storyboard x:Key="OpacityRestored" Duration="0:0:1" FillBehavior="Stop">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                         To="1"      />
       </Storyboard>
 
       <Style x:Key="AnimOpacityDataGridRowStyle" TargetType="{x:Type DataGridRow}">
@@ -203,6 +194,6 @@
   </UserControl.Resources>
   <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
     <Label  Content="Page 02" FontSize="60" Margin="100 0" />
-    <TextBlock Text="Page 02" FontSize="60" Margin="400 0" />
+    <TextBlock Text="Page 02" FontSize="60" Margin="200 0" />
   </Grid>
 </UserControl> 

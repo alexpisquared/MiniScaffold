@@ -1,13 +1,13 @@
-﻿<UserControl x:Class="MinNavTpl.View.NavigationBar" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"                    
+﻿<UserControl x:Class="MinNavTpl.View.NavigationBar" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"               
                 xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib" 
                 xmlns:sys="clr-namespace:System;assembly=mscorlib" 
                 xmlns:mdl="clr-namespace:ModalControl;assembly=ModalControl" 
-                xmlns:xui="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"                 
-                xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib"         
-                xmlns:anm="clr-namespace:WpfUserControlLib.Anime;assembly=WpfUserControlLib"                 
+                xmlns:xui="clr-namespace:WpfUserControlLib.Views;assembly=WpfUserControlLib"            
+                xmlns:lnk="clr-namespace:WpfUserControlLib.Base;assembly=WpfUserControlLib"    
+                xmlns:anm="clr-namespace:WpfUserControlLib.Anime;assembly=WpfUserControlLib"            
                 xmlns:vws="clr-namespace:MinNavTpl.View"
                 xmlns:nav="clr-namespace:NavigationDrawerControl;assembly=NavigationDrawerControl" 
-             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:NavBarVM}"                 
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:NavBarVM}"            
              d:DesignHeight="88" d:DesignWidth="19" >
   <UserControl.Resources>
     <ResourceDictionary>
@@ -21,7 +21,7 @@
     <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" CommandParameter="IPInfoHierFinde2VM" IsChecked="True" ToolTip="Client/Account List  (AKA Payment Scheduler)">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <TextBlock Text="" Padding="2 2 0 0" FontFamily="Webdings" FontWeight="Normal" FontSize="22" Foreground="#cfd" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Client/Account Finder"/>
@@ -30,7 +30,7 @@
     <nav:NavDrawerItem Command="{Binding NavigatePage02Command}" CommandParameter="MaxWithdrawSetupVM" ToolTip="Max Withdrawal Setup">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-yellow.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-yellow.ico"      Width="32" />
           <TextBlock Text="&#x0087;" Padding="3 3 0 0" FontFamily="Wingdings 3" FontWeight="Bold" FontSize="22" Foreground="#04f" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Max Withdrawal Setup"/>
@@ -39,7 +39,7 @@
     <nav:NavDrawerItem Command="{Binding NavigatePage03Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
           <TextBlock Text="&#x0088;" Padding="3 3 0 0" FontFamily="Wingdings 3" FontWeight="Bold" FontSize="22" Foreground="#ff0" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Min Withdrawal Setup"/>
@@ -48,44 +48,44 @@
     <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="WithldngTaxRatesVM" ToolTip="Withholding Tax Rates">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-orange.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-orange.ico"      Width="32" />
           <TextBlock Text="$" Padding="8 0 0 0" FontWeight="Bold" FontSize="18" Foreground="#0e0" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Withholding Tax Rates"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM"  ToolTip="Import RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Save.png" Margin="8" Width="16"/>
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Import Excel Files"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="PmtProcessExportVM"  ToolTip="Export RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Excel_16x16.png" Margin="8"/>
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" BMO EFT Query POC"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="BankingValidatorVM"  ToolTip="Banking Pre-Check Validation" >
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="BankingValidatorVM" ToolTip="Banking Pre-Check Validation" >
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
           <TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Banking Pre-Check"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="UserPermissionerVM"  ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="UserPermissionerVM" ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
           <TextBlock Text="&#x0091;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#fff" />
         </Grid>
@@ -95,28 +95,28 @@
 
     <TextBlock Text="Dev   ↓ ↓ ↓" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" Margin="8 26 0 8" d:Visibility="Visible" />
 
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM"  Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
           <TextBlock Text="" Padding="1 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#def" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Import Excel Files dbl"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="DevOpsMasterPageVM"  Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="DevOpsMasterPageVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
           <TextBlock Text="" Padding="3 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#ffc" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" QA Results"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="HomeLandingPage0View" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters"  d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="HomeLandingPage0View" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"           Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
           <TextBlock Text="" Padding="5 0 0 0" FontFamily="Segoe MDL2 assets" Foreground="#00d" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ▄▀▄▀ ^ ~Home"/>

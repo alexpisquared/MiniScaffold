@@ -1,7 +1,5 @@
-﻿using MinNavTpl.VM.Stores;
-
-namespace MinNavTpl.VM.VMs;
-public class Page00VM : BaseDbVM
+﻿namespace MinNavTpl.VM.VMs;
+public partial class Page00VM : BaseDbVM
 {
   public Page00VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110) => _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Logger); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
@@ -22,7 +20,8 @@ public class Page00VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
 
   void ReportProgress(string msg) => ReportMessage = msg;
-  string _bm = "Hang on...\n\n       ...updating the binaries.\n\n              Will relaunch when done."; public string ReportMessage { get => _bm; set => SetProperty(ref _bm, value); }
+
+  [ObservableProperty] string reportMessage = ":0";
 
   public override void Dispose() => base.Dispose();
 }

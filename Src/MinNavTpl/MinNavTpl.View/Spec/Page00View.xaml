@@ -1,20 +1,15 @@
-﻿<UserControl x:Class="MinNavTpl.View.Page00View"     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+﻿<UserControl x:Class="MinNavTpl.View.Page00View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page00VM}" 
              d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4888" >
   <UserControl.Resources>
     <ResourceDictionary>
-      <!--<ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
+      <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
-      </ResourceDictionary.MergedDictionaries>-->
+      </ResourceDictionary.MergedDictionaries>
 
-      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
     </ResourceDictionary>
   </UserControl.Resources>
@@ -30,7 +25,8 @@
     </Grid.RowDefinitions>
 
     <TextBlock Grid.Row="1" Text="Page00" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
-    
+
+    <Border  Grid.Row="2" />
     <Viewbox Grid.Row="2" >
       <TextBlock Text="{Binding ReportMessage}" d:Text="Page00" />
     </Viewbox>
