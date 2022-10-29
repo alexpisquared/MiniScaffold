@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page01VM}" 
-             d:DesignHeight="50"     d:DesignWidth="800"   Padding="8" Background="#100f" >
+             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#400f" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
