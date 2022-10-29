@@ -56,7 +56,7 @@ public partial class App : System.Windows.Application
     await _serviceProvider.GetRequiredService<IBpr>().FinishAsync();
   }
 
-  void LogAllLevels(ILogger lgr)
+  static void LogAllLevels(ILogger lgr)
   {
     lgr.Log(LogLevel.Warning,     /**/ "│   °°° The current LogLevel is:");
     lgr.Log(LogLevel.Trace,       /**/ "│   °°° LogLevel.Trace");

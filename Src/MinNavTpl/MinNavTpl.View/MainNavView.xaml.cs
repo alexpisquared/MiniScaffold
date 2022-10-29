@@ -1,7 +1,6 @@
 ﻿namespace MinNavTpl.View;
 public partial class MainNavView : WpfUserControlLib.Base.WindowBase
 {
-
   public MainNavView(ILogger logger) : this((ILogger<Window>)logger) { }
   public MainNavView(ILogger<Window> logger) : base(logger)
   {
@@ -10,7 +9,6 @@ public partial class MainNavView : WpfUserControlLib.Base.WindowBase
     MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight; // MaximumWindowTrackHeight; // 2021-11: is it for not overlapping the taskbar?
 
     //themeSelector1.ThemeApplier = ApplyTheme; //dnf theming 1/2
-    Topmost = Debugger.IsAttached;
 
     btnExit.IsCancel = VersionHelper.IsDbg;
   }
