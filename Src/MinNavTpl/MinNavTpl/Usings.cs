@@ -6,7 +6,7 @@ global using System.Windows;
 global using System.Windows.Controls;
 global using System.Windows.Markup;
 global using AmbienceLib;
-global using DB.Inventory.Models;
+global using DB.QStats.Std.Models;
 global using EF.DbHelper.Lib;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;

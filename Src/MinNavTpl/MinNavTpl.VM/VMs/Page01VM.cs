@@ -1,19 +1,13 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public class Page01VM : BaseDbVM
 {
-  public Page01VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, InventoryContext inv, IAddChild win, SrvrStore srvrStore, DtBsStore dtbsStore, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, inv, win, allowWriteDBStore, usrStgns, 8110)
+  public Page01VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrStore srvrStore, DtBsStore dtbsStore, UserSettings usrStgns, AllowWriteDBStore allowWriteDBStore) : base(mainVM, lgr, cfg, bpr, sec, dbx, win, allowWriteDBStore, usrStgns, 8110)
   {
     SrvrStore = srvrStore; SrvrStore.CurrentSrvrChanged += SrvrStore_SrvrChngd;
     DtBsStore = dtbsStore; DtBsStore.CurrentDtbsChanged += DtbsStore_DtbsChngd;
 
-    _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Logger); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+    _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
   }
-
-  public SrvrStore SrvrStore { get; }
-  public DtBsStore DtBsStore { get; }
-  async void SrvrStore_SrvrChngd(ADSrvr srvr) { SelectSrvr = srvr; await RefreshReloadAsync(); }
-  async void DtbsStore_DtbsChngd(ADDtBs srvr) { SelectDtBs = srvr; await RefreshReloadAsync(); }
-
   public override async Task<bool> InitAsync()
   {
     try
@@ -23,7 +17,7 @@ public class Page01VM : BaseDbVM
       await Task.Yield();
       return true;
     }
-    catch (Exception ex) { ex.Pop(Logger); return false; }
+    catch (Exception ex) { ex.Pop(Lgr); return false; }
     finally
     {
       IsBusy = false;
@@ -36,6 +30,12 @@ public class Page01VM : BaseDbVM
     SrvrStore.CurrentSrvrChanged -= SrvrStore_SrvrChngd;
     return base.WrapAsync();
   }
+
+  public SrvrStore SrvrStore { get; }
+  public DtBsStore DtBsStore { get; }
+  async void SrvrStore_SrvrChngd(ADSrvr srvr) { SelectSrvr = srvr; await RefreshReloadAsync(); }
+  async void DtbsStore_DtbsChngd(ADDtBs srvr) { SelectDtBs = srvr; await RefreshReloadAsync(); }
+
 
   ADSrvr? _cs; public ADSrvr? SelectSrvr
   {
@@ -59,7 +59,7 @@ public class Page01VM : BaseDbVM
           Page01VMHelpers.LoadServerDBsFAF(value.Name, DtBsList, SetLoadedFlag, string.Format(Config[GenConst.SqlVer] ?? "d", value.Name, _startUpDB), Logger);
 #endif
         }
-        catch (Exception ex) { ex.Pop(Logger); }
+        catch (Exception ex) { ex.Pop(Lgr); }
       }
     }
   }
@@ -72,7 +72,7 @@ public class Page01VM : BaseDbVM
         Bpr.Click();
         UserSetgs.PrefDtBsName = value.Name;
         DtBsStore.ChgDtBs(value);
-        //Page01VMHelpers.LoadDtBsRolesFAF(value.Name, RoleList, _spm, string.Format(Config[GenConst.SqlVerSpm] ?? "'", SelectSrvr?.Name, SelectDtBs?.Name), Logger);
+        //Page01VMHelpers.LoadDtBsRolesFAF(value.Name, RoleList, _spm, string.Format(Cfg[GenConst.SqlVerSpm] ?? "'", SelectSrvr?.Name, SelectDtBs?.Name), Lgr);
       }
     }
   }

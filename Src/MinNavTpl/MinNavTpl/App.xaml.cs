@@ -45,7 +45,7 @@ public partial class App : System.Windows.Application
   protected override async void OnExit(ExitEventArgs e)
   {
     if (Current is not null) Current.DispatcherUnhandledException -= UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
-    _serviceProvider.GetRequiredService<InventoryContext>().Dispose();
+    _serviceProvider.GetRequiredService<QStatsRlsContext>().Dispose();
 
     if (DateTime.Now == DateTime.Today) LogAllLevels(_serviceProvider.GetRequiredService<ILogger>());
 
@@ -78,7 +78,7 @@ public partial class App : System.Windows.Application
         return;
       }
 
-      _audit = VersionHelper.DevDbgAudit(cfg, DbxExt.CalcConStr<InventoryContext>(_serviceProvider, "todo:UserSettingsIPM.UserPrefSqlServer", CfgName.SqlVerIpm).SqlConStrValues());
+      _audit = VersionHelper.DevDbgAudit(cfg, DbxExt.CalcConStr<QStatsRlsContext>(_serviceProvider, "todo:UserSettingsIPM.UserPrefSqlServer", CfgName.SqlVerIpm).SqlConStrValues());
     }
     catch (Exception ex)
     {
@@ -88,7 +88,7 @@ public partial class App : System.Windows.Application
   }
   void TryFixingCfgAndRestart(string reason)
   {
-    if (MessageBox.Show($"{reason}\n\nTry to fix config ecosystem?", "App Config Problem", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+    if (MessageBox.Show($"{reason}\n\nTry to fix config ecosystem?", "App Cfg Problem", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
     {
       _ = ConfigHelper.AutoInitConfigHardcoded(enforceCreation: true);
       _serviceProvider.GetRequiredService<ILogger>().LogWarning(reason);

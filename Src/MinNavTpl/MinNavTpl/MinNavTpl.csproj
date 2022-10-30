@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj" />
     <ProjectReference Include="..\MinNavTpl.View\MinNavTpl.View.csproj" />
     <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>

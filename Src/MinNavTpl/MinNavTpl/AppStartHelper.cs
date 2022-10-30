@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl;
+﻿using DB.QStats.Std.Models;
+
+namespace MinNavTpl;
 public static class AppStartHelper
 {
   public static void InitAppSvcs(IServiceCollection services)
@@ -11,6 +13,6 @@ public static class AppStartHelper
 
     _ = services.AddSingleton<IBpr, Bpr>(); // _ = VersionHelper_.IsDbgAndRBD ? services.AddSingleton<IBpr, Bpr>() : services.AddSingleton<IBpr, BprSilentMock>();
 
-    _ = services.AddTransient(sp => new InventoryContext(DbxExt.CalcConStr<InventoryContext>(sp, DevOps.IsDevMachineH ? @".\SqlExpress" : @"mtDEVsqlDB", CfgName.SqlVerIpm)));
+    _ = services.AddTransient(sp => new QStatsRlsContext(DbxExt.CalcConStr<QStatsRlsContext>(sp, DevOps.IsDevMachineH ? @".\SqlExpress" : @"mtDEVsqlDB", CfgName.SqlVerIpm)));
   }
 }
