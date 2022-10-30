@@ -2,11 +2,11 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page04VM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f00" >
+             d:DesignHeight="200" d:DesignWidth="600" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Google.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
@@ -26,8 +26,6 @@
 
     <TextBlock Grid.Row="1" Text="Page04" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
-    <Viewbox   Grid.Row="2" >
-    </Viewbox>
     <DataGrid  Grid.Row="2"  ItemsSource="{Binding LeadCvs}" AutoGenerateColumns="True"/>
 
     <Label     Grid.Row="3" Content="{Binding ReportMessage}" d:Content="Page04" />
