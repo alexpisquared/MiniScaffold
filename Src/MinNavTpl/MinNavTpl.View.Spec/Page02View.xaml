@@ -26,7 +26,7 @@
 
     <TextBlock Grid.Row="1" Text="Page02" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
-    <Border    Grid.Row="2" BorderThickness="2" />
+    <Border    Grid.Row="2" BorderThickness="2" Margin="222" />
     <Viewbox   Grid.Row="2" >
       <TextBlock Text="{Binding ReportMessage}" d:Text="Page02" />
     </Viewbox>

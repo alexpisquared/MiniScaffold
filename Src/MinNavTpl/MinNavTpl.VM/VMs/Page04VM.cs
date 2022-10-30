@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
-  public Page04VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, AllowWriteDBStore allowWriteDBStore, UserSettings usrStgns, int oid) : base(mainVM, lgr, cfg, bpr, sec, dbx, win, allowWriteDBStore, usrStgns, oid) { }
+  public Page04VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, AllowWriteDBStore allowWriteDBStore, UserSettings usrStgns) : base(mainVM, lgr, cfg, bpr, sec, dbx, win, allowWriteDBStore, usrStgns, 8440) { }
   public override async Task<bool> InitAsync()
   {
     try

@@ -27,8 +27,8 @@
     <TextBlock Grid.Row="1" Text="Page04" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
     <Viewbox   Grid.Row="2" >
-      <!--<DataGrid ItemsSource="{Binding LeadCsv}" AutoGenerateColumns="True"/>-->
     </Viewbox>
+    <DataGrid  Grid.Row="2"  ItemsSource="{Binding LeadCvs}" AutoGenerateColumns="True"/>
 
     <Label     Grid.Row="3" Content="{Binding ReportMessage}" d:Content="Page04" />
   </Grid>

@@ -5,7 +5,7 @@ public partial class NavBarVM : BaseMinVM
   readonly DtBsStore _dtbsStore;
   readonly AllowWriteDBStore _allowWriteDBStore;
 
-  public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, UserSettings usrStgns)
+  public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
   {
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;
@@ -19,6 +19,7 @@ public partial class NavBarVM : BaseMinVM
     NavigatePage01Command = new NavigateCommand(page01NavSvc);
     NavigatePage02Command = new NavigateCommand(page02NavSvc);
     NavigatePage03Command = new NavigateCommand(page03NavSvc);
+    NavigatePage04Command = new NavigateCommand(page04NavSvc);
 
     PrefSrvrName = usrStgns.PrefSrvrName;
     PrefDtBsName = usrStgns.PrefDtBsName;
@@ -50,6 +51,7 @@ public partial class NavBarVM : BaseMinVM
   public ICommand NavigatePage01Command { get; }
   public ICommand NavigatePage02Command { get; }
   public ICommand NavigatePage03Command { get; }
+  public ICommand NavigatePage04Command { get; }
 
   IRelayCommand? _sq; public IRelayCommand SwtchSqlSvrCmd => _sq ??= new AsyncRelayCommand<object>(SwitchSqlServer); async Task SwitchSqlServer(object? sqlServerTLA)
   {

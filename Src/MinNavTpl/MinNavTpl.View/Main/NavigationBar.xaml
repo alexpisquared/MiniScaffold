@@ -45,7 +45,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Min Withdrawal Setup"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="WithldngTaxRatesVM" ToolTip="Withholding Tax Rates">
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-orange.ico"      Width="32" />
