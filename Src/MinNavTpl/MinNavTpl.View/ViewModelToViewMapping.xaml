@@ -19,4 +19,7 @@
   <DataTemplate DataType="{x:Type vv:Page03VM}">
     <view_Spec______________________:Page03View/>
   </DataTemplate>
+  <DataTemplate DataType="{x:Type vv:Page04VM}">
+    <view_Spec______________________:Page04View/>
+  </DataTemplate>
 </ResourceDictionary>

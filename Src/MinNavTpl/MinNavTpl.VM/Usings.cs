@@ -37,3 +37,6 @@ global using StandardLib.Helpers;
 global using WpfUserControlLib.Extensions;
 global using static System.Diagnostics.Trace;
 global using Application = System.Windows.Application;
+global using System.ComponentModel;
+global using System.Windows.Data;
+
