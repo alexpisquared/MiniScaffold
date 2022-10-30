@@ -261,34 +261,10 @@
           <TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>
 
-          <Label     Grid.Column="06" Content="Tracker " Target="{Binding ElementName=tbxTracker}" />
-          <TextBox   Grid.Column="07" ToolTip="Just a placeholder for now.." x:Name="tbxTracker" Text="38568" />
-          <Label     Grid.Column="09" Content="Effective Year"/>
-          <TextBlock Grid.Column="10" Text="{Binding YearOfInterest}" d:Text="2022" FontSize="18" FontWeight="Medium" ToolTip="AKA Year of Interest"/>
-          <!-- 
-          Added   as per HB's request on May 17, 2002
-          Removed as per https://pariotech.atlassian.net/browse/BE-204 - 1. on Sep 2, 2022
-          <Ellipse   Grid.Column="12" Stroke="#d00" StrokeThickness="5" Grid.ColumnSpan="2" Margin="-16 -9" ToolTip="As per HB design 'About the security system in IPM' of May 17, 2022">
-            <Ellipse.Triggers>
-              <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <BeginStoryboard>
-                  <Storyboard>
-                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:10:0" />
-                  </Storyboard>
-                </BeginStoryboard>
-              </EventTrigger>
-            </Ellipse.Triggers>
-          </Ellipse>-->
-          <Label     Grid.Column="12" Content="Environment Name" />
+          <Label     Grid.Column="12" Content="SqlServer" />
           <TextBlock Grid.Column="13" Text="{Binding SqlServer}" d:Text="MTUATSQLDB" FontWeight="Medium" ToolTip="SQL Server Instance name &#10;Changeable by the Settings menu" />
           <!--<ComboBox  Grid.Column="13" ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" IsEnabled="{Binding CanSelectSQL}" BorderThickness="0" />-->
 
-          <Label     Grid.Column="15" Content="Client Info" />
-          <TextBlock Grid.Column="16" FontSize="13" > 
-            <Hyperlink RequestNavigate="OnRequestNavigate" NavigateUri="{Binding AttachmentsPath}" >
-              <TextBlock Text="{Binding AttachmentsPath, StringFormat='{}{0}'}" d:Text="Attachments: v:\FolderName"/>
-            </Hyperlink>
-          </TextBlock>
         </Grid>
 
         <Grid Grid.Row="3" Name="NavPlusContent" Margin="-3 0 0 0">
@@ -392,7 +368,6 @@
                       <MenuItem Header="Admin Visibility Test - Non-Admin" ToolTip="Just a test" Visibility="{Binding IsAdmin, UpdateSourceTrigger=PropertyChanged, Converter={cnv:BoolToVisibilityConverter InvertValue=True}}" />
                       <Separator/>
                       <MenuItem Header="_All Cash by Group"        Command="{Binding UpdateViewCommand}" CommandParameter="AllCashByGroupVM" />
-                      <MenuItem Header="_DB Process-User Assignment" Command="{Binding UpdateViewCommand}" CommandParameter="DBProcUserListVM" />
                       <MenuItem Header="_SP Fallback Runner"       Command="{Binding UpdateViewCommand}" CommandParameter="SPFallbackRunrVM" />
                       <MenuItem Header="_User-SP Assigner"         Command="{Binding UpdateViewCommand}" CommandParameter="UserSpAssignerVM" />
                       <MenuItem Header="_Validation Demo "         Command="{Binding UpdateViewCommand}" CommandParameter="ValidationDemoVM" />
@@ -411,8 +386,8 @@
                     <MenuItem   Header="_Video Feedback" IsCheckable="True" IsChecked="{Binding IsAnimeOn}"     ToolTip="Animated feedback on app's activity." />
                     <MenuItem   Header="_Useful Links ...">
                       <MenuItem Header="_Attachments" Click="OnGoToLink" Tag="{Binding AttachmentsPath}" />
-                      <MenuItem Header="_Settings" Click="OnGoToLink" Tag="{Binding StngFolder}" />
-                      <MenuItem Header="_Logs"   Click="OnGoToLink" Tag="{Binding LogsFolder}" />
+                      <MenuItem Header="_Settings"    Click="OnGoToLink" Tag="{Binding StngFolder}" />
+                      <MenuItem Header="_Logs"        Click="OnGoToLink" Tag="{Binding LogsFolder}" />
                     </MenuItem>
                   </MenuItem>
                 </Menu>

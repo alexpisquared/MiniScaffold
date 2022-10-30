@@ -1,26 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace MinNavTpl.View.Spec;
-/// <summary>
-/// Interaction logic for Page04View.xaml
-/// </summary>
+﻿namespace MinNavTpl.View.Spec;
 public partial class Page04View : UserControl
 {
-  public Page04View()
+  public Page04View() => InitializeComponent();
+  void onInitNewItem(object s, InitializingNewItemEventArgs e)
   {
-    InitializeComponent();
+    try
+    {
+      //_ = dgLeads.items.MoveCurrentToLast();
+
+      if (dgLeads.SelectedItem != null)
+        dgLeads.ScrollIntoView(dgLeads.SelectedItem);
+
+      _ = tbxNote.Focus();
+    }
+    catch (Exception ex) { ex.Pop(); }
   }
 }

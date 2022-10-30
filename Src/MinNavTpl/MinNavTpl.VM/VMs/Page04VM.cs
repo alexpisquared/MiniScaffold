@@ -1,4 +1,7 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using CommunityToolkit.Mvvm.Input;
+using System.Windows.Input;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
   public Page04VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, AllowWriteDBStore allowWriteDBStore, UserSettings usrStgns) : base(mainVM, lgr, cfg, bpr, sec, dbx, win, allowWriteDBStore, usrStgns, 8440) { }
@@ -26,10 +29,17 @@ public partial class Page04VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
 
   void ReportProgress(string msg) => ReportMessage = msg;
+  public override void Dispose() => base.Dispose();
 
   [ObservableProperty] string reportMessage = ":0";
   [ObservableProperty] ICollectionView? leadCvs;
   string _xh = ""; public string SearchText { get => _xh; set { if (SetProperty(ref _xh, value)) LeadCvs?.Refresh(); } }
+  bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) LeadCvs?.Refresh(); } }
 
-  public override void Dispose() => base.Dispose();
+  private RelayCommand addNewLeadCommand;
+  public ICommand AddNewLeadCommand => addNewLeadCommand ??= new RelayCommand(AddNewLead);
+
+  private void AddNewLead()
+  {
+  }
 }
