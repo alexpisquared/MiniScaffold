@@ -33,13 +33,12 @@ public partial class Page04VM : BaseDbVM
 
   [ObservableProperty] string reportMessage = ":0";
   [ObservableProperty] ICollectionView? leadCvs;
-  string _xh = ""; public string SearchText { get => _xh; set { if (SetProperty(ref _xh, value)) LeadCvs?.Refresh(); } }
+  string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) LeadCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) LeadCvs?.Refresh(); } }
 
-  private RelayCommand addNewLeadCommand;
-  public ICommand AddNewLeadCommand => addNewLeadCommand ??= new RelayCommand(AddNewLead);
-
-  private void AddNewLead()
+  [RelayCommand]
+  void AddNewLead()
   {
+    ; ;
   }
 }
