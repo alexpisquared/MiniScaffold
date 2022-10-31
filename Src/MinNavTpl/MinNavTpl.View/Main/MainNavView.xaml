@@ -15,97 +15,13 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/IsObsoleteBurronStyle.xaml" />
-        <!--
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
-        -->
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
         <ResourceDictionary Source="/MinNavTpl.View;component/ViewModelToViewMapping.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <sys:Double x:Key="blur">0</sys:Double>
 
-      <!--<Style x:Key="RightAlignStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="TextAlignment" Value="Right"	/>
-      </Style>
-      <Style x:Key="CenterAlignStyle" TargetType="{x:Type TextBlock}">
-        <Setter Property="TextAlignment" Value="Center" />
-      </Style>-->
-      <Style x:Key="CenterAlignChkBox" TargetType="{x:Type CheckBox}">
-        <Setter Property="HorizontalAlignment" Value="Center" />
-      </Style>
       <Style TargetType="{x:Type MenuItem}">
         <Setter Property="FontSize" Value="18" />
-      </Style>
-
-      <Style x:Key="AnimOpacityDataGridRowStyle" TargetType="{x:Type DataGridRow}">
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Path=IsStatusOutstandingAndNoUser}" Value="True">
-            <DataTrigger.EnterActions>
-              <BeginStoryboard Storyboard="{StaticResource ColorFlashing}"/>
-            </DataTrigger.EnterActions>
-            <DataTrigger.ExitActions>
-              <BeginStoryboard Storyboard="{StaticResource ColorRestored}"/>
-            </DataTrigger.ExitActions>
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-      <Style x:Key="AnimOpacityDataGridCellStyle" TargetType="{x:Type DataGridCell}">
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Path=IsStatusOutstandingAndNoUser}" Value="True">
-            <DataTrigger.EnterActions>
-              <BeginStoryboard Storyboard="{StaticResource ColorFlashing}"/>
-            </DataTrigger.EnterActions>
-            <DataTrigger.ExitActions>
-              <BeginStoryboard Storyboard="{StaticResource ColorRestored}"/>
-            </DataTrigger.ExitActions>
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-
-      <Style x:Key="awesomeStyleRadlDiag" TargetType="{x:Type Control}">
-        <Setter Property="Background" Value="{StaticResource awesomeBkGrRadl}" />
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Path=IsStatusOutstandingAndNoUser}" Value="True">
-            <DataTrigger.EnterActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardRadl}"/>
-            </DataTrigger.EnterActions>
-            <DataTrigger.ExitActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardStop}"/>
-            </DataTrigger.ExitActions>
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-      <Style x:Key="awesomeDataGridCellStyle" TargetType="{x:Type Control}">
-        <Setter Property="Background" Value="{StaticResource awesomeBkGrDiag}" />
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Path=IsStatusOutstandingAndNoUser}" Value="True">
-            <DataTrigger.EnterActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardDiag}"/>
-            </DataTrigger.EnterActions>
-            <DataTrigger.ExitActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardStop}"/>
-            </DataTrigger.ExitActions>
-          </DataTrigger>
-        </Style.Triggers>
-      </Style>
-      <Style x:Key="awesomeDataGridRowStyle" TargetType="{x:Type Control}">
-        <Setter Property="Background" Value="{StaticResource awesomeBkGrVert}" />
-        <Style.Triggers>
-          <DataTrigger Binding="{Binding Path=IsStatusOutstandingAndNoUser}" Value="True">
-            <DataTrigger.EnterActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardVert}"/>
-            </DataTrigger.EnterActions>
-            <DataTrigger.ExitActions>
-              <BeginStoryboard Storyboard="{StaticResource awesomeBkGrStoryboardStop}"/>
-            </DataTrigger.ExitActions>
-          </DataTrigger>
-        </Style.Triggers>
       </Style>
 
       <Storyboard x:Key="sbFwd">
@@ -261,9 +177,11 @@
           <TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>
 
-          <Label     Grid.Column="12" Content="SqlServer" />
-          <TextBlock Grid.Column="13" Text="{Binding SqlServer}" d:Text="MTUATSQLDB" FontWeight="Medium" ToolTip="SQL Server Instance name &#10;Changeable by the Settings menu" />
-          <!--<ComboBox  Grid.Column="13" ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" IsEnabled="{Binding CanSelectSQL}" BorderThickness="0" />-->
+          <Label     Grid.Column="09" Content="Sql" />
+          <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" />
+
+          <Label     Grid.Column="12" Content="DB" />
+          <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
 
         </Grid>
 
@@ -357,6 +275,7 @@
                     </MenuItem.Header>
                     <MenuItem   Header="_DevDbg" Visibility="{Binding IsDevDbgViz}" FontStyle="Oblique" FontWeight="Medium">
                       <ComboBox ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" BorderThickness="0" />
+                      <ComboBox ItemsSource="{Binding DtBsNames}"  SelectedItem="{Binding DtBsName}"  BorderThickness="0" />
                       <MenuItem Header="S_QL Server Selection..." Command="{Binding OpenAppConfigCommand}" Visibility="{Binding CanSelectSQL, Converter={cnv:UniConverter}, FallbackValue=Collapsed}" />
                       <MenuItem Header="_Experimental ..." />
                       <MenuItem Header="Get _Busy "     IsCheckable="True" IsChecked="{Binding IsBusy}" ToolTip="Temporary feature for quick dev-t only." />

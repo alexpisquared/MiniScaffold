@@ -3,11 +3,14 @@
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Iress.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/IsObsoleteBurronStyle.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
+        <!--<ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Iress.xaml" />-->
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <!--<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />-->

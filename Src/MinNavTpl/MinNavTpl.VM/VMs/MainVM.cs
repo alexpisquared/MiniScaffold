@@ -4,7 +4,7 @@ public partial class MainVM : BaseMinVM
   readonly bool _ctored;
   readonly NavigationStore _navigationStore;
   readonly Window _mainWin;
-  public MainVM(NavBarVM navBarVM, /*BaseMinVM contentVM,*/ NavigationStore navigationStore, ILogger lgr, IBpr bpr, UserSettings usrStgns, IAddChild wnd)
+  public MainVM(NavBarVM navBarVM, /*BaseMinVM contentVM,*/ NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, UserSettings usrStgns, IAddChild wnd)
   {
     NavBarVM = navBarVM;
     //ContentVM = contentVM;
@@ -18,11 +18,8 @@ public partial class MainVM : BaseMinVM
 
     _navigationStore.CurrentVMChanged += OnCurrentVMChanged;
 
-    if (DevOps.IsSelectModes)
-    {
-      UsrStgns.IsAudible = false;
-      UsrStgns.IsAnimeOn = false;
-    }
+    cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServers.Add(r));
+    cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
 
     Bpr.SuppressTicks = Bpr.SuppressAlarm = !(IsAudible = UsrStgns.IsAudible);
     IsAnimeOn = UsrStgns.IsAnimeOn;
@@ -33,7 +30,10 @@ public partial class MainVM : BaseMinVM
   }
   public override async Task<bool> InitAsync()
   {
-    AppVerNumber = VersionHelper.CurVerStrYYMMDD;
+    SqlServer = UsrStgns.PrefSrvrName;
+    DtBsName = UsrStgns.PrefDtBsName;
+
+    AppVerNumber = VersionHelper.CurVerStr("0.M.d");
     AppVerToolTip = VersionHelper.CurVerStr("0.M.d.H.m");
 
     try { await KeepCheckingForUpdatesAndNeverReturn(); } catch (Exception ex) { ex.Pop(Logger); }
@@ -79,6 +79,46 @@ public partial class MainVM : BaseMinVM
   public NavBarVM NavBarVM { get; }
   //public BaseMinVM ContentVM { get; } // not used here (see LayoutViewModel.xs)
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
+  public List<string> SqlServers { get; } = new();
+  public List<string> DtBsNames { get; } = new();
+  string _qs = default!; public string SqlServer
+  {
+    get => _qs; set
+    {
+      if (SetProperty(ref _qs, value, true) && value is not null && _loaded)
+      {
+        Bpr.Click();
+
+        UsrStgns.PrefSrvrName = value;
+
+        _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
+        _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+        {
+          await Task.Delay(2600);
+          Application.Current.Shutdown();
+        });
+      }
+    }
+  }
+  string _dn = default!; public string DtBsName
+  {
+    get => _dn; set
+    {
+      if (SetProperty(ref _dn, value, true) && value is not null && _loaded)
+      {
+        Bpr.Click();          
+
+        UsrStgns.PrefSrvrName = value;
+
+        _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
+        _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+        {
+          await Task.Delay(2600);
+          Application.Current.Shutdown();
+        });
+      }
+    }
+  }
 
   [ObservableProperty] double upgradeUrgency = 1;         // in days
   [ObservableProperty] string appVerNumber = "0.0";
@@ -158,7 +198,6 @@ public partial class MainVM : BaseMinVM
       IsObsolete = true;
     }
   }
-
   
   public override void Dispose()
   {
@@ -167,5 +206,4 @@ public partial class MainVM : BaseMinVM
 
     base.Dispose();
   }
-
 }
