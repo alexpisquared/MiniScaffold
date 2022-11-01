@@ -3,10 +3,10 @@ public static class MvvmInitHelper
 {
   public static void InitMVVM(IServiceCollection services)
   {
-    _ = services.AddSingleton<SrvrStore>();
-    _ = services.AddSingleton<DtBsStore>();
+    _ = services.AddSingleton<SrvrNameStore>();
+    _ = services.AddSingleton<DtBsNameStore>();
     _ = services.AddSingleton<NavigationStore>();
-    _ = services.AddSingleton<AllowWriteDBStore>();
+    _ = services.AddSingleton<LetDbChgStore>();
 
     if (VersionHelper.IsDbg)
       _ = services.AddSingleton<INavSvc, Page00NavSvc>(); //tu: Start Page controller.

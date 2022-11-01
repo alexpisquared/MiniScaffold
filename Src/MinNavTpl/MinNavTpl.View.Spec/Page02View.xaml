@@ -28,9 +28,9 @@
 
     <Border    Grid.Row="2" BorderThickness="2" Margin="222" />
     <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding ReportMessage}" d:Text="Page02" />
+      <TextBlock Text="{Binding Report}" d:Text="Page02" />
     </Viewbox>
 
-    <Label     Grid.Row="3" Content="{Binding ReportMessage}" d:Content="Page02" />
+    <Label     Grid.Row="3" Content="{Binding Report}" d:Content="Page02" />
   </Grid>
 </UserControl> 

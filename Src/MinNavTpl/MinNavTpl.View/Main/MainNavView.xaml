@@ -178,7 +178,7 @@
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
 
           <Label     Grid.Column="09" Content="Sql" />
-          <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" />
+          <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" />
 
           <Label     Grid.Column="12" Content="DB" />
           <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
@@ -274,7 +274,7 @@
                       </Grid>
                     </MenuItem.Header>
                     <MenuItem   Header="_DevDbg" Visibility="{Binding IsDevDbgViz}" FontStyle="Oblique" FontWeight="Medium">
-                      <ComboBox ItemsSource="{Binding SqlServers}" SelectedItem="{Binding SqlServer}" BorderThickness="0" />
+                      <ComboBox ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" BorderThickness="0" />
                       <ComboBox ItemsSource="{Binding DtBsNames}"  SelectedItem="{Binding DtBsName}"  BorderThickness="0" />
                       <!--
                       <MenuItem Header="S_QL Server Selection..." Command="{Binding OpenAppConfigCommand}" Visibility="{Binding CanSelectSQL, Converter={cnv:UniConverter}, FallbackValue=Collapsed}" />

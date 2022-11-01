@@ -4,7 +4,7 @@ using System.Windows.Input;
 namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
-  public Page04VM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, AllowWriteDBStore allowWriteDBStore, UserSettings usrStgns) : base(mainVM, lgr, cfg, bpr, sec, dbx, win, allowWriteDBStore, usrStgns, 8440) { }
+  public Page04VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
     try
@@ -20,7 +20,7 @@ public partial class Page04VM : BaseDbVM
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
 
-      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UserSetgs.PrefSrvrName} ▀▄▀▄▀▄▀▄▀");
+      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.PrefSrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
     }
     catch (Exception ex) { ex.Pop(Lgr); return false; }
@@ -28,10 +28,9 @@ public partial class Page04VM : BaseDbVM
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
 
-  void ReportProgress(string msg) => ReportMessage = msg;
+  void ReportProgress(string msg) => Report = msg;
   public override void Dispose() => base.Dispose();
 
-  [ObservableProperty] string reportMessage = ":0";
   [ObservableProperty] ICollectionView? leadCvs;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) LeadCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) LeadCvs?.Refresh(); } }

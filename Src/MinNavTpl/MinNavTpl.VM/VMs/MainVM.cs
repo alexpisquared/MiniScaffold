@@ -18,7 +18,7 @@ public partial class MainVM : BaseMinVM
 
     _navigationStore.CurrentVMChanged += OnCurrentVMChanged;
 
-    cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServers.Add(r));
+    cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServrs.Add(r));
     cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
 
     Bpr.SuppressTicks = Bpr.SuppressAlarm = !(IsAudible = UsrStgns.IsAudible);
@@ -30,7 +30,7 @@ public partial class MainVM : BaseMinVM
   }
   public override async Task<bool> InitAsync()
   {
-    SqlServer = UsrStgns.PrefSrvrName;
+    SqlServr = UsrStgns.PrefSrvrName;
     DtBsName = UsrStgns.PrefDtBsName;
 
     AppVerNumber = VersionHelper.CurVerStr("0.M.d");
@@ -86,9 +86,9 @@ public partial class MainVM : BaseMinVM
   public NavBarVM NavBarVM { get; }
   //public BaseMinVM ContentVM { get; } // not used here (see LayoutViewModel.xs)
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
-  public List<string> SqlServers { get; } = new();
+  public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
-  string _qs = default!; public string SqlServer
+  string _qs = default!; public string SqlServr
   {
     get => _qs; set
     {

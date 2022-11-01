@@ -1,11 +1,11 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class NavBarVM : BaseMinVM
 {
-  readonly SrvrStore _srvrStore;
-  readonly DtBsStore _dtbsStore;
-  readonly AllowWriteDBStore _allowWriteDBStore;
+  readonly SrvrNameStore _srvrStore;
+  readonly DtBsNameStore _dtbsStore;
+  readonly LetDbChgStore _allowWriteDBStore;
 
-  public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
+  public NavBarVM(SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore allowWriteDBStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
   {
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;

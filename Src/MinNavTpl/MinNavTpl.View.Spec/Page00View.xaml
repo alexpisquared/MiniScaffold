@@ -27,11 +27,45 @@
     <TextBlock Grid.Row="1" Text="Page00" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
     <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding ReportMessage}" d:Text="Page00" />
     </Viewbox>
 
-    <Label     Grid.Row="3" Content="{Binding ReportMessage}" d:Content="Page00" />
+    <Grid       Grid.Row="2" Margin="0,0,0,6" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="180"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
 
+      <TextBlock Grid.Column="02" FontSize="16" Text="Welcome ..." />
+      <!--<TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
+          <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
+
+      <Label     Grid.Column="09" Content="Sql" />
+      <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" />
+
+      <Label     Grid.Column="12" Content="DB" />
+      <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
+
+    </Grid>
+
+    <Label      Grid.Row="3" Content="{Binding Report}" d:Content="Page00" />
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" >
       <Button   Content="_Import"  Command="{Binding ImportCsvCommand}" x:Name="S" />
       <Button   Content="_Save DB" Command="{Binding Save2DbCommand}"   x:Name="T" />
