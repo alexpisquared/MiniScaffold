@@ -9,9 +9,9 @@ public static class MvvmInitHelper
     _ = services.AddSingleton<AllowWriteDBStore>();
 
     if (VersionHelper.IsDbg)
-      _ = services.AddSingleton<INavSvc, Page04NavSvc>(); //tu: Start Page controller.
-    else if (Environment.GetCommandLineArgs().Length > 4)
       _ = services.AddSingleton<INavSvc, Page00NavSvc>(); //tu: Start Page controller.
+    else if (Environment.GetCommandLineArgs().Length > 4)
+      _ = services.AddSingleton<INavSvc, Page04NavSvc>(); //tu: Start Page controller.
     else
       _ = services.AddSingleton<INavSvc, Page01NavSvc>(); //tu: Start Page controller.
 

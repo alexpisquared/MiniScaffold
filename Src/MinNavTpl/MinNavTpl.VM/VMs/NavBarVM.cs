@@ -5,7 +5,7 @@ public partial class NavBarVM : BaseMinVM
   readonly DtBsStore _dtbsStore;
   readonly AllowWriteDBStore _allowWriteDBStore;
 
-  public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
+  public NavBarVM(SrvrStore srvrStore, DtBsStore dtbsStore, AllowWriteDBStore allowWriteDBStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
   {
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;
@@ -16,6 +16,7 @@ public partial class NavBarVM : BaseMinVM
     _allowWriteDBStore.AllowWriteDBChanged += _allowWriteDBStore_AllowWriteDBChanged;
 
     UsrStgns = usrStgns;
+    NavigatePage00Command = new NavigateCommand(page00NavSvc);
     NavigatePage01Command = new NavigateCommand(page01NavSvc);
     NavigatePage02Command = new NavigateCommand(page02NavSvc);
     NavigatePage03Command = new NavigateCommand(page03NavSvc);
@@ -48,6 +49,7 @@ public partial class NavBarVM : BaseMinVM
 
   public UserSettings UsrStgns { get; }
 
+  public ICommand NavigatePage00Command { get; }
   public ICommand NavigatePage01Command { get; }
   public ICommand NavigatePage02Command { get; }
   public ICommand NavigatePage03Command { get; }

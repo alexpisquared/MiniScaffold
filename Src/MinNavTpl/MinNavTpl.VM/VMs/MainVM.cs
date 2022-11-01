@@ -40,6 +40,13 @@ public partial class MainVM : BaseMinVM
 
     return await base.InitAsync();
   }
+  public override void Dispose()
+  {
+    NavBarVM.Dispose();
+    //ContentVM.Dispose();
+
+    base.Dispose();
+  }
   async Task KeepCheckingForUpdatesAndNeverReturn()
   {
     await Task.Delay(15000);
@@ -124,9 +131,12 @@ public partial class MainVM : BaseMinVM
   [ObservableProperty] string appVerNumber = "0.0";
   [ObservableProperty] object appVerToolTip = "Old";
   [ObservableProperty] string busyMessage = "Loading...";
+  [ObservableProperty] string gSReport = "Loading...";
   [ObservableProperty] bool isDevDbg;
   [ObservableProperty] bool isObsolete;
-  [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible; 
+  [ObservableProperty] int navAnmDirn;
+  [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible;
+  [ObservableProperty] Visibility gSRepViz = Visibility.Visible; 
   bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├──   MainVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); } } /*BusyBlur = value ? 8 : 0;*/  }
   bool _au; public bool IsAudible
   {
@@ -150,6 +160,7 @@ public partial class MainVM : BaseMinVM
       }
     }
   }
+  ObservableCollection<string?> _vm = new(); public ObservableCollection<string?> ValidationMessages { get => _vm; private set => SetProperty(ref _vm, value); }
 
   void OnCurrentVMChanged() => OnPropertyChanged(nameof(CurrentVM));
   void OnCurrentModalVMChanged()
@@ -198,12 +209,5 @@ public partial class MainVM : BaseMinVM
       IsObsolete = true;
     }
   }
-  
-  public override void Dispose()
-  {
-    NavBarVM.Dispose();
-    //ContentVM.Dispose();
-
-    base.Dispose();
-  }
+  [RelayCommand]  async Task HidePnl() { await Task.Yield(); ; }
 }

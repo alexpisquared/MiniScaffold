@@ -54,7 +54,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Withholding Tax Rates"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
@@ -63,7 +63,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Import Excel Files"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
@@ -72,7 +72,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" BMO EFT Query POC"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="BankingValidatorVM" ToolTip="Banking Pre-Check Validation" >
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="BankingValidatorVM" ToolTip="Banking Pre-Check Validation" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
@@ -82,7 +82,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Banking Pre-Check"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="UserPermissionerVM" ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="UserPermissionerVM" ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
@@ -95,7 +95,7 @@
 
     <TextBlock Text="Dev   ↓ ↓ ↓" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" Margin="8 26 0 8" d:Visibility="Visible" />
 
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="XlsOneTimeImportVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding NavigatePage00Command}" CommandParameter="XlsOneTimeImportVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
@@ -104,7 +104,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Import Excel Files dbl"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="DevOpsMasterPageVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="DevOpsMasterPageVM" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
@@ -113,7 +113,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" QA Results"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding UpdateViewCommand}" CommandParameter="HomeLandingPage0View" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="HomeLandingPage0View" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" ToolTip="DevDbg Matters" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
