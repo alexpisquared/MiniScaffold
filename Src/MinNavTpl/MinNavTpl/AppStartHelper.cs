@@ -1,6 +1,4 @@
-﻿using DB.QStats.Std.Models;
-
-namespace MinNavTpl;
+﻿namespace MinNavTpl;
 public static class AppStartHelper
 {
   public static void InitAppSvcs(IServiceCollection services)
