@@ -2,24 +2,23 @@
 
 public class SrvrNameStore
 {
-  public event Action<ADSrvr>? SrvrAdded;
-  public event Action<ADSrvr>? CurrentSrvrChanged;
+  public event Action<string>? SrvrAdded;
+  public event Action<string>? Changed;
 
-  public void AddSrvr(ADSrvr name) => SrvrAdded?.Invoke(name);
-  public void ChgSrvr(ADSrvr name) => CurrentSrvrChanged?.Invoke(name);
+  public void AddSvr(string name) => SrvrAdded?.Invoke(name);
+  public void Change(string name) => Changed?.Invoke(name);
 }
 public class DtBsNameStore
 {
-  public event Action<ADDtBs>? DtBsAdded;
-  public event Action<ADDtBs>? CurrentDtbsChanged;
+  public event Action<string>? DtBsAdded;
+  public event Action<string>? Changed;
 
-  public void AddDtBs(ADDtBs name) => DtBsAdded?.Invoke(name);
-  public void ChgDtBs(ADDtBs name) => CurrentDtbsChanged?.Invoke(name);
+  public void AddDBs(string name) => DtBsAdded?.Invoke(name);
+  public void Change(string name) => Changed?.Invoke(name);
 }
 public class LetDbChgStore
 {
-  public event Action<bool>? AllowWriteDBChanged;
-
-  public void ChangAllowWriteDB(bool value) => AllowWriteDBChanged?.Invoke(value);
+  public event Action<bool>? Changed;
+  public void Change(bool value) => Changed?.Invoke(value);
 }
 

@@ -177,12 +177,16 @@
           <!--<TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
 
+          <CheckBox  Grid.Column="07" IsChecked="{Binding LetDbChgProp}" Content="WrD" />
+
           <Label     Grid.Column="09" Content="Sql" />
           <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" />
+          <TextBlock Grid.Column="11"        Text="{Binding SqlServr}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
           <Label     Grid.Column="12" Content="DB" />
           <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
-
+          <TextBlock Grid.Column="14"        Text="{Binding DtBsName}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          
         </Grid>
 
         <Grid Grid.Row="3" Name="NavPlusContent" Margin="-3 0 0 0">
@@ -427,7 +431,7 @@
         </Grid>
 
         <StackPanel Grid.Row="1" Margin="0,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
-          <Button Content="{Binding AppVerNumber}" Command="{Binding UpgradeSelfCmd}" d:Content="123" BorderThickness="0" Background="Transparent" FontSize="14" VerticalAlignment="Bottom" Padding="4 0 4 1" Margin="2 -4"
+          <Button Content="{Binding AppVerNumber}" Command="{Binding UpgradeSelfCommand}" d:Content="123" BorderThickness="0" Background="Transparent" FontSize="14" VerticalAlignment="Bottom" Padding="4 0 4 1" Margin="2 -4"
                   ToolTip="{Binding AppVerToolTip}" 
                Foreground="{Binding IsObsolete, Converter={cnv:UniConverter BrushTrue=OrangeRed, BrushFalse=Green}, FallbackValue=#07e}" />
           <!-- BE-194                        Style="{StaticResource AnimColorButtonStyle}" Height="26" />          -->

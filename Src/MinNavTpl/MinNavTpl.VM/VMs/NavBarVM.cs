@@ -3,17 +3,17 @@ public partial class NavBarVM : BaseMinVM
 {
   readonly SrvrNameStore _srvrStore;
   readonly DtBsNameStore _dtbsStore;
-  readonly LetDbChgStore _allowWriteDBStore;
+  readonly LetDbChgStore _letDStore;
 
-  public NavBarVM(SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore allowWriteDBStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
+  public NavBarVM(SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, UserSettings usrStgns)
   {
     _srvrStore = srvrStore;
     _dtbsStore = dtbsStore;
-    _allowWriteDBStore = allowWriteDBStore;
+    _letDStore = letDStore;
 
-    _srvrStore.CurrentSrvrChanged += OnCurrentSrvrChanged;
-    _dtbsStore.CurrentDtbsChanged += OnCurrentDtbsChanged;
-    _allowWriteDBStore.AllowWriteDBChanged += _allowWriteDBStore_AllowWriteDBChanged;
+    _srvrStore.Changed += OnCurrentSrvrChanged;
+    _dtbsStore.Changed += OnCurrentDtbsChanged;
+    _letDStore.Changed += OnCurrentLetDChanged;
 
     UsrStgns = usrStgns;
     NavigatePage00Command = new NavigateCommand(page00NavSvc);
@@ -24,24 +24,24 @@ public partial class NavBarVM : BaseMinVM
 
     PrefSrvrName = usrStgns.PrefSrvrName;
     PrefDtBsName = usrStgns.PrefDtBsName;
-    AllowWriteDB = usrStgns.AllowWriteDB;
+    LetDbChgProp = usrStgns.LetDbChgProp;
 
-    IsEnabledAllowWriteDB = true;
+    IsEnabledLetDbChgProp = true;
 
     IsDevDbg = VersionHelper.IsDbg;
 
     _awd = IsDevDbg && /*_secForcer.CanEdit &&*/ (
       UsrStgns.PrefSrvrName is null ? false :
       UsrStgns.PrefSrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
-      UsrStgns.AllowWriteDB);
+      UsrStgns.LetDbChgProp);
   }
 
-  void _allowWriteDBStore_AllowWriteDBChanged(bool val) { AllowWriteDB = val; ; }
-  void OnCurrentSrvrChanged(ADSrvr srvr) => PrefSrvrName = srvr.Name;  //OnPropertyChanged(nameof(PrefSrvrName)); }
-  void OnCurrentDtbsChanged(ADDtBs dtbs) => PrefDtBsName = dtbs.Name;  //OnPropertyChanged(nameof(PrefDtBsName)); }
+  void OnCurrentLetDChanged(bool value) => LetDbChgProp = value;
+  void OnCurrentSrvrChanged(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(PrefSrvrName)); }
+  void OnCurrentDtbsChanged(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(PrefDtBsName)); }
 
-  bool _awd; public bool AllowWriteDB { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.AllowWriteDB = value; _allowWriteDBStore.ChangAllowWriteDB(value); } } }
-  [ObservableProperty] bool isEnabledAllowWriteDB;
+  bool _awd; public bool LetDbChgProp { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.LetDbChgProp = value; _letDStore.Change(value); } } }
+  [ObservableProperty] bool isEnabledLetDbChgProp;
   [ObservableProperty] string prefSrvrName = Consts.SqlServerList.First();
   [ObservableProperty] string prefDtBsName = ".\\SqlExpress";
   [ObservableProperty] bool isDevDbg;
@@ -68,9 +68,9 @@ public partial class NavBarVM : BaseMinVM
 
   public override void Dispose()
   {
-    _srvrStore.CurrentSrvrChanged -= OnCurrentSrvrChanged;
-    _dtbsStore.CurrentDtbsChanged -= OnCurrentDtbsChanged;
-    _allowWriteDBStore.AllowWriteDBChanged -= _allowWriteDBStore_AllowWriteDBChanged;
+    _srvrStore.Changed -= OnCurrentSrvrChanged;
+    _dtbsStore.Changed -= OnCurrentDtbsChanged;
+    _letDStore.Changed -= OnCurrentLetDChanged;
 
     base.Dispose();
   }

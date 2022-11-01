@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page00VM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f0f" >
+             d:DesignHeight="200" d:DesignWidth="900" Padding="8" Background="#4f0f" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -57,11 +57,15 @@
       <!--<TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
 
-      <Label     Grid.Column="09" Content="Sql" />
+      <CheckBox  Grid.Column="07" IsChecked="{Binding LetDbChgProp}" Content="WrD" />
+
+      <Label     Grid.Column="09" Content="SQL" />
       <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" />
+      <TextBlock Grid.Column="11"        Text="{Binding SqlServr}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
       <Label     Grid.Column="12" Content="DB" />
       <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
+      <TextBlock Grid.Column="14"        Text="{Binding DtBsName}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
     </Grid>
 

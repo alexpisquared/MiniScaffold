@@ -1,9 +1,12 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public class BaseMinVM : ObservableValidator, IDisposable
 {
+  protected bool _ctored;
   protected bool _loaded;
   public virtual async Task<bool> InitAsync() { WriteLine($"::> Init of {GetType().Name}"); await Task.Yield(); _loaded = true; return true; }
   public virtual async Task<bool> WrapAsync() { WriteLine($"::> Wrap of {GetType().Name}"); await Task.Yield(); return true; }
+
+  //public BaseMinVM()  {    _ctored = true;  }
 
   bool _disposedValue;
   protected virtual void Dispose(bool disposing)

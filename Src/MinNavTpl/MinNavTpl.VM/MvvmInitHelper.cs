@@ -3,9 +3,9 @@ public static class MvvmInitHelper
 {
   public static void InitMVVM(IServiceCollection services)
   {
+    _ = services.AddSingleton<NavigationStore>();
     _ = services.AddSingleton<SrvrNameStore>();
     _ = services.AddSingleton<DtBsNameStore>();
-    _ = services.AddSingleton<NavigationStore>();
     _ = services.AddSingleton<LetDbChgStore>();
 
     if (VersionHelper.IsDbg)

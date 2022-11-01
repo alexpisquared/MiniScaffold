@@ -20,7 +20,7 @@ public class UserSettings : UserSettingsBase // ..actually, not a store/store - 
     PrefSrvrName = fromFile.PrefSrvrName;
     PrefDtBsRole = fromFile.PrefDtBsRole;
     PrefAplctnId = fromFile.PrefAplctnId;
-    AllowWriteDB = fromFile.AllowWriteDB;
+    LetDbChgProp = fromFile.LetDbChgProp;
     IsAudible = fromFile.IsAudible;
     IsAnimeOn = fromFile.IsAnimeOn;
 
@@ -29,7 +29,7 @@ public class UserSettings : UserSettingsBase // ..actually, not a store/store - 
   string _s = ".\\sqlexpress";  /**/ public string PrefSrvrName { get => _s; set { if (_s != value) { _s = value; SaveIfLoaded(); } } }
   string _d = "QStatsDbg";      /**/ public string PrefDtBsName { get => _d; set { if (_d != value) { _d = value; SaveIfLoaded(); } } }
   string _r = "IpmUserRole";    /**/ public string PrefDtBsRole { get => _r; set { if (_r != value) { _r = value; SaveIfLoaded(); } } }
-  bool _o;                      /**/ public bool AllowWriteDB { get => _o; set { if (_o != value) { _o = value; SaveIfLoaded(); } } }
+  bool _o;                      /**/ public bool LetDbChgProp { get => _o; set { if (_o != value) { _o = value; SaveIfLoaded(); } } }
   int _a = -2;                  /**/ public int PrefAplctnId { get => _a; set { if (_a != value) { _a = value; SaveIfLoaded(); } } }
   bool _u;                      /**/ public bool IsAudible { get => _u; set { if (_u != value) { _u = value; SaveIfLoaded(); } } }
   bool _n;                      /**/ public bool IsAnimeOn { get => _n; set { if (_n != value) { _n = value; SaveIfLoaded(); } } }

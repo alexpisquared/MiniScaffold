@@ -1,15 +1,11 @@
-﻿using MinNavTpl.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM
 {
   readonly int _hashCode;
   readonly MainVM _mainVM;
   readonly ISecForcer _secForcer;
   protected bool _saving, _loading, _inited;
-  protected readonly LetDbChgStore _allowWriteDBStore;
-
-  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore allowWriteDBStore, UserSettings usrStgns, int oid)
+  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore LetDbChgPropStore, UserSettings usrStgns, int oid)
   {
     IsDevDbg = VersionHelper.IsDbg;
 
@@ -26,18 +22,17 @@ public partial class BaseDbVM : BaseMinVM
     _aw = IsDevDbg && _secForcer.CanEdit && (
       UsrStgns.PrefSrvrName is null ? false :
       UsrStgns.PrefSrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
-      UsrStgns.AllowWriteDB);
+      UsrStgns.LetDbChgProp);
 
-    _allowWriteDBStore = allowWriteDBStore; _allowWriteDBStore.AllowWriteDBChanged += AllowWriteDBStore_Changed;
+    _letDbChgStore = LetDbChgPropStore; _letDbChgStore.Changed += LetCStore_Chngd;
 
-    SrvrStore = srvrStore; SrvrStore.CurrentSrvrChanged += SrvrStore_Chngd;
-    DtBsStore = dtbsStore; DtBsStore.CurrentDtbsChanged += DtbsStore_Chngd;
+    SrvrStore = srvrStore; SrvrStore.Changed += SrvrStore_Chngd;
+    DtBsStore = dtbsStore; DtBsStore.Changed += DtbsStore_Chngd;
 
     _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
     Lgr.LogInformation($"┌── {GetType().Name} eo-ctor      PageRank:{oid}");
   }
-
   public override async Task<bool> InitAsync()
   {
     IsBusy = false;
@@ -51,7 +46,7 @@ public partial class BaseDbVM : BaseMinVM
   {
     try
     {
-      if (AllowWriteDB && Dbx.HasUnsavedChanges())
+      if (LetDbChgProp && Dbx.HasUnsavedChanges())
       {
         switch (MessageBox.Show("Would you like to save the changes?\r\n\n..or select Cancel to stay on the page", "There are unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
@@ -62,8 +57,8 @@ public partial class BaseDbVM : BaseMinVM
         }
       }
 
-      SrvrStore.CurrentSrvrChanged -= SrvrStore_Chngd;
-      SrvrStore.CurrentSrvrChanged -= SrvrStore_Chngd;
+      SrvrStore.Changed -= SrvrStore_Chngd;
+      SrvrStore.Changed -= SrvrStore_Chngd;
 
       //PopupMsg(Report = "");
       return true;
@@ -76,23 +71,21 @@ public partial class BaseDbVM : BaseMinVM
   }
   public override void Dispose()
   {
-    SrvrStore.CurrentSrvrChanged -= SrvrStore_Chngd;
-    DtBsStore.CurrentDtbsChanged -= DtbsStore_Chngd;
+    SrvrStore.Changed -= SrvrStore_Chngd;
+    DtBsStore.Changed -= DtbsStore_Chngd;
 
     base.Dispose();
   }
-
   public virtual async Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
 
 
-
-
+  protected readonly LetDbChgStore _letDbChgStore;
   public SrvrNameStore SrvrStore { get; }
   public DtBsNameStore DtBsStore { get; }
-  async void SrvrStore_Chngd(ADSrvr srvr) { SelectSrvr = srvr; await RefreshReloadAsync(); }
-  async void DtbsStore_Chngd(ADDtBs srvr) { SelectDtBs = srvr; await RefreshReloadAsync(); }
-  void AllowWriteDBStore_Changed(bool val) { AllowWriteDB = val; ; }
-  ADSrvr? _cs; public ADSrvr? SelectSrvr
+  async void SrvrStore_Chngd(string srvr) { SelectSrvr = srvr; await RefreshReloadAsync(); }
+  async void DtbsStore_Chngd(string srvr) { SelectDtBs = srvr; await RefreshReloadAsync(); }
+  async void LetCStore_Chngd(bool val) { LetDbChgProp = val; await RefreshReloadAsync(); }
+  string? _cs; public string? SelectSrvr
   {
     get => _cs; set
     {
@@ -101,8 +94,8 @@ public partial class BaseDbVM : BaseMinVM
         try
         {
           Bpr.Click();          //ArgumentNullException.ThrowIfNull(value, nameof(value));
-          UsrStgns.PrefSrvrName = value.Name;
-          SrvrStore.ChgSrvr(value);
+          UsrStgns.PrefSrvrName = value;
+          SrvrStore.Change(value);
 #if true
           _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
           _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
@@ -118,21 +111,20 @@ public partial class BaseDbVM : BaseMinVM
       }
     }
   }
-  ADDtBs? _cd; public ADDtBs? SelectDtBs
+  string? _cd; public string? SelectDtBs
   {
     get => _cd; set
     {
       if (SetProperty(ref _cd, value) && value is not null && _inited)
       {
         Bpr.Click();
-        UsrStgns.PrefDtBsName = value.Name;
-        DtBsStore.ChgDtBs(value);
-        //Page01VMHelpers.LoadDtBsRolesFAF(value.Name, RoleList, _spm, string.Format(Cfg[GenConst.SqlVerSpm] ?? "'", SelectSrvr?.Name, SelectDtBs?.Name), Lgr);
+        UsrStgns.PrefDtBsName = value;
+        DtBsStore.Change(value);
+        //Page01VMHelpers.LostringRolesFAF(value.Name, RoleList, _spm, string.Format(Cfg[GenConst.SqlVerSpm] ?? "'", SelectSrvr?.Name, SelectDtBs?.Name), Lgr);
       }
     }
   }
   ADUser? _ct; public ADUser? CurentUser { get => _ct; set { if (SetProperty(ref _ct, value) && value is not null) { WriteLine($"TrWL:> Curent User:  {value.FullName,-26} {value.A,-6}{value.W,-6}{value.R,-6}{value.L,-6}  {value.Permisssions}"); } } }
-
 
   public UserSettings UsrStgns { get; }
   public IConfigurationRoot Cfg { get; }
@@ -144,7 +136,7 @@ public partial class BaseDbVM : BaseMinVM
   [ObservableProperty] string report = "";
   bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); _mainVM.IsBusy = value; } } /*BusyBlur = value ? 8 : 0;*/  }
   bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
-  bool _aw; public bool AllowWriteDB { get => _aw; set { if (SetProperty(ref _aw, value)) { _allowWriteDBStore.ChangAllowWriteDB(value); } } }
+  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value)) { _letDbChgStore.Change(value); } } }
 
   [RelayCommand] void CheckDb() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
   [RelayCommand]
@@ -162,7 +154,7 @@ public partial class BaseDbVM : BaseMinVM
 
   public async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {
-    if (AllowWriteDB)
+    if (LetDbChgProp)
     {
       var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrow)} called by {cmn} on {dbx.GetType().Name}.  {note}");
       if (!success) throw new Exception(report);
