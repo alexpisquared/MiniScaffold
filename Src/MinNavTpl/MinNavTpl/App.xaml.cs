@@ -78,7 +78,7 @@ public partial class App : System.Windows.Application
         return;
       }
 
-      _audit = VersionHelper.DevDbgAudit(cfg, DbxExt.CalcConStr<QStatsRlsContext>(_serviceProvider, "todo:UserSettingsIPM.UserPrefSqlServer", CfgName.SqlVerIpm).SqlConStrValues());
+      _audit = VersionHelper.DevDbgAudit(cfg, MvvmInitHelper.CalcConStr<QStatsRlsContext>(_serviceProvider, CfgName.SqlVerIpm).SqlConStrValues());
     }
     catch (Exception ex)
     {

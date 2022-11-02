@@ -40,6 +40,16 @@ public static class MvvmInitHelper
     _ = services.AddTransient<ISecForcer, SecForcer>();
 
     _ = services.AddTransient<UserSettings>();
+
+    _ = services.AddTransient(sp =>
+    {
+      return new QStatsRlsContext(CalcConStr<QStatsRlsContext>(sp, CfgName.SqlVerIpm));
+    });
+  }
+  public static string CalcConStr<T>(IServiceProvider sp, string sqlver)
+  {
+    var us = sp.GetRequiredService<UserSettings>();
+    return string.Format(sp.GetRequiredService<IConfigurationRoot>()[sqlver]!, us.SrvrName, us.DtBsName, "IpmDevDbgUser", "IpmDevDbgUser");
   }
 }
 
