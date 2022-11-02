@@ -64,7 +64,7 @@
       <TextBlock Grid.Column="11"        Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
       <Label     Grid.Column="12" Content="DB" />
-      <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
+      <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsNameProp}" />
       <TextBlock Grid.Column="14"        Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
     </Grid>

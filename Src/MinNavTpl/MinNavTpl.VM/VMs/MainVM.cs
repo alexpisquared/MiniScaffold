@@ -32,13 +32,16 @@ public partial class MainVM : BaseMinVM
   {
     SrvrNameProp = UsrStgns.SrvrName;
     DtBsNameProp = UsrStgns.DtBsName;
+    LetDbChgProp = UsrStgns.LetDbChg;
 
     AppVerNumber = VersionHelper.CurVerStr("0.M.d");
     AppVerToolTip = VersionHelper.CurVerStr("0.M.d.H.m");
 
+    var rv = await base.InitAsync();
+
     try { await KeepCheckingForUpdatesAndNeverReturn(); } catch (Exception ex) { ex.Pop(Logger); }
 
-    return await base.InitAsync();
+    return rv;
   }
   public override void Dispose()
   {
@@ -49,7 +52,6 @@ public partial class MainVM : BaseMinVM
     SrvrStore.Changed -= SrvrStore_Chngd;
     DtBsStore.Changed -= DtbsStore_Chngd;
     _letStore.Changed -= LetCStore_Chngd;
-
 
     base.Dispose();
   }
@@ -92,9 +94,9 @@ public partial class MainVM : BaseMinVM
   void SrvrStore_Chngd(string val) { SrvrNameProp = val;   /* await RefreshReloadAsync(); */ }
   void DtbsStore_Chngd(string val) { DtBsNameProp = val;   /* await RefreshReloadAsync(); */ }
   void LetCStore_Chngd(bool value) { LetDbChgProp = value; /* await RefreshReloadAsync(); */ }
-  string _qs = default!; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; } } }
-  string _dn = default!; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; } } }
-  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value)) { _letStore.Change(value); } } }
+  string _qs = ""; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; SrvrStore.Change(value); } } }
+  string _dn = ""; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.DtBsName = value; DtBsStore.Change(value); } } }
+  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Click(); UsrStgns.LetDbChg = value; _letStore.Change(value); } } }
 
   string? _ds; public string DeploymntSrcExe { get => _ds ?? Deployment.DeplSrcExe; set => _ds = value; }
   public IBpr Bpr { get; }
@@ -104,7 +106,7 @@ public partial class MainVM : BaseMinVM
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
   public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
-  
+
 
   [ObservableProperty] double upgradeUrgency = 1;         // in days
   [ObservableProperty] string appVerNumber = "0.0";

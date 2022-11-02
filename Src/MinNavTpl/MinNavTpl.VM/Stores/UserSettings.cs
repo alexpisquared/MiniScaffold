@@ -26,9 +26,9 @@ public class UserSettings : UserSettingsBase // ..actually, not a store/store - 
 
     _loaded = true;
   }
+  string _r = "IpmUserRole";    /**/ public string PrefDtBsRole { get => _r; set { if (_r != value) { _r = value; SaveIfLoaded(); } } }
   string _s = ".\\sqlexpress";  /**/ public string SrvrName { get => _s; set { if (_s != value) { _s = value; SaveIfLoaded(); } } }
   string _d = "QStatsDbg";      /**/ public string DtBsName { get => _d; set { if (_d != value) { _d = value; SaveIfLoaded(); } } }
-  string _r = "IpmUserRole";    /**/ public string PrefDtBsRole { get => _r; set { if (_r != value) { _r = value; SaveIfLoaded(); } } }
   bool _o;                      /**/ public bool LetDbChg { get => _o; set { if (_o != value) { _o = value; SaveIfLoaded(); } } }
   int _a = -2;                  /**/ public int PrefAplctnId { get => _a; set { if (_a != value) { _a = value; SaveIfLoaded(); } } }
   bool _u;                      /**/ public bool IsAudible { get => _u; set { if (_u != value) { _u = value; SaveIfLoaded(); } } }
