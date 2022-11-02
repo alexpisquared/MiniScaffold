@@ -20,7 +20,7 @@ public partial class Page04VM : BaseDbVM
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
 
-      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.PrefSrvrName} ▀▄▀▄▀▄▀▄▀");
+      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.SrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
     }
     catch (Exception ex) { ex.Pop(Lgr); return false; }

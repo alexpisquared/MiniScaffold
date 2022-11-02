@@ -57,15 +57,15 @@
       <!--<TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
           <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
 
-      <CheckBox  Grid.Column="07" IsChecked="{Binding LetDbChgProp}" Content="WrD" />
+      <CheckBox  Grid.Column="07" IsChecked="{Binding LetDbChgProp}" Content="WrD " />
 
       <Label     Grid.Column="09" Content="SQL" />
-      <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SqlServr}" />
-      <TextBlock Grid.Column="11"        Text="{Binding SqlServr}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+      <ComboBox  Grid.Column="10" ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SrvrNameProp}" />
+      <TextBlock Grid.Column="11"        Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
       <Label     Grid.Column="12" Content="DB" />
       <ComboBox  Grid.Column="13" ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}" />
-      <TextBlock Grid.Column="14"        Text="{Binding DtBsName}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+      <TextBlock Grid.Column="14"        Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
     </Grid>
 

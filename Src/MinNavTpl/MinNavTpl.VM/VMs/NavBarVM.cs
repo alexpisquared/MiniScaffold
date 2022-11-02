@@ -22,25 +22,25 @@ public partial class NavBarVM : BaseMinVM
     NavigatePage03Command = new NavigateCommand(page03NavSvc);
     NavigatePage04Command = new NavigateCommand(page04NavSvc);
 
-    PrefSrvrName = usrStgns.PrefSrvrName;
-    PrefDtBsName = usrStgns.PrefDtBsName;
-    LetDbChgProp = usrStgns.LetDbChgProp;
+    PrefSrvrName = usrStgns.SrvrName;
+    PrefDtBsName = usrStgns.DtBsName;
+    LetDbChgProp = usrStgns.LetDbChg;
 
     IsEnabledLetDbChgProp = true;
 
     IsDevDbg = VersionHelper.IsDbg;
 
     _awd = IsDevDbg && /*_secForcer.CanEdit &&*/ (
-      UsrStgns.PrefSrvrName is null ? false :
-      UsrStgns.PrefSrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
-      UsrStgns.LetDbChgProp);
+      UsrStgns.SrvrName is null ? false :
+      UsrStgns.SrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
+      UsrStgns.LetDbChg);
   }
 
+  void OnCurrentSrvrChanged(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(SrvrName)); }
+  void OnCurrentDtbsChanged(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(DtBsNameProp)); }
   void OnCurrentLetDChanged(bool value) => LetDbChgProp = value;
-  void OnCurrentSrvrChanged(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(PrefSrvrName)); }
-  void OnCurrentDtbsChanged(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(PrefDtBsName)); }
 
-  bool _awd; public bool LetDbChgProp { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.LetDbChgProp = value; _letDStore.Change(value); } } }
+  bool _awd; public bool LetDbChgProp { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.LetDbChg = value; _letDStore.Change(value); } } }
   [ObservableProperty] bool isEnabledLetDbChgProp;
   [ObservableProperty] string prefSrvrName = Consts.SqlServerList.First();
   [ObservableProperty] string prefDtBsName = ".\\SqlExpress";
@@ -59,7 +59,7 @@ public partial class NavBarVM : BaseMinVM
   {
     ArgumentNullException.ThrowIfNull(sqlServerTLA, nameof(sqlServerTLA));
 
-    PrefSrvrName = UsrStgns.PrefSrvrName = Consts.SqlServerList.FirstOrDefault(r => r.Contains((string)sqlServerTLA, StringComparison.InvariantCultureIgnoreCase)) ?? Consts.SqlServerList.First();
+    PrefSrvrName = UsrStgns.SrvrName = Consts.SqlServerList.FirstOrDefault(r => r.Contains((string)sqlServerTLA, StringComparison.InvariantCultureIgnoreCase)) ?? Consts.SqlServerList.First();
 
     _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
     await Task.Delay(2600);

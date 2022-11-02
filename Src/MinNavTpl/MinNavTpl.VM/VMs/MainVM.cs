@@ -2,7 +2,7 @@
 public partial class MainVM : BaseMinVM
 {
   readonly NavigationStore _navigationStore;
-  public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, UserSettings usrStgns) : base()
+  public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, UserSettings usrStgns) : base()
   {
     NavBarVM = navBarVM;
     _navigationStore = navigationStore;
@@ -13,6 +13,10 @@ public partial class MainVM : BaseMinVM
     IsDevDbg = VersionHelper.IsDbg;
 
     _navigationStore.CurrentVMChanged += OnCurrentVMChanged;
+
+    SrvrStore = srvrStore; SrvrStore.Changed += SrvrStore_Chngd;
+    DtBsStore = dtbsStore; DtBsStore.Changed += DtbsStore_Chngd;
+    _letStore = letDStore; _letStore.Changed += LetCStore_Chngd;
 
     cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServrs.Add(r));
     cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
@@ -26,8 +30,8 @@ public partial class MainVM : BaseMinVM
   }
   public override async Task<bool> InitAsync()
   {
-    SqlServr = UsrStgns.PrefSrvrName;
-    DtBsName = UsrStgns.PrefDtBsName;
+    SrvrNameProp = UsrStgns.SrvrName;
+    DtBsNameProp = UsrStgns.DtBsName;
 
     AppVerNumber = VersionHelper.CurVerStr("0.M.d");
     AppVerToolTip = VersionHelper.CurVerStr("0.M.d.H.m");
@@ -41,6 +45,11 @@ public partial class MainVM : BaseMinVM
     NavBarVM.Dispose();
 
     _navigationStore.CurrentVMChanged -= OnCurrentVMChanged;
+
+    SrvrStore.Changed -= SrvrStore_Chngd;
+    DtBsStore.Changed -= DtbsStore_Chngd;
+    _letStore.Changed -= LetCStore_Chngd;
+
 
     base.Dispose();
   }
@@ -76,6 +85,17 @@ public partial class MainVM : BaseMinVM
     catch (Exception ex) { Logger.LogError(ex, "│   ▄─▀─▄─▀─▄ -- Ignore"); }
   }
 
+
+  protected readonly LetDbChgStore _letStore;
+  public SrvrNameStore SrvrStore { get; }
+  public DtBsNameStore DtBsStore { get; }
+  void SrvrStore_Chngd(string val) { SrvrNameProp = val;   /* await RefreshReloadAsync(); */ }
+  void DtbsStore_Chngd(string val) { DtBsNameProp = val;   /* await RefreshReloadAsync(); */ }
+  void LetCStore_Chngd(bool value) { LetDbChgProp = value; /* await RefreshReloadAsync(); */ }
+  string _qs = default!; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; } } }
+  string _dn = default!; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; } } }
+  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value)) { _letStore.Change(value); } } }
+
   string? _ds; public string DeploymntSrcExe { get => _ds ?? Deployment.DeplSrcExe; set => _ds = value; }
   public IBpr Bpr { get; }
   public ILogger Logger { get; }
@@ -84,8 +104,7 @@ public partial class MainVM : BaseMinVM
   public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
   public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
-  string _qs = default!; public string SqlServr { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.PrefSrvrName = value; } } }
-  string _dn = default!; public string DtBsName { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.PrefSrvrName = value; } } }
+  
 
   [ObservableProperty] double upgradeUrgency = 1;         // in days
   [ObservableProperty] string appVerNumber = "0.0";

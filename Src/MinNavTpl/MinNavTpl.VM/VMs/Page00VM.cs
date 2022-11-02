@@ -14,13 +14,13 @@ public partial class Page00VM : BaseDbVM
       Cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServrs.Add(r));
       Cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
 
-      SqlServr = UsrStgns.PrefSrvrName;
-      DtBsName = UsrStgns.PrefDtBsName;
+      SrvrNameProp = UsrStgns.SrvrName;
+      DtBsNameProp = UsrStgns.DtBsName;
 
       //await new WpfUserControlLib.Services.ClickOnceUpdater(Lgr).CopyAndLaunch(ReportProgress);
       //await ImportCsv();
 
-      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.PrefSrvrName} ▀▄▀▄▀▄▀▄▀");
+      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.SrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
     }
     catch (Exception ex) { ex.Pop(Lgr); return false; }
@@ -29,53 +29,10 @@ public partial class Page00VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
   public override void Dispose() => base.Dispose();
 
-
   public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
-  string _qs = default!; public string SqlServr
-  {
-    get => _qs; set
-    {
-      if (SetProperty(ref _qs, value, true) && value is not null && _loaded)
-      {
-        Bpr.Click();
 
-        UsrStgns.PrefSrvrName = value;
-
-        _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
-        _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
-        {
-          await Task.Delay(2600);
-          Application.Current.Shutdown();
-        });
-      }
-    }
-  }
-  string _dn = default!; public string DtBsName
-  {
-    get => _dn; set
-    {
-      if (SetProperty(ref _dn, value, true) && value is not null && _loaded)
-      {
-        Bpr.Click();
-
-        UsrStgns.PrefSrvrName = value;
-
-        _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
-        _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
-        {
-          await Task.Delay(2600);
-          Application.Current.Shutdown();
-        });
-      }
-    }
-  }
-
-  void ReportProgress(string msg)
-  {
-    Report = msg;
-    Lgr.Log(LogLevel.Trace, msg);
-  }
+  void ReportProgress(string msg) { Report = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   [RelayCommand]
   async Task ImportCsv()
