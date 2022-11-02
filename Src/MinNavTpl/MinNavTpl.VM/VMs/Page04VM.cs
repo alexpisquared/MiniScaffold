@@ -1,7 +1,4 @@
-﻿using CommunityToolkit.Mvvm.Input;
-using System.Windows.Input;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
   public Page04VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
@@ -27,8 +24,6 @@ public partial class Page04VM : BaseDbVM
     finally { _ = await base.InitAsync(); }
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
-
-  void ReportProgress(string msg) => Report = msg;
   public override void Dispose() => base.Dispose();
 
   [ObservableProperty] ICollectionView? leadCvs;

@@ -79,7 +79,7 @@ public partial class BaseDbVM : BaseMinVM
     base.Dispose();
   }
   public virtual async Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
-
+  protected void ReportProgress(string msg) { Report = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   protected readonly LetDbChgStore _letStore;
   public SrvrNameStore SrvrStore { get; }

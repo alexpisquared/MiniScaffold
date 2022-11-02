@@ -32,7 +32,6 @@ public partial class Page00VM : BaseDbVM
   public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
 
-  void ReportProgress(string msg) { Report = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   [RelayCommand]
   async Task ImportCsv()
