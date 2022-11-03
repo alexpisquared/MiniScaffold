@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\Ambience\AmbienceLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
