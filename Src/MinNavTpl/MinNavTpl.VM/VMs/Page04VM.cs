@@ -11,6 +11,8 @@ public partial class Page04VM : BaseDbVM
       IsBusy = true;
       var sw = Stopwatch.StartNew();
 
+      await Task.Delay(22); // <== does not show up without this.
+
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
       await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
@@ -19,6 +21,12 @@ public partial class Page04VM : BaseDbVM
       LeadCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) ||
         lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+
+      await Dbx.Emails.LoadAsync();
+      EmailCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection());
+
+      await Dbx.LkuLeadStatuses.LoadAsync();
+      LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection());
 
       Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.SrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
@@ -30,6 +38,8 @@ public partial class Page04VM : BaseDbVM
   public override void Dispose() => base.Dispose();
 
   [ObservableProperty] ICollectionView? leadCvs;
+  [ObservableProperty] ICollectionView? emailCvs;
+  [ObservableProperty] ICollectionView? leadStatusCvs;
   [ObservableProperty] Lead? selectdLead;
   [ObservableProperty] Lead? currentLead;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) LeadCvs?.Refresh(); } }
@@ -48,4 +58,5 @@ public partial class Page04VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
   }
   [RelayCommand] void ChkDb4Cngs() {; ; }
+  [RelayCommand] void CloseLead() {; ; }
 }

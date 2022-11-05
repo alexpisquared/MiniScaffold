@@ -97,7 +97,7 @@
         <DataGridTemplateColumn                                 Header="Act" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="SemiBold" Command="{Binding CloseLeadCommand}" />
+              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="SemiBold" Command="{Binding DataContext.CloseLeadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
@@ -144,9 +144,8 @@
       <TextBlock                    Grid.Column="5" Grid.Row="1" Text="{Binding Agency,          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontSize="16"/>
 
       <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentEmail}" Content="Agent E_mail" />
-      <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentEmail"
-                  IsEditable="True" 
-                  ItemsSource="{Binding EMailCvs}" DisplayMemberPath="Id" SelectedValuePath="Id" 
+      <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentEmail" IsEditable="False" 
+                ItemsSource="{Binding DataContext.EmailCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" DisplayMemberPath="Id" SelectedValuePath="Id" 
                 SelectedValue="{Binding AgentEmailId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
         <ComboBox.ItemsPanel>
           <ItemsPanelTemplate>
@@ -164,10 +163,10 @@
       <AccessText Text="Address"        Grid.Column="2" Grid.Row="3" />
       <TextBox                         Grid.Column="3" Grid.Row="3" Text="{Binding OppAddress,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
 
-      <AccessText Text="Market _Venue"  Grid.Column="4" Grid.Row="2"  />
+      <AccessText Text="Market Venue"  Grid.Column="4" Grid.Row="2"  />
       <TextBox                          Grid.Column="5" Grid.Row="2" Text="{Binding MarketVenue,     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
       <Label Content="Stat_us"          Grid.Column="4" Grid.Row="3" Target="{Binding ElementName=cbStatus}" />
-      <ComboBox                         Grid.Column="5" Grid.Row="3" DisplayMemberPath="Name" ItemsSource="{Binding LeadStatusCvs}" SelectedValuePath="Id" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
+      <ComboBox                         Grid.Column="5" Grid.Row="3" ItemsSource="{Binding DataContext.LeadStatusCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedValuePath="Id" DisplayMemberPath="Name" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
       <!--
         <AccessText Text="Priority"       Grid.Column="6" Grid.Row="2" />      
         <TextBox                          Grid.Column="7" Grid.Row="2" Text="{Binding Priority,        Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />-->
