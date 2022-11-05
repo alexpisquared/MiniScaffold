@@ -12,10 +12,9 @@ public partial class Page04VM : BaseDbVM
       await Dbx.Leads.LoadAsync();
       LeadCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection());
       LeadCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Descending));
-      LeadCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) || 
-        lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true || 
+      LeadCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) ||
+        lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
-
 
       Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.SrvrName} ▀▄▀▄▀▄▀▄▀");
       return true;
@@ -27,12 +26,11 @@ public partial class Page04VM : BaseDbVM
   public override void Dispose() => base.Dispose();
 
   [ObservableProperty] ICollectionView? leadCvs;
+  [ObservableProperty] Lead? selectdLead;
+  [ObservableProperty] Lead? currentLead;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) LeadCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) LeadCvs?.Refresh(); } }
 
-  [RelayCommand]
-  void AddNewLead()
-  {
-    ; ;
-  }
+  [RelayCommand] void AddNewLead() {; ; }
+  [RelayCommand] void ChkDb4Cngs() {; ; }
 }

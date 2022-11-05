@@ -1,17 +1,20 @@
 ﻿namespace MinNavTpl.View.Spec;
 public partial class Page04View : UserControl
 {
-  public Page04View() => InitializeComponent();
-  void onInitNewItem(object s, InitializingNewItemEventArgs e)
+  public Page04View()
+  {
+    InitializeComponent();
+    _ = tbFilter.Focus();
+  }
+
+  void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
     try
     {
       //_ = dgLeads.items.MoveCurrentToLast();
 
-      if (dgLeads.SelectedItem != null)
-        dgLeads.ScrollIntoView(dgLeads.SelectedItem);
-
-      _ = tbxNote.Focus();
+      //if (dgLeads.SelectedItem != null)
+      //  dgLeads.ScrollIntoView(dgLeads.SelectedItem);
     }
     catch (Exception ex) { ex.Pop(); }
   }
