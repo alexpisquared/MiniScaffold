@@ -69,14 +69,7 @@
         </DataTemplate>
       </DataGrid.Resources>
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding AgentName}"       Header="Agent"  Width="Auto"/>
-        <DataGridTemplateColumn                                 Header="Agency" Width="90" SortMemberPath="Agency">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <TextBlock Text="{Binding Agency}"          Foreground="{Binding HourlyRate, Converter={cnv:UniConverter}}" />
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
+        <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent"  Width="Auto"/>
         <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -113,7 +106,7 @@
       </DataGrid.Columns>
     </DataGrid>
 
-    <Grid Grid.Row="2" DataContext="{Binding SelectdLead}">
+    <Grid Grid.Row="2" DataContext="{Binding SelectdLead}" Background="#4888">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="160*"/>
@@ -184,7 +177,8 @@
       <TextBox                          Grid.Column="0" Grid.Row="5" Text="{Binding Note,                          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
     </Grid>
 
-    <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="0 3 0 -3" Height="6" />
+
+    <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
 
   </Grid>
 </UserControl>
