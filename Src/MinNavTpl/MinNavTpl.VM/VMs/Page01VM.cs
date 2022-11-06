@@ -42,10 +42,10 @@ public partial class Page01VM : BaseDbVM
 
   [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] ICollectionView? emailCvs;
-  [ObservableProperty] Email? selectdEmail;
   [ObservableProperty] Email? currentEmail;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) EmailCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) EmailCvs?.Refresh(); } }
+  string _e = ""; public string SelectdEmail { get => _e; set { if (SetProperty(ref _e, value)) EmailOIStore  } }
 
   [RelayCommand]
   void AddNewEmail()
