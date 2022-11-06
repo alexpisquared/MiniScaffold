@@ -16,19 +16,21 @@ public partial class Page04VM : BaseDbVM
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
       await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
+      await Dbx.Emails.LoadAsync();
+      await Dbx.LkuLeadStatuses.LoadAsync();
+      
       LeadCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection());
       LeadCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Ascending));
       LeadCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) ||
         lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      await Dbx.Emails.LoadAsync();
       EmailCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection());
 
-      await Dbx.LkuLeadStatuses.LoadAsync();
       LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection());
 
-      Lgr.Log(LogLevel.Trace, $"DB:  in {sw.ElapsedMilliseconds,8}ms  at SQL:{UsrStgns.SrvrName} ▀▄▀▄▀▄▀▄▀");
+      Lgr.Log(LogLevel.Trace, Report = $" {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+
       return true;
     }
     catch (Exception ex) { ex.Pop(Lgr); return false; }
