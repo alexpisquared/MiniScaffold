@@ -79,7 +79,7 @@
     <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F9" CommandParameter="ImportRifLifXlsxVM" />
     <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F12" CommandParameter="ZeroGravitiesNewVM" />
     <Key
-      Binding Command="{Binding CheckDbCommand}" Gesture="F11" CommandParameter="DevDbg"        Modifiers="Ctrl" />
+      Binding Command="{Binding ChkDb4CngsCommand}" Gesture="F11" CommandParameter="DevDbg"        Modifiers="Ctrl" />
     <KeyBinding Command="{Binding TglAdmnCommand}" Gesture="F12" CommandParameter="F12" Modifiers="Ctrl" />
     <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Left" CommandParameter="Left" Modifiers="Alt" />
     <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Right" CommandParameter="Right" Modifiers="Alt" />
@@ -300,7 +300,7 @@
                       <Separator/>
                       <!--
                       <MenuItem Header="_Reset DB" Command="{Binding ResetDbCommand}" CommandParameter="DevDbg" InputGestureText="Ctrl+F22" ToolTip="Delete all forever from the database!!!" />
-                      <MenuItem Header="_Check DB" Command="{Binding CheckDbCommand}" CommandParameter="DevDbg" InputGestureText="Ctrl+F11" ToolTip="..for changes" />
+                      <MenuItem Header="_Check DB" Command="{Binding ChkDb4CngsCommand}" CommandParameter="DevDbg" InputGestureText="Ctrl+F11" ToolTip="..for changes" />
                       <MenuItem Header="_Tgl Admn" Command="{Binding TglAdmnCommand}" CommandParameter="DevDbg" InputGestureText="Ctrl+F12" ToolTip="Toggle DB flag and restart the app in the new mode" />-->
                     </MenuItem>
                     <Separator />

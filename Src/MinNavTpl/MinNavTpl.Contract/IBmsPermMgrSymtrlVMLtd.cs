@@ -15,7 +15,7 @@ public interface IPage02VMLtd
   Microsoft.Extensions.Logging.ILogger Logger { get; }
   Task LoadEF(bool isAsync = true);
   Task<string> SaveLogReportOrThrow(Microsoft.EntityFrameworkCore.DbContext dbContext, string note = "", [CallerMemberName] string? cmn = "");
-  void CheckDb();
+  void ChkDb4Cngs();
 
   bool IsBusy { get; set; }
 }

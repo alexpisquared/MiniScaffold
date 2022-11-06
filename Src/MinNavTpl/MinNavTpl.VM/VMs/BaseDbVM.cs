@@ -93,9 +93,9 @@ public partial class BaseDbVM : BaseMinVM
     {
       if (SetProperty(ref _cs, value) && value is not null && _inited)
       {
-          Bpr.Click();          
-          UsrStgns.SrvrName = value;
-          SrvrStore.Change(value);
+        Bpr.Click();
+        UsrStgns.SrvrName = value;
+        SrvrStore.Change(value);
       }
     }
   }
@@ -125,20 +125,8 @@ public partial class BaseDbVM : BaseMinVM
   bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); _mainVM.IsBusy = value; } } /*BusyBlur = value ? 8 : 0;*/  }
   bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
 
-  [RelayCommand] void CheckDb() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
-  [RelayCommand]
-  async Task Save2Db()
-  {
-    try
-    {
-      Bpr.Click();
-      IsBusy = _saving = true;
-      _ = await SaveLogReportOrThrow(Dbx);
-    }
-    catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); }
-    finally { IsBusy = _saving = false; Bpr.Tick(); }
-  }
-
+  [RelayCommand] void ChkDb4Cngs() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
+  [RelayCommand] async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
   public async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {
     if (LetDbChgProp)
