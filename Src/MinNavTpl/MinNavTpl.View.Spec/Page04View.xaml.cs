@@ -11,7 +11,7 @@ public partial class Page04View : UserControl
   {
     try
     {
-      //_ = dgLeads.items.MoveCurrentToLast();
+      _ = dgLeads.Items.MoveCurrentToLast();
 
       //if (dgLeads.SelectedItem != null)
       //  dgLeads.ScrollIntoView(dgLeads.SelectedItem);

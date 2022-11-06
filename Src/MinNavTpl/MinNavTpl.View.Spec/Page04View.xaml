@@ -62,9 +62,8 @@
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Info" Foreground="#1af"  />
     </Grid>
 
-    <DataGrid CanUserAddRows="True" ItemsSource="{Binding LeadCvs}" Grid.Row="1" x:Name="dgLeads" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
-              SelectedItem="{Binding SelectdLead}"
-               CurrentItem="{Binding CurrentLead}">
+    <DataGrid ItemsSource="{Binding LeadCvs}" Grid.Row="1" x:Name="dgLeads" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
+              CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False">
       <DataGrid.Resources>
         <DataTemplate x:Key="DateTemplate" >
         </DataTemplate>
@@ -117,15 +116,15 @@
     <Grid Grid.Row="2" DataContext="{Binding SelectdLead}">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="260*"/>
+        <ColumnDefinition Width="160*"/>
         <ColumnDefinition Width="120"/>
         <ColumnDefinition Width="200*"/>
         <ColumnDefinition Width="120"/>
         <ColumnDefinition Width="100*"/>
         <ColumnDefinition Width="120"/>
-        <ColumnDefinition Width="100"/>
-        <ColumnDefinition Width="070"/>
-        <ColumnDefinition Width="070"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto" MinWidth="60"/>
         <ColumnDefinition Width="8"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
@@ -139,9 +138,9 @@
       </Grid.RowDefinitions>
 
       <AccessText Text="Agent Name" Grid.Column="2" Grid.Row="1" />
-      <TextBlock                    Grid.Column="3" Grid.Row="1" Text="{Binding AgentName,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontSize="16"/>
+      <TextBlock                    Grid.Column="3" Grid.Row="1" Text="{Binding AgentName}" FontSize="16"/>
       <AccessText Text="Agency"     Grid.Column="4" Grid.Row="1" />
-      <TextBlock                    Grid.Column="5" Grid.Row="1" Text="{Binding Agency,          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" FontSize="16"/>
+      <TextBlock                    Grid.Column="5" Grid.Row="1" Text="{Binding Agency}"    FontSize="16"/>
 
       <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentEmail}" Content="Agent E_mail" />
       <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentEmail" IsEditable="False" 
@@ -159,7 +158,7 @@
       <TextBox                         Grid.Column="1" Grid.Row="3" Text="{Binding OppCompany,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
 
       <AccessText Text="Role Desc-n"    Grid.Column="2" Grid.Row="2" />
-      <TextBox                         Grid.Column="3" Grid.Row="2" Text="{Binding RoleDescription, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <TextBox                         Grid.Column="3" Grid.Row="2" Text="{Binding RoleDescription, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" FontWeight="Medium" />
       <AccessText Text="Address"        Grid.Column="2" Grid.Row="3" />
       <TextBox                         Grid.Column="3" Grid.Row="3" Text="{Binding OppAddress,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
 
