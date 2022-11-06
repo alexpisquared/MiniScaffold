@@ -8,7 +8,7 @@
                 xmlns:vws="clr-namespace:MinNavTpl.View"
                 xmlns:nav="clr-namespace:NavigationDrawerControl;assembly=NavigationDrawerControl" 
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:NavBarVM}"            
-             d:DesignHeight="88" d:DesignWidth="19" >
+             d:DesignHeight="440" d:DesignWidth="222" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -24,7 +24,7 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <TextBlock Text="" Padding="2 2 0 0" FontFamily="Webdings" FontWeight="Normal" FontSize="22" Foreground="#cfd" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Client/Account Finder"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Emails/Agents"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage02Command}" CommandParameter="MaxWithdrawSetupVM" ToolTip="Max Withdrawal Setup">
@@ -33,7 +33,7 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-yellow.ico"      Width="32" />
           <TextBlock Text="&#x0087;" Padding="3 3 0 0" FontFamily="Wingdings 3" FontWeight="Bold" FontSize="22" Foreground="#04f" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Max Withdrawal Setup"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Broadcast"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage03Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
@@ -42,7 +42,7 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
           <TextBlock Text="&#x0088;" Padding="3 3 0 0" FontFamily="Wingdings 3" FontWeight="Bold" FontSize="22" Foreground="#ff0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Min Withdrawal Setup"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Outlook"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
@@ -51,16 +51,16 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-orange.ico"      Width="32" />
           <TextBlock Text="$" Padding="8 0 0 0" FontWeight="Bold" FontSize="18" Foreground="#0e0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Withholding Tax Rates"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Leads"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding NavigateEmailDetailCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Save.png" Margin="8" Width="16"/>
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Import Excel Files"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Email Detail"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
@@ -69,17 +69,17 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Excel_16x16.png" Margin="8"/>
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" BMO EFT Query POC"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Page04"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="BankingValidatorVM" ToolTip="Banking Pre-Check Validation" >
+    <nav:NavDrawerItem Command="{Binding NavigateEmailDetailCommand}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
           <TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Banking Pre-Check"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" EmailDetail"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="UserPermissionerVM" ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
@@ -89,7 +89,7 @@
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
           <TextBlock Text="&#x0091;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#fff" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Permission Manager"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Page04"/>
       </StackPanel>
     </nav:NavDrawerItem>
 
