@@ -2,10 +2,16 @@
 
 public partial class Page01View : UserControl
 {
-  public Page01View()
+  public Page01View() { InitializeComponent(); _ = tbFilter.Focus(); }
+  void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
-    InitializeComponent();
+    try
+    {
+      _ = dgEmails.Items.MoveCurrentToLast();
 
-    Loaded += async (s, e) => { await Task.Delay(1500)/*!!.ConfigureAwait(false)*/; /*_ = S.Focus();*/ };
+      //if (dgEmails.SelectedItem != null)
+      //  dgEmails.ScrollIntoView(dgEmails.SelectedItem);
+    }
+    catch (Exception ex) { ex.Pop(); }
   }
 }

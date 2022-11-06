@@ -1,6 +1,4 @@
-﻿using DB.QStats.Std.Models;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
   int _thisCampaign;
@@ -17,16 +15,16 @@ public partial class Page04VM : BaseDbVM
 
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
-
-
+#if true
       await Dbx.
-        Emails.
+      Emails.
         Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaign)).
         //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
         LoadAsync();
-      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
-      //await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
-      //await Dbx.Emails.LoadAsync();
+#else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
+     await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
+     await Dbx.Emails.LoadAsync();
+#endif 
 
       await Dbx.LkuLeadStatuses.LoadAsync();
 
@@ -71,6 +69,6 @@ public partial class Page04VM : BaseDbVM
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  [RelayCommand] void ChkDb4Cngs() {; ; }
-  [RelayCommand] void CloseLead() {; ; }
+
+  [RelayCommand] void CloseLead() { if (SelectdLead is not null) SelectdLead.Status = "Closed"; }
 }
