@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using DB.QStats.Std.Models;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
   int _thisCampaign;
@@ -15,12 +17,22 @@ public partial class Page04VM : BaseDbVM
 
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
-      await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
-      await Dbx.Emails.LoadAsync();
+
+
+      await Dbx.
+        Emails.
+        Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaign)).
+        //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
+        LoadAsync();
+      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
+      //await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
+      //await Dbx.Emails.LoadAsync();
+
       await Dbx.LkuLeadStatuses.LoadAsync();
-      
-      LeadCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection());
-      LeadCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Ascending));
+
+      LeadCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === LeadCvs = CollectionViewSource.GetDefaultView(await Dbx.Leads.ToListAsync());
+
+      LeadCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Descending));
       LeadCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) ||
         lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
@@ -29,7 +41,7 @@ public partial class Page04VM : BaseDbVM
 
       LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection());
 
-      Lgr.Log(LogLevel.Trace, Report = $" {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, Report = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Leads.Local.Count:N0} + {Dbx.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }
