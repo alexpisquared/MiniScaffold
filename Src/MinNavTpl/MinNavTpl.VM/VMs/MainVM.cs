@@ -2,21 +2,22 @@
 public partial class MainVM : BaseMinVM
 {
   readonly NavigationStore _navigationStore;
-  public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, UserSettings usrStgns) : base()
+  public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore svr, DtBsNameStore dbs, EmailOfIStore eml, LetDbChgStore alw, UserSettings usr) : base()
   {
     NavBarVM = navBarVM;
     _navigationStore = navigationStore;
     Logger = lgr;
     Bpr = bpr;
-    UsrStgns = usrStgns;
+    UsrStgns = usr;
 
     IsDevDbg = VersionHelper.IsDbg;
 
     _navigationStore.CurrentVMChanged += OnCurrentVMChanged;
 
-    SrvrStore = srvrStore; SrvrStore.Changed += SrvrStore_Chngd;
-    DtBsStore = dtbsStore; DtBsStore.Changed += DtbsStore_Chngd;
-    _letStore = letDStore; _letStore.Changed += LetCStore_Chngd;
+    SrvrStore = svr; SrvrStore.Changed += SrvrStore_Chngd;
+    DtBsStore = dbs; DtBsStore.Changed += DtbsStore_Chngd;
+    EmaiStore = eml; EmaiStore.Changed += EmaiStore_Chngd;
+    _letStore = alw; _letStore.Changed += LetCStore_Chngd;
 
     cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServrs.Add(r));
     cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
@@ -32,6 +33,7 @@ public partial class MainVM : BaseMinVM
   {
     SrvrNameProp = UsrStgns.SrvrName;
     DtBsNameProp = UsrStgns.DtBsName;
+    EmailOfIProp = UsrStgns.EmailOfI;
     LetDbChgProp = UsrStgns.LetDbChg;
 
     AppVerNumber = VersionHelper.CurVerStr("0.M.d");
@@ -51,6 +53,7 @@ public partial class MainVM : BaseMinVM
 
     SrvrStore.Changed -= SrvrStore_Chngd;
     DtBsStore.Changed -= DtbsStore_Chngd;
+    EmaiStore.Changed -= EmaiStore_Chngd;
     _letStore.Changed -= LetCStore_Chngd;
 
     base.Dispose();
@@ -91,9 +94,12 @@ public partial class MainVM : BaseMinVM
   protected readonly LetDbChgStore _letStore;
   public SrvrNameStore SrvrStore { get; }
   public DtBsNameStore DtBsStore { get; }
+  public EmailOfIStore EmaiStore { get; }
   void SrvrStore_Chngd(string val) { SrvrNameProp = val;   /* await RefreshReloadAsync(); */ }
   void DtbsStore_Chngd(string val) { DtBsNameProp = val;   /* await RefreshReloadAsync(); */ }
+  void EmaiStore_Chngd(string val) { EmailOfIProp = val;   /* await RefreshReloadAsync(); */ }
   void LetCStore_Chngd(bool value) { LetDbChgProp = value; /* await RefreshReloadAsync(); */ }
+  string _em = ""; public string EmailOfIProp { get => _em; set { if (SetProperty(ref _em, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value; SrvrStore.Change(value); } } }
   string _qs = ""; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; SrvrStore.Change(value); } } }
   string _dn = ""; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.DtBsName = value; DtBsStore.Change(value); } } }
   bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Click(); UsrStgns.LetDbChg = value; _letStore.Change(value); } } }

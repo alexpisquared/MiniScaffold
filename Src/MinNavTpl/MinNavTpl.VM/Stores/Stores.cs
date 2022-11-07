@@ -10,7 +10,7 @@ public class DtBsNameStore
   public event Action<string>? Added; public void Add(string name) => Added?.Invoke(name);
   public event Action<string>? Changed; public void Change(string name) => Changed?.Invoke(name);
 }
-public class EmailOIStore
+public class EmailOfIStore
 {
   public event Action<string>? Changed; public void Change(string name) => Changed?.Invoke(name);
 }

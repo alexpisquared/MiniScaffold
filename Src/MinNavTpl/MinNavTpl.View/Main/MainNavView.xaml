@@ -130,7 +130,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
@@ -184,7 +184,10 @@
 
           <Label     Grid.Column="12" Content="DB" />
           <TextBlock Grid.Column="13"        Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
-          
+
+          <Label     Grid.Column="15" Content="Agent" />
+          <TextBlock Grid.Column="16"        Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+
         </Grid>
 
         <Grid Grid.Row="3" Name="NavPlusContent" Margin="-3 0 0 0">

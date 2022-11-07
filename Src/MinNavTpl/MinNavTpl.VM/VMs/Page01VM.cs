@@ -2,7 +2,10 @@
 public partial class Page01VM : BaseDbVM
 {
   int _thisCampaign;
-  public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
+  public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, EmailOfIStore eml, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110)
+  {
+    EmaiStore = eml; //EmaiStore.Changed += EmaiStore_Chngd;
+  }
   public override async Task<bool> InitAsync()
   {
     try
@@ -40,22 +43,24 @@ public partial class Page01VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
   public override void Dispose() => base.Dispose();
 
+  public EmailOfIStore EmaiStore { get; }
+
   [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] ICollectionView? emailCvs;
   [ObservableProperty] Email? currentEmail;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) EmailCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) EmailCvs?.Refresh(); } }
-  string _e = ""; public string SelectdEmail { get => _e; set { if (SetProperty(ref _e, value)) EmailOIStore  } }
+  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value.Id; SrvrStore.Change(value.Id); } } }
 
   [RelayCommand]
   void AddNewEmail()
   {
     try
     {
-      var nl = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() };
-      Dbx.Emails.Local.Add(nl);
+      var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() };
+      Dbx.Emails.Local.Add(newEml);
 
-      SelectdEmail = nl;
+      SelectdEmail = newEml;
     }
     catch (Exception ex) { ex.Pop(); }
   }
