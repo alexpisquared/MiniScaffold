@@ -50,7 +50,7 @@ public partial class Page01VM : BaseDbVM
   [ObservableProperty] Email? currentEmail;
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) EmailCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) EmailCvs?.Refresh(); } }
-  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value.Id; SrvrStore.Change(value.Id); } } }
+  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value.Id; EmaiStore.Change(value.Id); } } }
 
   [RelayCommand]
   void AddNewEmail()

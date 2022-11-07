@@ -37,8 +37,7 @@ public partial class BaseDbVM : BaseMinVM
     IsBusy = false;
     _inited = true;
     Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}");
-    await Bpr.FinishAsync();
-    return true;
+    return await base.InitAsync(); 
   }
   public virtual async Task VMSpecificSaveToDB(object? isGoingBack) => await SaveLogReportOrThrow(Dbx);
   public override async Task<bool> WrapAsync()
