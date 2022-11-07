@@ -89,7 +89,7 @@
     </Grid>
 
     <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
-      <lcl:EmailDetailView Margin="0" />
+      <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
     </Grid>
 
     <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
