@@ -1,7 +1,9 @@
-﻿<UserControl x:Class="MinNavTpl.View.Spec.Page01View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+﻿<UserControl x:Class="MinNavTpl.View.Spec.Page01View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
-             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page01VM}" 
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" 
+             xmlns:lcl="clr-namespace:MinNavTpl.View.Spec" 
+             d:DataContext="{d:DesignInstance Type={x:Type vms:Page01VM}}" 
              d:DesignHeight="300" d:DesignWidth="1100" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
@@ -14,7 +16,7 @@
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! =&gt; must be a Style. ???????">
     <Grid.LayoutTransform>
       <TransformGroup>
         <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
@@ -26,8 +28,13 @@
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
 
-    <Grid Name="ctrlPnl" Height="30">
+    <Grid x:Name="ctrlPnl" Height="30">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
@@ -40,28 +47,21 @@
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
-        <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Add _New Email" Foreground="#f80" />
 
-        <TextBlock>
-          <Run Text="     Slctd:" FontWeight="Light" />
-          <Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" />
-        </TextBlock>
-        <TextBlock>
-          <Run Text="     Crrnt:" FontWeight="Light" />
-          <Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" />
-        </TextBlock>
+        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" /></TextBlock>
+        <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
       </StackPanel>
 
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
     </Grid>
 
     <DataGrid ItemsSource="{Binding EmailCvs}" Grid.Row="1" x:Name="dgEmails" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" AutoGenerateColumns="True">
-    </DataGrid>
+              CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" AutoGenerateColumns="True"/>
 
     <Grid Grid.Row="2" DataContext="{Binding SelectdEmail}" Background="#4888">
       <Grid.ColumnDefinitions>
@@ -88,7 +88,13 @@
       </Grid.RowDefinitions>
     </Grid>
 
+    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
+      <lcl:EmailDetailView Margin="0" />
+    </Grid>
+
     <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
+
+    <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="22" Grid.RowSpan="4" />
 
   </Grid>
 </UserControl>

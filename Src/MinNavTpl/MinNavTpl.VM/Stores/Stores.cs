@@ -12,7 +12,12 @@ public class DtBsNameStore
 }
 public class EmailOfIStore
 {
-  public event Action<string>? Changed; public void Change(string name) => Changed?.Invoke(name);
+  public string LastVal { get; private set; } = ":Nul";
+  public event Action<string>? Changed; public void Change(string name)
+  {
+    LastVal = name;
+    Changed?.Invoke(name);
+  }
 }
 public class LetDbChgStore
 {

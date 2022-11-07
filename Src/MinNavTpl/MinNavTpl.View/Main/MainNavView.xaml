@@ -180,13 +180,13 @@
           <CheckBox  Grid.Column="07"   IsChecked="{Binding LetDbChgProp}" Content="WrD " />
 
           <Label     Grid.Column="09" Content="Sql" />
-          <TextBlock Grid.Column="10"        Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <TextBlock Grid.Column="10" Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
           <Label     Grid.Column="12" Content="DB" />
-          <TextBlock Grid.Column="13"        Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <TextBlock Grid.Column="13" Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
           <Label     Grid.Column="15" Content="Agent" />
-          <TextBlock Grid.Column="16"        Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <TextBlock Grid.Column="16" Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
 
         </Grid>
 

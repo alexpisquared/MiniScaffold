@@ -64,7 +64,7 @@
         </DataTemplate>
       </DataGrid.Resources>
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding AgentLeadId}"    Header="Agent"  Width="Auto"/>
+        <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent"  Width="Auto"/>
         <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -90,7 +90,7 @@
         </DataGridTemplateColumn>
 
         <!--
-          <DataGridTextColumn Binding="{Binding AgentLeadId}"    Header="Agent Lead"			Width="120" IsReadOnly="True"/>
+          <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent Lead"			Width="120" IsReadOnly="True"/>
           <DataGridTextColumn Binding="{Binding MarketVenue}"     Header="MrktVenue" Width="Auto"/>
           <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
           <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
@@ -133,7 +133,7 @@
       <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentLead}" Content="Agent E_mail" />
       <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentLead" IsEditable="False" 
                 ItemsSource="{Binding DataContext.LeadCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" DisplayMemberPath="Id" SelectedValuePath="Id" 
-                SelectedValue="{Binding AgentLeadId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
+                SelectedValue="{Binding AgentEmail, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
         <ComboBox.ItemsPanel>
           <ItemsPanelTemplate>
             <VirtualizingStackPanel/>
@@ -141,19 +141,19 @@
         </ComboBox.ItemsPanel>
       </ComboBox>
       <AccessText Text="Job# (role title)"     Grid.Column="0" Grid.Row="2" />
-      <TextBox                         Grid.Column="1" Grid.Row="2" Text="{Binding RoleTitle,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
-      <AccessText Text="Client"				 Grid.Column="0" Grid.Row="3" />
-      <TextBox                         Grid.Column="1" Grid.Row="3" Text="{Binding OppCompany,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <TextBox                        Grid.Column="1" Grid.Row="2" Text="{Binding RoleTitle,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <AccessText Text="Client"				Grid.Column="0" Grid.Row="3" />
+      <TextBox                        Grid.Column="1" Grid.Row="3" Text="{Binding OppCompany,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
 
-      <AccessText Text="Role Desc-n"    Grid.Column="2" Grid.Row="2" />
-      <TextBox                         Grid.Column="3" Grid.Row="2" Text="{Binding RoleDescription, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" FontWeight="Medium" />
-      <AccessText Text="Address"        Grid.Column="2" Grid.Row="3" />
-      <TextBox                         Grid.Column="3" Grid.Row="3" Text="{Binding OppAddress,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <AccessText Text="Role Desc-n"  Grid.Column="2" Grid.Row="2" />
+      <TextBox                        Grid.Column="3" Grid.Row="2" Text="{Binding RoleDescription, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" FontWeight="Medium" />
+      <AccessText Text="Address"      Grid.Column="2" Grid.Row="3" />
+      <TextBox                        Grid.Column="3" Grid.Row="3" Text="{Binding OppAddress,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
 
-      <AccessText Text="Market Venue"  Grid.Column="4" Grid.Row="2"  />
-      <TextBox                          Grid.Column="5" Grid.Row="2" Text="{Binding MarketVenue,     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
-      <Label Content="Stat_us"          Grid.Column="4" Grid.Row="3" Target="{Binding ElementName=cbStatus}" />
-      <ComboBox                         Grid.Column="5" Grid.Row="3" ItemsSource="{Binding DataContext.LeadStatusCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedValuePath="Id" DisplayMemberPath="Name" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
+      <AccessText Text="Market Venue" Grid.Column="4" Grid.Row="2"  />
+      <TextBox                        Grid.Column="5" Grid.Row="2" Text="{Binding MarketVenue,     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <Label Content="Stat_us"        Grid.Column="4" Grid.Row="3" Target="{Binding ElementName=cbStatus}" />
+      <ComboBox                       Grid.Column="5" Grid.Row="3" ItemsSource="{Binding DataContext.LeadStatusCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" SelectedValuePath="Id" DisplayMemberPath="Name" SelectedValue="{Binding Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Margin="0,2"  Name="cbStatus" />
       <!--
         <AccessText Text="Priority"       Grid.Column="6" Grid.Row="2" />      
         <TextBox                          Grid.Column="7" Grid.Row="2" Text="{Binding Priority,        Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />-->

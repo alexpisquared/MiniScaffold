@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:EmailDetailVM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f00" >
+             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#8f00" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -24,10 +24,10 @@
       <RowDefinition Height="30" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="1" Text="EmailDetail" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
+    <TextBlock Grid.Row="1" Text="{Binding Report}" d:Text="EmailDetail" FontSize="20" Margin="19 0" />
 
     <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding Report}" d:Text="EmailDetail" />
+      <TextBlock Text="{Binding EmailOfIProp}" d:Text="EmailDetail" />
     </Viewbox>
 
     <Label     Grid.Row="3" Content="{Binding Report}" d:Content="EmailDetail" />
