@@ -102,25 +102,25 @@
       <TextBox                          Grid.Column="1" Grid.Row="0" Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
       <Label Content="Modified At"      Grid.Column="4" Grid.Row="0" />
       <TextBlock                        Grid.Column="5" Grid.Row="0" Text="{Binding ModifiedAt}" />
-      <Button                           Grid.Column="5" Grid.Row="0" Content="Del"     Command="{Binding DelCommand}" ToolTip="onDel ... ?????~~~~!!! " HorizontalAlignment="Right" Margin="0"    Foreground="#f00"     />
+      <Button                           Grid.Column="5" Grid.Row="0" Content="Del"     Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="onDel ... ?????~~~~!!! " HorizontalAlignment="Right" Margin="0"    Foreground="#f00"     />
 
       <Label Content="First Name"       Grid.Column="0" Grid.Row="1" />
       <TextBox                          Grid.Column="1" Grid.Row="1" Text="{Binding Fname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
       <TextBlock                        Grid.Column="1" Grid.Row="1" Text="{Binding Country}" HorizontalAlignment="Right" d:Text="Ukraine" />
-      <Button                           Grid.Column="2" Grid.Row="1" Content="◄Country" Command="{Binding CouCommand}" ToolTip="Get country" HorizontalAlignment="Left" Margin="0" />
+      <Button                           Grid.Column="2" Grid.Row="1" Content="◄Country" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="Get country" HorizontalAlignment="Left" Margin="0" />
       <Label Content="Last Name"        Grid.Column="2" Grid.Row="1" />
       <TextBox                          Grid.Column="3" Grid.Row="1" Text="{Binding Lname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
       <Label Content="Company"          Grid.Column="4" Grid.Row="1" />
       <TextBox                          Grid.Column="5" Grid.Row="1" Text="{Binding Company, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
       <Label Content="Perm Ban Rsn"     Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=tbPbr}" />
-      <Button                           Grid.Column="1" Grid.Row="2" Content="!agn"  Tag="Not an Agent"         HorizontalAlignment="Left" Height="26" Command="{Binding PBRCommand}" Margin="00,0,0,0"  Width="48" ToolTip="Set PBR to 'Not an Agent'" />
-      <Button                           Grid.Column="1" Grid.Row="2" Content="faild" Tag="Delivery has failed"  HorizontalAlignment="Left" Height="26" Command="{Binding PBRCommand}" Margin="50,0,0,0"  Width="48" ToolTip="Set PBR to 'Delivery has failed'" />
-      <Button                           Grid.Column="1" Grid.Row="2" Content="peer"  Tag="Peer"                 HorizontalAlignment="Left" Height="26" Command="{Binding PBRCommand}" Margin="100,0,0,0" Width="48" ToolTip="Set PBR to 'Peer'" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="!agn"  Tag="Not an Agent"         HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="00,0,0,0"  Width="48" ToolTip="Set PBR to 'Not an Agent'" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="faild" Tag="Delivery has failed"  HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="50,0,0,0"  Width="48" ToolTip="Set PBR to 'Delivery has failed'" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="peer"  Tag="Peer"                 HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="100,0,0,0" Width="48" ToolTip="Set PBR to 'Peer'" />
       <TextBox                          Grid.Column="1" Grid.Row="2" Text="{Binding PermBanReason, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" x:Name="tbPbr" HorizontalAlignment="Stretch" Margin="150,0,0,0" />
-      <!--ton                           Grid.Column="1" Grid.Row="2" Content="FLD"  Tag="{Binding ElementName=tbPbr, Path=Text}"           Height="26" Command="{Binding PBRCommand}" Margin="48,0,0,0"  Padding="3" ToolTip="Set PBR to text on the left" HorizontalAlignment="Right" />-->
-      <Button                           Grid.Column="2" Grid.Row="2" Content="ne_xt" x:Name="bt227"             HorizontalAlignment="Left" Height="26" Command="{Binding NxtCommand}" Margin="2,0,0,0"   Width="48" ToolTip="Update Outlook" Padding="0" />
-      <Button                           Grid.Column="2" Grid.Row="2" Content="OLk"   x:Name="bt222"             HorizontalAlignment="Left" Height="26" Command="{Binding OLkCommand}" Margin="52,0,71,0" Width="48" ToolTip="Update Outlook" />
+      <!--ton                           Grid.Column="1" Grid.Row="2" Content="FLD"  Tag="{Binding ElementName=tbPbr, Path=Text}"           Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="48,0,0,0"  Padding="3" ToolTip="Set PBR to text on the left" HorizontalAlignment="Right" />-->
+      <Button                           Grid.Column="2" Grid.Row="2" Content="ne_xt" x:Name="bt227"             HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.NxtCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="2,0,0,0"   Width="48" ToolTip="Update Outlook" Padding="0" />
+      <Button                           Grid.Column="2" Grid.Row="2" Content="OLk"   x:Name="bt222"             HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.OLkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="52,0,71,0" Width="48" ToolTip="Update Outlook" />
       <Label Content="   Phone"         Grid.Column="2" Grid.Row="2" />
       <TextBox                          Grid.Column="3" Grid.Row="2" Text="{Binding Phone, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
       <Label Content="_Re-send after"   Grid.Column="4" Grid.Row="2" Target="{Binding ElementName=tbRa}" />
@@ -129,7 +129,7 @@
       <Label Content="Priority"         Grid.Column="0" Grid.Row="3" />
       <TextBox                          Grid.Column="1" Grid.Row="3" Text="{Binding NotifyPriority, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
 
-      <Button Content="_DNN Avl"        Grid.Column="2" Grid.Row="3" Command="{Binding DNNCommand}" Margin="5 0" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" />
+      <Button Content="_DNN Avl"        Grid.Column="2" Grid.Row="3" Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="5 0" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" />
       <TextBox                          Grid.Column="3" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
       <Label Content="DNN OffMarkt"     Grid.Column="4" Grid.Row="3" />
       <TextBox                          Grid.Column="5" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />

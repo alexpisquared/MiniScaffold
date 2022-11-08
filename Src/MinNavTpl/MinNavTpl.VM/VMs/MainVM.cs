@@ -103,10 +103,10 @@ public partial class MainVM : BaseMinVM
     EmailOfIProp = emailOfI;   /* await RefreshReloadAsync(); */
   }
   void LetCStore_Chngd(bool value) { LetDbChgProp = value; /* await RefreshReloadAsync(); */ }
-  string _qs = ""; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; SrvrStore.Change(value); } } }
-  string _dn = ""; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.DtBsName = value; DtBsStore.Change(value); } } }
-  string _em = ""; public string EmailOfIProp { get => _em; set { if (SetProperty(ref _em, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value; EmaiStore.Change(value); } } }
-  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Click(); UsrStgns.LetDbChg = value; _letStore.Change(value); } } }
+  string _qs = ""; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.SrvrName = value; SrvrStore.Change(value); } } }
+  string _dn = ""; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.DtBsName = value; DtBsStore.Change(value); } } }
+  string _em = ""; public string EmailOfIProp { get => _em; set { if (SetProperty(ref _em, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value; EmaiStore.Change(value); } } }
+  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Tick(); UsrStgns.LetDbChg = value; _letStore.Change(value); } } }
 
   string? _ds; public string DeploymntSrcExe { get => _ds ?? Deployment.DeplSrcExe; set => _ds = value; }
   public IBpr Bpr { get; }
