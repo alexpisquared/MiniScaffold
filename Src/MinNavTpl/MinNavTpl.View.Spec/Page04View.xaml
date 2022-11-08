@@ -34,7 +34,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Leads" Margin="4 0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#f6f" />
+      <TextBlock  Text="Leads" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 

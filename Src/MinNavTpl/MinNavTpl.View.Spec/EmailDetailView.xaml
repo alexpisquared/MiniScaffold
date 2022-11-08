@@ -32,7 +32,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Ehists" Margin="4 0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#f6f" />
+      <TextBlock  Text="Ehists" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
@@ -52,8 +52,7 @@
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
     </Grid>
 
-    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" Margin="4 8"
-              CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" HeadersVisibility="Column" >
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
         <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:UniConverter}}" SortDirection="Descending"  />

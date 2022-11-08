@@ -6,10 +6,10 @@ public partial class Page02View : UserControl
   {
     try
     {
-      _ = dgPageCvs.Items.MoveCurrentToLast();
+      _ = ((DataGrid)s).Items.MoveCurrentToLast();
 
-      if (dgPageCvs.SelectedItem != null)
-        dgPageCvs.ScrollIntoView(dgPageCvs.SelectedItem);
+      if (((DataGrid)s).SelectedItem != null)
+        ((DataGrid)s).ScrollIntoView(((DataGrid)s).SelectedItem);
     }
     catch (Exception ex) { ex.Pop(); }
   }

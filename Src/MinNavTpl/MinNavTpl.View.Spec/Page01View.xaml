@@ -41,7 +41,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Emails" Margin="4 0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#f6f" />
+      <TextBlock  Text="Agents" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
@@ -59,7 +59,7 @@
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
     </Grid>
 
-    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
+    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
               CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" >
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"             IsReadOnly="True"/>

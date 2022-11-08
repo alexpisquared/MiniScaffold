@@ -69,4 +69,5 @@ public partial class Page01VM : BaseDbVM
   [RelayCommand] void PBR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void OLk() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void DNN() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 }
