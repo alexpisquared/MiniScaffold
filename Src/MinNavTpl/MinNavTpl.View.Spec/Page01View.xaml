@@ -60,7 +60,25 @@
     </Grid>
 
     <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" AutoGenerateColumns="True"/>
+              CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" >
+      <DataGrid.Columns>
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"             IsReadOnly="True"/>
+        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"           />
+        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"           />
+        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"         />
+        <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
+        <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:UniConverter}}"   IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:UniConverter}}"   IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:UniConverter}}"   IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"       IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"          FontSize="8" Width="*"  />
+        <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"        Width="SizeToHeader" />
+      </DataGrid.Columns>
+    </DataGrid>
 
     <Grid Grid.Row="2" DataContext="{Binding SelectdEmail}" Background="#4888">
       <Grid.ColumnDefinitions>
@@ -91,9 +109,8 @@
       <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
     </Grid>
 
-    <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
-
-    <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="22" Grid.RowSpan="4" />
+    <GridSplitter Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" />
+    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
 
   </Grid>
 </UserControl>
