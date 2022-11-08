@@ -1,72 +1,145 @@
-﻿<UserControl x:Class="MinNavTpl.View.Spec.Page02View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+﻿<UserControl x:Class="MinNavTpl.View.Spec.Page02View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
-             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page02VM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#20f0" >
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type={x:Type vms:Page02VM}}" 
+             xmlns:lcl="clr-namespace:MinNavTpl.View.Spec" 
+             d:DesignHeight="300" d:DesignWidth="1100" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+      </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! =&gt; must be a Style. ???????">
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
     <Grid.RowDefinitions>
-      <RowDefinition Height="40" />
-      <RowDefinition Height="20" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="30" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
 
-    <TextBlock Grid.Row="1" Text="Page02" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
+    <Grid x:Name="ctrlPnl" Height="30">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
 
-    <DataGrid  Grid.Row="2" ItemsSource="{Binding LeadCvs}" x:Name="dgLeads" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False">
-      <DataGrid.Resources>
-        <DataTemplate x:Key="DateTemplate" >
-        </DataTemplate>
-      </DataGrid.Resources>
+      <TextBlock  Text="Sender" Margin="4 0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#f6f" />
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+
+        <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Add _New Email" Foreground="#f80" />
+
+        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" /></TextBlock>
+        <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
+      </StackPanel>
+
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
+    </Grid>
+
+    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
+              CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" >
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent"  Width="Auto"/>
-        <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-
-        <DataGridTextColumn Binding="{Binding RoleTitle}"       Header="Job# (role title)"		FontWeight="SemiBold" />
-        <DataGridTextColumn Binding="{Binding RoleDescription}" Header="Role Description"     Width="*"/>
-
-        <DataGridTextColumn Binding="{Binding OppCompany}"      Header="Company"   />
-        <DataGridTextColumn Binding="{Binding OppAddress}"      Header="Address"   Width="140" />
-        <DataGridTextColumn Binding="{Binding AddedAt, Converter={cnv:UniConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
-        <DataGridTextColumn Binding="{Binding Status}"          Header="Status"    Width="Auto" ElementStyle="{StaticResource CenterAlignStyle}"  Foreground="Blue" />
-
-        <DataGridTemplateColumn                                 Header="Act" Width="Auto">
-          <DataGridTemplateColumn.CellTemplate>
-            <DataTemplate>
-              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="SemiBold" Command="{Binding DataContext.CloseLeadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
-            </DataTemplate>
-          </DataGridTemplateColumn.CellTemplate>
-        </DataGridTemplateColumn>
-
-        <!--
-          <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent Lead"			Width="120" IsReadOnly="True"/>
-          <DataGridTextColumn Binding="{Binding MarketVenue}"     Header="MrktVenue" Width="Auto"/>
-          <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
-          <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
-          <DataGridTextColumn Binding="{Binding OfficiallySubmittedAt, StringFormat={}{0:MMM-d}}" Header="Submitted" IsReadOnly="True" FontWeight="SemiBold" Foreground="Brown" />
-          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cnv:UniConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
-          -->
-
+        <DataGridTextColumn Header=" Email (Id)"  Binding="{Binding Id}"           Width="180"                    />
+        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                       />
+        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />
+        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                     />
+        <DataGridTextColumn Header=" DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                    ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
+        <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cnv:UniConverter}}" />
+        <DataGridTextColumn Header=" LastSent"    Binding="{Binding LastSentAt,    Converter={cnv:UniConverter}}" />
+        <DataGridTextColumn Header=" LastReplied" Binding="{Binding LastRepliedAt, Converter={cnv:UniConverter}}" />
+        <DataGridTextColumn Header=" MyRplyCnt"   Binding="{Binding MyReplies}"    Width="62"                     ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"        Width="*" FontSize="9"         />
       </DataGrid.Columns>
     </DataGrid>
 
-    <Label     Grid.Row="3" Content="{Binding Report}" d:Content="Page02" />
+    <Grid Grid.Row="2" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="3*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="2*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="2*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <Label Content="E_mail (Id)"      Grid.Column="0" Grid.Row="0" />
+      <TextBox                          Grid.Column="1" Grid.Row="0" Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
+      <Label Content="Modified At"      Grid.Column="4" Grid.Row="0" />
+      <TextBlock                        Grid.Column="5" Grid.Row="0" Text="{Binding ModifiedAt}" />
+      <Button                           Grid.Column="5" Grid.Row="0" Content="Del"     Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="onDel ... ?????~~~~!!! " HorizontalAlignment="Right" Margin="0"    Foreground="#f00"     />
+
+      <Label Content="First Name"       Grid.Column="0" Grid.Row="1" />
+      <TextBox                          Grid.Column="1" Grid.Row="1" Text="{Binding Fname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+      <TextBlock                        Grid.Column="1" Grid.Row="1" Text="{Binding Country}" HorizontalAlignment="Right" d:Text="Ukraine" />
+      <Button                           Grid.Column="2" Grid.Row="1" Content="◄Country" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="Get country" HorizontalAlignment="Left" Margin="0" />
+      <Label Content="Last Name"        Grid.Column="2" Grid.Row="1" />
+      <TextBox                          Grid.Column="3" Grid.Row="1" Text="{Binding Lname, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+      <Label Content="Company"          Grid.Column="4" Grid.Row="1" />
+      <TextBox                          Grid.Column="5" Grid.Row="1" Text="{Binding Company, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+
+      <Label Content="Perm Ban Rsn"     Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=tbPbr}" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="!agn"  Tag="Not an Agent"         HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="00,0,0,0"  Width="48" ToolTip="Set PBR to 'Not an Agent'" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="faild" Tag="Delivery has failed"  HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="50,0,0,0"  Width="48" ToolTip="Set PBR to 'Delivery has failed'" />
+      <Button                           Grid.Column="1" Grid.Row="2" Content="peer"  Tag="Peer"                 HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="100,0,0,0" Width="48" ToolTip="Set PBR to 'Peer'" />
+      <TextBox                          Grid.Column="1" Grid.Row="2" Text="{Binding PermBanReason, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" x:Name="tbPbr" HorizontalAlignment="Stretch" Margin="150,0,0,0" />
+      <!--ton                           Grid.Column="1" Grid.Row="2" Content="FLD"  Tag="{Binding ElementName=tbPbr, Path=Text}"           Height="26" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="48,0,0,0"  Padding="3" ToolTip="Set PBR to text on the left" HorizontalAlignment="Right" />-->
+      <Button                           Grid.Column="2" Grid.Row="2" Content="ne_xt" x:Name="bt227"             HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.NxtCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="2,0,0,0"   Width="48" ToolTip="Update Outlook" Padding="0" />
+      <Button                           Grid.Column="2" Grid.Row="2" Content="OLk"   x:Name="bt222"             HorizontalAlignment="Left" Height="26" Command="{Binding DataContext.OLkCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="52,0,71,0" Width="48" ToolTip="Update Outlook" />
+      <Label Content="   Phone"         Grid.Column="2" Grid.Row="2" />
+      <TextBox                          Grid.Column="3" Grid.Row="2" Text="{Binding Phone, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" />
+      <Label Content="_Re-send after"   Grid.Column="4" Grid.Row="2" Target="{Binding ElementName=tbRa}" />
+      <DatePicker                       Grid.Column="5" Grid.Row="2" SelectedDate="{Binding ReSendAfter, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  x:Name="tbRa" />
+
+      <Label Content="Priority"         Grid.Column="0" Grid.Row="3" />
+      <TextBox                          Grid.Column="1" Grid.Row="3" Text="{Binding NotifyPriority, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+
+      <Button Content="_DNN Avl"        Grid.Column="2" Grid.Row="3" Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="5 0" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" />
+      <TextBox                          Grid.Column="3" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+      <Label Content="DNN OffMarkt"     Grid.Column="4" Grid.Row="3" />
+      <TextBox                          Grid.Column="5" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
+
+      <Label Content="_Notes"           Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=tbAN}" />
+      <TextBox                          Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
+
+    </Grid>
+
+    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
+      <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
+    </Grid>
+
+    <GridSplitter Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" />
+    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
+
   </Grid>
-</UserControl> 
+</UserControl>

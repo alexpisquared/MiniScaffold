@@ -50,7 +50,6 @@ public partial class Page01VM : BaseDbVM
   [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] Email? currentEmail;
   Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmaiStore.Change(value.Id); } } }
-  bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) PageCvs?.Refresh(); } }
 
   [RelayCommand]
   void AddNewEmail()
@@ -64,10 +63,10 @@ public partial class Page01VM : BaseDbVM
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  [RelayCommand] void CloseEmail() { Bpr.Click(); ; }
-  [RelayCommand] void Del() { Bpr.Click(); ; }
-  [RelayCommand] void Cou() { Bpr.Click(); ; }
-  [RelayCommand] void PBR() { Bpr.Click(); ; }
-  [RelayCommand] void Nxt() { Bpr.Click(); ; }
-  [RelayCommand] void OLk() { Bpr.Click(); ; }
+  [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Cou() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void PBR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void OLk() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 }
