@@ -36,8 +36,8 @@ public partial class BaseDbVM : BaseMinVM
   {
     IsBusy = false;
     _inited = true;
-    Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}");
-    return await base.InitAsync(); 
+    //Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}");
+    return await base.InitAsync();
   }
   public virtual async Task VMSpecificSaveToDB(object? isGoingBack) => await SaveLogReportOrThrow(Dbx);
   public override async Task<bool> WrapAsync()
@@ -121,7 +121,17 @@ public partial class BaseDbVM : BaseMinVM
   public Window MainWin { get; }
   [ObservableProperty] bool isDevDbg;
   [ObservableProperty] string report = "";
-  bool _ib; public bool IsBusy { get => _ib; set { if (SetProperty(ref _ib, value)) { Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n"); _mainVM.IsBusy = value; } } /*BusyBlur = value ? 8 : 0;*/  }
+  bool _ib; public bool IsBusy
+  {
+    get => _ib; set
+    {
+      if (SetProperty(ref _ib, value))
+      {
+        //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+        _mainVM.IsBusy = value;
+      }
+    } /*BusyBlur = value ? 8 : 0;*/
+  }
   bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
 
   [RelayCommand] void ChkDb4Cngs() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
@@ -145,5 +155,4 @@ public partial class BaseDbVM : BaseMinVM
 
     return Report;
   }
-  protected string? GetCaller([CallerMemberName] string? cmn = "") => cmn;
 }

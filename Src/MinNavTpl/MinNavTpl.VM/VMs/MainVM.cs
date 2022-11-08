@@ -60,7 +60,7 @@ public partial class MainVM : BaseMinVM
   }
   async Task KeepCheckingForUpdatesAndNeverReturn()
   {
-    await Task.Delay(15000);
+    await Task.Delay(150000); // 2.5 min
     OnCheckForNewVersion();
 
     var nextHour = DateTime.Now.AddHours(1);
@@ -97,7 +97,11 @@ public partial class MainVM : BaseMinVM
   public EmailOfIStore EmaiStore { get; }
   void SrvrStore_Chngd(string val) { SrvrNameProp = val;   /* await RefreshReloadAsync(); */ }
   void DtbsStore_Chngd(string val) { DtBsNameProp = val;   /* await RefreshReloadAsync(); */ }
-  void EmaiStore_Chngd(string val) { EmailOfIProp = val;   /* await RefreshReloadAsync(); */ }
+  void EmaiStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
+  {
+    WriteLine($"■■ MAIN  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfIProp != emailOfI ? "==>Load as it were ..." : "==>----")}");
+    EmailOfIProp = emailOfI;   /* await RefreshReloadAsync(); */
+  }
   void LetCStore_Chngd(bool value) { LetDbChgProp = value; /* await RefreshReloadAsync(); */ }
   string _qs = ""; public string SrvrNameProp { get => _qs; set { if (SetProperty(ref _qs, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.SrvrName = value; SrvrStore.Change(value); } } }
   string _dn = ""; public string DtBsNameProp { get => _dn; set { if (SetProperty(ref _dn, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.DtBsName = value; DtBsStore.Change(value); } } }

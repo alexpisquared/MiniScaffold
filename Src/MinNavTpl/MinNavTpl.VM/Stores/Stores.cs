@@ -13,10 +13,10 @@ public class DtBsNameStore
 public class EmailOfIStore
 {
   public string LastVal { get; private set; } = ":Nul";
-  public event Action<string>? Changed; public void Change(string name)
+  public event Action<string, string?>? Changed; public void Change(string name, [CallerMemberName] string? cmn = "")
   {
     LastVal = name;
-    Changed?.Invoke(name);
+    Changed?.Invoke(name, cmn);
   }
 }
 public class LetDbChgStore

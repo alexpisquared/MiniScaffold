@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:EmailDetailVM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#8f00" >
+             d:DesignHeight="200" d:DesignWidth="600" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -10,26 +10,86 @@
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! =&gt; must be a Style. ???????">
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
     <Grid.RowDefinitions>
-      <RowDefinition Height="40" />
-      <RowDefinition Height="20" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="30" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
 
-    <TextBlock Grid.Row="1" Text="{Binding Report}" d:Text="EmailDetail" FontSize="20" Margin="19 0" />
+    <Grid x:Name="ctrlPnl" Height="30" Grid.ColumnSpan="3">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
 
-    <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding EmailOfIProp}" d:Text="EmailDetail" />
-    </Viewbox>
+      <TextBlock  Text="Ehists" Margin="4 0" FontSize="23" FontFamily="Ink Free" FontWeight="ExtraBold" Foreground="#f6f" />
 
-    <Label     Grid.Row="3" Content="{Binding Report}" d:Content="EmailDetail" />
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+        <!--
+        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+
+        <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
+        -->
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Add _New Email" Foreground="#f80" />
+
+        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEhist.Id}" FontWeight="Medium" /></TextBlock>
+        <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>
+      </StackPanel>
+
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
+    </Grid>
+
+    <DataGrid ItemsSource="{Binding EhistCvs}" Grid.Row="1" x:Name="dgEhists" IsReadOnly="False" Margin="4 8"
+              CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" AutoGenerateColumns="True"/>
+
+    <Grid Grid.Row="1" Grid.Column="2" DataContext="{Binding SelectdEhist}" Grid.RowSpan="4" Background="#4888" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="160*"/>
+        <ColumnDefinition Width="120"/>
+        <ColumnDefinition Width="200*"/>
+        <ColumnDefinition Width="120"/>
+        <ColumnDefinition Width="100*"/>
+        <ColumnDefinition Width="120"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto" MinWidth="60"/>
+        <ColumnDefinition Width="8"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="5"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+    </Grid>
+
+    <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
+    <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="22" Grid.RowSpan="4" />
+
   </Grid>
-</UserControl> 
+</UserControl>
