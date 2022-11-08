@@ -65,4 +65,9 @@ public partial class Page01VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
   }
   [RelayCommand] void CloseEmail() {; ; }
+  [RelayCommand] void Del() {; ; }
+  [RelayCommand] void Cou() {; ; }
+  [RelayCommand] void PBR() {; ; }
+  [RelayCommand] void Nxt() {; ; }
+  [RelayCommand] void OLk() {; ; }
 }

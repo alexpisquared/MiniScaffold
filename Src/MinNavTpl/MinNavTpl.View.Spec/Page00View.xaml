@@ -5,9 +5,6 @@
              d:DesignHeight="200" d:DesignWidth="900" Padding="8" Background="#4f0f" >
   <UserControl.Resources>
     <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Google.xaml" />
-      </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
