@@ -52,8 +52,16 @@
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
     </Grid>
 
-    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" AutoGenerateColumns="True"/>
+    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" Margin="4 8"
+              CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" HeadersVisibility="Column" >
+      <DataGrid.Columns>
+        <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
+        <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:UniConverter}}" SortDirection="Descending"  />
+        <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
+        <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
+        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
+      </DataGrid.Columns>
+    </DataGrid>
 
     <Grid Grid.Row="1" Grid.Column="2" DataContext="{Binding SelectdEhist}" Grid.RowSpan="4" Background="#4888" >
       <Grid.ColumnDefinitions>
