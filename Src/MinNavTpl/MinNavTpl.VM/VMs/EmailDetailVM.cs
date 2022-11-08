@@ -6,17 +6,16 @@ public partial class EmailDetailVM : BaseDbVM
     EmaiStore = eml; EmaiStore.Changed += EmaiStore_Chngd;
     EmailOfIProp = eml.LastVal;
   }
-  public override async Task<bool> InitAsync() { _ = await InitAsyncTask(EmailOfIProp); return await base.InitAsync(); }
+  public override async Task<bool> InitAsync() {    IsBusy = true; _ = await InitAsyncTask(EmailOfIProp); return await base.InitAsync(); }
   async Task<bool> InitAsyncTask(string emailOfI, [CallerMemberName] string? cmn = "")
   {
     WriteLine($"■■ Init  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22} ■■■■");
     try
-    {
-      IsBusy = true;
+    {      
       var sw = Stopwatch.StartNew();
       EmailOfIProp = emailOfI;
 
-      await Task.Delay(22); // <== does not show up without this...............................
+      await Task.Yield(); 
 
 #if !true
       await Dbx.
@@ -56,7 +55,6 @@ public partial class EmailDetailVM : BaseDbVM
     WriteLine($"■■ EmDt  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfIProp != emailOfI ? "==>Load" : "==>----")}");
     if (EmailOfIProp != emailOfI)
       _ = await InitAsyncTask(emailOfI);
-    //else
   }
   public EmailOfIStore EmaiStore { get; }
   string _em = "°"; public string EmailOfIProp { get => _em; set => SetProperty(ref _em, value); }
