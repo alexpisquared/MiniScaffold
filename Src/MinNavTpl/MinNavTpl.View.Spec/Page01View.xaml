@@ -59,7 +59,7 @@
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
     </Grid>
 
-    <DataGrid ItemsSource="{Binding EmailCvs}" Grid.Row="1" x:Name="dgEmails" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
+    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPageCvs" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
               CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" AutoGenerateColumns="True"/>
 
     <Grid Grid.Row="2" DataContext="{Binding SelectdEmail}" Background="#4888">

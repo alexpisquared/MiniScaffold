@@ -28,9 +28,9 @@ public partial class Page01VM : BaseDbVM
       //await Dbx.Ehists.LoadAsync();
 #endif
 
-      EmailCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === EmailCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
-      EmailCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
-      EmailCvs.Filter = obj => obj is not Email lead || lead is null || string.IsNullOrEmpty(SearchText) ||
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
+      PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
+      PageCvs.Filter = obj => obj is not Email lead || lead is null || string.IsNullOrEmpty(SearchText) ||
         lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
@@ -48,11 +48,9 @@ public partial class Page01VM : BaseDbVM
   public EmailDetailVM EmailOfIVM { get; }
 
   [ObservableProperty] ICollectionView? ehistCvs;
-  [ObservableProperty] ICollectionView? emailCvs;
   [ObservableProperty] Email? currentEmail;
   Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Click(); UsrStgns.EmailOfI = value.Id; EmaiStore.Change(value.Id); } } }
-  string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) EmailCvs?.Refresh(); } }
-  bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) EmailCvs?.Refresh(); } }
+  bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) PageCvs?.Refresh(); } }
 
   [RelayCommand]
   void AddNewEmail()

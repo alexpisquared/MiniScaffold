@@ -1,26 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-namespace MinNavTpl.View.Spec;
-/// <summary>
-/// Interaction logic for EmailDetailView.xaml
-/// </summary>
+﻿namespace MinNavTpl.View.Spec;
 public partial class EmailDetailView : UserControl
 {
-  public EmailDetailView()
+  public EmailDetailView() { InitializeComponent(); _ = tbFilter.Focus(); }
+  void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
-    InitializeComponent();
+    try
+    {
+      _ = dgPageCvs.Items.MoveCurrentToLast();
+
+      if (dgPageCvs.SelectedItem != null)
+        dgPageCvs.ScrollIntoView(dgPageCvs.SelectedItem);
+    }
+    catch (Exception ex) { ex.Pop(); }
   }
 }

@@ -7,10 +7,10 @@ public partial class Page01View : UserControl
   {
     try
     {
-      _ = dgEmails.Items.MoveCurrentToLast();
+      _ = dgPageCvs.Items.MoveCurrentToLast();
 
-      //if (dgEmails.SelectedItem != null)
-      //  dgEmails.ScrollIntoView(dgEmails.SelectedItem);
+      if (dgPageCvs.SelectedItem != null)
+        dgPageCvs.ScrollIntoView(dgPageCvs.SelectedItem);
     }
     catch (Exception ex) { ex.Pop(); }
   }

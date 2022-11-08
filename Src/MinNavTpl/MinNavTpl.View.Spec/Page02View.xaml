@@ -5,9 +5,6 @@
              d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#20f0" >
   <UserControl.Resources>
     <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Google.xaml" />
-      </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
 
@@ -26,10 +23,49 @@
 
     <TextBlock Grid.Row="1" Text="Page02" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
-    <Border    Grid.Row="2" BorderThickness="2" Margin="222" />
-    <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding Report}" d:Text="Page02" />
-    </Viewbox>
+    <DataGrid  Grid.Row="2" ItemsSource="{Binding LeadCvs}" x:Name="dgLeads" IsReadOnly="False" Margin="4 8"
+              CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False">
+      <DataGrid.Resources>
+        <DataTemplate x:Key="DateTemplate" >
+        </DataTemplate>
+      </DataGrid.Resources>
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent"  Width="Auto"/>
+        <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <DataGridTextColumn Binding="{Binding RoleTitle}"       Header="Job# (role title)"		FontWeight="SemiBold" />
+        <DataGridTextColumn Binding="{Binding RoleDescription}" Header="Role Description"     Width="*"/>
+
+        <DataGridTextColumn Binding="{Binding OppCompany}"      Header="Company"   />
+        <DataGridTextColumn Binding="{Binding OppAddress}"      Header="Address"   Width="140" />
+        <DataGridTextColumn Binding="{Binding AddedAt, Converter={cnv:UniConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+        <DataGridTextColumn Binding="{Binding Status}"          Header="Status"    Width="Auto" ElementStyle="{StaticResource CenterAlignStyle}"  Foreground="Blue" />
+
+        <DataGridTemplateColumn                                 Header="Act" Width="Auto">
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="SemiBold" Command="{Binding DataContext.CloseLeadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
+        <!--
+          <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent Lead"			Width="120" IsReadOnly="True"/>
+          <DataGridTextColumn Binding="{Binding MarketVenue}"     Header="MrktVenue" Width="Auto"/>
+          <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
+          <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
+          <DataGridTextColumn Binding="{Binding OfficiallySubmittedAt, StringFormat={}{0:MMM-d}}" Header="Submitted" IsReadOnly="True" FontWeight="SemiBold" Foreground="Brown" />
+          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cnv:UniConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
+          -->
+
+      </DataGrid.Columns>
+    </DataGrid>
 
     <Label     Grid.Row="3" Content="{Binding Report}" d:Content="Page02" />
   </Grid>

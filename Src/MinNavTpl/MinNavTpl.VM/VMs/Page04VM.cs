@@ -35,7 +35,7 @@ public partial class Page04VM : BaseDbVM
         lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      EmailCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection());
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection());
 
       LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection());
 
@@ -50,7 +50,7 @@ public partial class Page04VM : BaseDbVM
   public override void Dispose() => base.Dispose();
 
   [ObservableProperty] ICollectionView? leadCvs;
-  [ObservableProperty] ICollectionView? emailCvs;
+  [ObservableProperty] ICollectionView? pageCvs;
   [ObservableProperty] ICollectionView? leadStatusCvs;
   [ObservableProperty] Lead? selectdLead;
   [ObservableProperty] Lead? currentLead;

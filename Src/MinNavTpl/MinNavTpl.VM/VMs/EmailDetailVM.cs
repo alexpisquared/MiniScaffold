@@ -33,9 +33,9 @@ public partial class EmailDetailVM : BaseDbVM
       Dbx.Ehists.Where(r => r.EmailId == EmailOfIProp).Load();
 #endif
 
-      EhistCvs = CollectionViewSource.GetDefaultView(Dbx.Ehists.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === EhistCvs = CollectionViewSource.GetDefaultView(await Dbx.Ehists.ToListAsync());
-      EhistCvs.SortDescriptions.Add(new SortDescription(nameof(Ehist.AddedAt), ListSortDirection.Descending));
-      //EhistCvs.Filter = obj => obj is not Ehist lead || lead is null || string.IsNullOrEmpty(SearchText) ||        lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||        lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Ehists.Local.ToObservableCollection().Where(r => r.EmailId == EmailOfIProp)); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Ehists.ToListAsync());
+      PageCvs.SortDescriptions.Add(new SortDescription(nameof(Ehist.AddedAt), ListSortDirection.Descending));
+      //PageCvs.Filter = obj => obj is not Ehist lead || lead is null || string.IsNullOrEmpty(SearchText) ||        lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||        lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
       Report = $" {Dbx.Emails.Local.Count:N0} + {Dbx.Ehists.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s";
       //Lgr.Log(LogLevel.Trace, Report );
@@ -63,5 +63,4 @@ public partial class EmailDetailVM : BaseDbVM
 
   [ObservableProperty] Ehist? currentEhist;
   [ObservableProperty] Ehist? selectdEhist;
-  [ObservableProperty] ICollectionView? ehistCvs;
 }
