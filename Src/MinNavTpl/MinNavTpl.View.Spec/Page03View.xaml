@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page03VM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f00" >
+             d:DesignHeight="200" d:DesignWidth="600" Padding="8" >
   <UserControl.Resources>
   </UserControl.Resources>
   <Grid  x:Name="ZommablePanel" >
@@ -18,20 +18,21 @@
     </Grid.RowDefinitions>
 
     <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
-      <MenuItem Header="[Re] Do _Reglr"       Command="{Binding DoReglr}"  ToolTip="Check and add if new the Q folder"/>
-      <MenuItem Header="[Re] Do _Fails"       Command="{Binding DoFails}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
-      <MenuItem Header="[Re] Do La_ter"       Command="{Binding DoLater}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
-      <MenuItem Header="[Re] Do _DoneR"       Command="{Binding DoDoneR}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
+      <MenuItem Header="[Re] Do _Reglr"       Command="{Binding DoReglrCommand}"  ToolTip="Check and add if new the Q folder"/>
+      <MenuItem Header="[Re] Do _JunkM"       Command="{Binding DoJunkMCommand}"  ToolTip="Check and add if new the JunkMail folder"/>
+      <MenuItem Header="[Re] Do _Fails"       Command="{Binding DoFailsCommand}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
+      <MenuItem Header="[Re] Do La_ter"       Command="{Binding DoLaterCommand}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+      <MenuItem Header="[Re] Do _DoneR"       Command="{Binding DoDoneRCommand}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
       <MenuItem Header="Ad_vanced"                                                                                                       Foreground="DarkOrange">
-        <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOL}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />
-        <MenuItem Header="_Deleted Contacts"  Command="{Binding UpdateOL}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" CommandParameter="Deleted Items"/>
+        <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOLCommand}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />
+        <MenuItem Header="_Deleted Contacts"  Command="{Binding UpdateOLCommand}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" CommandParameter="Deleted Items"/>
       </MenuItem>
     </Menu>
 
     <Label        Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ..." />
 
     <ScrollViewer Grid.Row="2" Margin="6" VerticalScrollBarVisibility="Auto" >
-      <TextBlock Name="tb1" Text="|||| WWWW |||| WWWW |||| WWWW |||| WWWW " VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
+      <TextBlock Name="tb1" Text="{Binding ReportOL}" VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
     </ScrollViewer>
     <Rectangle    Grid.Row="2" Margin="6 6 26 6" Fill="Transparent" />
 
