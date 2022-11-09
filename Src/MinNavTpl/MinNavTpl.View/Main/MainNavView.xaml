@@ -15,6 +15,7 @@
   <lnk:WindowBase.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
         <ResourceDictionary Source="/MinNavTpl.View;component/ViewModelToViewMapping.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
@@ -110,37 +111,35 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        
         <Grid Grid.Row="1" Margin="0,0,0,6" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid.Resources>
+            <Style TargetType="{x:Type Label}"        BasedOn="{StaticResource lblTopLeft}" />
+          </Grid.Resources>
 
-          <!--
-          Removed as per https://pariotech.atlassian.net/browse/BE-204 - 2. on Sep 2, 2022
           <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.ColumnSpan="16" Margin="20 -11">
             <StackPanel.Background>
-              <ImageBrush TileMode="Tile">
-              </ImageBrush>
+              <ImageBrush TileMode="Tile" />
             </StackPanel.Background>
             <StackPanel.Resources>
               <Style TargetType="TextBlock">
@@ -170,23 +169,21 @@
             <TextBlock Text=" Phase 2       " />
             <TextBlock Text="          Phase 2" />
             <TextBlock Text="Phase 2                       " />
-          </StackPanel>-->
+          </StackPanel>
 
-          <vws:BrandTitleUserControl />
-          <TextBlock Grid.Column="02" FontSize="16" Text="Welcome ..." />
-          <!--<TextBlock Grid.Column="03" FontSize="16" Text="{Binding CurrentUser.FullName, StringFormat='{}{0}!'}" FontWeight="SemiBold" d:Text="CI\Alex" ToolTip="{Binding CurrentUser.Notes}" />
-          <TextBlock Grid.Column="04" FontSize="14" Text="{Binding PermisssionCSV, StringFormat='{} ({0})', FallbackValue='Loading Permissions...'}" FontStyle="Italic" FontWeight="SemiBold" ToolTip="Current permissions"/>-->
+          <vws:BrandTitleUserControl Grid.RowSpan="3" />
 
-          <CheckBox  Grid.Column="07"   IsChecked="{Binding LetDbChgProp}" Content="WrD " />
+          <Label     Grid.Column="2" Content="Sql" />
+          <TextBlock Grid.Column="2" Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
-          <Label     Grid.Column="09" Content="Sql" />
-          <TextBlock Grid.Column="10" Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <Label     Grid.Column="4" Content="DB" />
+          <TextBlock Grid.Column="4" Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
-          <Label     Grid.Column="12" Content="DB" />
-          <TextBlock Grid.Column="13" Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <Label     Grid.Column="6" Content="Agent" />
+          <TextBlock Grid.Column="6" Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
-          <Label     Grid.Column="15" Content="Agent" />
-          <TextBlock Grid.Column="16" Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" />
+          <Label     Grid.Column="8" Content="RW" />
+          <CheckBox  Grid.Column="8" IsChecked="{Binding LetDbChgProp}" Grid.Row="1" />
 
         </Grid>
 
