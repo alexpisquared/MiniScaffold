@@ -33,9 +33,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StandardContractsLib", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NavigationDrawerControl", "..\..\..\AAV.Shared\Src\Net.CI\NavigationDrawerControl\NavigationDrawerControl.csproj", "{CFCABE52-E796-4D2E-971D-EB30BC2D48E6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinNavTpl.View.Spec", "MinNavTpl.View.Spec\MinNavTpl.View.Spec.csproj", "{AED54F27-AE33-48AB-9937-E95F143D70A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinNavTpl.View.Spec", "MinNavTpl.View.Spec\MinNavTpl.View.Spec.csproj", "{AED54F27-AE33-48AB-9937-E95F143D70A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DB.QStats.Std", "..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj", "{7D7E2CD8-E821-48BE-A8DA-F294578B3E91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Emailing.NET6", "..\..\..\GigaHunt\Src\sln\Emailing.NET6\Emailing.NET6.csproj", "{19A95C14-8934-48D7-A6FA-88A26F7B0003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -273,6 +275,22 @@ Global
 		{7D7E2CD8-E821-48BE-A8DA-F294578B3E91}.Release|x64.Build.0 = Release|x64
 		{7D7E2CD8-E821-48BE-A8DA-F294578B3E91}.Release|x86.ActiveCfg = Release|Any CPU
 		{7D7E2CD8-E821-48BE-A8DA-F294578B3E91}.Release|x86.Build.0 = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|ARM32.ActiveCfg = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|ARM32.Build.0 = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|x64.ActiveCfg = Debug|x64
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|x64.Build.0 = Debug|x64
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Debug|x86.Build.0 = Debug|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|ARM32.ActiveCfg = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|ARM32.Build.0 = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|x64.ActiveCfg = Release|x64
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|x64.Build.0 = Release|x64
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|x86.ActiveCfg = Release|Any CPU
+		{19A95C14-8934-48D7-A6FA-88A26F7B0003}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,32 +4,44 @@
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page03VM}" 
              d:DesignHeight="200" d:DesignWidth="600" Padding="8" Background="#4f00" >
   <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Lite.Google.xaml" />
-      </ResourceDictionary.MergedDictionaries>
-
-      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
-
-    </ResourceDictionary>
   </UserControl.Resources>
-  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="1*"/>
-    </Grid.ColumnDefinitions>
+  <Grid  x:Name="ZommablePanel" >
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
     <Grid.RowDefinitions>
-      <RowDefinition Height="40" />
-      <RowDefinition Height="20" />
-      <RowDefinition Height="*" />
-      <RowDefinition Height="30" />
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="1" Text="Page03" FontSize="20" Margin="19 0" Grid.ColumnSpan="6" />
 
-    <Viewbox   Grid.Row="2" >
-      <TextBlock Text="{Binding Report}" d:Text="Page03" />
-    </Viewbox>
+    <StackPanel Orientation="Horizontal" x:Name="spCtlrPnl" >
 
-    <Label     Grid.Row="3" Content="{Binding Report}" d:Content="Page03" />
+      <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
+        <MenuItem Header="[Re] Do _Reglr"    Command="{Binding DoReglr}"   ToolTip="Check and add if new the Q folder"/>
+        <MenuItem Header="[Re] Do _Fails"    Command="{Binding DoFails}"   ToolTip="Find trg emai in Q\Fails folder and ..."/>
+        <MenuItem Header="[Re] Do La_ter"    Command="{Binding DoLater}"   ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+        <MenuItem Header="[Re] Do _DoneR"    Command="{Binding DoDoneR}"   ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
+        <MenuItem Header="Ad_vanced"                     Foreground="DarkOrange">
+          <MenuItem Header="_Update Contacts"  Command="{Binding UpdateOutlook}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" Tag="" />
+          <MenuItem Header="_Deleted Contacts" Command="{Binding UpdateOutlook}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" Tag="Deleted Items"/>
+        </MenuItem>
+      </Menu>
+
+    </StackPanel>
+
+    <Label        Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ..." />
+
+    <ScrollViewer Grid.Row="2" Margin="6" VerticalScrollBarVisibility="Auto" >
+      <TextBlock Name="tb1" Text="|||| WWWW |||| WWWW |||| WWWW |||| WWWW " VerticalAlignment="Top" Background="#1888" FontFamily="SimSun" Padding="6"/>
+    </ScrollViewer>
+    <Rectangle    Grid.Row="2" Margin="6 6 26 6" Fill="Transparent" />
+
+    <!-- Aug 2019: seems like leaves up in the bacground!!!       <Button Content="  _X  "     Command="{Binding Close" Foreground="#d00" ToolTip="Close" IsCancel="True" Background="Transparent" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-8" Height="40" Width="40" FontSize="15" Padding="0" />-->
+
+    <TextBlock x:Name="tbver" Margin="0 -6 100 -20" FontSize="13" Foreground="#4af" Text="ver" HorizontalAlignment="Right" VerticalAlignment="Top"/>
   </Grid>
 </UserControl> 
