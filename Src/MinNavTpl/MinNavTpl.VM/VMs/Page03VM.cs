@@ -1,23 +1,10 @@
-﻿using GigaHunt;
-using GigaHunt.AsLink;
-using OutlookToDbWpfApp;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
   public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
   public override async Task<bool> InitAsync() { await InitAsyncLocal(); _ = await base.InitAsync(); return true; }
-  async Task InitAsyncLocal()
-  {
-    await Task.Yield();
-  }
-  async Task InitAsyncLocal2()
-  {
-    await Task.Yield();
-  }
 
-  [ObservableProperty] string reportOL;
-
+  [ObservableProperty] string reportOL = "";
   [RelayCommand] void DoReglr() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void DoFails() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void DoLater() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
@@ -25,14 +12,12 @@ public partial class Page03VM : BaseDbVM
   [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 
 
-
   readonly OutlookHelper6 _oh = new();
   readonly QStatsRlsContext _db = QStatsRlsContext.Create();
   int _newEmailsAdded = 0;
   readonly DateTime Now = DateTime.Now;
 
-
-  async void OnLoaded(object s, RoutedEventArgs e)
+  async Task InitAsyncLocal()
   {
     var qF = _oh.GetItemsFromFolder(OuFolder.qFail).Count;
     var qR = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count;
@@ -44,7 +29,7 @@ public partial class Page03VM : BaseDbVM
 
     if (ttl == 0)
     {
-      //App.Speak(ReportOL = "Nothing new in Outlook to for DB.");
+      ReportOL = "Nothing new in Outlook to for DB.";
     }
     else
     {
