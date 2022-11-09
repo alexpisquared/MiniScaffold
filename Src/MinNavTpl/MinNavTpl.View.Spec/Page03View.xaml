@@ -17,21 +17,16 @@
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-
-    <StackPanel Orientation="Horizontal" x:Name="spCtlrPnl" >
-
-      <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
-        <MenuItem Header="[Re] Do _Reglr"    Command="{Binding DoReglr}"   ToolTip="Check and add if new the Q folder"/>
-        <MenuItem Header="[Re] Do _Fails"    Command="{Binding DoFails}"   ToolTip="Find trg emai in Q\Fails folder and ..."/>
-        <MenuItem Header="[Re] Do La_ter"    Command="{Binding DoLater}"   ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
-        <MenuItem Header="[Re] Do _DoneR"    Command="{Binding DoDoneR}"   ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
-        <MenuItem Header="Ad_vanced"                     Foreground="DarkOrange">
-          <MenuItem Header="_Update Contacts"  Command="{Binding UpdateOutlook}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" Tag="" />
-          <MenuItem Header="_Deleted Contacts" Command="{Binding UpdateOutlook}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" Tag="Deleted Items"/>
-        </MenuItem>
-      </Menu>
-
-    </StackPanel>
+    <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
+      <MenuItem Header="[Re] Do _Reglr"       Command="{Binding DoReglr}"  ToolTip="Check and add if new the Q folder"/>
+      <MenuItem Header="[Re] Do _Fails"       Command="{Binding DoFails}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
+      <MenuItem Header="[Re] Do La_ter"       Command="{Binding DoLater}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+      <MenuItem Header="[Re] Do _DoneR"       Command="{Binding DoDoneR}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
+      <MenuItem Header="Ad_vanced"                                                                                                       Foreground="DarkOrange">
+        <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOL}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />
+        <MenuItem Header="_Deleted Contacts"  Command="{Binding UpdateOL}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" CommandParameter="Deleted Items"/>
+      </MenuItem>
+    </Menu>
 
     <Label        Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ..." />
 

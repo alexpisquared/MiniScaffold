@@ -18,6 +18,11 @@ public partial class Page03VM : BaseDbVM
 
   [ObservableProperty] string reportOL;
 
+  [RelayCommand] void DoReglr() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void DoFails() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void DoLater() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void DoDoneR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 
 
 
