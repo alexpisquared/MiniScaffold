@@ -79,7 +79,7 @@ public partial class Page03VM : BaseDbVM
       ReportOL += rv;
       LoadVwSrcs();
     }
-    catch (System.Exception ex) { ex.Pop(); }
+    catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; }
   }
   async Task OnDoFails_()
@@ -176,10 +176,10 @@ public partial class Page03VM : BaseDbVM
           cnt++;
           try
           {
-            if (folderName == OuFolder.qRcvd)
+            if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)
             {
               var senderEmail = OutlookHelper6.FigureOutSenderEmail(mailItem);
-              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, "..from  Q  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
+              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
               if (isNew) newEmailsAdded++;
               report += OutlookHelper6.reportLine(folderName, senderEmail, isNew);
 
