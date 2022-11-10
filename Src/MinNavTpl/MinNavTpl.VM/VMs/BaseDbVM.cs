@@ -5,6 +5,7 @@ public partial class BaseDbVM : BaseMinVM
   readonly MainVM _mainVM;
   readonly ISecForcer _secForcer;
   protected bool _saving, _loading, _inited;
+  protected readonly DateTime Now = DateTime.Now;
   public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, UserSettings usrStgns, int oid)
   {
     IsDevDbg = VersionHelper.IsDbg;

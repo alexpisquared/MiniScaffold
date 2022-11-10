@@ -1,23 +1,91 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
-  public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
-  public override async Task<bool> InitAsync() { await InitAsyncLocal(); _ = await base.InitAsync(); return true; }
-
-  [ObservableProperty] string reportOL = "";
-  [RelayCommand] async Task DoReglr() { Bpr.Click(); try { await OnDoReglr_(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] async Task DoJunkM() { Bpr.Click(); try { await OnDoJunkM(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] async Task DoFails() { Bpr.Click(); try { await OnDoFails_(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] async Task DoLater() { Bpr.Click(); try { await OnDoLater_(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] async Task DoDoneR() { Bpr.Click(); try { await OnDoDoneR_(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
-
-
-  readonly DateTime Now = DateTime.Now;
   readonly OutlookHelper6 _oh = new();
   int _newEmailsAdded = 0;
+  public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
+  public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync();  }
 
-  async Task InitAsyncLocal()
+  [ObservableProperty] string reportOL = "";
+  [RelayCommand] async Task DoReglr()
+  {
+    IsBusy = !false;
+
+    try
+    {
+      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
+      rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
+      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
+      ReportOL += rv;
+      LoadVwSrcs();
+    }
+    catch (System.Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; }
+  }
+  [RelayCommand] async Task DoJunkM()
+  {
+    IsBusy = !false;
+
+    try
+    {
+      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
+      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
+      ReportOL += rv;
+      LoadVwSrcs();
+    }
+    catch (Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; }
+  }
+  [RelayCommand] async Task DoFails()
+  {
+    IsBusy = !false;
+
+    try
+    {
+      var sw = Stopwatch.StartNew();
+      var rv = await OutlookFolderToDb_FailsAsync(OuFolder.qFail);
+      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
+      ReportOL += rv;
+      WriteLine(rv);
+      LoadVwSrcs();
+    }
+    catch (Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; }
+  }
+  [RelayCommand] async Task DoLater()
+  {
+    IsBusy = !false;
+
+    try
+    {
+      var sw = Stopwatch.StartNew();
+      var rv = await OutlookFolderToDb_LaterAsync(OuFolder.qLate);
+      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
+      ReportOL += rv;
+      WriteLine(rv);
+      LoadVwSrcs();
+    }
+    catch (System.Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; }
+  }
+  [RelayCommand] async Task DoDoneR()
+  {
+    IsBusy = !false;
+
+    try
+    {
+      var sw = Stopwatch.StartNew();
+      var rv = await OutlookFolderToDb_DoneRAsync(OuFolder.qRcvdDone);
+      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
+      ReportOL += rv;
+      WriteLine(rv);
+      LoadVwSrcs();
+    }
+    catch (System.Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; }
+  }
+  [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  async Task DoReFaLa()
   {
     try
     {
@@ -39,9 +107,9 @@ public partial class Page03VM : BaseDbVM
 
         await Dbx.Emails.LoadAsync();
 
-        await OnDoReglr_();
-        await OnDoFails_();
-        await OnDoLater_();
+        await DoReglr();
+        await DoFails();
+        await DoLater();
 
         if (_newEmailsAdded > 0)
         {
@@ -52,85 +120,6 @@ public partial class Page03VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
     finally { Bpr.Finish(); }
   }
-
-  async Task OnDoReglr_()
-  {
-    IsBusy = !false;
-
-    try
-    {
-      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
-      rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
-      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      LoadVwSrcs();
-    }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
-  }
-  async Task OnDoJunkM()
-  {
-    IsBusy = !false;
-
-    try
-    {
-      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
-      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      LoadVwSrcs();
-    }
-    catch (Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
-  }
-  async Task OnDoFails_()
-  {
-    IsBusy = !false;
-
-    try
-    {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_FailsAsync(OuFolder.qFail);
-      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
-  }
-  async Task OnDoLater_()
-  {
-    IsBusy = !false;
-
-    try
-    {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_LaterAsync(OuFolder.qLate);
-      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
-  }
-  async Task OnDoDoneR_()
-  {
-    IsBusy = !false;
-
-    try
-    {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_DoneRAsync(OuFolder.qRcvdDone);
-      var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
-  }
-
   async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
   {
     var newEmail = OutlookHelper6.FindEmails(body);
@@ -148,12 +137,7 @@ public partial class Page03VM : BaseDbVM
 
     return new TupleSubst { HasNewEmails = isAnyNew, NewEmails = newEmail };
   }
-  class TupleSubst
-  {
-    public bool HasNewEmails { get; set; }
-    public string[]? NewEmails { get; set; }
-  }
-
+  class TupleSubst  {    public bool HasNewEmails { get; set; }    public string[]? NewEmails { get; set; }  }
   async Task<string> OutlookFolderToDb_ReglrAsync(string folderName)
   {
     int cnt = 0, ttl = 0, newEmailsAdded = 0;
@@ -489,7 +473,6 @@ public partial class Page03VM : BaseDbVM
     report___ += OutlookHelper6.reportSectionTtl(folderName, ttlProcessed, 0, newEmailsAdded);
     return report___;
   }
-
   static string OneLineAndTrunkate(string body, int max = 55)
   {
     if (string.IsNullOrEmpty(body)) return "";
@@ -500,7 +483,6 @@ public partial class Page03VM : BaseDbVM
 
     return len <= max ? body : (body[..max] + "...");
   }
-
   async Task<bool> CheckDbInsertIfMissing_sender(OL.MailItem mailItem, string senderEmail, string note)
   {
     //if (Dbx.Emails.Find(senderEmail) == null)
@@ -508,7 +490,6 @@ public partial class Page03VM : BaseDbVM
     var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, note, "R");
     return isNew;
   }
-
   void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
   {
     var emr = Dbx.Emails.Find(email);
@@ -535,7 +516,6 @@ public partial class Page03VM : BaseDbVM
       }
     }
   }
-
   static void LoadVwSrcs()
   {
     //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
@@ -543,7 +523,6 @@ public partial class Page03VM : BaseDbVM
     //((CollectionViewSource)(FindResource("eHistVwSrc"))).Source = ctx.EHists.Where(p => p.AddedAt >= before).ToList();
     //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
   }
-
   static void TestOneKey(OL.ReportItem item, string key, bool isBinary = false)
   {
     try
