@@ -140,7 +140,7 @@ public partial class BaseDbVM : BaseMinVM
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) PageCvs?.Refresh(); } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) PageCvs?.Refresh(); } }
 
-  [RelayCommand] void ChkDb4Cngs() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
+  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); }
   [RelayCommand] async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
   public async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {

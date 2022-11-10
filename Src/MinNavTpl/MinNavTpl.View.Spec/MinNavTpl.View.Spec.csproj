@@ -16,8 +16,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Page05View.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="EmailDetailView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Page05View.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

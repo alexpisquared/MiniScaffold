@@ -109,7 +109,7 @@ public class CsvImporterService
 
     return "";
   }
-  static string GetCompany(string email) => email.Split("@").LastOrDefault()?.Split(".").FirstOrDefault()?.ToLower() ?? "NoCompanyName";
+  public static string GetCompany(string email) => email.Split("@").LastOrDefault()?.Split(".").FirstOrDefault()?.ToLower() ?? "NoCompanyName";
 
   public class CsvRow
   {

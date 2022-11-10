@@ -54,6 +54,15 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Leads"/>
       </StackPanel>
     </nav:NavDrawerItem>
+    <nav:NavDrawerItem Command="{Binding NavigatePage05Command}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
+      <StackPanel Orientation="Horizontal">
+        <Grid>
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Excel_16x16.png" Margin="8"/>
+        </Grid>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Companies"/>
+      </StackPanel>
+    </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigateEmailDetailCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
       <StackPanel Orientation="Horizontal">
         <Grid>
@@ -61,15 +70,6 @@
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Save.png" Margin="8" Width="16"/>
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Email Detail"/>
-      </StackPanel>
-    </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
-      <StackPanel Orientation="Horizontal">
-        <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Excel_16x16.png" Margin="8"/>
-        </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Page04"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigateEmailDetailCommand}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">

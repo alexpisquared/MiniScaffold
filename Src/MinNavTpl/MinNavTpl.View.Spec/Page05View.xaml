@@ -1,0 +1,112 @@
+﻿<UserControl x:Class="MinNavTpl.View.Spec.Page05View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page05VM}" 
+             d:DesignHeight="300" d:DesignWidth="1100" Padding="8" >
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
+
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+
+    <Grid Name="ctrlPnl" Height="30">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock  Text="Companies" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+
+        <Button Content=" _Get " Command="{Binding Scan4newCoCommand}" ToolTip="Scan Email table for new companies" Foreground="#0a0" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}" ToolTip="Add _New Agency"                    Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"    ToolTip="Add _New Agency"                    Foreground="#f80" />
+
+        <TextBlock>
+          <Run Text="     Slctd:" FontWeight="Light" />
+          <Run Text="{Binding SelectdAgency.Id}" FontWeight="Medium" />
+        </TextBlock>
+        <TextBlock>
+          <Run Text="     Crrnt:" FontWeight="Light" />
+          <Run Text="{Binding CurrentAgency.Id}" FontWeight="Medium" />
+        </TextBlock>
+      </StackPanel>
+
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />    </Grid>
+
+    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPage" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
+              CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False">
+      <DataGrid.Resources>
+        <DataTemplate x:Key="DateTemplate" >
+        </DataTemplate>
+      </DataGrid.Resources>
+      <DataGrid.Columns>
+        <DataGridTextColumn Header="Agency"    Binding="{Binding Id}"          Width="Auto"/>
+        <DataGridTextColumn Header="TtlAgents" Binding="{Binding TtlAgents}"  	FontWeight="SemiBold" />
+        <DataGridTextColumn Header="Address"   Binding="{Binding Address}"      Width="*"/>
+        <DataGridTextColumn Header="Note"      Binding="{Binding Note}"        Width="140" />
+        <DataGridTextColumn Header="Added"     Binding="{Binding AddedAt,    Converter={cnv:UniConverter}}"	 IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+        <DataGridTextColumn Header="Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:UniConverter}}"	 IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Grid Grid.Row="2" DataContext="{Binding SelectdAgency}" Background="#4888">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="12"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="5"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <AccessText Text="Ttl Agennt"   Grid.Column="1" Grid.Row="1" />
+      <TextBox                        Grid.Column="1" Grid.Row="2" Text="{Binding TtlAgents}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <AccessText Text="Address"			Grid.Column="3" Grid.Row="1" />
+      <TextBox                        Grid.Column="3" Grid.Row="2" Text="{Binding Address,                  Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <Label Content="A_dded"         Grid.Column="5" Grid.Row="1" Target="{Binding ElementName=dpAdAt}" />
+      <DatePicker                     Grid.Column="5" Grid.Row="2" SelectedDate="{Binding AddedAt,          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
+      <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" Target="{Binding ElementName=dpAdAt2}" />
+      <DatePicker                     Grid.Column="7" Grid.Row="2" SelectedDate="{Binding ModifiedAt,       Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />
+
+      <TextBox                        Grid.Column="0" Grid.Row="4" Text="{Binding Note,                     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
+    </Grid>
+
+    <GridSplitter Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Height="22" />
+
+  </Grid>
+</UserControl>

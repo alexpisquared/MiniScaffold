@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.View.Spec;
-public partial class Page04View : UserControl
+public partial class Page05View : UserControl
 {
-  public Page04View()  {    InitializeComponent();    _ = tbFilter.Focus();  }
+  public Page05View()  {    InitializeComponent();    _ = tbFilter.Focus();  }
   void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
     try
