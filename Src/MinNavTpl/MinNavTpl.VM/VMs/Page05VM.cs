@@ -38,15 +38,26 @@ public partial class Page05VM : BaseDbVM
     await Task.Delay(222); // <== does not show busy anime up without this...............................
     try
     {
-      var emailAdrss = await Dbx.Emails.Select(r => r.Id).ToListAsync();
+      var emailAdrss = await Dbx.Emails.
+        GroupBy(e => e.Company).
+        Select(r => new { Company = r.Key, Count = r.Count() }).ToListAsync();
+
       emailAdrss.ForEach(eml =>
       {
-        var agency = CsvImporterService.GetCompany(eml);
-        if (Dbx.Agencies.Local.Any(r => r.Id.Equals(agency, StringComparison.OrdinalIgnoreCase)))
-          return;
-
-        var nl = new Agency { Id = agency, AddedAt = Now };
-        Dbx.Agencies.Local.Add(nl);
+        var exstg = Dbx.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
+        if (exstg is not null)
+        {
+          if (exstg.TtlAgents != eml.Count)
+          {
+            exstg.TtlAgents = eml.Count;
+            exstg.ModifiedAt = Now;
+          }
+        }
+        else
+        {
+          var nl = new Agency { Id = eml.Company, TtlAgents = eml.Count, AddedAt = Now };
+          Dbx.Agencies.Local.Add(nl);
+        }
       });
 
       ChkDb4Cngs();      //Report = await SaveLogReportOrThrow(Dbx, "new agencies");

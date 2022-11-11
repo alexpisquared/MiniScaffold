@@ -60,12 +60,12 @@
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Agency"    Binding="{Binding Id}"         Width="Auto"/>
-        <DataGridTextColumn Header="TtlAgents" Binding="{Binding TtlAgents}"  />
-        <DataGridTextColumn Header="Address"   Binding="{Binding Address}"    Width="*"/>
-        <DataGridTextColumn Header="Note"      Binding="{Binding Note}"       Width="240" />
-        <DataGridTextColumn Header="Added"     Binding="{Binding AddedAt}"	  Width="140" IsReadOnly="True" FontWeight="SemiBold" />
-        <DataGridTextColumn Header="Modfd"     Binding="{Binding ModifiedAt}" Width="140" IsReadOnly="True" FontWeight="SemiBold" />
+        <DataGridTextColumn Header="Agency"    Binding="{Binding Id}"        MaxWidth="200"/>
+        <DataGridTextColumn Header="TtlAgents" Binding="{Binding TtlAgents}" />
+        <DataGridTextColumn Header="Address"   Binding="{Binding Address}"   Width="180"/>
+        <DataGridTextColumn Header="Note"      Binding="{Binding Note}"      Width="*" />
+        <DataGridTextColumn Header="Added"     Binding="{Binding AddedAt,    StringFormat='{}{0:y-MM-dd}'}" Width="140" IsReadOnly="True" FontWeight="SemiBold" />
+        <DataGridTextColumn Header="Modfd"     Binding="{Binding ModifiedAt, StringFormat='{}{0:y-MM-dd}'}" Width="140" IsReadOnly="True" FontWeight="SemiBold" />
       </DataGrid.Columns>
     </DataGrid>
 
