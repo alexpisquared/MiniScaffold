@@ -49,7 +49,6 @@ public partial class Page04VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
   public override void Dispose() => base.Dispose();
 
-  [ObservableProperty] ICollectionView? pageCvs;
   [ObservableProperty] ICollectionView? leadStatusCvs;
   [ObservableProperty] Lead? selectdLead;
   [ObservableProperty] Lead? currentLead;

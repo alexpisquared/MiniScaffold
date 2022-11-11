@@ -1,8 +1,6 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page05VM : BaseDbVM
 {
-  int _thisCampaign;
-
   public Page05VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
@@ -13,19 +11,12 @@ public partial class Page05VM : BaseDbVM
 
       await Task.Delay(22); // <== does not show up without this...............................
 
-      _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
-
       await Dbx.Agencies.LoadAsync();
-
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Agencies.ToListAsync());
-
-      PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.Id), ListSortDirection.Ascending));
-      PageCvs.Filter = obj => obj is not Agency Agency || Agency is null || string.IsNullOrEmpty(SearchText) ||
-        Agency.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        Agency.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
-
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Agencies.Local.ToObservableCollection());
-
+      PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.AddedAt), ListSortDirection.Descending));
+      PageCvs.Filter = obj => obj is not Agency row || row is null || string.IsNullOrEmpty(SearchText) ||
+        row.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+        row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
       Lgr.Log(LogLevel.Trace, Report = $" {Dbx.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
@@ -37,7 +28,6 @@ public partial class Page05VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
   public override void Dispose() => base.Dispose();
 
-  [ObservableProperty] ICollectionView? pageCvs;
   [ObservableProperty] Agency? selectdAgency;
   [ObservableProperty] Agency? currentAgency;
 
@@ -45,16 +35,17 @@ public partial class Page05VM : BaseDbVM
   async void Scan4newCo()
   {
     IsBusy = true;
+    await Task.Delay(222); // <== does not show busy anime up without this...............................
     try
     {
       var emailAdrss = await Dbx.Emails.Select(r => r.Id).ToListAsync();
       emailAdrss.ForEach(eml =>
       {
         var agency = CsvImporterService.GetCompany(eml);
-        if (Dbx.Agencies.Local.Any(r => r.Id.Equals(agency)))
+        if (Dbx.Agencies.Local.Any(r => r.Id.Equals(agency, StringComparison.OrdinalIgnoreCase)))
           return;
 
-        var nl = new Agency { Id = agency, AddedAt = DateTime.Now };
+        var nl = new Agency { Id = agency, AddedAt = Now };
         Dbx.Agencies.Local.Add(nl);
       });
 

@@ -13,7 +13,7 @@
 
     </ResourceDictionary>
   </UserControl.Resources>
-  <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
+  <Grid>
     <Grid.LayoutTransform>
       <TransformGroup>
         <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
@@ -58,25 +58,20 @@
 
       <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />    </Grid>
 
-    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgPage" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False">
-      <DataGrid.Resources>
-        <DataTemplate x:Key="DateTemplate" >
-        </DataTemplate>
-      </DataGrid.Resources>
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4">
       <DataGrid.Columns>
-        <DataGridTextColumn Header="Agency"    Binding="{Binding Id}"          Width="Auto"/>
-        <DataGridTextColumn Header="TtlAgents" Binding="{Binding TtlAgents}"  	FontWeight="SemiBold" />
-        <DataGridTextColumn Header="Address"   Binding="{Binding Address}"      Width="*"/>
-        <DataGridTextColumn Header="Note"      Binding="{Binding Note}"        Width="140" />
-        <DataGridTextColumn Header="Added"     Binding="{Binding AddedAt,    Converter={cnv:UniConverter}}"	 IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
-        <DataGridTextColumn Header="Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:UniConverter}}"	 IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+        <DataGridTextColumn Header="Agency"    Binding="{Binding Id}"         Width="Auto"/>
+        <DataGridTextColumn Header="TtlAgents" Binding="{Binding TtlAgents}"  />
+        <DataGridTextColumn Header="Address"   Binding="{Binding Address}"    Width="*"/>
+        <DataGridTextColumn Header="Note"      Binding="{Binding Note}"       Width="240" />
+        <DataGridTextColumn Header="Added"     Binding="{Binding AddedAt}"	  Width="140" IsReadOnly="True" FontWeight="SemiBold" />
+        <DataGridTextColumn Header="Modfd"     Binding="{Binding ModifiedAt}" Width="140" IsReadOnly="True" FontWeight="SemiBold" />
       </DataGrid.Columns>
     </DataGrid>
 
     <Grid Grid.Row="2" DataContext="{Binding SelectdAgency}" Background="#4888">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="140"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="12"/>
         <ColumnDefinition Width="*"/>
@@ -94,10 +89,12 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
+      <AccessText Text="Agenncy"      Grid.Column="0" Grid.Row="1" />
+      <TextBox                        Grid.Column="0" Grid.Row="2" Text="{Binding Id}"          />
       <AccessText Text="Ttl Agennt"   Grid.Column="1" Grid.Row="1" />
-      <TextBox                        Grid.Column="1" Grid.Row="2" Text="{Binding TtlAgents}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <TextBox                        Grid.Column="1" Grid.Row="2" Text="{Binding TtlAgents}"   />
       <AccessText Text="Address"			Grid.Column="3" Grid.Row="1" />
-      <TextBox                        Grid.Column="3" Grid.Row="2" Text="{Binding Address,                  Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  HorizontalAlignment="Stretch" Margin="0,4" />
+      <TextBox                        Grid.Column="3" Grid.Row="2" Text="{Binding Address,                  Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"   />
       <Label Content="A_dded"         Grid.Column="5" Grid.Row="1" Target="{Binding ElementName=dpAdAt}" />
       <DatePicker                     Grid.Column="5" Grid.Row="2" SelectedDate="{Binding AddedAt,          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
       <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" Target="{Binding ElementName=dpAdAt2}" />

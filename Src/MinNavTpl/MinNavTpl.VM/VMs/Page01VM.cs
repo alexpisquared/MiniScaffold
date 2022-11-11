@@ -18,21 +18,13 @@ public partial class Page01VM : BaseDbVM
 
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
-#if true
-      await Dbx.
-        Emails.
-        //Include(r => r.Ehists).
-        LoadAsync();
-#else //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
       await Dbx.Emails.LoadAsync();
-      //await Dbx.Ehists.LoadAsync();
-#endif
 
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
-      PageCvs.Filter = obj => obj is not Email lead || lead is null || string.IsNullOrEmpty(SearchText) ||
-        lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+      PageCvs.Filter = obj => obj is not Email row || row is null || string.IsNullOrEmpty(SearchText) ||
+        row.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+        row.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
       Lgr.Log(LogLevel.Trace, Report = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
