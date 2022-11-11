@@ -49,7 +49,7 @@
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8">

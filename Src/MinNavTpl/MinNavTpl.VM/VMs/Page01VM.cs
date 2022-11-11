@@ -26,7 +26,7 @@ public partial class Page01VM : BaseDbVM
         row.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         row.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      Lgr.Log(LogLevel.Trace, Report = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }

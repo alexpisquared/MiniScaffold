@@ -36,8 +36,8 @@ public partial class EmailDetailVM : BaseDbVM
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Ehist.AddedAt), ListSortDirection.Descending));
       //PageCvs.Filter = obj => obj is not Ehist lead || lead is null || string.IsNullOrEmpty(SearchText) ||        lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||        lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      Report = $" {Dbx.Emails.Local.Count:N0} + {Dbx.Ehists.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s";
-      //Lgr.Log(LogLevel.Trace, Report );
+      GSReport = $" {Dbx.Emails.Local.Count:N0} + {Dbx.Ehists.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s";
+      //Lgr.Log(LogLevel.Trace, GSReport );
 
       return true;
     }

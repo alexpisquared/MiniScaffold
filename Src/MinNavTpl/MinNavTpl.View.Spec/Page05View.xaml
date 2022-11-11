@@ -57,7 +57,7 @@
         </TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />    </Grid>
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />    </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4">
       <DataGrid.Columns>

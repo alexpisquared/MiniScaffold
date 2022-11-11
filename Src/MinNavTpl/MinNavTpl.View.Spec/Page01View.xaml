@@ -56,7 +56,7 @@
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding Report}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="Report" Foreground="#1af"  />
+      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4">

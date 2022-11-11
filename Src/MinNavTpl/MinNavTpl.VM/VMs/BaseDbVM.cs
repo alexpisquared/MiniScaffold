@@ -63,7 +63,7 @@ public partial class BaseDbVM : BaseMinVM
       GSReportStore.Changed -= GSReportStore_Chngd;
       _letStore.Changed -= LetDbChgStore_Chngd;
 
-      //PopupMsg(Report = "");
+      //PopupMsg(GSReport = "");
 
       return true;
     }
@@ -83,7 +83,7 @@ public partial class BaseDbVM : BaseMinVM
     base.Dispose();
   }
   public virtual async Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
-  protected void ReportProgress(string msg) { Report = msg; Lgr.Log(LogLevel.Trace, msg); }
+  protected void ReportProgress(string msg) { GSReport = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   protected readonly LetDbChgStore _letStore;
   public SrvrNameStore SrvrNameStore { get; }
@@ -138,7 +138,6 @@ public partial class BaseDbVM : BaseMinVM
   public IBpr Bpr { get; }
   public Window MainWin { get; }
   [ObservableProperty] bool isDevDbg;
-  [ObservableProperty] string report = "";
   [ObservableProperty] ICollectionView? pageCvs;
 
   bool _ib; public bool IsBusy
@@ -156,7 +155,7 @@ public partial class BaseDbVM : BaseMinVM
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
   bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
 
-  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); Report = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges();  WriteLine(Report);  }
+  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges();  WriteLine(GSReport);  }
   [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
   async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {
@@ -166,15 +165,15 @@ public partial class BaseDbVM : BaseMinVM
       if (!success) throw new Exception(report);
 
       Lgr.LogInformation(report);
-      Report = report;
+      GSReport = report;
     }
     else
     {
-      Report = $"Current user permisssion \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
-      Lgr.LogWarning(Report.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
+      GSReport = $"Current user permisssion \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
+      Lgr.LogWarning(GSReport.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
       await Bpr.BeepAsync(333, 2.5); // _ = MessageBox.Show(report, $"Not enough priviliges \t\t {DateTime.Now:MMM-dd HH:mm}", MessageBoxButton.OK, MessageBoxImage.Hand);
     }
 
-    return Report;
+    return GSReport;
   }
 }

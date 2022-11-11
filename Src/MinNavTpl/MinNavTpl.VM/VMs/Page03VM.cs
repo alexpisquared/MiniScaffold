@@ -213,7 +213,7 @@ public partial class Page03VM : BaseDbVM
               OutlookHelper6.moveIt(trgFolder, mailItem);
             }
           }
-          catch (System.Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. Report: {report}."); }
+          catch (System.Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
         } // for
 #if DEBUG
       } while (false);

@@ -111,7 +111,7 @@
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="1" Margin="0,0,0,6" HorizontalAlignment="Stretch" VerticalAlignment="Center" >
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
@@ -411,7 +411,8 @@
               <DropShadowEffect BlurRadius="16" />
             </Border.Effect>
             <Grid>
-              <ListBox MaxHeight="160" MaxWidth="920" Background="Transparent" BorderThickness="0" Margin="5 8 15 5" ItemsSource="{Binding ValidationMessages}" VerticalAlignment="Top" HorizontalAlignment="Left" >
+              <TextBlock Text="{Binding GSReport}" MaxHeight="160" MaxWidth="920" Background="Transparent" Margin="12 8 26 5" VerticalAlignment="Top" HorizontalAlignment="Left" d:Text="Hello! Here it is."/>
+              <!--<ListBox MaxHeight="160" MaxWidth="920" Background="Transparent" BorderThickness="0" Margin="5 8 15 5" ItemsSource="{Binding ValidationMessages}" VerticalAlignment="Top" HorizontalAlignment="Left" >
                 <ListBox.ItemContainerStyle>
                   <Style TargetType="{x:Type ListBoxItem}" >
                     <Setter Property="Template" Value="{StaticResource ColoredValidationMsgStyle}"/>
@@ -422,7 +423,7 @@
                 <ListBoxItem Content="123 wonderful color" Foreground="#f44" />
                 <ListBoxItem Content="123 wonderful color" Foreground="#f88" />
                 <ListBoxItem Content="123 wonderful color" Foreground="#faa" />
-              </ListBox>
+              </ListBox>-->
               <Button Content="r" FontFamily="Webdings" FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding HidePnlCommand}" Background="#555" Margin="0 -0" IsCancel="True" ToolTip="Close Popup" />
             </Grid>
           </Border>

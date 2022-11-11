@@ -30,7 +30,7 @@ public partial class Page02VM : BaseDbVM
         lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      Lgr.Log(LogLevel.Trace, Report = $" ({Dbx.VEmailAvailProds.Local.Count:N0} + {Dbx.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.VEmailAvailProds.Local.Count:N0} + {Dbx.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }
