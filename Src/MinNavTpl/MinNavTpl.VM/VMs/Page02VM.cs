@@ -2,9 +2,9 @@
 public partial class Page02VM : BaseDbVM
 {
   int _thisCampaign;
-  public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110)
+  public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110)
   {
-    EmaiStore = eml; //EmaiStore.Changed += EmaiStore_Chngd;
+    EmailOfIStore = eml; //EmailOfIStore.Changed += EmailOfIStore_Chngd;
     EmailOfIVM = evm;
   }
   public override async Task<bool> InitAsync()
@@ -40,18 +40,18 @@ public partial class Page02VM : BaseDbVM
   public override Task<bool> WrapAsync() => base.WrapAsync();
   public override void Dispose() => base.Dispose();
 
-  public EmailOfIStore EmaiStore { get; }
+  public EmailOfIStore EmailOfIStore { get; }
   public EmailDetailVM EmailOfIVM { get; }
 
   [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] Email? currentEmail;
-  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmaiStore.Change(value.Id); } } }
+  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } }
 
   [RelayCommand] void AddNewEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); }  }
-  [RelayCommand] void Cou() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); }  }
-  [RelayCommand] void PBR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); }  }
-  [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); }  }
+  [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Cou() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void PBR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void OLk() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 }

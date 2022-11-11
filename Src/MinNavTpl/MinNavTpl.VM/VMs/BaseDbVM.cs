@@ -6,7 +6,7 @@ public partial class BaseDbVM : BaseMinVM
   readonly ISecForcer _secForcer;
   protected bool _saving, _loading, _inited;
   protected readonly DateTime Now = DateTime.Now;
-  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, UserSettings usrStgns, int oid)
+  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
   {
     IsDevDbg = VersionHelper.IsDbg;
 
@@ -25,9 +25,10 @@ public partial class BaseDbVM : BaseMinVM
       UsrStgns.SrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
       UsrStgns.LetDbChg);
 
-    SrvrStore = srvrStore; SrvrStore.Changed += SrvrStore_Chngd;
-    DtBsStore = dtbsStore; DtBsStore.Changed += DtbsStore_Chngd;
-    _letStore = letDStore; _letStore.Changed += LetCStore_Chngd;
+    SrvrNameStore = svr; SrvrNameStore.Changed += SrvrNameStore_Chngd;
+    DtBsNameStore = dbs; DtBsNameStore.Changed += DtBsNameStore_Chngd;
+    GSReportStore = gsr; GSReportStore.Changed += GSReportStore_Chngd;
+    _letStore = awd; _letStore.Changed += LetDbChgStore_Chngd;
 
     _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
@@ -46,7 +47,7 @@ public partial class BaseDbVM : BaseMinVM
   {
     try
     {
-      if (LetDbChgProp && Dbx.HasUnsavedChanges())
+      if (LetDbChg && Dbx.HasUnsavedChanges())
       {
         switch (MessageBox.Show("Would you like to save the changes?\r\n\n..or select Cancel to stay on the page", "There are unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
         {
@@ -57,9 +58,10 @@ public partial class BaseDbVM : BaseMinVM
         }
       }
 
-      SrvrStore.Changed -= SrvrStore_Chngd;
-      DtBsStore.Changed -= DtbsStore_Chngd;
-      _letStore.Changed -= LetCStore_Chngd;
+      SrvrNameStore.Changed -= SrvrNameStore_Chngd;
+      DtBsNameStore.Changed -= DtBsNameStore_Chngd;
+      GSReportStore.Changed -= GSReportStore_Chngd;
+      _letStore.Changed -= LetDbChgStore_Chngd;
 
       //PopupMsg(Report = "");
 
@@ -73,9 +75,10 @@ public partial class BaseDbVM : BaseMinVM
   }
   public override void Dispose()
   {
-    SrvrStore.Changed -= SrvrStore_Chngd;
-    DtBsStore.Changed -= DtbsStore_Chngd;
-    _letStore.Changed -= LetCStore_Chngd;
+    SrvrNameStore.Changed -= SrvrNameStore_Chngd;
+    DtBsNameStore.Changed -= DtBsNameStore_Chngd;
+    GSReportStore.Changed -= GSReportStore_Chngd;
+    _letStore.Changed -= LetDbChgStore_Chngd;
 
     base.Dispose();
   }
@@ -83,12 +86,14 @@ public partial class BaseDbVM : BaseMinVM
   protected void ReportProgress(string msg) { Report = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   protected readonly LetDbChgStore _letStore;
-  public SrvrNameStore SrvrStore { get; }
-  public DtBsNameStore DtBsStore { get; }
-  async void SrvrStore_Chngd(string val) { SrvrNameProp = val; await RefreshReloadAsync(); }
-  async void DtbsStore_Chngd(string val) { DtBsNameProp = val; await RefreshReloadAsync(); }
-  async void LetCStore_Chngd(bool value) { LetDbChgProp = value; await RefreshReloadAsync(); }
-  string? _cs; public string? SrvrNameProp
+  public SrvrNameStore SrvrNameStore { get; }
+  public DtBsNameStore DtBsNameStore { get; }
+  public GSReportStore GSReportStore { get; }
+  async void SrvrNameStore_Chngd(string val) { SrvrName = val; await RefreshReloadAsync(); }
+  async void DtBsNameStore_Chngd(string val) { DtBsName = val; await RefreshReloadAsync(); }
+  async void GSReportStore_Chngd(string val) { GSReport = val; await RefreshReloadAsync(); }
+  async void LetDbChgStore_Chngd(bool value) { LetDbChg = value; await RefreshReloadAsync(); }
+  string? _cs; public string? SrvrName
   {
     get => _cs; set
     {
@@ -96,11 +101,11 @@ public partial class BaseDbVM : BaseMinVM
       {
         Bpr.Click();
         UsrStgns.SrvrName = value;
-        SrvrStore.Change(value);
+        SrvrNameStore.Change(value);
       }
     }
   }
-  string? _cd; public string? DtBsNameProp
+  string? _cd; public string? DtBsName
   {
     get => _cd; set
     {
@@ -108,11 +113,22 @@ public partial class BaseDbVM : BaseMinVM
       {
         Bpr.Click();
         UsrStgns.DtBsName = value;
-        DtBsStore.Change(value);
+        DtBsNameStore.Change(value);
       }
     }
   }
-  bool _aw; public bool LetDbChgProp { get => _aw; set { if (SetProperty(ref _aw, value)) { _letStore.Change(value); } } }
+  string? _gr; public string? GSReport
+  {
+    get => _gr; set
+    {
+      if (SetProperty(ref _gr, value) && value is not null && _inited)
+      {
+        Bpr.Click();
+        GSReportStore.Change(value);
+      }
+    }
+  }
+  bool _aw; public bool LetDbChg { get => _aw; set { if (SetProperty(ref _aw, value)) { _letStore.Change(value); } } }
   ADUser? _ct; public ADUser? CurentUser { get => _ct; set { if (SetProperty(ref _ct, value) && value is not null) { WriteLine($"TrWL:> Curent User:  {value.FullName,-26} {value.A,-6}{value.W,-6}{value.R,-6}{value.L,-6}  {value.Permisssions}"); } } }
 
   public UserSettings UsrStgns { get; }
@@ -144,7 +160,7 @@ public partial class BaseDbVM : BaseMinVM
   [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
   async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {
-    if (LetDbChgProp)
+    if (LetDbChg)
     {
       var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrow)} called by {cmn} on {dbx.GetType().Name}.  {note}");
       if (!success) throw new Exception(report);

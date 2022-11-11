@@ -174,16 +174,16 @@
           <vws:BrandTitleUserControl Grid.RowSpan="3" />
 
           <Label     Grid.Column="2" Content="Sql" />
-          <TextBlock Grid.Column="2" Text="{Binding SrvrNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
+          <TextBlock Grid.Column="2" Text="{Binding SrvrName}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
           <Label     Grid.Column="4" Content="DB" />
-          <TextBlock Grid.Column="4" Text="{Binding DtBsNameProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
+          <TextBlock Grid.Column="4" Text="{Binding DtBsName}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
           <Label     Grid.Column="6" Content="Agent" />
-          <TextBlock Grid.Column="6" Text="{Binding EmailOfIProp}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
+          <TextBlock Grid.Column="6" Text="{Binding EmailOfI}" FontStyle="Italic" FontWeight="SemiBold" FontSize="14" Grid.Row="1" d:Text="SqlExprs" />
 
           <Label     Grid.Column="8" Content="RW" />
-          <CheckBox  Grid.Column="8" IsChecked="{Binding LetDbChgProp}" Grid.Row="1" />
+          <CheckBox  Grid.Column="8" IsChecked="{Binding LetDbChg}" Grid.Row="1" />
 
         </Grid>
 
@@ -276,8 +276,8 @@
                       </Grid>
                     </MenuItem.Header>
                     <MenuItem   Header="_DevDbg" Visibility="{Binding IsDevDbgViz}" FontStyle="Oblique" FontWeight="Medium">
-                      <ComboBox ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SrvrNameProp}" BorderThickness="0" />
-                      <ComboBox ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsNameProp}"  BorderThickness="0" />
+                      <ComboBox ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SrvrName}" BorderThickness="0" />
+                      <ComboBox ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}"  BorderThickness="0" />
                       <!--
                       <MenuItem Header="S_QL Server Selection..." Command="{Binding OpenAppConfigCommand}" Visibility="{Binding CanSelectSQL, Converter={cnv:UniConverter}, FallbackValue=Collapsed}" />
                       <Separator/>

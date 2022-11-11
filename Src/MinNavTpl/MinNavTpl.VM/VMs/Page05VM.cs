@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page05VM : BaseDbVM
 {
-  public Page05VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110) { }
+  public Page05VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
     try
@@ -55,7 +55,7 @@ public partial class Page05VM : BaseDbVM
         }
         else
         {
-          var nl = new Agency { Id = eml.Company, TtlAgents = eml.Count, AddedAt = Now };
+          var nl = new Agency { Id = eml.Company ?? "■■ No way ■■", TtlAgents = eml.Count, AddedAt = Now };
           Dbx.Agencies.Local.Add(nl);
         }
       });

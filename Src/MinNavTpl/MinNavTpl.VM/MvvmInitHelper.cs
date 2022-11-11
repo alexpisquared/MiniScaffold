@@ -6,6 +6,7 @@ public static class MvvmInitHelper
     _ = services.AddSingleton<NavigationStore>();
     _ = services.AddSingleton<SrvrNameStore>();
     _ = services.AddSingleton<DtBsNameStore>();
+    _ = services.AddSingleton<GSReportStore>();
     _ = services.AddSingleton<EmailOfIStore>();
     _ = services.AddSingleton<LetDbChgStore>();
 

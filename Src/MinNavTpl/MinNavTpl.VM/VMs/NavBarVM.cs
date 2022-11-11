@@ -1,19 +1,22 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class NavBarVM : BaseMinVM
 {
-  readonly SrvrNameStore _srvrStore;
-  readonly DtBsNameStore _dtbsStore;
-  readonly LetDbChgStore _letDStore;
+  readonly SrvrNameStore _SrvrNameStore;
+  readonly DtBsNameStore _DtBsNameStore;
+  readonly GSReportStore _GSReportStore;
+  readonly LetDbChgStore __letDbChStore;
 
-  public NavBarVM(SrvrNameStore srvrStore, DtBsNameStore dtbsStore, LetDbChgStore letDStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, Page05NavSvc Page05NavSvc, EmailDetailNavSvc emailDetailNavSvc, UserSettings usrStgns)
+  public NavBarVM(SrvrNameStore SrvrNameStore, DtBsNameStore DtBsNameStore, GSReportStore gsr, LetDbChgStore letDStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, Page05NavSvc Page05NavSvc, EmailDetailNavSvc emailDetailNavSvc, UserSettings usrStgns)
   {
-    _srvrStore = srvrStore;
-    _dtbsStore = dtbsStore;
-    _letDStore = letDStore;
+    _SrvrNameStore = SrvrNameStore;
+    _DtBsNameStore = DtBsNameStore;
+    _GSReportStore = gsr;
+    __letDbChStore = letDStore;
 
-    _srvrStore.Changed += OnCurrentSrvrChanged;
-    _dtbsStore.Changed += OnCurrentDtbsChanged;
-    _letDStore.Changed += OnCurrentLetDChanged;
+    _SrvrNameStore.Changed += SrvrNameStore_Chngd;
+    _DtBsNameStore.Changed += DtBsNameStore_Chngd;
+    //_GSReportStore.Changed += GSReportStore_Chngd;
+    __letDbChStore.Changed += LetDbChgStore_Chngd;
 
     UsrStgns = usrStgns;
     NavigatePage00Command = new NavigateCommand(page00NavSvc);
@@ -26,9 +29,9 @@ public partial class NavBarVM : BaseMinVM
 
     PrefSrvrName = usrStgns.SrvrName;
     PrefDtBsName = usrStgns.DtBsName;
-    LetDbChgProp = usrStgns.LetDbChg;
+    LetDbChg = usrStgns.LetDbChg;
 
-    IsEnabledLetDbChgProp = true;
+    IsEnabledLetDbChg = true;
 
     IsDevDbg = VersionHelper.IsDbg;
 
@@ -38,14 +41,16 @@ public partial class NavBarVM : BaseMinVM
       UsrStgns.LetDbChg);
   }
 
-  void OnCurrentSrvrChanged(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(SrvrName)); }
-  void OnCurrentDtbsChanged(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(DtBsNameProp)); }
-  void OnCurrentLetDChanged(bool value) => LetDbChgProp = value;
+  void SrvrNameStore_Chngd(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(SrvrName)); }
+  void DtBsNameStore_Chngd(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(DtBsName)); }
+  //void GSReportStore_Chngd(string dtbs) => PrefGSReport = dtbs;  //OnPropertyChanged(nameof(DtBsName)); }
+  void LetDbChgStore_Chngd(bool value) => LetDbChg = value;
 
-  bool _awd; public bool LetDbChgProp { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.LetDbChg = value; _letDStore.Change(value); } } }
-  [ObservableProperty] bool isEnabledLetDbChgProp;
+  bool _awd; public bool LetDbChg { get => _awd; set { if (SetProperty(ref _awd, value)) { UsrStgns.LetDbChg = value; __letDbChStore.Change(value); } } }
+  [ObservableProperty] bool isEnabledLetDbChg;
   [ObservableProperty] string prefSrvrName = Consts.SqlServerList.First();
   [ObservableProperty] string prefDtBsName = ".\\SqlExpress";
+  [ObservableProperty] string gSReportName = "...GSReport";
   [ObservableProperty] bool isDevDbg;
   [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible;
 
@@ -72,9 +77,10 @@ public partial class NavBarVM : BaseMinVM
 
   public override void Dispose()
   {
-    _srvrStore.Changed -= OnCurrentSrvrChanged;
-    _dtbsStore.Changed -= OnCurrentDtbsChanged;
-    _letDStore.Changed -= OnCurrentLetDChanged;
+    _SrvrNameStore.Changed -= SrvrNameStore_Chngd;
+    _DtBsNameStore.Changed -= DtBsNameStore_Chngd;
+    _GSReportStore.Changed -= DtBsNameStore_Chngd;
+    __letDbChStore.Changed -= LetDbChgStore_Chngd;
 
     base.Dispose();
   }

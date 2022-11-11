@@ -1,38 +1,38 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class EmailDetailVM : BaseDbVM
 {
-  public EmailDetailVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, EmailOfIStore eml, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, awd, stg, 8110)
+  public EmailDetailVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110)
   {
-    EmaiStore = eml; EmaiStore.Changed += EmaiStore_Chngd;
-    EmailOfIProp = eml.LastVal;
+    EmailOfIStore = eml; EmailOfIStore.Changed += EmailOfIStore_Chngd;
+    EmailOfI = eml.LastVal;
   }
-  public override async Task<bool> InitAsync() {    IsBusy = true; _ = await InitAsyncTask(EmailOfIProp); return await base.InitAsync(); }
+  public override async Task<bool> InitAsync() {    IsBusy = true; _ = await InitAsyncTask(EmailOfI); return await base.InitAsync(); }
   async Task<bool> InitAsyncTask(string emailOfI, [CallerMemberName] string? cmn = "")
   {
     WriteLine($"■■ Init  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22} ■■■■");
     try
     {      
       var sw = Stopwatch.StartNew();
-      EmailOfIProp = emailOfI;
+      EmailOfI = emailOfI;
 
       await Task.Yield(); 
 
 #if !true
       await Dbx.
-        Emails.Where(r => r.Id == EmailOfIProp).
+        Emails.Where(r => r.Id == EmailOfI).
         Include(r => r.Ehists).
         LoadAsync();
 #else //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
 
       //This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.   NotSupportedException at C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\EmailDetailVM.cs(40): InitAsyncTask() 
       //System.NotSupportedException: This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.
-      //await Dbx.Emails.Where(r => r.Id == EmailOfIProp).LoadAsync();
-      //await Dbx.Ehists.Where(r => r.EmailId == EmailOfIProp).LoadAsync();
-      Dbx.Emails.Where(r => r.Id == EmailOfIProp).Load();
-      Dbx.Ehists.Where(r => r.EmailId == EmailOfIProp).Load();
+      //await Dbx.Emails.Where(r => r.Id == EmailOfI).LoadAsync();
+      //await Dbx.Ehists.Where(r => r.EmailId == EmailOfI).LoadAsync();
+      Dbx.Emails.Where(r => r.Id == EmailOfI).Load();
+      Dbx.Ehists.Where(r => r.EmailId == EmailOfI).Load();
 #endif
 
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Ehists.Local.ToObservableCollection().Where(r => r.EmailId == EmailOfIProp)); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Ehists.ToListAsync());
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Ehists.Local.ToObservableCollection().Where(r => r.EmailId == EmailOfI)); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Ehists.ToListAsync());
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Ehist.AddedAt), ListSortDirection.Descending));
       //PageCvs.Filter = obj => obj is not Ehist lead || lead is null || string.IsNullOrEmpty(SearchText) ||        lead.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||        lead.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
@@ -46,18 +46,18 @@ public partial class EmailDetailVM : BaseDbVM
   }
   public override void Dispose()
   {
-    EmaiStore.Changed -= EmaiStore_Chngd;
+    EmailOfIStore.Changed -= EmailOfIStore_Chngd;
     base.Dispose();
   }
 
-  async void EmaiStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
+  async void EmailOfIStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
   {
-    WriteLine($"■■ EmDt  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfIProp != emailOfI ? "==>Load" : "==>----")}");
-    if (EmailOfIProp != emailOfI)
+    WriteLine($"■■ EmDt  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load" : "==>----")}");
+    if (EmailOfI != emailOfI)
       _ = await InitAsyncTask(emailOfI);
   }
-  public EmailOfIStore EmaiStore { get; }
-  string _em = "°"; public string EmailOfIProp { get => _em; set => SetProperty(ref _em, value); }
+  public EmailOfIStore EmailOfIStore { get; }
+  string _em = "°"; public string EmailOfI { get => _em; set => SetProperty(ref _em, value); }
 
   [ObservableProperty] Ehist? currentEhist;
   [ObservableProperty] Ehist? selectdEhist;
