@@ -4,10 +4,11 @@ public partial class Page03VM : BaseDbVM
   readonly OutlookHelper6 _oh = new();
   int _newEmailsAdded = 0;
   public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
-  public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync();  }
+  public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync(); }
 
   [ObservableProperty] string reportOL = "";
-  [RelayCommand] async Task DoReglr()
+  [RelayCommand]
+  async Task DoReglr()
   {
     IsBusy = !false;
 
@@ -22,7 +23,8 @@ public partial class Page03VM : BaseDbVM
     catch (System.Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; }
   }
-  [RelayCommand] async Task DoJunkM()
+  [RelayCommand]
+  async Task DoJunkM()
   {
     IsBusy = !false;
 
@@ -36,7 +38,8 @@ public partial class Page03VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; }
   }
-  [RelayCommand] async Task DoFails()
+  [RelayCommand]
+  async Task DoFails()
   {
     IsBusy = !false;
 
@@ -52,7 +55,8 @@ public partial class Page03VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; }
   }
-  [RelayCommand] async Task DoLater()
+  [RelayCommand]
+  async Task DoLater()
   {
     IsBusy = !false;
 
@@ -68,7 +72,8 @@ public partial class Page03VM : BaseDbVM
     catch (System.Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; }
   }
-  [RelayCommand] async Task DoDoneR()
+  [RelayCommand]
+  async Task DoDoneR()
   {
     IsBusy = !false;
 
@@ -137,7 +142,7 @@ public partial class Page03VM : BaseDbVM
 
     return new TupleSubst { HasNewEmails = isAnyNew, NewEmails = newEmail };
   }
-  class TupleSubst  {    public bool HasNewEmails { get; set; }    public string[]? NewEmails { get; set; }  }
+  class TupleSubst { public bool HasNewEmails { get; set; } public string[]? NewEmails { get; set; } }
   async Task<string> OutlookFolderToDb_ReglrAsync(string folderName)
   {
     int cnt = 0, ttl = 0, newEmailsAdded = 0;
@@ -401,8 +406,7 @@ public partial class Page03VM : BaseDbVM
             senderEmail = OutlookHelper6.RemoveBadEmailParts(senderEmail);
             if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
 
-            var emr = Dbx.Emails.Find(senderEmail);
-            if (emr == null)
+            if (Dbx.Emails.Find(senderEmail) == null)
             {
               var (first, last) = OutlookHelper6.figureOutSenderFLName(reportItem, senderEmail);
               var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, reportItem.Subject, "under constr-n", null, reportItem.CreationTime, msg, "R");
@@ -462,10 +466,10 @@ public partial class Page03VM : BaseDbVM
         }
         catch (Exception ex) { ex.Pop($":{senderEmail}."); }
 
-        ReportOL += $"\n\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
-
-        if (ttlProcessed % 10 == 0) await Task.Delay(10); else await Task.Yield();
+        if (ttlProcessed % 10 == 0) ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
       }
+
+      ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... \n";
     }
     catch (Exception ex) { ex.Pop(); }
 

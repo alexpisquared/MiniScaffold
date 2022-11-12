@@ -1,33 +1,46 @@
-﻿<UserControl x:Class="MinNavTpl.View.Spec.Page03View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+﻿ <UserControl x:Class="MinNavTpl.View.Spec.Page03View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page03VM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" >
+             d:DesignHeight="200" d:DesignWidth="1600" Padding="8" >
   <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
+
+    </ResourceDictionary>
   </UserControl.Resources>
   <Grid  x:Name="ZommablePanel" >
-    <Grid.LayoutTransform>
-      <TransformGroup>
-        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
-      </TransformGroup>
-    </Grid.LayoutTransform>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
-    <Menu Margin="20 0" Background="Transparent" x:Name="menu1" VerticalAlignment="Center">
-      <MenuItem Header="[Re] Do _Reglr"       Command="{Binding DoReglrCommand}"  ToolTip="Check and add if new the Q folder"/>
-      <MenuItem Header="[Re] Do _JunkM"       Command="{Binding DoJunkMCommand}"  ToolTip="Check and add if new the JunkMail folder"/>
-      <MenuItem Header="[Re] Do _Fails"       Command="{Binding DoFailsCommand}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
-      <MenuItem Header="[Re] Do La_ter"       Command="{Binding DoLaterCommand}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
-      <MenuItem Header="[Re] Do _DoneR"       Command="{Binding DoDoneRCommand}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
-      <MenuItem Header="Ad_vanced"                                                                                                       Foreground="DarkOrange">
-        <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOLCommand}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />
-        <MenuItem Header="_Deleted Contacts"  Command="{Binding UpdateOLCommand}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" CommandParameter="Deleted Items"/>
-      </MenuItem>
-    </Menu>
+    <StackPanel Orientation="Horizontal">
+
+      <Menu Margin="10 0" VerticalAlignment="Center">
+        <MenuItem Header="[Re] _Reglr"       Command="{Binding DoReglrCommand}"  ToolTip="Check and add if new the Q folder"/>
+        <MenuItem Header="[Re] _JunkM"       Command="{Binding DoJunkMCommand}"  ToolTip="Check and add if new the JunkMail folder"/>
+        <MenuItem Header="[Re] _Fails"       Command="{Binding DoFailsCommand}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
+        <MenuItem Header="[Re] La_ter"       Command="{Binding DoLaterCommand}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+        <MenuItem Header="[Re] _DoneR"       Command="{Binding DoDoneRCommand}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
+        <MenuItem Header="Ad_vanced"                                                                                                              Foreground="DarkOrange">
+          <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOLCommand}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />
+          <MenuItem Header="_Deleted Contacts"  Command="{Binding UpdateOLCommand}" ToolTip="Go through deleted contacts... "                     Foreground="DarkOrange" CommandParameter="Deleted Items"/>
+        </MenuItem>
+      </Menu>
+
+      <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}" ToolTip="Add _New Agency"                    Foreground="#0a0" />
+      <Button Content=" _Sve " Command="{Binding Save2DbCommand}"    ToolTip="Add _New Agency"                    Foreground="#f80" />
+
+    </StackPanel>
+
 
     <Label        Grid.Row="1" x:Name="lblMetaHeader"  HorizontalAlignment="Center" Content="... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ..." />
 
