@@ -3,7 +3,7 @@ public partial class Page03VM : BaseDbVM
 {
   readonly OutlookHelper6 _oh = new();
   int _newEmailsAdded = 0;
-  public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
+  public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
   public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync();  }
 
   [ObservableProperty] string reportOL = "";
@@ -200,7 +200,7 @@ public partial class Page03VM : BaseDbVM
               {
                 var (first, last) = OutlookHelper6.figureOutSenderFLName(re.Name, re.Address);
 
-                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, re.Address, first, last, mailItem?.Subject, mailItem?.Body, mailItem?.ReceivedTime, $"..from Sent folder. ", "S");
+                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, re.Address, first, last, mailItem?.Subject, mailItem?.Body, mailItem?.SentOn, mailItem?.ReceivedTime, $"..from Sent folder. ", "S");
                 if (isNew) { newEmailsAdded++; }
 
                 report += OutlookHelper6.reportLine(folderName, re.Address, isNew);
@@ -257,7 +257,7 @@ public partial class Page03VM : BaseDbVM
               if (emr == null)
               {
                 var (first, last) = OutlookHelper6.figureOutSenderFLName(reportItem, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"));
-                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, reportItem.Subject, reportItem.Body, reportItem.CreationTime, "..banned upon delivery fail BUT not existed !!! ", "R");
+                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, reportItem.Subject, reportItem.Body, null, reportItem.CreationTime, "..banned upon delivery fail BUT not existed !!! ", "R");
                 if (isNew) { newEmailsAdded++; }
               }
               else
@@ -289,7 +289,7 @@ public partial class Page03VM : BaseDbVM
                 if (Dbx.Emails.Find(emailFromBody) == null)
                 {
                   var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, emailFromBody);
-                  var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
+                  var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
                   if (isNew) { newEmailsAdded++; }
                 }
               }
@@ -347,7 +347,7 @@ public partial class Page03VM : BaseDbVM
                 if (Dbx.Emails.Find(emailFromBody) == null)
                 {
                   var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, emailFromBody);
-                  isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
+                  isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
                   if (isNew) { newEmailsAdded++; }
                 }
               }
@@ -405,7 +405,7 @@ public partial class Page03VM : BaseDbVM
             if (emr == null)
             {
               var (first, last) = OutlookHelper6.figureOutSenderFLName(reportItem, senderEmail);
-              var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, reportItem.Subject, "under constr-n", reportItem.CreationTime, msg, "R");
+              var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, reportItem.Subject, "under constr-n", null, reportItem.CreationTime, msg, "R");
               if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
             }
 
@@ -427,7 +427,7 @@ public partial class Page03VM : BaseDbVM
               if (Dbx.Emails.Find(senderEmail) == null)
               {
                 var (first, last) = OutlookHelper6.figureOutFLNameFromBody(mailItem.Body, senderEmail);
-                isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..from body. ", "R");
+                isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from body. ", "R");
                 if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
               }
 
@@ -487,7 +487,7 @@ public partial class Page03VM : BaseDbVM
   {
     //if (Dbx.Emails.Find(senderEmail) == null)
     var (first, last) = OutlookHelper6.figureOutSenderFLName(mailItem, senderEmail);
-    var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, note, "R");
+    var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbx, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
     return isNew;
   }
   void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)

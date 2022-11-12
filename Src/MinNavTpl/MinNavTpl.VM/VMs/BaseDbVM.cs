@@ -6,7 +6,7 @@ public partial class BaseDbVM : BaseMinVM
   readonly ISecForcer _secForcer;
   protected bool _saving, _loading, _inited;
   protected readonly DateTime Now = DateTime.Now;
-  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QStatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
+  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
   {
     IsDevDbg = VersionHelper.IsDbg;
 
@@ -133,7 +133,7 @@ public partial class BaseDbVM : BaseMinVM
 
   public UserSettings UsrStgns { get; }
   public IConfigurationRoot Cfg { get; }
-  public QStatsRlsContext Dbx { get; }
+  public QstatsRlsContext Dbx { get; }
   public ILogger Lgr { get; }
   public IBpr Bpr { get; }
   public Window MainWin { get; }

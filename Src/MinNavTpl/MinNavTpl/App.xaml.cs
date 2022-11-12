@@ -45,7 +45,7 @@ public partial class App : System.Windows.Application
   protected override async void OnExit(ExitEventArgs e)
   {
     if (Current is not null) Current.DispatcherUnhandledException -= UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
-    _serviceProvider.GetRequiredService<QStatsRlsContext>().Dispose();
+    _serviceProvider.GetRequiredService<QstatsRlsContext>().Dispose();
 
     if (DateTime.Now == DateTime.Today) LogAllLevels(_serviceProvider.GetRequiredService<ILogger>());
 
@@ -78,7 +78,7 @@ public partial class App : System.Windows.Application
         return;
       }
 
-      _audit = VersionHelper.DevDbgAudit(cfg, MvvmInitHelper.CalcConStr<QStatsRlsContext>(_serviceProvider, CfgName.SqlVerIpm).SqlConStrValues());
+      _audit = VersionHelper.DevDbgAudit(cfg, MvvmInitHelper.CalcConStr<QstatsRlsContext>(_serviceProvider, CfgName.SqlVerIpm).SqlConStrValues());
     }
     catch (Exception ex)
     {

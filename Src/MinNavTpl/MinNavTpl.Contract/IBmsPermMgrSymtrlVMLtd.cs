@@ -11,7 +11,7 @@ public interface IPage02VMLtd
   //Task<int> SyncToSqlRmv(PermissionAssignment pa);
   //void DoDgSelChngdUser(User lastSelectUser);
   IBpr Bpr { get; }
-  QStatsRlsContext DbxInv { get; }
+  QstatsRlsContext DbxInv { get; }
   Microsoft.Extensions.Logging.ILogger Logger { get; }
   Task LoadEF(bool isAsync = true);
   Task<string> SaveLogReportOrThrow(Microsoft.EntityFrameworkCore.DbContext dbContext, string note = "", [CallerMemberName] string? cmn = "");

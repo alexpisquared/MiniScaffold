@@ -51,7 +51,7 @@ public static class MvvmInitHelper
 
     _ = services.AddTransient(sp =>
     {
-      return new QStatsRlsContext(CalcConStr<QStatsRlsContext>(sp, CfgName.SqlVerIpm));
+      return new QstatsRlsContext(CalcConStr<QstatsRlsContext>(sp, CfgName.SqlVerIpm));
     });
   }
   public static string CalcConStr<T>(IServiceProvider sp, string sqlver)
