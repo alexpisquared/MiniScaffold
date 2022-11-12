@@ -7,10 +7,12 @@ public partial class Page03VM : BaseDbVM
   public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync(); }
 
   [ObservableProperty] string reportOL = "";
+  [RelayCommand] void ClearText() { ReportOL = ""; ; }
+
   [RelayCommand]
   async Task DoReglr()
   {
-    IsBusy = !false;
+    IsBusy = !false; Bpr.Click(); await Task.Delay(222); 
 
     try
     {
@@ -20,13 +22,13 @@ public partial class Page03VM : BaseDbVM
       ReportOL += rv;
       LoadVwSrcs();
     }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
+    catch (Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
   async Task DoJunkM()
   {
-    IsBusy = !false;
+    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
     try
     {
@@ -36,12 +38,12 @@ public partial class Page03VM : BaseDbVM
       LoadVwSrcs();
     }
     catch (Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
+    finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
   async Task DoFails()
   {
-    IsBusy = !false;
+    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
     try
     {
@@ -53,12 +55,12 @@ public partial class Page03VM : BaseDbVM
       LoadVwSrcs();
     }
     catch (Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
+    finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
   async Task DoLater()
   {
-    IsBusy = !false;
+    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
     try
     {
@@ -69,13 +71,13 @@ public partial class Page03VM : BaseDbVM
       WriteLine(rv);
       LoadVwSrcs();
     }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
+    catch (Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
   async Task DoDoneR()
   {
-    IsBusy = !false;
+    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
     try
     {
@@ -86,8 +88,8 @@ public partial class Page03VM : BaseDbVM
       WriteLine(rv);
       LoadVwSrcs();
     }
-    catch (System.Exception ex) { ex.Pop(); }
-    finally { IsBusy = !true; }
+    catch (Exception ex) { ex.Pop(); }
+    finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   async Task DoReFaLa()
@@ -218,7 +220,7 @@ public partial class Page03VM : BaseDbVM
               OutlookHelper6.moveIt(trgFolder, mailItem);
             }
           }
-          catch (System.Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
+          catch (Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
         } // for
 #if DEBUG
       } while (false);
@@ -229,7 +231,7 @@ public partial class Page03VM : BaseDbVM
       _newEmailsAdded += newEmailsAdded;
       report += OutlookHelper6.reportSectionTtl(folderName, cnt, newEmailsAdded);
     }
-    catch (System.Exception ex) { ex.Pop(); }
+    catch (Exception ex) { ex.Pop(); }
     finally { WriteLine(""); }
 
     return report;
@@ -311,7 +313,7 @@ public partial class Page03VM : BaseDbVM
         itemsFailes = _oh.GetItemsFromFolder(folderName);
       } while (prev != itemsFailes.Count);
     }
-    catch (System.Exception ex) { ex.Pop(); }
+    catch (Exception ex) { ex.Pop(); }
 
     _newEmailsAdded += newEmailsAdded;
     report += OutlookHelper6.reportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
@@ -452,15 +454,15 @@ public partial class Page03VM : BaseDbVM
 
             rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
           }
-          else if (item is OL.AppointmentItem itm0)  /**/ { ReportOL += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {OneLineAndTrunkate(itm0.Body)} \r\n"; }
-          else if (item is OL.DistListItem itm1)     /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
-          else if (item is OL.DocumentItem itm2)     /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
-          else if (item is OL.JournalItem itm3)      /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
-          else if (item is OL.MeetingItem itm4)      /**/ { ReportOL += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
-          else if (item is OL.MobileItem itm5)       /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
-          else if (item is OL.NoteItem itm6)         /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
-          else if (item is OL.TaskItem itm7)         /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
-          else if (Debugger.IsAttached) { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
+          else if (item is OL.AppointmentItem itm0) /**/ { ReportOL += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {OneLineAndTrunkate(itm0.Body)} \r\n"; }
+          else if (item is OL.DistListItem itm1)    /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
+          else if (item is OL.DocumentItem itm2)    /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
+          else if (item is OL.JournalItem itm3)     /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
+          else if (item is OL.MeetingItem itm4)     /**/ { ReportOL += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
+          else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
+          else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
+          else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
+          else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
 
           WriteLine($"{rptLine}");
         }
