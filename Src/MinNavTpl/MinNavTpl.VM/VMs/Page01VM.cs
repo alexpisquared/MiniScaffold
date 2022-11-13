@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using GenderApiLib;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page01VM : BaseDbVM
 {
   int _thisCampaign;
@@ -56,7 +58,19 @@ public partial class Page01VM : BaseDbVM
   }
   [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] void Cou() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand]
+  void Cou()
+  {
+    Bpr.Click(); try
+    {
+      if (SelectdEmail?.Fname is not null)
+      {
+        //var (ts, _, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
+        //SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
+      }
+    }
+    catch (Exception ex) { ex.Pop(); }
+  }
   [RelayCommand] void PBR() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void OLk() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }

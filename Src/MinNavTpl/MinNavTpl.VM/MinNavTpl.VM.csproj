@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />
+    <ProjectReference Include="..\..\..\..\CI\Src\CI\GenderApiLib\GenderApiLib.csproj" />
     <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\Emailing.NET6\Emailing.NET6.csproj" />
     <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
   </ItemGroup>
