@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿//using Microsoft.Office.Interop.Outlook;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
   readonly OutlookHelper6 _oh = new();
@@ -165,6 +167,7 @@ public partial class Page03VM : BaseDbVM
         {
           ttl--;
           cnt++;
+          ReportOL = $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:";
           try
           {
             if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)
@@ -255,6 +258,7 @@ public partial class Page03VM : BaseDbVM
         foreach (var item in itemsFailes)
         {
           ttl0++;
+          ReportOL = $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
           try
           {
             if (item is OL.ReportItem reportItem)
@@ -338,6 +342,7 @@ public partial class Page03VM : BaseDbVM
         foreach (var item in itemsTempAway)
         {
           ttl0++;
+          ReportOL = $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
           try
           {
             if (item is OL.ReportItem reportItem)
@@ -397,6 +402,8 @@ public partial class Page03VM : BaseDbVM
       {
         var senderEmail = "?";
         var rptLine = "";
+
+        ReportOL = $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
         try
         {
           if (item is OL.ReportItem reportItem)
