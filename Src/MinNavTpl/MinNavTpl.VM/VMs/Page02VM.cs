@@ -38,7 +38,6 @@ public partial class Page02VM : BaseDbVM
     finally { _ = await base.InitAsync(); }
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
-  public override void Dispose() => base.Dispose();
 
   public EmailOfIStore EmailOfIStore { get; }
   public EmailDetailVM EmailOfIVM { get; }

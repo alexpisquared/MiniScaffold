@@ -26,7 +26,6 @@ public partial class Page05VM : BaseDbVM
     finally { _ = await base.InitAsync(); }
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
-  public override void Dispose() => base.Dispose();
 
   [ObservableProperty] Agency? selectdAgency;
   [ObservableProperty] Agency? currentAgency;

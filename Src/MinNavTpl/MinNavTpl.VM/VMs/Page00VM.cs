@@ -27,7 +27,6 @@ public partial class Page00VM : BaseDbVM
     finally { _ = await base.InitAsync(); }
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
-  public override void Dispose() => base.Dispose();
 
   public List<string> SqlServrs { get; } = new();
   public List<string> DtBsNames { get; } = new();
