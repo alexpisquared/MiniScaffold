@@ -429,6 +429,8 @@ public partial class Page03VM : BaseDbVM
             senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
             if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
 
+            WriteLine($"   SentOn:{mailItem.SentOn:MM-dd HH:mm:ss}   Receiv:{(mailItem.ReceivedTime- mailItem.SentOn):hh\\:mm\\:ss}   Creati:{(mailItem.CreationTime - mailItem.SentOn).TotalDays:N5}   LastMo:{(mailItem.LastModificationTime - mailItem.SentOn).TotalDays:N5}   Expiry:{(mailItem.ExpiryTime- mailItem.SentOn).TotalDays:N5}");
+
             var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, msg);
             if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
 
