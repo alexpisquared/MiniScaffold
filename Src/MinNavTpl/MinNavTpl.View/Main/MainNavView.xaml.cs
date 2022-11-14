@@ -6,7 +6,7 @@ public partial class MainNavView : WpfUserControlLib.Base.WindowBase
   {
     InitializeComponent();
 
-    MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight; // MaximumWindowTrackHeight; // 2021-11: is it for not overlapping the taskbar?
+    //tu: ..if needed!!! MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight; // MaximumWindowTrackHeight; // 2021-11: is it for not overlapping the taskbar?
 
     //themeSelector1.ThemeApplier = ApplyTheme; //dnf theming 1/2
 
