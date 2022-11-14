@@ -24,6 +24,9 @@ global using CsvHelper;
 global using CsvHelper.Configuration;
 global using DB.QStats.Std.Models;
 global using EF.DbHelper.Lib;
+global using GenderApiLib;
+global using GigaHunt;
+global using GigaHunt.AsLink;
 global using Microsoft.Data.SqlClient;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
@@ -36,6 +39,7 @@ global using MinNavTpl.Stores;
 global using MinNavTpl.VM.Services;
 global using MinNavTpl.VM.Stores;
 global using MinNavTpl.VM.VMs;
+global using OutlookToDbWpfApp;
 global using StandardContractsLib;
 global using StandardLib.Base;
 global using StandardLib.Helpers;
@@ -44,7 +48,3 @@ global using static System.Diagnostics.Trace;
 //obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
 global using OL = Microsoft.Office.Interop.Outlook;
 global using Application = System.Windows.Application;
-//obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
-global using GigaHunt;
-global using GigaHunt.AsLink;
-global using OutlookToDbWpfApp;
