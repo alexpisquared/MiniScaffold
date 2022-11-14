@@ -200,7 +200,7 @@ public partial class Page03VM : BaseDbVM
                 report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
               }
 
-              ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@");
+              ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
 
               OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
             }
@@ -218,7 +218,7 @@ public partial class Page03VM : BaseDbVM
 
               var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
 
-              ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@");
+              ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
 
               OutlookHelper6.MoveIt(trgFolder, mailItem);
             }
@@ -276,7 +276,7 @@ public partial class Page03VM : BaseDbVM
                 BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (a) ");
               }
 
-              ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@");
+              ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@-");
               OutlookHelper6.MoveIt(failsDoneFolder, reportItem);
             }
             else if (item is OL.MailItem mailItem)
@@ -305,7 +305,7 @@ public partial class Page03VM : BaseDbVM
                 }
               }
 
-              ArgumentNullException.ThrowIfNull(failsDoneFolder, "senderEmail is nul @@@@@@@@@@@@@@@");
+              ArgumentNullException.ThrowIfNull(failsDoneFolder, "senderEmail is nul @@@@@@@@@@@@@@@-");
               OutlookHelper6.MoveIt(failsDoneFolder, mailItem);
             }
             else if (Debugger.IsAttached)
@@ -366,7 +366,7 @@ public partial class Page03VM : BaseDbVM
 
               if (Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
               {
-                ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@");
+                ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
 
                 var fnm = Dbx.Emails.Find(mailItem.SenderEmailAddress)?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
                 var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
@@ -411,7 +411,7 @@ public partial class Page03VM : BaseDbVM
             if (DateTime.Now == DateTime.MinValue) TestAllKeys(reportItem);
 
             senderEmail = reportItem.PropertyAccessor.GetProperty("http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
-            ArgumentNullException.ThrowIfNull(senderEmail, "senderEmail is nul @@@@@@@@@@@@@@@");
+            ArgumentNullException.ThrowIfNull(senderEmail, "senderEmail is nul @@@@@@@@@@@@@@@-");
             senderEmail = OutlookHelper6.RemoveBadEmailParts(senderEmail);
             if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
 

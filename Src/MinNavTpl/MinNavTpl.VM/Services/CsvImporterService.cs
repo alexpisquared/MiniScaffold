@@ -36,7 +36,7 @@ public class CsvImporterService
         if (++i % 1000 == 0)
           ReportProgress($"null:{_nullRec,-5}    exst:{_existDb,-5}    sccs:{_succss,-5}   in {sw.ElapsedMilliseconds,8}ms  ");
 
-        lst.Add(csv.GetRecord<CsvRow>() ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@@@@@@@@@@@"));
+        lst.Add(csv.GetRecord<CsvRow>() ?? throw new ArgumentNullException("@@@@@@@@@@@@@@@@@@@@@@@@@@-"));
       }
 
     //lst.ForEach(async r =>
@@ -109,7 +109,7 @@ public class CsvImporterService
 
     return "";
   }
-  public static string GetCompany(string email) => email.Split("@").LastOrDefault()?.Split(".").FirstOrDefault()?.ToLower() ?? "NoCompanyName";
+  public static string GetCompany(string email) => email.Split("@-").LastOrDefault()?.Split(".").FirstOrDefault()?.ToLower() ?? "NoCompanyName";
 
   public class CsvRow
   {
