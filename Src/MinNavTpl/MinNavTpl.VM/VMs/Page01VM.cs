@@ -1,4 +1,5 @@
-﻿using GenderApiLib;
+﻿using System.Diagnostics.Metrics;
+using GenderApiLib;
 
 namespace MinNavTpl.VM.VMs;
 public partial class Page01VM : BaseDbVM
@@ -42,6 +43,7 @@ public partial class Page01VM : BaseDbVM
 
   [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] Email? currentEmail;
+  [ObservableProperty] string? country;
   Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } }
 
   [RelayCommand]
@@ -59,14 +61,18 @@ public partial class Page01VM : BaseDbVM
   [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand]
-  void Cou()
+  async void Cou()
   {
     Bpr.Click(); try
     {
       if (SelectdEmail?.Fname is not null)
       {
-        //var (ts, _, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
-        //SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? "??";
+        WriteLine($"■ ■ ■ cfg?[\"WhereAmI\"]: '{new ConfigurationBuilder().AddUserSecrets<Application>().Build()?["WhereAmI"]}'   \t <== ConfigurationBuilder().AddUserSecrets<Application>().");
+
+        ArgumentNullException.ThrowIfNull(Cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
+        var (ts, _, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
+
+        Country = SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? "?????";
       }
     }
     catch (Exception ex) { ex.Pop(); }

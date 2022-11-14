@@ -3,7 +3,7 @@ public static class AppStartHelper
 {
   public static void InitAppSvcs(IServiceCollection services)
   {
-    _ = services.AddSingleton<IConfigurationRoot>(ConfigHelper.AutoInitConfigHardcoded());
+    _ = services.AddSingleton<IConfigurationRoot>(ConfigHelper.AutoInitConfigFromFile());
 
     _ = services.AddSingleton<ILogger>(sp => SeriLogHelper.InitLoggerFactory(
       folder: FSHelper.GetCreateSafeLogFolderAndFile((sp.GetRequiredService<IConfigurationRoot>()[CfgName.LogFolder] ?? "Logs").Replace("..", $"{Assembly.GetExecutingAssembly().GetName().Name![..6]}.{VersionHelper.Env()}.{Environment.UserName[..3]}..")),

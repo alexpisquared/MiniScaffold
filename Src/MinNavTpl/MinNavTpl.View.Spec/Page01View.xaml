@@ -28,9 +28,9 @@
       <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="2*"/>
+      <ColumnDefinition Width="6" />
+      <ColumnDefinition Width="1*" />
     </Grid.ColumnDefinitions>
 
     <Grid x:Name="ctrlPnl" Height="30">
@@ -61,10 +61,10 @@
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4">
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"             IsReadOnly="True"/>
-        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"           />
-        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"           />
-        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"         />
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"             MaxWidth="200" IsReadOnly="True" />
+        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"          MaxWidth="100" />
+        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"          MaxWidth="100" />
+        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"        MaxWidth="100" />
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"      IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"  Foreground="#c00" />
@@ -106,6 +106,7 @@
       <Label Content="First Name"       Grid.Column="0" Grid.Row="1" />
       <TextBox                          Grid.Column="1" Grid.Row="1" Text="{Binding Fname}"  />
       <TextBlock                        Grid.Column="1" Grid.Row="1" Text="{Binding Country}" HorizontalAlignment="Right" d:Text="Ukraine" />
+      <TextBlock                        Grid.Column="1" Grid.Row="1" Text="{Binding DataContext.Country, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" HorizontalAlignment="Right" d:Text="Ukraine" />
       <Button                           Grid.Column="2" Grid.Row="1" Content="◄Country" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="Get country" HorizontalAlignment="Left" Margin="0" />
       <Label Content="Last Name"        Grid.Column="2" Grid.Row="1" />
       <TextBox                          Grid.Column="3" Grid.Row="1" Text="{Binding Lname}"  />

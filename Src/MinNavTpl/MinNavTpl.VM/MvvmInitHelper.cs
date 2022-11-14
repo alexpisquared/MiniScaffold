@@ -57,7 +57,8 @@ public static class MvvmInitHelper
   public static string CalcConStr<T>(IServiceProvider sp, string sqlver)
   {
     var us = sp.GetRequiredService<UserSettings>();
-    return string.Format(sp.GetRequiredService<IConfigurationRoot>()[sqlver]!, us.SrvrName, us.DtBsName, "IpmDevDbgUser", "IpmDevDbgUser");
+    var cfg = sp.GetRequiredService<IConfigurationRoot>();
+    return string.Format(cfg[sqlver]!, us.SrvrName, us.DtBsName, "IpmDevDbgUser", "IpmDevDbgUser");
   }
 }
 
