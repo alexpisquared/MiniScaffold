@@ -35,9 +35,9 @@ public partial class Page04VM : BaseDbVM
         lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection());
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-      LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection());
+      LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
       Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Leads.Local.Count:N0} + {Dbx.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 

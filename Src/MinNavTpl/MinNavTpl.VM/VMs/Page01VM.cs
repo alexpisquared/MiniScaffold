@@ -4,6 +4,7 @@ using GenderApiLib;
 namespace MinNavTpl.VM.VMs;
 public partial class Page01VM : BaseDbVM
 {
+  List<string>? _badEmails;
   int _thisCampaign;
   public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110)
   {
@@ -22,14 +23,17 @@ public partial class Page01VM : BaseDbVM
       _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
 
       await Dbx.Emails.LoadAsync();
+      _badEmails = await DB.QStats.Std.Models.MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbx.Database.GetConnectionString() ?? "??");
 
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
-      PageCvs.Filter = obj => obj is not Email row || row is null || string.IsNullOrEmpty(SearchText) ||
-        row.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        row.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+      PageCvs.Filter = obj => obj is not Email r || r is null || 
+        (string.IsNullOrEmpty(SearchText) ||
+        r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+        r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
+        (IncludeClosed == true || string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id));
 
-      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs.Cast<Email>().Count():N0} / {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }
