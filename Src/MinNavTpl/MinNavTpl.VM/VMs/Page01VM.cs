@@ -45,8 +45,8 @@ public partial class Page01VM : BaseDbVM
 
   [ObservableProperty]
   [NotifyCanExecuteChangedFor(nameof(DelCommand))]
-  Email? selectdEmail; 
-  partial void OnSelectdEmailChanged(Email? value) { if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } }
+  Email? selectdEmail;
+  partial void OnSelectdEmailChanged(Email? value) { if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
   [RelayCommand]
   void AddNewEmail()
@@ -63,7 +63,7 @@ public partial class Page01VM : BaseDbVM
   [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 
   [RelayCommand(CanExecute = nameof(CanDel))] void Del(Email? email) { Bpr.Click(); try { _ = Dbx.Emails.Local.Remove(SelectdEmail!); } catch (Exception ex) { ex.Pop(); } }
-  bool CanDel(Email? email) => email is not null;
+  bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 
   [RelayCommand]
   async void Cou()
