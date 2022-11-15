@@ -71,6 +71,8 @@
       <Button   Content="_Import"  Command="{Binding ImportCsvCommand}" x:Name="S" />
       <Button   Content="_Chk DB"  Command="{Binding ChkDb4CngsCommand}"   x:Name="C" />
       <Button   Content="_Save DB" Command="{Binding Save2DbCommand}"   x:Name="T" />
+      <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
+      <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
     </StackPanel>
 
   </Grid>

@@ -2,9 +2,13 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:EmailDetailVM}" 
-             d:DesignHeight="200" d:DesignWidth="600" Padding="8" >
+             d:DesignHeight="200" d:DesignWidth="1600" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+      </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
       <Style TargetType="{x:Type TextBox}"   BasedOn="{StaticResource tbxRW}" />
@@ -32,7 +36,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Ehists" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
+      <TextBlock  Text="eHists" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
@@ -43,7 +47,8 @@
 
         <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
         -->
-        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Add _New Email" Foreground="#f80" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEhist.Id}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>

@@ -14,4 +14,9 @@ public partial class Page01View : UserControl
     }
     catch (Exception ex) { ex.Pop(); }
   }
+
+  void Button_Click(object sender, RoutedEventArgs e)
+  {
+    //dgPage.Refresh();
+  }
 }
