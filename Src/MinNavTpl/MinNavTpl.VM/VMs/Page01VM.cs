@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page01VM : BaseDbVM
 {
   List<string>? _badEmails;
@@ -39,14 +37,16 @@ public partial class Page01VM : BaseDbVM
     catch (Exception ex) { ex.Pop(Lgr); return false; }
     finally { _ = await base.InitAsync(); }
   }
-  public override Task<bool> WrapAsync() => base.WrapAsync();
 
   public EmailOfIStore EmailOfIStore { get; }
   public EmailDetailVM EmailOfIVM { get; }
 
-  [ObservableProperty] ICollectionView? ehistCvs;
   [ObservableProperty] Email? currentEmail;
-  Email? _e; public Email? SelectdEmail { get => _e; set { if (SetProperty(ref _e, value, true) && value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } }
+
+  [ObservableProperty]
+  [NotifyCanExecuteChangedFor(nameof(DelCommand))]
+  Email? selectdEmail; 
+  partial void OnSelectdEmailChanged(Email? value) { if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } }
 
   [RelayCommand]
   void AddNewEmail()
@@ -61,7 +61,10 @@ public partial class Page01VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
   }
   [RelayCommand] void CloseEmail() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] void Del() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+
+  [RelayCommand(CanExecute = nameof(CanDel))] void Del(Email? email) { Bpr.Click(); try { _ = Dbx.Emails.Local.Remove(SelectdEmail!); } catch (Exception ex) { ex.Pop(); } }
+  bool CanDel(Email? email) => email is not null;
+
   [RelayCommand]
   async void Cou()
   {
@@ -81,7 +84,7 @@ public partial class Page01VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
   }
   [RelayCommand] void PBR() { Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); } }
-  [RelayCommand] void Nxt() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void Nxt() { Bpr.Click(); try { _ = (PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void OLk() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void DNN() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
 }
