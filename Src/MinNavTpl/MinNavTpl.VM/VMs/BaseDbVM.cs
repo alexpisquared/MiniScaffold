@@ -84,6 +84,26 @@ public partial class BaseDbVM : BaseMinVM
   public virtual async Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
   protected void ReportProgress(string msg) { GSReport = msg; Lgr.Log(LogLevel.Trace, msg); }
 
+  async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
+  {
+    if (LetDbChg)
+    {
+      var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrow)} called by {cmn} on {dbx.GetType().Name}.  {note}");
+      if (!success) throw new Exception(report);
+
+      Lgr.LogInformation(report);
+      GSReport = report;
+    }
+    else
+    {
+      GSReport = $"Current user permisssion \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
+      Lgr.LogWarning(GSReport.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
+      await Bpr.BeepAsync(333, 2.5); // _ = MessageBox.Show(report, $"Not enough priviliges \t\t {DateTime.Now:MMM-dd HH:mm}", MessageBoxButton.OK, MessageBoxImage.Hand);
+    }
+
+    return GSReport;
+  }
+
   protected readonly LetDbChgStore _letStore;
   public SrvrNameStore SrvrNameStore { get; }
   public DtBsNameStore DtBsNameStore { get; }
@@ -136,44 +156,18 @@ public partial class BaseDbVM : BaseMinVM
   public ILogger Lgr { get; }
   public IBpr Bpr { get; }
   public Window MainWin { get; }
+
   [ObservableProperty] bool isDevDbg;
   [ObservableProperty] ICollectionView? pageCvs;
+  [ObservableProperty] string searchText;
+  [ObservableProperty] bool includeClosed;
+  [ObservableProperty] bool isBusy;
+  [ObservableProperty][NotifyCanExecuteChangedFor(nameof(Save2DbCommand))] bool hasChanges;
 
-  bool _ib; public bool IsBusy
-  {
-    get => _ib; set
-    {
-      if (SetProperty(ref _ib, value))
-      {
-        //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
-        _mainVM.IsBusy = value;
-      }
-    } /*BusyBlur = value ? 8 : 0;*/
-  }
-  string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
-  bool _ic; public bool IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
-  bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
-  
-  async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
-  {
-    if (LetDbChg)
-    {
-      var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrow)} called by {cmn} on {dbx.GetType().Name}.  {note}");
-      if (!success) throw new Exception(report);
+  partial void OnSearchTextChanged(string value) { Bpr.Tick(); PageCvs?.Refresh(); }  //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
+  partial void OnIncludeClosedChanged(bool value) { Bpr.Tick(); PageCvs?.Refresh(); } //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
+  partial void OnIsBusyChanged(bool value) { _mainVM.IsBusy = value; ; }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
-      Lgr.LogInformation(report);
-      GSReport = report;
-    }
-    else
-    {
-      GSReport = $"Current user permisssion \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
-      Lgr.LogWarning(GSReport.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
-      await Bpr.BeepAsync(333, 2.5); // _ = MessageBox.Show(report, $"Not enough priviliges \t\t {DateTime.Now:MMM-dd HH:mm}", MessageBoxButton.OK, MessageBoxImage.Hand);
-    }
-
-    return GSReport;
-  }
-
-  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges();  WriteLine(GSReport);  }
+  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); WriteLine(GSReport); }
   [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
 }
