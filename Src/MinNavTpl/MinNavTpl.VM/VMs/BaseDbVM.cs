@@ -42,7 +42,6 @@ public partial class BaseDbVM : BaseMinVM
     Bpr.Finish();
     return await base.InitAsync();
   }
-  public virtual async Task VMSpecificSaveToDB(object? isGoingBack) => await SaveLogReportOrThrow(Dbx);
   public override async Task<bool> WrapAsync()
   {
     try
@@ -53,7 +52,7 @@ public partial class BaseDbVM : BaseMinVM
         {
           default:
           case MessageBoxResult.Cancel: return false;
-          case MessageBoxResult.Yes: await VMSpecificSaveToDB($" ..from {nameof(BaseDbVM)}.{nameof(WrapAsync)}() "); break;
+          case MessageBoxResult.Yes: await SaveLogReportOrThrow(Dbx); break;
           case MessageBoxResult.No: Dbx.DiscardChanges(); break;
         }
       }
@@ -151,12 +150,10 @@ public partial class BaseDbVM : BaseMinVM
       }
     } /*BusyBlur = value ? 8 : 0;*/
   }
-  bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
   string _f = ""; public string SearchText { get => _f; set { if (SetProperty(ref _f, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
-  bool? _ic; public bool? IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
-
-  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges();  WriteLine(GSReport);  }
-  [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
+  bool _ic; public bool IncludeClosed { get => _ic; set { if (SetProperty(ref _ic, value)) { Bpr.Tick(); PageCvs?.Refresh(); } } }
+  bool _hc; public bool HasChanges { get => _hc; set { if (SetProperty(ref _hc, value)) Save2DbCommand.NotifyCanExecuteChanged(); } }
+  
   async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
   {
     if (LetDbChg)
@@ -176,4 +173,7 @@ public partial class BaseDbVM : BaseMinVM
 
     return GSReport;
   }
+
+  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges();  WriteLine(GSReport);  }
+  [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
 }

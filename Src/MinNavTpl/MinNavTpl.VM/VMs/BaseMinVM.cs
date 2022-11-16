@@ -1,5 +1,5 @@
 ﻿namespace MinNavTpl.VM.VMs;
-public class BaseMinVM : ObservableValidator, IDisposable
+public partial class BaseMinVM : ObservableValidator, IDisposable
 {
   protected bool _ctored;
   protected bool _loaded;
@@ -37,4 +37,6 @@ public class BaseMinVM : ObservableValidator, IDisposable
   }
 
   protected string? GetCaller([CallerMemberName] string? cmn = "") => cmn;
+
+  [RelayCommand] async Task InitializeAsync() { WriteLine(GetCaller()); await Task.Yield(); }
 }

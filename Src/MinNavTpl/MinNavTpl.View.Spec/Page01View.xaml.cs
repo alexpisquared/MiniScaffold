@@ -14,9 +14,14 @@ public partial class Page01View : UserControl
     }
     catch (Exception ex) { ex.Pop(); }
   }
-
-  void Button_Click(object sender, RoutedEventArgs e)
+    
+  void dgPage_SelectionChanged(object s, SelectionChangedEventArgs e)
   {
-    //dgPage.Refresh();
+    try
+    {
+      if (((DataGrid)s).SelectedItem != null)
+        ((DataGrid)s).ScrollIntoView(((DataGrid)s).SelectedItem);
+    }
+    catch (Exception ex) { ex.Pop(); }
   }
 }

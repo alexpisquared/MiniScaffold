@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UserSecretsId>fe462dce-98f6-4ba9-981e-e2414a473a8b</UserSecretsId>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
