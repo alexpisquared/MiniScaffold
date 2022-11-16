@@ -64,32 +64,15 @@
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
   <lnk:WindowBase.InputBindings>
-    <!--
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Home" CommandParameter="HomeLandingPage0VM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Home" CommandParameter="HomeLandingPage0VM" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Home" CommandParameter="HomeLandingPage0VM" Modifiers="Alt" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F1" CommandParameter="IPInfoHierFinde2VM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F1" CommandParameter="IPInfoHierFinderVM" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F2" CommandParameter="MaxWithdrawSetupVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F3" CommandParameter="MinWithdrawSetupVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F4" CommandParameter="WithldngTaxRatesVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F5" CommandParameter="XlsOneTimeImportVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F6" CommandParameter="PmtProcessExportVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F7" CommandParameter="BankingValidatorVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F8" CommandParameter="Page03VM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F9" CommandParameter="ImportRifLifXlsxVM" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="F12" CommandParameter="ZeroGravitiesNewVM" />
-    <Key
-      Binding Command="{Binding ChkDb4CngsCommand}" Gesture="F11" CommandParameter="DevDbg"        Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding TglAdmnCommand}" Gesture="F12" CommandParameter="F12" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Left" CommandParameter="Left" Modifiers="Alt" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Right" CommandParameter="Right" Modifiers="Alt" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Left" CommandParameter="Prev"/>
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Right" CommandParameter="Next"/>
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Left" CommandParameter="Prev" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Right" CommandParameter="Next" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Left" CommandParameter="Prev" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding UpdateViewCommand}" Gesture="Right" CommandParameter="Next" Modifiers="Ctrl" />-->
+    <!-- //todo: defined in NavBarVM ??? how to use from here ??? -->
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-None" />
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Ctrl" Modifiers="Ctrl" />
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Alt"  Modifiers="Alt"  />
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" />
+    <KeyBinding Command="{Binding NavigatePage02Command}" Gesture="F2" />
+    <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
+    <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
+    <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
   </lnk:WindowBase.InputBindings>
   <Border Style="{StaticResource BorderStyle_Aav0}">
     <Grid>
@@ -459,11 +442,11 @@
         <!--<xui:ThemeSelectorUsrCtrl x:Name="themeSelector4" Height="26" Margin="5 0" />        <xui:ThemeSelectorUsrCtrl x:Name="themeSelector3" Header="Dark Mode" FontFml="Arial" FontSze="16"/>-->
 
         <xui:Zoomer x:Name="ZoomSlider2" ZmValue="{Binding ZV, ElementName=wnd, Mode=TwoWay}"	VerticalAlignment="Top" Margin="5 0" />
-        <Button	Margin="2" Content="_æ" FontFamily="Webdings" FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#00F" BorderThickness="0" ToolTip="Toggle Audio" Click="OnAudio"                 Visibility="Collapsed" />
+        <Button	Margin="2" Content="_æ" FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#00F" BorderThickness="0" ToolTip="Toggle Audio" Click="OnAudio"                        Visibility="Collapsed" />
         <Button	Margin="2" Content="_+" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Restore Window" Click="OnWindowRestoree" x:Name="wr" Visibility="Collapsed" />
         <Button	Margin="2" Content="_£" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Maximize Window" Click="OnWindowMaximize" x:Name="wm"                   />
-        <Button	Margin="2" Content="_-"                     FontSize="26" Height="26" Padding="2 -0" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Minimize Window" Click="OnWindowMiniBase"                               />
-        <Button	Margin="2" Content="r" FontFamily="Webdings" FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Click="OnClosShutdnBase" x:Name="btnExit" />
+        <Button	Margin="2" Content="_-"                          FontSize="26" Height="26" Padding="2 -0" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Minimize Window" Click="OnWindowMiniBase"                               />
+        <Button	Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Click="OnClosShutdnBase" x:Name="btnExit" />
       </StackPanel>
     </Grid>
   </Border>

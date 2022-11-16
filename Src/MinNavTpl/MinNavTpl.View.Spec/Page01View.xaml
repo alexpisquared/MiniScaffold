@@ -3,7 +3,7 @@
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type={x:Type vms:Page01VM}}" 
              xmlns:lcl="clr-namespace:MinNavTpl.View.Spec" 
-             d:DesignHeight="300" d:DesignWidth="1400" Padding="8" >
+             d:DesignHeight="380" d:DesignWidth="1400" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -30,8 +30,8 @@
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
-      <RowDefinition Height="*"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="8"/>
+      <RowDefinition Height="200"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="2*"/>
@@ -89,7 +89,7 @@
       </DataGrid.Columns>
     </DataGrid>
 
-    <Grid Grid.Row="2" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
+    <Grid Grid.Row="3" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="2*"/>
@@ -110,9 +110,10 @@
 
       <Label Content="E_mail (Id)"      Grid.Column="0" Grid.Row="0" />
       <TextBlock                        Grid.Column="1" Grid.Row="0" Text="{Binding Id}" />
-      <Button                           Grid.Column="2" Grid.Row="0" Content="Delete" ToolTip="Delete from DB " Margin="0,0,10,0" Width="78"  Foreground="#f00"          
-                                                 Command="{Binding DataContext.DelCommand,   RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
-                                        CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+      <Button                           Grid.Column="4" Grid.Row="0" Content="Delete" ToolTip="Delete from DB " Margin="0,0,10,0" Width="78"  Foreground="#f00"          
+                                        CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" 
+                                                 Command="{Binding DataContext.DelCommand,   RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+      
       <Label Content="Modified At"      Grid.Column="5" Grid.Row="0" />
       <TextBlock                        Grid.Column="6" Grid.Row="0" Text="{Binding ModifiedAt}" />
 
@@ -154,7 +155,7 @@
       <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
     </Grid>
 
-    <GridSplitter Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom" />
+    <GridSplitter Grid.Row="2" Grid.Column="0" />
     <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
 
   </Grid>

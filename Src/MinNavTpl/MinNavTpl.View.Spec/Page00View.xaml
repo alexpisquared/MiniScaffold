@@ -5,11 +5,19 @@
              d:DesignHeight="200" d:DesignWidth="900" Padding="8" Background="#4f0f" >
   <UserControl.Resources>
     <ResourceDictionary>
-
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
-
     </ResourceDictionary>
   </UserControl.Resources>
+  <UserControl.InputBindings>
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-None" />
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Ctrl" Modifiers="Ctrl" />
+    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Alt"  Modifiers="Alt"  />
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" />
+    <KeyBinding Command="{Binding NavigatePage02Command}" Gesture="F2" />
+    <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
+    <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
+    <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
+  </UserControl.InputBindings>
   <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="1*"/>
