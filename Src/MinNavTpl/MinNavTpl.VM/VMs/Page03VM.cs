@@ -93,7 +93,7 @@ public partial class Page03VM : BaseDbVM
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
-  [RelayCommand] void UpdateOL() { Bpr.Click(); try { } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void UpdateOL() { Bpr.Click(); try { MessageBox.Show("■"); } catch (Exception ex) { ex.Pop(); } }
   async Task DoReFaLa()
   {
     try
