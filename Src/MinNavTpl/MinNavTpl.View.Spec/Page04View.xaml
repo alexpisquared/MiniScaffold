@@ -40,7 +40,7 @@
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
-        <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=333, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _New " Command="{Binding AddNewLeadCommand}" ToolTip="Add _New Lead" Foreground="#f80" />
