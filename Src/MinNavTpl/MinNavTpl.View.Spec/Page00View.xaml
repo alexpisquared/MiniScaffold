@@ -74,7 +74,7 @@
 
     </Grid>
 
-    <Label      Grid.Row="3" Content="{Binding GSReport}" d:Content="Page00" />
+    <!--<Label      Grid.Row="3" Content="{Binding GSReport}" d:Content="Page00" />-->
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" >
       <Button   Content="_Import"  Command="{Binding ImportCsvCommand}" x:Name="S" />
       <Button   Content="_Chk DB"  Command="{Binding ChkDb4CngsCommand}"   x:Name="C" />

@@ -347,8 +347,7 @@
             </Grid>
           </Grid>
 
-          <Grid x:Name="pnlIsBusy" Grid.Column="1" Margin="2,8,2,0" Cursor="Wait" Visibility="{Binding IsBusy, Converter={cnv:UniConverter}}" 
-                Background="{Binding IsAnimeOn, Converter={cnv:UniConverter BrushFalse={x:Null}, BrushTrue=#18f8}}">
+          <Grid x:Name="pnlIsBusy" Grid.Column="1" Margin="2,8,2,0" Cursor="Wait" Visibility="{Binding IsBusy, Converter={cnv:UniConverter}}" Background="{Binding IsAnimeOn, Converter={cnv:UniConverter BrushFalse={x:Null}, BrushTrue=#18f8}}">
             <Grid.RowDefinitions>
               <RowDefinition Height="2*"/>
               <RowDefinition Height="1*"/>

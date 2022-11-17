@@ -1,6 +1,4 @@
-﻿//using Microsoft.Office.Interop.Outlook;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
   readonly OutlookHelper6 _oh = new();
@@ -9,7 +7,7 @@ public partial class Page03VM : BaseDbVM
   public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync(); }
 
   [ObservableProperty] string reportOL = "";
-  [RelayCommand] void ClearText() { ReportOL = ""; ; }
+  [RelayCommand] void ClearText() { ReportOL += ""; ; }
 
   [RelayCommand]
   async Task DoReglr()
@@ -108,11 +106,11 @@ public partial class Page03VM : BaseDbVM
 
       if (ttl == 0)
       {
-        ReportOL = "Nothing new in Outlook to for DB.";
+        ReportOL += "Nothing new in Outlook to for DB.";
       }
       else
       {
-        ReportOL = $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
+        ReportOL += $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
 
         await Dbx.Emails.LoadAsync();
 
@@ -167,7 +165,7 @@ public partial class Page03VM : BaseDbVM
         {
           ttl--;
           cnt++;
-          ReportOL = $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:";
+          ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:";
           try
           {
             if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)
@@ -258,7 +256,7 @@ public partial class Page03VM : BaseDbVM
         foreach (var item in itemsFailes)
         {
           ttl0++;
-          ReportOL = $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
+          ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
           try
           {
             if (item is OL.ReportItem reportItem)
@@ -342,7 +340,7 @@ public partial class Page03VM : BaseDbVM
         foreach (var item in itemsTempAway)
         {
           ttl0++;
-          ReportOL = $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
+          ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
           try
           {
             if (item is OL.ReportItem reportItem)
@@ -403,7 +401,7 @@ public partial class Page03VM : BaseDbVM
         var senderEmail = "?";
         var rptLine = "";
 
-        ReportOL = $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
+        ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
         try
         {
           if (item is OL.ReportItem reportItem)

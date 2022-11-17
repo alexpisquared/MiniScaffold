@@ -57,7 +57,8 @@
         </TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />    </Grid>
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
+    </Grid>
 
     <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgLeads" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
               CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False">
@@ -70,7 +71,7 @@
         <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
+              <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
@@ -80,13 +81,13 @@
 
         <DataGridTextColumn Binding="{Binding OppCompany}"      Header="Company"   />
         <DataGridTextColumn Binding="{Binding OppAddress}"      Header="Address"   Width="140" />
-        <DataGridTextColumn Binding="{Binding AddedAt, Converter={cnv:UniConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
+        <DataGridTextColumn Binding="{Binding AddedAt, Converter={cnv:SmartDateConverter}}"	Header="Added"     IsReadOnly="True" FontWeight="SemiBold" Foreground="Green" SortDirection="Ascending" />
         <DataGridTextColumn Binding="{Binding Status}"          Header="Status"    Width="Auto" ElementStyle="{StaticResource CenterAlignStyle}"  Foreground="Blue" />
 
         <DataGridTemplateColumn                                 Header="Act" Width="Auto">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" FontWeight="SemiBold" Command="{Binding DataContext.CloseLeadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
+              <Button Content="Close" Height="20" Margin="3 -4" Padding="3 -9" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" FontWeight="SemiBold" Command="{Binding DataContext.CloseLeadCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"  />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
@@ -97,7 +98,7 @@
           <DataGridTextColumn Binding="{Binding Note}"            Header="Note"      Width="*"/>
           <DataGridTextColumn Binding="{Binding Priority}"        Header="Priority"  Width="Auto" FontWeight="Bold" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="OrangeRed" />
           <DataGridTextColumn Binding="{Binding OfficiallySubmittedAt, StringFormat={}{0:MMM-d}}" Header="Submitted" IsReadOnly="True" FontWeight="SemiBold" Foreground="Brown" />
-          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cnv:UniConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
+          <DataGridTextColumn Binding="{Binding InterviewedAt, Converter={cnv:SmartDateConverter}}" Header="Intervwd"  IsReadOnly="True" FontWeight="SemiBold" Foreground="Red" />
           -->
 
       </DataGrid.Columns>
@@ -169,7 +170,7 @@
       <DatePicker                       Grid.Column="7" Grid.Row="3" SelectedDate="{Binding InterviewedAt,         Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt3" />
 
       <Label Content="$$/_hr"           Grid.Column="8" Grid.Row="1" Target="{Binding ElementName=tbHR}" />
-      <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cnv:UniConverter}}" Name="tbHR"/>
+      <TextBox FontSize="16"            Grid.Column="9" Grid.Row="1" Text="{Binding HourlyRate,      Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"  FontWeight="ExtraBold" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" Name="tbHR"/>
 
       <TextBox                          Grid.Column="0" Grid.Row="5" Text="{Binding Note,                          Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="11" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
     </Grid>

@@ -64,7 +64,7 @@
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
@@ -80,9 +80,9 @@
         <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             MaxWidth="100" Foreground="#f60" />
         <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"  IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:QStatsConverter}}" IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:QStatsConverter}}" IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:QStatsConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
         <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
         <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                     FontSize="8" Width="*"  />

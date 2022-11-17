@@ -54,13 +54,13 @@
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>
       </StackPanel>
 
-      <TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
-        <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:UniConverter}}" SortDirection="Descending"  />
+        <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:SmartDateConverter}}" SortDirection="Descending"  />
         <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
         <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
         <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
