@@ -1,9 +1,7 @@
 ﻿namespace MinNavTpl.View.Spec;
-
 public partial class Page01View : UserControl
 {
-  public Page01View() => InitializeComponent();
-  async void OnLoaded(object s, RoutedEventArgs e) { await Task.Delay(2500); _ = tbFilter.Focus(); }
+  public Page01View() { InitializeComponent(); Loaded += async (s, e) => { await Task.Delay(2500); _ = tbFilter.Focus(); }; }
   void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
     try

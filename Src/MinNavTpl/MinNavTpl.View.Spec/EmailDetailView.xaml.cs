@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.View.Spec;
 public partial class EmailDetailView : UserControl
 {
-  public EmailDetailView() { InitializeComponent(); _ = tbFilter.Focus(); }
+  public EmailDetailView() { InitializeComponent(); Loaded += async (s, e) => { await Task.Delay(2500); _ = tbFilter.Focus(); }; }
   void OnInitNewItem(object s, InitializingNewItemEventArgs e)
   {
     try

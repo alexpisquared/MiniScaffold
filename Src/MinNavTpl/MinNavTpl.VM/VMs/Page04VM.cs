@@ -17,13 +17,13 @@ public partial class Page04VM : BaseDbVM
 
 #if true
       await Dbx.
-      Emails.
+        Emails.
         Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaign)).
         //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
         LoadAsync();
 #else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
-     await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
      await Dbx.Emails.LoadAsync();
+     await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
 #endif 
 
       await Dbx.LkuLeadStatuses.LoadAsync();
@@ -31,15 +31,15 @@ public partial class Page04VM : BaseDbVM
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Leads.ToListAsync());
 
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Descending));
-      PageCvs.Filter = obj => obj is not Lead lead || lead is null || string.IsNullOrEmpty(SearchText) ||
-        lead.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        lead.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+      PageCvs.Filter = obj => obj is not Lead r || r is null || string.IsNullOrEmpty(SearchText) ||
+        r.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+        r.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
+      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
       LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Emails.Local.Count:N0} + {Dbx.Leads.Local.Count:N0} + {Dbx.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Leads.Local.Count:N0} + {Dbx.Leads.Local.Count:N0} + {Dbx.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }

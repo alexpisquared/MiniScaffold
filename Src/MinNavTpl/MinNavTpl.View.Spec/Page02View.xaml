@@ -64,7 +64,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (Id)"  Binding="{Binding Id}"           Width="180"                    />
         <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                       />
-        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />
+        <!--<DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                       />        -->
         <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                     />
         <DataGridTextColumn Header=" DNN"         Binding="{Binding DoNotNotifyForCampaignId}"                    ToolTipService.ToolTip="Do Not Notify On On-Market For Campaign Id"/>
         <DataGridTextColumn Header=" Added At"    Binding="{Binding AddedAt,       Converter={cnv:UniConverter}}" />
