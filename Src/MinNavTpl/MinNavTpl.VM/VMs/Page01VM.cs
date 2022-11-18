@@ -33,6 +33,7 @@ public partial class Page01VM : BaseEmVM
 
   [RelayCommand(CanExecute = nameof(CanDel))] void Del(Email? email) { Bpr.Click(); try { _ = Dbx.Emails.Local.Remove(SelectdEmail!); } catch (Exception ex) { ex.Pop(); } }            //var rowsAffected = await Dbx.Emails.Where(r=> r.Id == selectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way.
   bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
+  [RelayCommand] void PBR() { Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void AddNewEmail() { try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() }; Dbx.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { ex.Pop(); } }
 
   [RelayCommand]
@@ -46,12 +47,36 @@ public partial class Page01VM : BaseEmVM
         WriteLine($"■ ■ ■ cfg?[\"WhereAmI\"]: '{new ConfigurationBuilder().AddUserSecrets<Application>().Build()?["WhereAmI"]}'   \t <== ConfigurationBuilder().AddUserSecrets<Application>().");
 
         ArgumentNullException.ThrowIfNull(Cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
-        var (ts, _, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
+        var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
 
-        SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? "?????";
+        SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
       }
     }
     catch (Exception ex) { ex.Pop(); }
   }
-  [RelayCommand] void PBR() { Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand]
+  async void GetTopDetail()
+  {
+    Bpr.Start(8);
+    try
+    {
+      _ = (PageCvs?.MoveCurrentToFirst());
+      for (var i = 0; i < 10; i++)
+      {
+        if (PageCvs?.MoveCurrentToPosition(i) == true && SelectdEmail is not null)
+        {
+          var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname, true);
+
+          SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
+          SelectdEmail.Ttl_Rcvd = i;
+          SelectdEmail.Ttl_Sent = i;
+          SelectdEmail.LastRcvd =
+          SelectdEmail.LastSent = DateTime.Now;
+        }
+      }
+      _ = (PageCvs?.MoveCurrentToFirst());
+      Bpr.Finish(8);
+    }
+    catch (Exception ex) { ex.Pop(); }
+  }
 }

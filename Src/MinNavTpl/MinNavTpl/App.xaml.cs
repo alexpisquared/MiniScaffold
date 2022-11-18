@@ -5,8 +5,8 @@ public partial class App : System.Windows.Application
   readonly IServiceProvider _serviceProvider;
   string _audit = "audit is unassigned";
 
-  public App()
-  {
+  public App()  {    //AmbienceLib.Bpr.DevDbg();
+
     IServiceCollection services = new ServiceCollection();
 
     AppStartHelper.InitAppSvcs(services);

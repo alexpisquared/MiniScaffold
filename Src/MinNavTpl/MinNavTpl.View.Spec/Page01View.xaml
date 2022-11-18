@@ -55,9 +55,10 @@
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="+C_losed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
-        <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email"        Foreground="#f80" />
-        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
-        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
+        <Button Content=" _Dtl " Command="{Binding GetTopDetailCommand}"  ToolTip="Get details for the top XX rows."        Foreground="#f80" />
+        <Button Content=" New "  Command="{Binding AddNewEmailCommand}"   ToolTip="Add _New Email"        Foreground="#f80" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"    ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" /></TextBlock>
@@ -83,8 +84,8 @@
         <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#01e" />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#1b1" />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#08f" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#fa0" />
         <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                     FontSize="8" Width="*"  />
       </DataGrid.Columns>
     </DataGrid>
@@ -141,7 +142,7 @@
 
       <Label Content="Priority"         Grid.Column="0" Grid.Row="3" />
       <TextBox                          Grid.Column="1" Grid.Row="3" Text="{Binding NotifyPriority, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
-      <Button Content="_DNN Avl"        Grid.Column="3" Grid.Row="3" Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" Margin="10 0 0 0" />
+      <Button Content="DNN Avl"         Grid.Column="3" Grid.Row="3" Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ToolTip="Do Not Notify - Available for this Camp-n" HorizontalAlignment="Right" Margin="10 0 0 0" />
       <TextBox                          Grid.Column="4" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
       <Label Content="DNN OffMarkt"     Grid.Column="5" Grid.Row="3" />
       <TextBox                          Grid.Column="6" Grid.Row="3" Text="{Binding DoNotNotifyOnOffMarketForCampaignId, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}"  />
