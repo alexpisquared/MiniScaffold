@@ -60,10 +60,14 @@ public partial class Page01VM : BaseEmVM
     Bpr.Start(8);
     try
     {
-      //_ = (PageCvs?.MoveCurrentToFirst());
-      for (var i = 0; i < 25; i++)
+      if (PageCvs is null) return;
+
+      var curpos = PageCvs.CurrentPosition;
+
+      for (int i = 0, j = 0; i < 555 && j < 5; i++)
       {
-        if (PageCvs?.MoveCurrentToNext() == true && SelectdEmail is not null)
+        WriteLine($"== {i,3} {SelectdEmail.Id}");
+        if (PageCvs?.MoveCurrentToNext() == true && SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
         {
           var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
 
@@ -72,9 +76,14 @@ public partial class Page01VM : BaseEmVM
           SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
           if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
           if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
+
+          j++;
         }
       }
-      //_ = (PageCvs?.MoveCurrentToFirst());
+
+      if (curpos > 0)
+        _ = (PageCvs?.MoveCurrentToPosition(curpos));
+
       Bpr.Finish(8);
     }
     catch (Exception ex) { ex.Pop(); }
