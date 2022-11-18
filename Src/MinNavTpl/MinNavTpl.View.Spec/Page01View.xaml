@@ -69,7 +69,7 @@
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
-              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged">
+              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                        MaxWidth="200" IsReadOnly="True" />
         <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                     MaxWidth="100" />

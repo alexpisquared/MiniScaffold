@@ -60,21 +60,21 @@ public partial class Page01VM : BaseEmVM
     Bpr.Start(8);
     try
     {
-      _ = (PageCvs?.MoveCurrentToFirst());
-      for (var i = 0; i < 10; i++)
+      //_ = (PageCvs?.MoveCurrentToFirst());
+      for (var i = 0; i < 25; i++)
       {
-        if (PageCvs?.MoveCurrentToPosition(i) == true && SelectdEmail is not null)
+        if (PageCvs?.MoveCurrentToNext() == true && SelectdEmail is not null)
         {
-          var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname, true);
+          var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
 
           SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
-          SelectdEmail.Ttl_Rcvd = i;
-          SelectdEmail.Ttl_Sent = i;
-          SelectdEmail.LastRcvd =
-          SelectdEmail.LastSent = DateTime.Now;
+          SelectdEmail.Ttl_Rcvd = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
+          SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
+          if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
+          if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
         }
       }
-      _ = (PageCvs?.MoveCurrentToFirst());
+      //_ = (PageCvs?.MoveCurrentToFirst());
       Bpr.Finish(8);
     }
     catch (Exception ex) { ex.Pop(); }
