@@ -20,6 +20,9 @@ public partial class Page01VM : BaseEmVM
           r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
         (IncludeClosed == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))));
 
+      await GetTopDetail();
+      _ = PageCvs?.MoveCurrentToFirst();
+
       Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs?.Cast<Email>().Count():N0} / {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return rv;
@@ -55,7 +58,7 @@ public partial class Page01VM : BaseEmVM
     catch (Exception ex) { ex.Pop(); }
   }
   [RelayCommand]
-  async void GetTopDetail()
+  async Task GetTopDetail()
   {
     Bpr.Start(8);
     try
@@ -64,9 +67,10 @@ public partial class Page01VM : BaseEmVM
 
       var curpos = PageCvs.CurrentPosition;
 
-      for (int i = 0, j = 0; i < 555 && j < 5; i++)
+      for (int i = 0, j = 0; i < 555 && j < 10; i++)
       {
-        WriteLine($"== {i,3} {SelectdEmail.Id}");
+        WriteLine($"== {i,3} {SelectdEmail?.Id}");
+
         if (PageCvs?.MoveCurrentToNext() == true && SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
         {
           var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
