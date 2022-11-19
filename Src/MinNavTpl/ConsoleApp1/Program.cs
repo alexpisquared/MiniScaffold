@@ -1,31 +1,36 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
 using DB.QStats.Std.Models;
+using Microsoft.EntityFrameworkCore;
 
 List<string> pns = new List<string>();
 
-int max = 100000;
+int max = 10;
 
 Trace.WriteLine("The Start...");
 UseDB();
 
-void UseDB()
+async void UseDB()
 {
   using var dbx = QstatsRlsContext.Create();
+  await dbx.PhoneAgencyXrefs.LoadAsync();
+  await dbx.PhoneEmailXrefs.LoadAsync();
+  await dbx.Phones.LoadAsync();
+
   var q = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222).Take(max);
-  q.ToList().ForEach(FindPhoneNumbers);
+  q.ToList().ForEach(r => FindPhoneNumbers(dbx, r));
 
   Console.WriteLine($"{pns.Count,9:N0} / {q.Count():N0} = {(100.0 * pns.Count / max):N0} %");
 }
 
-void FindPhoneNumbers(Ehist x)
+void FindPhoneNumbers(QstatsRlsContext dbx, Ehist x)
 {
   new string[] {
     @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})"
-  }.ToList().ForEach(r => FindPhoneNumbers2(x, r));
+  }.ToList().ForEach(r => FindPhoneNumbers2(dbx, x, r));
 }
 
-void FindPhoneNumbers2(Ehist x, string regex)
+void FindPhoneNumbers2(QstatsRlsContext dbx, Ehist x, string regex)
 {
   var rePhone = new Regex(regex);
   var m = rePhone.Match(x.LetterBody!);
