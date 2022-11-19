@@ -53,6 +53,9 @@ void FindPhoneNumbers2(Ehist x, string regex)
         Trace.Write($"@@@@@@@@");
       else
       {
+        if (pn.Length == 11 && pn[0] == '1')
+          pn = pn.Substring(1, pn.Length - 1);
+
         Console.Write($"{x.Id,5:N0} {x.LetterBody?.Length,8:N0}   {x.EmailId,88}{pn,18}    {x.EmailedAt:yyyy-MM-dd}\n");
         Trace.Write($"++++++++");
         pns.Add(pn);
