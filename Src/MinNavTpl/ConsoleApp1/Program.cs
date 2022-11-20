@@ -5,16 +5,30 @@ using System.Text.RegularExpressions;
 using DB.QStats.Std.Models;
 using Microsoft.EntityFrameworkCore;
 
-var _take = 10000;
-var _page = 100;
 var _now = DateTime.Today;
-var ts = TimeSpan.Zero;
 var sw = Stopwatch.StartNew();
-int _cur = 0, _j = 0, _ttl;
+var ts = TimeSpan.Zero;
+int _cur = 0, _j = 0, _ttl, _page = 10000, _take = _page * 10;
 
-await UseDB();
+await ShowPhoneExtraction();
 
-async Task UseDB()
+async Task ShowPhoneExtraction()
+{
+  using var dbx = QstatsRlsContext.Create();
+
+
+  Console.ForegroundColor = ConsoleColor.Cyan;
+
+  var rcvds = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222
+  //&& r.EmailId.Contains("glass")
+  ).OrderBy(r => r.EmailedAt);
+  _ttl = await rcvds.CountAsync();
+  sw = Stopwatch.StartNew();
+  rcvds.Take(_take).ToList().ForEach(eHist => GetPhoneNumbersToDbIf(dbx, eHist, true));
+
+  //var rows = await dbx.SaveChangesAsync();  Console.ForegroundColor = ConsoleColor.Green;  Console.WriteLine($"   {rows,3} rows saved.     All took {sw.Elapsed.TotalMinutes:N0} min.");
+}
+async Task LoadAsyncFindAdd()
 {
   using var dbx = QstatsRlsContext.Create();
   await dbx.PhoneAgencyXrefs.LoadAsync();
@@ -32,21 +46,24 @@ async Task UseDB()
 
   Console.ForegroundColor = ConsoleColor.Cyan;
 
-  _ttl = dbx.Phones.Local.Count();
-  dbx.Phones.Local.Take(_take).ToList().ForEach(p =>
+  if (DateTime.Now != DateTime.Today)
   {
-    dbx.PhoneEmailXrefs.Local.Where(e => e.PhoneId == p.Id).ToList().ForEach(e =>
-      InsertPhoneAgencyXRef(dbx, e.EmailId, _now, p.PhoneNumber, p));
+    _ttl = dbx.Phones.Local.Count();
+    dbx.Phones.Local.Take(_take).ToList().ForEach(p =>
+    {
+      dbx.PhoneEmailXrefs.Local.Where(e => e.PhoneId == p.Id).ToList().ForEach(e =>
+        InsertPhoneAgencyXRef(dbx, e.EmailId, _now, p.PhoneNumber, p));
 
-    if (++_cur % _page == 0)
-      Console.Write($"{_cur,8:N0} / {_ttl:N0}    {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
-  });
-
-  //var rcvds = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222);
-  //_ttl = await rcvds.CountAsync();
-  //rcvds.
-  //  Take(_take).
-  //  ToList().ForEach(r => FindPhoneNumbers(dbx, r));
+      if (++_cur % _page == 0)
+        Console.Write($"{_cur,8:N0} / {_ttl:N0}    {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
+    });
+  }
+  else
+  {
+    var rcvds = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222);
+    _ttl = await rcvds.CountAsync();
+    rcvds.Take(_take).ToList().ForEach(r => GetPhoneNumbersToDbIf(dbx, r, false));
+  }
 
   var rows = await dbx.SaveChangesAsync();
 
@@ -54,18 +71,19 @@ async Task UseDB()
   Console.WriteLine($"   {rows,3} rows saved.     All took {sw.Elapsed.TotalMinutes:N0} min.");
 }
 
-void FindPhoneNumbers(QstatsRlsContext dbx, Ehist ehist)
+void GetPhoneNumbersToDbIf(QstatsRlsContext dbx, Ehist ehist, bool skipDbInsert)
 {
   new string[] {
     @"((\+|\+\s|\d{1}\s?|\()(\d\)?\s?[-\.\s\(]??){8,}\d{1}|\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})"
   }.ToList().ForEach(r =>
   {
     var pnlst = GetPhoneNumbersFromLetter(ehist, r);
-    InsertPhoneNumbersIntoDB(dbx, pnlst, ehist.EmailId, ehist.EmailedAt);
 
-    if (_cur % _page == 0)
+    if (!skipDbInsert)
+      InsertPhoneNumbersIntoDB(dbx, pnlst, ehist.EmailId, ehist.EmailedAt);
+
+    if (!skipDbInsert && _cur % _page == 0)
       Console.Write($"{_cur,8:N0} / {_ttl:N0}    {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
-    
   });
 }
 
@@ -96,10 +114,35 @@ List<string> GetPhoneNumbersFromLetter(Ehist ehist, string regex)
         Trace.Write($"< 10 ---");
       else if (pn.Length > 11)
         Trace.Write($"> 11 ---");
+      else if (pn == pnraw)
+      {
+        if (
+          pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905")) ||
+          pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905")))
+          ; // Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),8:N1} min left       {ehist.EmailedAt:yyyy-MM}  + + + \n");
+        else
+        {
+          var idx = ehist.LetterBody?.IndexOf(pnraw) ?? 0;
+          if (idx > 10)
+          {
+            var d = " :+\n\r";
+            if (d.Contains(ehist.LetterBody?.Substring(idx - 1, 1)))
+              ; //  Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),8:N1} min left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6)}  +++++++++++++++++++\n");
+            else
+              Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),8:N1} min left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ ■ Remove me from DB!!!\n");
+          }
+          else
+          {
+            Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),8:N1} min left       {ehist.EmailedAt:yyyy-MM}  - - -\n");
+          }
+        }
+      }
       else
       {
         if (pn.Length == 11 && pn[0] == '1')
           pn = pn[1..];
+
+        //Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),8:N1} min left       {ehist.EmailedAt:yyyy-MM}  \n");
 
         Trace.Write($"++++++++");
         rv.Add(pn);
