@@ -5,11 +5,9 @@ using DB.QStats.Std.Models;
 using Microsoft.EntityFrameworkCore;
 
 var _now = DateTime.Today;
-var sw = Stopwatch.StartNew();
-var ts = TimeSpan.Zero;
-int _cur = 0, _j = 0, _ttl, _page = 200, _take = _page * 10;
-HashSet<string> _vlds = new();
-HashSet<string> _bads = new();
+var _sw = Stopwatch.StartNew();
+int _cur = 0, _j = 0, _ttl, _page = 1000, _take = _page * 100;
+HashSet<string> _vlds = new(), _bads = new();
 
 await ShowPhoneExtraction();
 Console.Write("\a");
@@ -20,22 +18,22 @@ async Task ShowPhoneExtraction()
 
   Console.ForegroundColor = ConsoleColor.Cyan;
 
-  var rcvds = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222
+  var rcvds = dbx.Ehists.Where(r => r.RecivedOrSent != "S" && r.LetterBody != null && r.LetterBody.Length > 222 && r.EmailedAt > new DateTime(2022, 11, 11)
   //&& r.EmailId.Contains("glass")
   ).OrderBy(r => r.EmailedAt);
   _ttl = await rcvds.CountAsync();
-  sw = Stopwatch.StartNew();
+  _sw = Stopwatch.StartNew();
   rcvds.Take(_take).ToList().ForEach(eHist => GetPhoneNumbersToDbIf(dbx, eHist, true));
 
-  //Console.ForegroundColor = ConsoleColor.Blue; Console.Write($"  v/b: {_vld0.Count,8:N0} / {_bad0.Count,-6:N0}    {sw.Elapsed.TotalSeconds,5:N1} sec took \n");
+  //Console.ForegroundColor = ConsoleColor.Blue; Console.Write($"  v/b: {_vld0.Count,8:N0} / {_bad0.Count,-6:N0}    {_sw.Elapsed.TotalSeconds,5:N1} sec took \n");
   //_vlds = RemoveDupes(_vld0);
   //_bads = RemoveDupes(_bad0);
   var bads = _bads.Except(_vlds);
-  Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"  v/b: {_vlds.Count,8:N0} / {_bads.Count,-6:N0} - {_vlds.Intersect(_bads).Count(),8:N0} = {bads.Count(),-8:N0}    {sw.Elapsed.TotalSeconds,5:N0} sec took \n");
+  Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"  v/b: {_vlds.Count,8:N0} / {_bads.Count,-6:N0} - {_vlds.Intersect(_bads).Count(),8:N0} = {bads.Count(),-8:N0}    {_sw.Elapsed.TotalSeconds,5:N0} sec took \n");
 
   var rv = await RemoveBadsFromDbAsync(dbx, bads);
 
-  var rows = await dbx.SaveChangesAsync();  Console.ForegroundColor = ConsoleColor.Green;  Console.WriteLine($"                   {rows,5} rows saved.     All took {sw.Elapsed.TotalSeconds,5:N0} sec.");
+  var rows = await dbx.SaveChangesAsync();  Console.ForegroundColor = ConsoleColor.Green;  Console.WriteLine($"                   {rows,5} rows saved.     All took {_sw.Elapsed.TotalSeconds,5:N0} sec.");
 }
 
 async Task<int> RemoveBadsFromDbAsync(QstatsRlsContext dbx, IEnumerable<string> bads)
@@ -84,9 +82,9 @@ async Task LoadAsyncFindAdd()
     $"Phones {dbx.Phones.Local.Count:N0}     " +
     $"Emails {dbx.PhoneEmailXrefs.Local.Count:N0}     " +
     $"Compns {dbx.PhoneAgencyXrefs.Local.Count:N0}     " +
-    $"in {sw.Elapsed.TotalSeconds:N0}s");
+    $"in {_sw.Elapsed.TotalSeconds:N0}s");
 
-  sw = Stopwatch.StartNew();
+  _sw = Stopwatch.StartNew();
 
   Console.ForegroundColor = ConsoleColor.Cyan;
 
@@ -99,7 +97,7 @@ async Task LoadAsyncFindAdd()
         InsertPhoneAgencyXRef(dbx, e.EmailId, _now, p.PhoneNumber, p));
 
       if (++_cur % _page == 0)
-        Console.Write($"{_cur,8:N0} / {_ttl:N0}    {(_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur,5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
+        Console.Write($"{_cur,8:N0} / {_ttl:N0}    {(_ttl - _cur) * _sw.Elapsed.TotalMinutes / _cur,5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
     });
   }
   else
@@ -112,7 +110,7 @@ async Task LoadAsyncFindAdd()
   var rows = await dbx.SaveChangesAsync();
 
   Console.ForegroundColor = ConsoleColor.Green;
-  Console.WriteLine($"   {rows,3} rows saved.     All took {sw.Elapsed.TotalMinutes:N0} min.");
+  Console.WriteLine($"   {rows,3} rows saved.     All took {_sw.Elapsed.TotalMinutes:N0} min.");
 }
 
 void GetPhoneNumbersToDbIf(QstatsRlsContext dbx, Ehist ehist, bool skipDbInsert)
@@ -127,7 +125,7 @@ void GetPhoneNumbersToDbIf(QstatsRlsContext dbx, Ehist ehist, bool skipDbInsert)
     //_bad0.AddRange(bad);
 
     //if (!skipDbInsert)      InsertPhoneNumbersIntoDB(dbx, pnlst, ehist.EmailId, ehist.EmailedAt);
-    //if (!skipDbInsert && _cur % _page == 0)      Console.Write($"{_cur,8:N0} / {_ttl:N0}    {((_ttl - _cur) * sw.Elapsed.TotalMinutes / _cur),5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
+    //if (!skipDbInsert && _cur % _page == 0)      Console.Write($"{_cur,8:N0} / {_ttl:N0}    {((_ttl - _cur) * _sw.Elapsed.TotalMinutes / _cur),5:N1} min left    {dbx.SaveChanges(),5} rows saved.\n");
   });
 }
 
@@ -164,7 +162,7 @@ void GetPhoneNumbersFromLetter(Ehist ehist, string regex)
           (pn.Length == 10 && (pn.StartsWith("416") || pn.StartsWith("647") || pn.StartsWith("905"))) ||
           (pn.Length == 11 && (pn.StartsWith("1416") || pn.StartsWith("1647") || pn.StartsWith("1905"))))
         {
-          Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  + + + \n");
+          Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * _sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  + + + \n");
         }
         else
         {
@@ -174,7 +172,7 @@ void GetPhoneNumbersFromLetter(Ehist ehist, string regex)
             var d = " :+\n\r";
             if (d.Contains(ehist.LetterBody.Substring(idx - 1, 1)))
             {
-              Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6)}  +++++++++++++++++++\n");
+              Console.ForegroundColor = ConsoleColor.DarkGreen; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * _sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 6, 6)}  +++++++++++++++++++\n");
             }
             else
             {
@@ -182,7 +180,7 @@ void GetPhoneNumbersFromLetter(Ehist ehist, string regex)
               if (pn.Length == 11 && pn[0] == '1') pn = pn[1..];
               if (_bads.Add(pn))
               {
-                Console.ForegroundColor = ConsoleColor.Magenta; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
+                Console.ForegroundColor = ConsoleColor.Magenta; Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * _sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}     {ehist.LetterBody?.Substring(idx - 16, 16)}  ■ ■ ■ ■ ■  Remove me from DB!!!\n");
               }
             }
           }
@@ -190,7 +188,7 @@ void GetPhoneNumbersFromLetter(Ehist ehist, string regex)
           {
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  - - -\n");
+            Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {(_ttl - _cur) * _sw.Elapsed.TotalSeconds / _cur,8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  - - -\n");
             Console.ResetColor();
           }
         }
@@ -201,7 +199,7 @@ void GetPhoneNumbersFromLetter(Ehist ehist, string regex)
         if (_vlds.Add(pn))
         {
           Console.ForegroundColor = ConsoleColor.DarkYellow;
-          Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * sw.Elapsed.TotalSeconds / _cur),8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  ++ ++ ++\n");
+          Console.Write($"{_cur,8:N0} / {_ttl:N0}  {ehist.EmailId,56}  {pnraw,16} {pn,11}   {((_ttl - _cur) * _sw.Elapsed.TotalSeconds / _cur),8:N1} sec left       {ehist.EmailedAt:yyyy-MM}  ++ ++ ++\n");
         }
       }
 
