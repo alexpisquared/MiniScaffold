@@ -57,13 +57,13 @@
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
-    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8">
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8" Grid.RowSpan="3">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
         <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:SmartDateConverter}}" SortDirection="Descending"  />
         <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
-        <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6b1" />
-        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#11e"  />
+        <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6d1" />
+        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"          Width="*"   FontSize="12" Foreground="#4ff" />
       </DataGrid.Columns>
     </DataGrid>
 
@@ -92,15 +92,15 @@
 
         <TextBox   Grid.ColumnSpan="6"                      Grid.Row="1" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
 
-        <Label Content=" Recived or Sent"   Grid.Column="0" Grid.Row="3" />
-        <TextBlock                          Grid.Column="1" Grid.Row="3" Text="{Binding RecivedOrSent}" />
-        <Label Content="Mailed"             Grid.Column="2" Grid.Row="3" />
-        <TextBlock                          Grid.Column="3" Grid.Row="3" Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" />
-        <Label Content="Added"              Grid.Column="4" Grid.Row="3" />
-        <TextBlock                          Grid.Column="5" Grid.Row="3" Text="{Binding AddedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}"  />
+        <Label Content="Rcvd|Sent" Grid.Column="0" Grid.Row="3" />
+        <TextBlock                 Grid.Column="1" Grid.Row="3" Text="{Binding RecivedOrSent}" />
+        <Label Content="   Mailed" Grid.Column="2" Grid.Row="3" />
+        <TextBlock                 Grid.Column="3" Grid.Row="3" Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" />
+        <Label Content="   Added"  Grid.Column="4" Grid.Row="3" />
+        <TextBlock                 Grid.Column="5" Grid.Row="3" Text="{Binding AddedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}"  />
         
-        <Label Content="Note"   Grid.Column="0"             Grid.Row="4"  />
-        <TextBox Grid.Column="1"                            Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Grid.ColumnSpan="5" Height="42" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
+        <Label Content="Note"      Grid.Column="0" Grid.Row="4" />
+        <TextBox Grid.Column="1"                   Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Grid.ColumnSpan="5" Height="82" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
       </Grid>
     </Border>
 
