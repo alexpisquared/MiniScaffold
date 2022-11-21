@@ -80,7 +80,7 @@ public partial class Page01VM : BaseEmVM
       {
         WriteLine($"== {i,3} {SelectdEmail?.Id}");
 
-        if (PageCvs?.MoveCurrentToNext() == true && SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
+        if (SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
         {
           var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
 
@@ -92,6 +92,9 @@ public partial class Page01VM : BaseEmVM
 
           j++;
         }
+
+        if (PageCvs?.MoveCurrentToNext() != true)
+          break;
       }
 
       if (curpos > 0)

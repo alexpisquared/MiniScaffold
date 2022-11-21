@@ -78,7 +78,7 @@
         <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                     MaxWidth="100" />
         <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                   MaxWidth="100" />-->
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                   />
-        <DataGridTextColumn Header=" Phone"       Binding="{Binding Phone}"                                     />
+        <DataGridTextColumn Header=" Phone"       Binding="{Binding Phone, Converter={cnv:PhoneConverter}}"     Width="34"/>
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             MaxWidth="100" Foreground="#f60" />
@@ -149,9 +149,14 @@
       <Label Content="_Notes"           Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=tbAN}" />
       <TextBox                          Grid.Column="1" Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" VerticalAlignment="Stretch" Grid.ColumnSpan="5" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
 
-      <ListBox                          Grid.Column="6" Grid.Row="4" ItemsSource="{Binding PhoneEmailXrefs}" DisplayMemberPath="Phone.PhoneNumber" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
-      <TextBox                          Grid.Column="6" Grid.Row="3" Text="{Binding Phone, Converter={cnv:PhoneConverter}}" />
-      <Label Content="   Phone"         Grid.Column="6" Grid.Row="3" />
+      <ListBox                          Grid.Column="6" Grid.Row="3" ItemsSource="{Binding PhoneEmailXrefs}" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneConverter}}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <Label Content="   Phones"        Grid.Column="5" Grid.Row="3" />
 
     </Grid>
 
