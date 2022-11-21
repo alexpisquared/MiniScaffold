@@ -9,7 +9,10 @@ public partial class Page01VM : BaseEmVM
     {
       IsBusy = true;
       var sw = Stopwatch.StartNew();
-      var rv = await base.InitAsync();
+      var rv = await base.InitAsync(); _loaded= false; // or else...
+
+      await Dbx.PhoneEmailXrefs.LoadAsync();
+      await Dbx.Phones.LoadAsync();
 
       await Dbx.Emails.LoadAsync();
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
@@ -32,7 +35,13 @@ public partial class Page01VM : BaseEmVM
   }
 
   [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
-  [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value) { if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
+  [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
+  {
+    if (value is not null && _loaded)
+    {
+      Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id);
+    }
+  } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
   [RelayCommand(CanExecute = nameof(CanDel))] void Del(Email? email) { Bpr.Click(); try { _ = Dbx.Emails.Local.Remove(SelectdEmail!); } catch (Exception ex) { ex.Pop(); } }            //var rowsAffected = await Dbx.Emails.Where(r=> r.Id == selectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way.
   bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand

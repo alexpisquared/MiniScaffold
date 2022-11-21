@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 var _now = DateTime.Today;
 var sw = Stopwatch.StartNew();
 var ts = TimeSpan.Zero;
-int _cur = 0, _j = 0, _ttl, _page = 20000, _take = _page * 10;
+int _cur = 0, _j = 0, _ttl, _page = 200, _take = _page * 10;
 HashSet<string> _vlds = new();
 HashSet<string> _bads = new();
 
