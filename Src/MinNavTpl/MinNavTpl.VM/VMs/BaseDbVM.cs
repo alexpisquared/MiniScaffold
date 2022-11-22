@@ -20,15 +20,12 @@ public partial class BaseDbVM : BaseMinVM
     _secForcer = sec;
     _hashCode = GetType().GetHashCode();
 
-    _aw = IsDevDbg && _secForcer.CanEdit && (
-      UsrStgns.SrvrName is null ? false :
-      UsrStgns.SrvrName.Contains("PRD", StringComparison.OrdinalIgnoreCase) ? false :
-      UsrStgns.LetDbChg);
+    letDbChg = UsrStgns.LetDbChg;
 
-    SrvrNameStore = svr; SrvrNameStore.Changed += SrvrNameStore_Chngd;
-    DtBsNameStore = dbs; DtBsNameStore.Changed += DtBsNameStore_Chngd;
-    GSReportStore = gsr; GSReportStore.Changed += GSReportStore_Chngd;
-    _letStore = awd; _letStore.Changed += LetDbChgStore_Chngd;
+    _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_Chngd;
+    _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_Chngd;
+    _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_Chngd;
+    _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_Chngd;
 
     _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
@@ -52,15 +49,15 @@ public partial class BaseDbVM : BaseMinVM
         {
           default:
           case MessageBoxResult.Cancel: return false;
-          case MessageBoxResult.Yes: await SaveLogReportOrThrow(Dbx); break;
+          case MessageBoxResult.Yes: _ = await SaveLogReportOrThrow(Dbx); break;
           case MessageBoxResult.No: Dbx.DiscardChanges(); break;
         }
       }
 
-      SrvrNameStore.Changed -= SrvrNameStore_Chngd;
-      DtBsNameStore.Changed -= DtBsNameStore_Chngd;
-      GSReportStore.Changed -= GSReportStore_Chngd;
-      _letStore.Changed -= LetDbChgStore_Chngd;
+      _SrvrNameStore.Changed -= SrvrNameStore_Chngd;
+      _DtBsNameStore.Changed -= DtBsNameStore_Chngd;
+      _GSReportStore.Changed -= GSReportStore_Chngd;
+      _LetDbChgStore.Changed -= LetDbChgStore_Chngd;
 
       //PopupMsg(GSReport = "");
 
@@ -74,10 +71,10 @@ public partial class BaseDbVM : BaseMinVM
   }
   public override void Dispose()
   {
-    SrvrNameStore.Changed -= SrvrNameStore_Chngd;
-    DtBsNameStore.Changed -= DtBsNameStore_Chngd;
-    GSReportStore.Changed -= GSReportStore_Chngd;
-    _letStore.Changed -= LetDbChgStore_Chngd;
+    _SrvrNameStore.Changed -= SrvrNameStore_Chngd;
+    _DtBsNameStore.Changed -= DtBsNameStore_Chngd;
+    _GSReportStore.Changed -= GSReportStore_Chngd;
+    _LetDbChgStore.Changed -= LetDbChgStore_Chngd;
 
     base.Dispose();
   }
@@ -104,50 +101,20 @@ public partial class BaseDbVM : BaseMinVM
     return GSReport;
   }
 
-  protected readonly LetDbChgStore _letStore;
-  public SrvrNameStore SrvrNameStore { get; }
-  public DtBsNameStore DtBsNameStore { get; }
-  public GSReportStore GSReportStore { get; }
+  protected readonly LetDbChgStore _LetDbChgStore;
+  protected readonly SrvrNameStore _SrvrNameStore;
+  protected readonly DtBsNameStore _DtBsNameStore;
+  protected readonly GSReportStore _GSReportStore;
   async void SrvrNameStore_Chngd(string val) { SrvrName = val; await RefreshReloadAsync(); }
   async void DtBsNameStore_Chngd(string val) { DtBsName = val; await RefreshReloadAsync(); }
   async void GSReportStore_Chngd(string val) { GSReport = val; await RefreshReloadAsync(); }
   async void LetDbChgStore_Chngd(bool value) { LetDbChg = value; await RefreshReloadAsync(); }
-  string? _cs; public string? SrvrName
-  {
-    get => _cs; set
-    {
-      if (SetProperty(ref _cs, value) && value is not null && _inited)
-      {
-        Bpr.Click();
-        UsrStgns.SrvrName = value;
-        SrvrNameStore.Change(value);
-      }
-    }
-  }
-  string? _cd; public string? DtBsName
-  {
-    get => _cd; set
-    {
-      if (SetProperty(ref _cd, value) && value is not null && _inited)
-      {
-        Bpr.Click();
-        UsrStgns.DtBsName = value;
-        DtBsNameStore.Change(value);
-      }
-    }
-  }
-  string? _gr; public string? GSReport
-  {
-    get => _gr; set
-    {
-      if (SetProperty(ref _gr, value) && value is not null && _inited)
-      {
-        Bpr.Click();
-        GSReportStore.Change(value);
-      }
-    }
-  }
-  bool _aw; public bool LetDbChg { get => _aw; set { if (SetProperty(ref _aw, value)) { _letStore.Change(value); } } }
+
+  [ObservableProperty] string? srvrName; partial void OnSrvrNameChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _SrvrNameStore.Change(value); UsrStgns.SrvrName = value; } }
+  [ObservableProperty] string? dtBsName; partial void OnDtBsNameChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _DtBsNameStore.Change(value); UsrStgns.DtBsName = value; } }
+  [ObservableProperty] string? gSReport; partial void OnGSReportChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _GSReportStore.Change(value); } }
+  [ObservableProperty] bool letDbChg; partial void OnLetDbChgChanged(bool value) { _LetDbChgStore.Change(value); }
+
   ADUser? _ct; public ADUser? CurentUser { get => _ct; set { if (SetProperty(ref _ct, value) && value is not null) { WriteLine($"TrWL:> Curent User:  {value.FullName,-26} {value.A,-6}{value.W,-6}{value.R,-6}{value.L,-6}  {value.Permisssions}"); } } }
 
   public UserSettings UsrStgns { get; }
@@ -168,6 +135,6 @@ public partial class BaseDbVM : BaseMinVM
   partial void OnIncludeClosedChanged(bool value) { Bpr.Tick(); PageCvs?.Refresh(); } //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
   partial void OnIsBusyChanged(bool value) { _mainVM.IsBusy = value; ; }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
-  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport(); HasChanges = Dbx.HasUnsavedChanges(); WriteLine(GSReport); }
+  [RelayCommand] protected void ChkDb4Cngs() { Bpr.Click(); GSReport = Dbx.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbx.HasUnsavedChanges(); WriteLine(GSReport); }
   [RelayCommand] protected async Task Save2Db() { try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); } }
 }

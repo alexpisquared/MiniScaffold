@@ -39,7 +39,7 @@
 
       <TextBlock  Text="eHists" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
-      <StackPanel Grid.Column="1" Orientation="Horizontal">
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Grid.ColumnSpan="3">
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
@@ -48,8 +48,8 @@
 
         <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
         -->
-        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
-        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
+        <Button Content=" Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEhist.Id}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>

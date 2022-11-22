@@ -10,7 +10,7 @@ public partial class Page01VM : BaseEmVM
       IsBusy = true;
       await Task.Delay(220); // <== does not show up without this...............................
       var sw = Stopwatch.StartNew();
-      var rv = await base.InitAsync(); _loaded= false; // or else...
+      var rv = await base.InitAsync(); _loaded = false; // or else...
 
       await Dbx.PhoneEmailXrefs.LoadAsync();
       await Dbx.Phones.LoadAsync();
@@ -44,7 +44,19 @@ public partial class Page01VM : BaseEmVM
     }
   } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
-  [RelayCommand(CanExecute = nameof(CanDel))] void Del(Email? email) { Bpr.Click(); try { _ = Dbx.Emails.Local.Remove(SelectdEmail!); } catch (Exception ex) { ex.Pop(); } }            //var rowsAffected = await Dbx.Emails.Where(r=> r.Id == selectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way.
+  [RelayCommand(CanExecute = nameof(CanDel))]
+  async Task Del(Email? email)
+  {
+    Bpr.Click();
+    try
+    {
+      ArgumentNullException.ThrowIfNull(SelectdEmail, nameof(SelectdEmail));
+      var rowsAffected = await Dbx.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = Dbx.Emails.Local.Remove(SelectdEmail!);
+      GSReport = $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
+      Dbx.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
+    }
+    catch (Exception ex) { ex.Pop(); }
+  }
   bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
   [RelayCommand] void PBR() { Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); } }
   [RelayCommand] void AddNewEmail() { try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() }; Dbx.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { ex.Pop(); } }
