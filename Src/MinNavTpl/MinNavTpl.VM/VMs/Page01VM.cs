@@ -8,6 +8,7 @@ public partial class Page01VM : BaseEmVM
     try
     {
       IsBusy = true;
+      await Task.Delay(220); // <== does not show up without this...............................
       var sw = Stopwatch.StartNew();
       var rv = await base.InitAsync(); _loaded= false; // or else...
 

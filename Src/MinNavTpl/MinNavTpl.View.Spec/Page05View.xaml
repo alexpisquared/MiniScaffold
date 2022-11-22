@@ -48,7 +48,7 @@
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+        <CheckBox Content="+_Bads " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _Get " Command="{Binding Scan4newCoCommand}"  ToolTip="Scan Email table for new companies" Foreground="#0a0" />
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
@@ -64,38 +64,38 @@
         </TextBlock>
       </StackPanel>
 
-      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->    
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
               IsSynchronizedWithCurrentItem="True" >
       <DataGrid.Columns>
-        <DataGridTextColumn     Header=" Agency"    Binding="{Binding Id}"        Width="200"/>
-        <DataGridCheckBoxColumn Header=" Is OK"     Binding="{Binding IsBroadcastee}" />
-        <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneAgencyXrefs.Count}" />
-        <DataGridTextColumn     Header=" Agents"    Binding="{Binding Emails.Count}" />
+        <DataGridTextColumn     Header=" Agency"    Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
+        <DataGridCheckBoxColumn Header="Is OK  "    Binding="{Binding IsBroadcastee}" />
+        <DataGridTextColumn     Header=" Agents"    Binding="{Binding Emails.Count}"           IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneAgencyXrefs.Count}" IsReadOnly="True" />
         <DataGridTextColumn     Header=" Address"   Binding="{Binding Address}"   Width="180"/>
         <DataGridTextColumn     Header=" Note"      Binding="{Binding Note}"      Width="*" />
-        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" FontWeight="SemiBold" />
-        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" FontWeight="SemiBold" />
+        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
 
     <Grid Grid.Row="3" DataContext="{Binding SelectdAgency}" Background="#4888">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="140"/>
+        <ColumnDefinition Width="8"/>
+        <ColumnDefinition Width="100"/>
+        <ColumnDefinition Width="8"/>
         <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="8"/>
         <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="8"/>
         <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="8"/>
         <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="12"/>
+        <ColumnDefinition Width="8"/>
         <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="12"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="12"/>
       </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
         <RowDefinition Height="5"/>
@@ -105,19 +105,11 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <Label Content="Agenncy"        Grid.Column="0" Grid.Row="1"   />
-      <TextBox                        Grid.Column="0" Grid.Row="2"   Text="{Binding Id}"          />
-      <Label Content="Ttl Agennt"     Grid.Column="1" Grid.Row="1"   />
-      <TextBlock                      Grid.Column="1" Grid.Row="2"   Text="{Binding Emails.Count}"   />
-      <Label Content="Address"			  Grid.Column="3" Grid.Row="1"   />
-      <TextBox                        Grid.Column="3" Grid.Row="2"   Text="{Binding Address,                  Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}"   />
-      <Label Content="A_dded"         Grid.Column="5" Grid.Row="1" Target="{Binding ElementName=dpAdAt}" />
-      <TextBox                        Grid.Column="5" Grid.Row="2"   Text="{Binding AddedAt,          StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
-      <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" Target="{Binding ElementName=dpAdAt2}" />
-      <TextBox                        Grid.Column="7" Grid.Row="2"   Text="{Binding ModifiedAt,       StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />
+      <Label Content="   Agents"      Grid.Column="0" Grid.Row="1" />
+      <ListBox                        Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Emails}" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
 
-      <Label Content="   Phones"      Grid.Column="9" Grid.Row="1" />
-      <ListBox                        Grid.Column="9" Grid.Row="2" ItemsSource="{Binding PhoneAgencyXrefs}" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
+      <Label Content="   Phones"      Grid.Column="2" Grid.Row="1" />
+      <ListBox                        Grid.Column="2" Grid.Row="2" ItemsSource="{Binding PhoneAgencyXrefs}" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
         <ListBox.ItemTemplate>
           <DataTemplate>
             <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneConverter}}" />
@@ -125,10 +117,16 @@
         </ListBox.ItemTemplate>
       </ListBox>
 
-      <Label Content="   Agents"      Grid.Column="11" Grid.Row="1" />
-      <ListBox                        Grid.Column="11" Grid.Row="2" ItemsSource="{Binding Emails}" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
+      <Label Content="Agenncy"        Grid.Column="4" Grid.Row="1" />
+      <TextBlock                      Grid.Column="4" Grid.Row="2" Text="{Binding Id}"             />
+      <Label Content="Address"			  Grid.Column="6" Grid.Row="1" />
+      <TextBox                        Grid.Column="6" Grid.Row="2" Text="{Binding Address}"   />
+      <!--<Label Content="A_dded"         Grid.Column="5" Grid.Row="1" />
+      <TextBlock                      Grid.Column="5" Grid.Row="2" Text="{Binding AddedAt,    StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
+      <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" />
+      <TextBlock                      Grid.Column="7" Grid.Row="2" Text="{Binding ModifiedAt, StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />-->
 
-      <TextBox                        Grid.Column="0" Grid.Row="4" Text="{Binding Note,                     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="8" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
+      <TextBox                        Grid.Column="6" Grid.Row="4" Text="{Binding Note,                     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="8" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
     </Grid>
 
     <GridSplitter Grid.Row="2" Grid.Column="0" />

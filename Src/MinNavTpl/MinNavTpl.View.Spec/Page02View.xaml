@@ -47,7 +47,7 @@
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Content="+_Closed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+        <CheckBox Content="+_Bads " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
         <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />

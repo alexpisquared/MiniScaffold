@@ -14,13 +14,14 @@ public partial class Page05VM : BaseDbVM
       await Dbx.Phones.LoadAsync();
       await Dbx.Emails.LoadAsync();
 
-      await Dbx.Agencies.LoadAsync();
+      await Dbx.Agencies.OrderBy(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
       PageCvs = CollectionViewSource.GetDefaultView(Dbx.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Agencies.ToListAsync());
-      PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.AddedAt), ListSortDirection.Descending));
-      PageCvs.Filter = obj => obj is not Agency row || row is null || string.IsNullOrEmpty(SearchText) ||
+      //PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.AddedAt), ListSortDirection.Descending));
+      PageCvs.Filter = obj => obj is not Agency row || row is null || (
+        string.IsNullOrEmpty(SearchText) ||
         row.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-        row.IsBroadcastee || IncludeClosed;
+        row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
+        (row.IsBroadcastee || IncludeClosed);
 
       Lgr.Log(LogLevel.Trace, GSReport = $" {Dbx.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
