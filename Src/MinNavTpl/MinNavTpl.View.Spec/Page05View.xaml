@@ -106,7 +106,7 @@
       <ListBox                        Grid.Column="2" Grid.Row="2" ItemsSource="{Binding PhoneAgencyXrefs}" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
         <ListBox.ItemTemplate>
           <DataTemplate>
-            <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneConverter}}" />
+            <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneFormatConverter}}" ToolTip="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneToolTipConverter}}" Foreground="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneBrushConverter}}" />
           </DataTemplate>
         </ListBox.ItemTemplate>
       </ListBox>

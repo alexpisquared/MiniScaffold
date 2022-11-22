@@ -79,7 +79,15 @@
         <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                     MaxWidth="100" />
         <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                   MaxWidth="100" />-->
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                   />
-        <DataGridTextColumn Header=" Phone"       Binding="{Binding Phone, Converter={cnv:PhoneConverter}}"     Width="34"/>
+        <DataGridTemplateColumn Header=" Phone"   Width="31" >
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
+                         ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
+                         Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             MaxWidth="100" Foreground="#f60" />
@@ -155,7 +163,9 @@
         <ListBox                          Grid.Column="6" Grid.Row="3" ItemsSource="{Binding PhoneEmailXrefs}" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
           <ListBox.ItemTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneConverter}}" />
+              <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneFormatConverter}}" 
+                         ToolTip="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneToolTipConverter}}"
+                         Foreground="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneBrushConverter}}" />
             </DataTemplate>
           </ListBox.ItemTemplate>
         </ListBox>
