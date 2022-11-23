@@ -16,10 +16,10 @@ public partial class Page03VM : BaseDbVM
 
     try
     {
-      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
-      rv += await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
+      var r1 = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
+      var r2 = await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
       var (success, rowsSavedCnt, report) = await Dbx.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
+      ReportOL += $"{r1}{r2}";
       LoadVwSrcs();
     }
     catch (Exception ex) { ex.Pop(); }

@@ -10,6 +10,8 @@ public partial class BaseDbVM : BaseMinVM
   {
     IsDevDbg = VersionHelper.IsDbg;
 
+    searchText = "";
+
     Lgr = lgr;
     Cfg = cfg;
     Dbx = dbx;

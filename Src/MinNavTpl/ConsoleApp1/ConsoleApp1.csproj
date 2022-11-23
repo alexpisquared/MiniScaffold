@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj" />
+    <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\Emailing.NET6\Emailing.NET6.csproj" />
   </ItemGroup>
 
 </Project>
