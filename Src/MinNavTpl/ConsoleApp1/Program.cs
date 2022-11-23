@@ -25,7 +25,7 @@ async Task ShowPhoneExtraction()
   _ttl = await rcvds.CountAsync();
   _sw = Stopwatch.StartNew();
 
-  rcvds.ToList().ForEach(eHist => GetPhoneNumbersToDbIf(dbx, eHist, true));
+  rcvds.ToList().ForEach(eHist => GetPhoneNumbersToDbIf(dbx, eHist, true)); ///////////////////////////////////////////////////
 
   var bads = _bads.Except(_vlds);
   Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($" ttl: {_ttl}   v/b: {_vlds.Count,5:N0} / {_bads.Count,-5:N0} - {_vlds.Intersect(_bads).Count(),8:N0} = {bads.Count(),-8:N0}    {_sw.Elapsed.TotalSeconds,5:N0} sec took \n");
@@ -117,7 +117,9 @@ async Task LoadAsyncFindAdd()
 
 void GetPhoneNumbersToDbIf(QstatsRlsContext dbx, Ehist ehist, bool skipDbInsert)
 {
-  OutlookHelper6.GetPhoneNumbersFromLetter(ehist, ref _cur, _ttl, _sw, _vlds, _bads);
+  _cur++;
+
+  OutlookHelper6.GetUniqueValidBadPhoneNumbersFromLetter(ehist, _cur, _ttl, _sw, _vlds, _bads);
 
   if (!skipDbInsert)
   {
