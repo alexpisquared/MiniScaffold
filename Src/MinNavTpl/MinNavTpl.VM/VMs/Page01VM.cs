@@ -40,7 +40,9 @@ public partial class Page01VM : BaseEmVM
   {
     if (value is not null && _loaded)
     {
-      Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id);
+      Bpr.Tick();
+      UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id);
+      Task.Run(GetDetailsForSelRow);
     }
   } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
@@ -94,18 +96,9 @@ public partial class Page01VM : BaseEmVM
       {
         WriteLine($"== {i,3} {SelectdEmail?.Id}");
 
-        if (SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
-        {
-          var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
+        await GetDetailsForSelRow();
 
-          SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
-          SelectdEmail.Ttl_Rcvd = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
-          SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
-          if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
-          if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
-
-          j++;
-        }
+        j++;
 
         if (PageCvs?.MoveCurrentToNext() != true)
           break;
@@ -117,5 +110,19 @@ public partial class Page01VM : BaseEmVM
       Bpr.Finish(8);
     }
     catch (Exception ex) { ex.Pop(); }
+  }
+
+  async Task GetDetailsForSelRow()
+  {
+    if (SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
+    {
+      var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
+
+      SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
+      SelectdEmail.Ttl_Rcvd = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
+      SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
+      if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
+      if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
+    }
   }
 }

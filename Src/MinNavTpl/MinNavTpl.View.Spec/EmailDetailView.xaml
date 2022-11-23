@@ -2,7 +2,7 @@
              xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:EmailDetailVM}" 
-             d:DesignHeight="200" d:DesignWidth="1600" Padding="8" >
+             d:DesignHeight="260" d:DesignWidth="1600" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -71,37 +71,27 @@
     <Border Grid.Row="1" Grid.Column="2" DataContext="{Binding SelectdEhist}" Grid.RowSpan="4" Background="#4888" Margin="5" Padding="5" CornerRadius="5" BorderThickness="1" BorderBrush="#888">
       <Grid>
         <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="Auto"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
           <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="8"/>
           <RowDefinition Height="*"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Label Content="Subj"   Grid.Column="0"  Grid.Row="0" />
-        <TextBlock Grid.Column="1"                          Grid.Row="0" Text="{Binding LetterSubject}" Grid.ColumnSpan="5" />
 
-        <TextBox   Grid.ColumnSpan="6"                      Grid.Row="1" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
+        <TextBlock Text="{Binding LetterSubject, FallbackValue='Subject'}" />
+        <TextBlock Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" d:Text="123231" HorizontalAlignment="Right" />
+        <Label      Grid.Row="1" Content="Note" HorizontalAlignment="Center"/>
+        <TextBox    Grid.Row="2" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Height="82" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
+        <!--<TextBlock  Grid.Row="4" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" />-->
+        <TextBox    Grid.Row="4" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True" />
 
-        <Label Content="Rcvd|Sent" Grid.Column="0" Grid.Row="3" />
-        <TextBlock                 Grid.Column="1" Grid.Row="3" Text="{Binding RecivedOrSent}" />
-        <Label Content="   Mailed" Grid.Column="2" Grid.Row="3" />
-        <TextBlock                 Grid.Column="3" Grid.Row="3" Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" />
-        <Label Content="   Added"  Grid.Column="4" Grid.Row="3" />
-        <TextBlock                 Grid.Column="5" Grid.Row="3" Text="{Binding AddedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}"  />
-        
-        <Label Content="Note"      Grid.Column="0" Grid.Row="4" />
-        <TextBox Grid.Column="1"                   Grid.Row="4" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Grid.ColumnSpan="5" Height="82" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
       </Grid>
     </Border>
 
