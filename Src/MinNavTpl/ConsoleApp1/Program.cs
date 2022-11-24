@@ -13,12 +13,12 @@ var _sw = Stopwatch.StartNew();
 int _cur = 0, _j = 0, _ttl, _page = 1;
 HashSet<string> _vlds = new(), _bads = new();
 
-await ShowBadPhonesFromDB();
-//await ShowPhoneExtraction();
+await RemoveBadPhonesFromDB();
+//await ShowPhoneExtraction_Plus_Removal();
 Console.Write("\a");
 Console.ResetColor();
 
-async Task ShowBadPhonesFromDB()
+async Task RemoveBadPhonesFromDB()
 {
   using var dbx = QstatsRlsContext.Create();
 
@@ -39,13 +39,13 @@ async Task ShowBadPhonesFromDB()
   Console.ForegroundColor = ConsoleColor.DarkCyan;
   badPhNums.ToList().ForEach(p => Console.Write($"   {++_cur,5}    {p.PhoneNumber}   {p.SeenLast}   {(p.SeenLast - p.SeenFirst).TotalDays,5:N1}  \n"));
 
-  var rv = await RemoveBadsFromDbAsync(dbx, badPhNums.Select(r => r.PhoneNumber));
+  var rv = await CascadingRemoveFromDbAsync(dbx, badPhNums.Select(r => r.PhoneNumber));
 
   var rowsSaved = await dbx.SaveChangesAsync();
   Console.ForegroundColor = rowsSaved > 0 ? ConsoleColor.Green : ConsoleColor.DarkGray;
   Console.WriteLine($"       {(rowsSaved > 0 ? "■ ■ ■ ■ ==>" : "··········")}  {rowsSaved,5} rowsSaved saved.     All took {_sw.Elapsed.TotalSeconds,5:N0} sec.");
 }
-async Task ShowPhoneExtraction()
+async Task ShowPhoneExtraction_Plus_Removal()
 {
   using var dbx = QstatsRlsContext.Create();
 
@@ -61,7 +61,7 @@ async Task ShowPhoneExtraction()
   var bads = _bads.Except(_vlds);
   Console.ForegroundColor = ConsoleColor.DarkCyan; Console.Write($" ttl: {_ttl}   v/b: {_vlds.Count,5:N0} / {_bads.Count,-5:N0} - {_vlds.Intersect(_bads).Count(),8:N0} = {bads.Count(),-8:N0}    {_sw.Elapsed.TotalSeconds,5:N0} sec took \n");
 
-  var rv = await RemoveBadsFromDbAsync(dbx, bads);
+  var rv = await CascadingRemoveFromDbAsync(dbx, bads);
 
   var rowsSaved = await dbx.SaveChangesAsync();
   Console.ForegroundColor = rowsSaved > 0 ? ConsoleColor.Green : ConsoleColor.DarkGray; Console.WriteLine($"       {(rowsSaved > 0 ? "■ ■ ■ ■ ==>" : "··········")}  {rowsSaved,5} rowsSaved saved.     All took {_sw.Elapsed.TotalSeconds,5:N0} sec.");
@@ -69,7 +69,7 @@ async Task ShowPhoneExtraction()
   Console.ForegroundColor = ConsoleColor.DarkGray;
 }
 
-async Task<int> RemoveBadsFromDbAsync(QstatsRlsContext dbx, IEnumerable<string> bads)
+async Task<int> CascadingRemoveFromDbAsync(QstatsRlsContext dbx, IEnumerable<string> bads)
 {
   foreach (var bad in bads)
   {
