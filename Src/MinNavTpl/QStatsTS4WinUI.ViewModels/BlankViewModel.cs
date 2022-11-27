@@ -2,9 +2,11 @@
 
 namespace QStatsTS4WinUI.ViewModels;
 
-public class BlankViewModel : ObservableRecipient
+public partial class BlankViewModel : ObservableRecipient
 {
     public BlankViewModel()
     {
     }
+
+    [ObservableProperty] string hello = "Hello from VM Lib!";
 }
