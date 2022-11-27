@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "QStatsTS4WinUI (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "QStatsTS4WinUI (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
