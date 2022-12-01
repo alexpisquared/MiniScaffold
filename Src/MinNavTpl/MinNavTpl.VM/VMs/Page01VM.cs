@@ -3,15 +3,15 @@ public partial class Page01VM : BaseEmVM
 {
   public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
     : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
-  public override async Task<bool> InitAsync()
+  public async override Task<bool> InitAsync()
   {
     try
     {
       IsBusy = true;
       await Task.Delay(220); // <== does not show up without this...............................
-      var sw = Stopwatch.StartNew();
       var rv = await base.InitAsync(); _loaded = false; // or else...
 
+      var sw = Stopwatch.StartNew();
       await Dbx.PhoneEmailXrefs.LoadAsync();
       await Dbx.Phones.LoadAsync();
 
@@ -121,8 +121,8 @@ public partial class Page01VM : BaseEmVM
       SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
       SelectdEmail.Ttl_Rcvd = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
       SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
-      if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
-      if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").DefaultIfEmpty().MaxAsync(r => r.EmailedAt);
+      if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
+      if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
     }
   }
 }

@@ -33,7 +33,7 @@ public partial class BaseDbVM : BaseMinVM
 
     Lgr.LogInformation($"┌── {GetType().Name} eo-ctor      PageRank:{oid}");
   }
-  public override async Task<bool> InitAsync()
+  public async override Task<bool> InitAsync()
   {
     IsBusy = false;
     _inited = true;
@@ -41,7 +41,7 @@ public partial class BaseDbVM : BaseMinVM
     Bpr.Finish();
     return await base.InitAsync();
   }
-  public override async Task<bool> WrapAsync()
+  public async override Task<bool> WrapAsync()
   {
     try
     {
@@ -80,7 +80,7 @@ public partial class BaseDbVM : BaseMinVM
 
     base.Dispose();
   }
-  public virtual async Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
+  public async virtual Task RefreshReloadAsync([CallerMemberName] string? cmn = "") { WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield(); }
   protected void ReportProgress(string msg) { GSReport = msg; Lgr.Log(LogLevel.Trace, msg); }
 
   async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")

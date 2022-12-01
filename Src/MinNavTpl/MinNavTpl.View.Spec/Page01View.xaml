@@ -180,5 +180,9 @@
     <GridSplitter Grid.Row="2" Grid.Column="0" />
     <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
 
+    <Viewbox Grid.RowSpan="4" Grid.ColumnSpan="3" >
+      <TextBlock Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" Text="Loading..." Foreground="Magenta" />
+    </Viewbox>
+
   </Grid>
 </UserControl>
