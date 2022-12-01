@@ -61,6 +61,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QStatsTS4WinUI.Views", "QSt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QStatsTS4WinUI.ViewModels", "QStatsTS4WinUI.ViewModels\QStatsTS4WinUI.ViewModels.csproj", "{2A3B9755-B2EE-4B10-B7DE-14052F9CD8EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QStatsTS4WinUI.Contracts", "QStatsTS4WinUI.Contracts\QStatsTS4WinUI.Contracts.csproj", "{932BF043-355B-4784-A69E-AE65C2215A72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -565,6 +567,26 @@ Global
 		{2A3B9755-B2EE-4B10-B7DE-14052F9CD8EF}.Release|x64.Build.0 = Release|Any CPU
 		{2A3B9755-B2EE-4B10-B7DE-14052F9CD8EF}.Release|x86.ActiveCfg = Release|Any CPU
 		{2A3B9755-B2EE-4B10-B7DE-14052F9CD8EF}.Release|x86.Build.0 = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|ARM32.ActiveCfg = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|ARM32.Build.0 = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|arm64.Build.0 = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|x64.Build.0 = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Debug|x86.Build.0 = Debug|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|ARM32.ActiveCfg = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|ARM32.Build.0 = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|arm64.ActiveCfg = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|arm64.Build.0 = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|x64.ActiveCfg = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|x64.Build.0 = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|x86.ActiveCfg = Release|Any CPU
+		{932BF043-355B-4784-A69E-AE65C2215A72}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
