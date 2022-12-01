@@ -28,6 +28,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Blank1Page.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Update="BlankPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>

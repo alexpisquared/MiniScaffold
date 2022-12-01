@@ -1,9 +1,4 @@
-﻿using Microsoft.UI.Xaml.Controls;
-
-using QStatsTS4WinUI.ViewModels;
-
-namespace QStatsTS4WinUI.Views;
-
+﻿namespace QStatsTS4WinUI.Views;
 public sealed partial class Blank1Page : Page
 {
     public Blank1ViewModel ViewModel
@@ -13,7 +8,7 @@ public sealed partial class Blank1Page : Page
 
     public Blank1Page()
     {
-        ViewModel = App.GetService<Blank1ViewModel>();
+        ViewModel = PageHelpers.GetService<Blank1ViewModel>(); // = App.GetService<Blank1ViewModel>();
         InitializeComponent();
     }
 }
