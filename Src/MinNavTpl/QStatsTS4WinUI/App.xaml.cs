@@ -28,17 +28,6 @@ public partial class App : Application, IApp
         get;
     }
 
-    public static T GetService<T>()
-        where T : class
-    {
-        if ((App.Current as App)!.Host.Services.GetService(typeof(T)) is not T service)
-        {
-            throw new ArgumentException($"{typeof(T)} needs to be registered in ConfigureServices within App.xaml.cs.");
-        }
-
-        return service;
-    }
-
     public static WindowEx MainWindow { get; } = new MainWindow();
 
     public App()
@@ -100,8 +89,7 @@ public partial class App : Application, IApp
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
-
-        App.GetService<IAppNotificationService>().Initialize();
+        AppHelpers.GetService<IAppNotificationService>().Initialize();
 
         UnhandledException += App_UnhandledException;
     }
@@ -115,9 +103,8 @@ public partial class App : Application, IApp
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
+        AppHelpers.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
 
-        App.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
-
-        await App.GetService<IActivationService>().ActivateAsync(args);
+        await AppHelpers.GetService<IActivationService>().ActivateAsync(args);
     }
 }

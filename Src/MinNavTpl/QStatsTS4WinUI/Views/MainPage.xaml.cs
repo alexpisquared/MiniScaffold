@@ -13,7 +13,7 @@ public sealed partial class MainPage : Page
 
     public MainPage()
     {
-        ViewModel = App.GetService<MainViewModel>();
+        ViewModel = AppHelpers.GetService<MainViewModel>();
         InitializeComponent();
     }
 }
