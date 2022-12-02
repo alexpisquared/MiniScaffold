@@ -45,7 +45,7 @@ public static class MvvmInitHelper
     _ = services.AddTransient<Page05VM>();
     _ = services.AddTransient<EmailDetailVM>();
 
-    _ = services.AddTransient<ISecForcer, SecForcer>();
+    _ = services.AddTransient<ISecurityForcer, SecurityForcer>();
 
     _ = services.AddTransient<UserSettings>();
 
@@ -60,17 +60,4 @@ public static class MvvmInitHelper
     var cfg = sp.GetRequiredService<IConfigurationRoot>();
     return string.Format(cfg[sqlver]!, us.SrvrName, us.DtBsName, "IpmDevDbgUser", "IpmDevDbgUser");
   }
-}
-
-public class SecForcer : ISecForcer
-{
-  public SecForcer() : this(true, true) { }
-  public SecForcer(bool isRead, bool isEdit) => (CanRead, CanEdit) = (isRead, isEdit);
-
-  public bool CanRead { get; }
-  public bool CanEdit { get; }
-
-  public string PermisssionCSV => $"{(CanRead ? "Read+" : "")}{(CanEdit ? "Edit+" : "")}".Trim(new[] { '+', ' ' });
-
-  public bool HasAccessTo(PermissionFlag ownedPermissions, PermissionFlag resource) => ownedPermissions.HasFlag(resource);
 }

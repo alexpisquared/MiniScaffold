@@ -3,10 +3,10 @@ public partial class BaseDbVM : BaseMinVM
 {
   readonly int _hashCode;
   readonly MainVM _mainVM;
-  readonly ISecForcer _secForcer;
+  readonly ISecurityForcer _secForcer;
   protected bool _saving, _loading, _inited;
   protected readonly DateTime Now = DateTime.Now;
-  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecForcer sec, QstatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
+  public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
   {
     IsDevDbg = VersionHelper.IsDbg;
 
