@@ -1,9 +1,4 @@
-﻿using CommunityToolkit.WinUI.UI;
-using System.ComponentModel;
-using DB.QStats.Std.Models;
-using Microsoft.UI.Xaml.Data;
-
-namespace QStatsTS4WinUI.ViewModels;
+﻿namespace QStatsTS4WinUI.ViewModels;
 
 public partial class DataGrid1ViewModel : ObservableRecipient, INavigationAware
 {
@@ -20,13 +15,12 @@ public partial class DataGrid1ViewModel : ObservableRecipient, INavigationAware
     {
         Source.Clear();
 
-        var data = await Dbx.Emails.OrderByDescending(e => e.AddedAt).Take(10).ToListAsync();
+        var data = await Dbx.Emails.OrderByDescending(e => e.AddedAt).Take(100).ToListAsync();
 
         foreach (var item in data)
         {
             Source.Add(item);
         }
-
     }
 
     public void OnNavigatedFrom()

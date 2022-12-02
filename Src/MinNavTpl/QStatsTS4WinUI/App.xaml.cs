@@ -74,7 +74,7 @@ public partial class App : Application, IApp
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
 
             // Also
-            _ = services.AddTransient(sp => new QstatsRlsContext("""Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;"""));
+            _ = services.AddTransient(sp => new QstatsRlsContext("""Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;"""));
         }).
         Build();
         AppHelpers.GetService<IAppNotificationService>().Initialize();
