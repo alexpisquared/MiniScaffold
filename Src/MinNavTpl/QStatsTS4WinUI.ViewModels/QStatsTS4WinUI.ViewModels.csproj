@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj" />
     <ProjectReference Include="..\QStatsTS4WinUI.Contracts\QStatsTS4WinUI.Contracts.csproj" />
     <ProjectReference Include="..\QStatsTS4WinUI.Core\QStatsTS4WinUI.Core.csproj" />
   </ItemGroup>

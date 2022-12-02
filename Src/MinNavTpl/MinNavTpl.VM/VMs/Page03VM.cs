@@ -167,7 +167,7 @@ public partial class Page03VM : BaseDbVM
         {
           ttl--;
           cnt++;
-          ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:";
+          ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:\n";
           try
           {
             if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)

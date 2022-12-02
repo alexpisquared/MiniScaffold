@@ -1,35 +1,32 @@
-﻿using System.Collections.ObjectModel;
-
-using CommunityToolkit.Mvvm.ComponentModel;
-
-using QStatsTS4WinUI.Contracts.ViewModels;
-using QStatsTS4WinUI.Core.Contracts.Services;
-using QStatsTS4WinUI.Core.Models;
+﻿using CommunityToolkit.WinUI.UI;
+using System.ComponentModel;
+using DB.QStats.Std.Models;
+using Microsoft.UI.Xaml.Data;
 
 namespace QStatsTS4WinUI.ViewModels;
 
-public class DataGrid1ViewModel : ObservableRecipient, INavigationAware
+public partial class DataGrid1ViewModel : ObservableRecipient, INavigationAware
 {
-    private readonly ISampleDataService _sampleDataService;
+    private readonly QstatsRlsContext Dbx;
 
-    public ObservableCollection<SampleOrder> Source { get; } = new ObservableCollection<SampleOrder>();
+    public ObservableCollection<Email> Source { get; } = new ObservableCollection<Email>();
 
-    public DataGrid1ViewModel(ISampleDataService sampleDataService)
+    public DataGrid1ViewModel(QstatsRlsContext qstatsRlsContext)
     {
-        _sampleDataService = sampleDataService;
+        Dbx = qstatsRlsContext;
     }
 
     public async void OnNavigatedTo(object parameter)
     {
         Source.Clear();
 
-        // TODO: Replace with real data.
-        var data = await _sampleDataService.GetGridDataAsync();
+        var data = await Dbx.Emails.OrderByDescending(e => e.AddedAt).Take(10).ToListAsync();
 
         foreach (var item in data)
         {
             Source.Add(item);
         }
+
     }
 
     public void OnNavigatedFrom()
