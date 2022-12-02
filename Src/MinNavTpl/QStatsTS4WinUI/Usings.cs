@@ -1,6 +1,19 @@
 ﻿global using System;
+global using DB.QStats.Std.Models;
+global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
+global using Microsoft.UI.Xaml;
 global using Microsoft.UI.Xaml.Controls;
-global using QStatsTS4WinUI.ViewModels;
-global using WinUIEx;
 global using QStatsTS4WinUI;
+global using QStatsTS4WinUI.Activation;
+global using QStatsTS4WinUI.Contracts.Services;
+global using QStatsTS4WinUI.Core.Contracts.Services;
+global using QStatsTS4WinUI.Core.Services;
+global using QStatsTS4WinUI.Helpers;
+global using QStatsTS4WinUI.Models;
+global using QStatsTS4WinUI.Notifications;
+global using QStatsTS4WinUI.Services;
+global using QStatsTS4WinUI.ViewModels;
+global using QStatsTS4WinUI.Views;
+global using WinUIEx;
+

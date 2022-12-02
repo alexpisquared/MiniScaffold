@@ -1,19 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.UI.Xaml;
-
-using QStatsTS4WinUI.Activation;
-using QStatsTS4WinUI.Contracts.Services;
-using QStatsTS4WinUI.Core.Contracts.Services;
-using QStatsTS4WinUI.Core.Services;
-using QStatsTS4WinUI.Helpers;
-using QStatsTS4WinUI.Models;
-using QStatsTS4WinUI.Notifications;
-using QStatsTS4WinUI.Services;
-using QStatsTS4WinUI.ViewModels;
-using QStatsTS4WinUI.Views;
-
-namespace QStatsTS4WinUI;
+﻿namespace QStatsTS4WinUI;
 
 // To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
 public partial class App : Application, IApp
@@ -87,6 +72,9 @@ public partial class App : Application, IApp
 
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
+
+            // Also
+            _ = services.AddTransient(sp => new QstatsRlsContext("""Server=.\SqlExpress;Database=QStatsDBG;Trusted_Connection=True;Encrypt=False;"""));
         }).
         Build();
         AppHelpers.GetService<IAppNotificationService>().Initialize();
