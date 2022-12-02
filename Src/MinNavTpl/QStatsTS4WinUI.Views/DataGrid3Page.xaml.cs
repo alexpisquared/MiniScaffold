@@ -15,7 +15,7 @@ public sealed partial class DataGrid3Page : Page
 
     public DataGrid3Page()
     {
-        ViewModel = App.GetService<DataGrid3ViewModel>();
+        ViewModel = PageHelpers.GetService<DataGrid3ViewModel>();
         InitializeComponent();
     }
 }

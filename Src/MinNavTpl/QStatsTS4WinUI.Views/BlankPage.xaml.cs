@@ -8,7 +8,7 @@ public sealed partial class BlankPage : Page
 
     public BlankPage()
     {
-        ViewModel = PageHelpers.GetService<BlankViewModel>(); // = App.GetService<BlankViewModel>();
+        ViewModel = PageHelpers.GetService<BlankViewModel>(); // = PageHelpers.GetService<BlankViewModel>();
         Trace.Write(ViewModel.Hello);
 
         InitializeComponent();

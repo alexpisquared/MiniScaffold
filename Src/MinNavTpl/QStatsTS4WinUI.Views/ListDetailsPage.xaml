@@ -7,8 +7,7 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:models="using:QStatsTS4WinUI.Core.Models"
     xmlns:views="using:QStatsTS4WinUI.Views"
-    xmlns:behaviors="using:QStatsTS4WinUI.Behaviors"
-    behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
+    xmlns:behaviors="using:QStatsTS4WinUI.Behaviors" behaviors:NavigationViewHeaderBehavior.HeaderMode="Never"
     mc:Ignorable="d">
     <Page.Resources>
         <DataTemplate x:Key="ItemTemplate" x:DataType="models:SampleOrder">

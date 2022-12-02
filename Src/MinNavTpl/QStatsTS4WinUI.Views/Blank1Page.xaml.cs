@@ -8,7 +8,7 @@ public sealed partial class Blank1Page : Page
 
     public Blank1Page()
     {
-        ViewModel = PageHelpers.GetService<Blank1ViewModel>(); // = App.GetService<Blank1ViewModel>();
+        ViewModel = PageHelpers.GetService<Blank1ViewModel>(); // = App.GetService <Blank1ViewModel>();
         InitializeComponent();
     }
 }

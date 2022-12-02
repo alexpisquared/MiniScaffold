@@ -21,11 +21,21 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\QStatsTS4WinUI.Behaviors\QStatsTS4WinUI.Behaviors.csproj" />
+    <ProjectReference Include="..\QStatsTS4WinUI.Contracts\QStatsTS4WinUI.Contracts.csproj" />
     <ProjectReference Include="..\QStatsTS4WinUI.ViewModels\QStatsTS4WinUI.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="BlankPage.xaml" />
+    <None Remove="ContentGridDetailPage.xaml" />
+    <None Remove="ContentGridPage.xaml" />
+    <None Remove="DataGrid1Page.xaml" />
+    <None Remove="DataGrid2Page.xaml" />
+    <None Remove="DataGrid3Page.xaml" />
+    <None Remove="DataGridPage.xaml" />
+    <None Remove="ListDetailsDetailControl.xaml" />
+    <None Remove="ListDetailsPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +46,30 @@
     <Page Update="BlankPage.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ContentGridDetailPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="ContentGridPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="DataGrid1Page.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="DataGrid2Page.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="DataGrid3Page.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="DataGridPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="ListDetailsDetailControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="ListDetailsPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
 

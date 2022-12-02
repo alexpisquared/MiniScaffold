@@ -1,12 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-using CommunityToolkit.Mvvm.ComponentModel;
-
-using QStatsTS4WinUI.Contracts.ViewModels;
-using QStatsTS4WinUI.Core.Contracts.Services;
-using QStatsTS4WinUI.Core.Models;
-
-namespace QStatsTS4WinUI.ViewModels;
+﻿namespace QStatsTS4WinUI.ViewModels;
 
 public class DataGrid3ViewModel : ObservableRecipient, INavigationAware
 {

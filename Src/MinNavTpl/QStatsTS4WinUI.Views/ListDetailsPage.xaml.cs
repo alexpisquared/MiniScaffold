@@ -15,7 +15,7 @@ public sealed partial class ListDetailsPage : Page
 
     public ListDetailsPage()
     {
-        ViewModel = App.GetService<ListDetailsViewModel>();
+        ViewModel = PageHelpers.GetService<ListDetailsViewModel>();
         InitializeComponent();
     }
 

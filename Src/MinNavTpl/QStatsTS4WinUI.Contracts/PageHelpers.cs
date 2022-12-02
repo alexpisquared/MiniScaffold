@@ -1,6 +1,8 @@
-﻿namespace QStatsTS4WinUI.Views;
+﻿using QStatsTS4WinUI.Views;
 
-internal static class PageHelpers
+namespace QStatsTS4WinUI.Contracts;
+
+public static class PageHelpers
 {
 
     public static T GetService<T>()

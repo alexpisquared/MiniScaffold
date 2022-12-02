@@ -1,8 +1,9 @@
-﻿using Microsoft.UI.Xaml;
+﻿using CommunityToolkit.Common.Parsers.Core;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.Xaml.Interactivity;
-
+using QStatsTS4WinUI.Contracts;
 using QStatsTS4WinUI.Contracts.Services;
 
 namespace QStatsTS4WinUI.Behaviors;
@@ -52,7 +53,7 @@ public class NavigationViewHeaderBehavior : Behavior<NavigationView>
     {
         base.OnAttached();
 
-        var navigationService = App.GetService<INavigationService>();
+        var navigationService = PageHelpers.GetService<INavigationService>();
         navigationService.Navigated += OnNavigated;
 
         _current = this;
@@ -62,7 +63,7 @@ public class NavigationViewHeaderBehavior : Behavior<NavigationView>
     {
         base.OnDetaching();
 
-        var navigationService = App.GetService<INavigationService>();
+        var navigationService = PageHelpers.GetService<INavigationService>();
         navigationService.Navigated -= OnNavigated;
     }
 

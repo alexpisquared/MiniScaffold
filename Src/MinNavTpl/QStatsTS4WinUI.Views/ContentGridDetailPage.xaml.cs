@@ -17,7 +17,7 @@ public sealed partial class ContentGridDetailPage : Page
 
     public ContentGridDetailPage()
     {
-        ViewModel = App.GetService<ContentGridDetailViewModel>();
+        ViewModel = PageHelpers.GetService<ContentGridDetailViewModel>();
         InitializeComponent();
     }
 
@@ -32,7 +32,7 @@ public sealed partial class ContentGridDetailPage : Page
         base.OnNavigatingFrom(e);
         if (e.NavigationMode == NavigationMode.Back)
         {
-            var navigationService = App.GetService<INavigationService>();
+            var navigationService = PageHelpers.GetService<INavigationService>();
 
             if (ViewModel.Item != null)
             {

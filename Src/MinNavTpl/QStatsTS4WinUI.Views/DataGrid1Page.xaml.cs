@@ -6,16 +6,16 @@ namespace QStatsTS4WinUI.Views;
 
 // TODO: Change the grid as appropriate for your app. Adjust the column definitions on DataGridPage.xaml.
 // For more details, see the documentation at https://docs.microsoft.com/windows/communitytoolkit/controls/datagrid.
-public sealed partial class DataGridPage : Page
+public sealed partial class DataGrid1Page : Page
 {
-    public DataGridViewModel ViewModel
+    public DataGrid1ViewModel ViewModel
     {
         get;
     }
 
-    public DataGridPage()
+    public DataGrid1Page()
     {
-        ViewModel = App.GetService<DataGridViewModel>();
+        ViewModel = PageHelpers.GetService<DataGrid1ViewModel>();
         InitializeComponent();
     }
 }
