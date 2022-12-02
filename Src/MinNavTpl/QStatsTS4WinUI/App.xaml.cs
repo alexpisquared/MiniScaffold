@@ -1,4 +1,7 @@
-﻿namespace QStatsTS4WinUI;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Configuration;
+
+namespace QStatsTS4WinUI;
 
 // To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
 public partial class App : Application, IApp
@@ -73,13 +76,24 @@ public partial class App : Application, IApp
             // Configuration
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
 
-            // Also
-            _ = services.AddTransient(sp => new QstatsRlsContext("""Server=.\SqlExpress;Database=QStatsRLS;Trusted_Connection=True;Encrypt=False;"""));
+            // ...Also
+            var cfg = new ConfigurationBuilder().AddUserSecrets<WhatIsThatForType>().Build();
+            services.AddSingleton<IConfigurationRoot>(cfg);
+
+            services.AddTransient(sp =>
+            {
+                var cfg = sp.GetRequiredService<IConfigurationRoot>();
+                return new QstatsRlsContext(cfg?["SqlConStr"] ?? throw new ArgumentNullException("llakfjasldf"));
+            });
         }).
         Build();
         AppHelpers.GetService<IAppNotificationService>().Initialize();
 
         UnhandledException += App_UnhandledException;
+    }
+    class WhatIsThatForType
+    {
+        public string MyProperty { get; } = "<Default Value of Nothing Special>";
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)

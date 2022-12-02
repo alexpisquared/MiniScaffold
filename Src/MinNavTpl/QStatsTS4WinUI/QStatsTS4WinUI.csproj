@@ -13,6 +13,7 @@
     <Nullable>enable</Nullable>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <UserSecretsId>91abb5ab-5bcb-4182-ab74-2685b32d8e36</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
