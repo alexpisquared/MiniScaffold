@@ -89,7 +89,6 @@ public partial class App : Application, IApp
     }
     class WhatIsThatForType
     {
-        public string MyProperty { get; } = "<Default Value of Nothing Special>";
     }
 
     private void App_UnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
