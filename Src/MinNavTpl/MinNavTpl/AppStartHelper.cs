@@ -10,7 +10,5 @@ public static class AppStartHelper
       levels: Settings.Default.LogLevels).CreateLogger<MainNavView>());
 
     _ = services.AddSingleton<IBpr, Bpr>(); // _ = VersionHelper_.IsDbgAndRBD ? services.AddSingleton<IBpr, Bpr>() : services.AddSingleton<IBpr, BprSilentMock>();
-
-    //_ = services.AddTransient(sp => new QstatsRlsContext(DbxExt.CalcConStr<QstatsRlsContext>(sp, DevOps.IsDevMachineH ? @".\SqlExpress" : @"mtDEVsqlDB", CfgName.SqlVerIpm)));
   }
 }
