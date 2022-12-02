@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Configuration;
-
-namespace QStatsTS4WinUI;
-
+﻿namespace QStatsTS4WinUI;
 // To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
 public partial class App : Application, IApp
 {
@@ -28,59 +24,59 @@ public partial class App : Application, IApp
         ConfigureServices((context, services) =>
         {
             // Default Activation Handler
-            services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
+            _ = services.AddTransient<ActivationHandler<LaunchActivatedEventArgs>, DefaultActivationHandler>();
 
             // Other Activation Handlers
-            services.AddTransient<IActivationHandler, AppNotificationActivationHandler>();
+            _ = services.AddTransient<IActivationHandler, AppNotificationActivationHandler>();
 
             // Services
-            services.AddSingleton<IAppNotificationService, AppNotificationService>();
-            services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
-            services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
-            services.AddTransient<INavigationViewService, NavigationViewService>();
+            _ = services.AddSingleton<IAppNotificationService, AppNotificationService>();
+            _ = services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
+            _ = services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
+            _ = services.AddTransient<INavigationViewService, NavigationViewService>();
 
-            services.AddSingleton<IActivationService, ActivationService>();
-            services.AddSingleton<IPageService, PageService>();
-            services.AddSingleton<INavigationService, NavigationService>();
+            _ = services.AddSingleton<IActivationService, ActivationService>();
+            _ = services.AddSingleton<IPageService, PageService>();
+            _ = services.AddSingleton<INavigationService, NavigationService>();
 
             // Core Services
-            services.AddSingleton<ISampleDataService, SampleDataService>();
-            services.AddSingleton<IFileService, FileService>();
+            _ = services.AddSingleton<ISampleDataService, SampleDataService>();
+            _ = services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
-            services.AddTransient<SettingsViewModel>();
-            services.AddTransient<SettingsPage>();
-            services.AddTransient<DataGrid3ViewModel>();
-            services.AddTransient<DataGrid3Page>();
-            services.AddTransient<DataGrid2ViewModel>();
-            services.AddTransient<DataGrid2Page>();
-            services.AddTransient<DataGrid1ViewModel>();
-            services.AddTransient<DataGrid1Page>();
-            services.AddTransient<ContentGridDetailViewModel>();
-            services.AddTransient<ContentGridDetailPage>();
-            services.AddTransient<ContentGridViewModel>();
-            services.AddTransient<ContentGridPage>();
-            services.AddTransient<ListDetailsViewModel>();
-            services.AddTransient<ListDetailsPage>();
-            services.AddTransient<DataGridViewModel>();
-            services.AddTransient<DataGridPage>();
-            services.AddTransient<Blank1ViewModel>();
-            services.AddTransient<Blank1Page>();
-            services.AddTransient<BlankViewModel>();
-            services.AddTransient<BlankPage>();
-            services.AddTransient<MainViewModel>();
-            services.AddTransient<MainPage>();
-            services.AddTransient<ShellPage>();
-            services.AddTransient<ShellViewModel>();
+            _ = services.AddTransient<SettingsViewModel>();
+            _ = services.AddTransient<SettingsPage>();
+            _ = services.AddTransient<DataGrid3ViewModel>();
+            _ = services.AddTransient<DataGrid3Page>();
+            _ = services.AddTransient<DataGrid2ViewModel>();
+            _ = services.AddTransient<DataGrid2Page>();
+            _ = services.AddTransient<DataGrid1ViewModel>();
+            _ = services.AddTransient<DataGrid1Page>();
+            _ = services.AddTransient<ContentGridDetailViewModel>();
+            _ = services.AddTransient<ContentGridDetailPage>();
+            _ = services.AddTransient<ContentGridViewModel>();
+            _ = services.AddTransient<ContentGridPage>();
+            _ = services.AddTransient<ListDetailsViewModel>();
+            _ = services.AddTransient<ListDetailsPage>();
+            _ = services.AddTransient<DataGridViewModel>();
+            _ = services.AddTransient<DataGridPage>();
+            _ = services.AddTransient<Blank1ViewModel>();
+            _ = services.AddTransient<Blank1Page>();
+            _ = services.AddTransient<BlankViewModel>();
+            _ = services.AddTransient<BlankPage>();
+            _ = services.AddTransient<MainViewModel>();
+            _ = services.AddTransient<MainPage>();
+            _ = services.AddTransient<ShellPage>();
+            _ = services.AddTransient<ShellViewModel>();
 
             // Configuration
-            services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
+            _ = services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
 
             // ...Also
             var cfg = new ConfigurationBuilder().AddUserSecrets<WhatIsThatForType>().Build();
-            services.AddSingleton<IConfigurationRoot>(cfg);
+            _ = services.AddSingleton<IConfigurationRoot>(cfg);
 
-            services.AddTransient(sp =>
+            _ = services.AddTransient(sp =>
             {
                 var cfg = sp.GetRequiredService<IConfigurationRoot>();
                 return new QstatsRlsContext(cfg?["SqlConStr"] ?? throw new ArgumentNullException("llakfjasldf"));

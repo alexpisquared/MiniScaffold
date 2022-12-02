@@ -16,4 +16,4 @@ global using QStatsTS4WinUI.Services;
 global using QStatsTS4WinUI.ViewModels;
 global using QStatsTS4WinUI.Views;
 global using WinUIEx;
-
+global using Microsoft.Extensions.Configuration;

@@ -12,7 +12,6 @@
       </controls:DataGrid.Resources>
       <controls:DataGrid.Columns>
         <controls:DataGridTextColumn Binding="{Binding AddedAt}" Header="AddedAt" />
-        <controls:DataGridTextColumn Binding="{Binding Company}" Header="Company" />
       </controls:DataGrid.Columns>
     </controls:DataGrid>
   </Grid>
