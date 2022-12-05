@@ -38,7 +38,7 @@ public partial class BaseDbVM : BaseMinVM
     IsBusy = false;
     _inited = true;
     //Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}");
-    Bpr.Finish();
+    //too many: Bpr.Finish();
     return await base.InitAsync();
   }
   public async override Task<bool> WrapAsync()
@@ -112,9 +112,9 @@ public partial class BaseDbVM : BaseMinVM
   async void GSReportStore_Chngd(string val) { GSReport = val; await RefreshReloadAsync(); }
   async void LetDbChgStore_Chngd(bool value) { LetDbChg = value; await RefreshReloadAsync(); }
 
-  [ObservableProperty] string? srvrName; partial void OnSrvrNameChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _SrvrNameStore.Change(value); UsrStgns.SrvrName = value; } }
-  [ObservableProperty] string? dtBsName; partial void OnDtBsNameChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _DtBsNameStore.Change(value); UsrStgns.DtBsName = value; } }
-  [ObservableProperty] string? gSReport; partial void OnGSReportChanged(string? value) { if (value is not null && _inited) { Bpr.Click(); _GSReportStore.Change(value); } }
+  [ObservableProperty] string? srvrName; partial void OnSrvrNameChanged(string? value) { if (value is not null && _inited) { _SrvrNameStore.Change(value); Bpr.Click(); UsrStgns.SrvrName = value; } }
+  [ObservableProperty] string? dtBsName; partial void OnDtBsNameChanged(string? value) { if (value is not null && _inited) { _DtBsNameStore.Change(value); Bpr.Click(); UsrStgns.DtBsName = value; } }
+  [ObservableProperty] string? gSReport; partial void OnGSReportChanged(string? value) { if (value is not null && _inited) {  _GSReportStore.Change(value); } }
   [ObservableProperty] bool letDbChg; partial void OnLetDbChgChanged(bool value) { _LetDbChgStore.Change(value); }
 
   ADUser? _ct; public ADUser? CurentUser { get => _ct; set { if (SetProperty(ref _ct, value) && value is not null) { WriteLine($"TrWL:> Curent User:  {value.FullName,-26} {value.A,-6}{value.W,-6}{value.R,-6}{value.L,-6}  {value.Permisssions}"); } } }
