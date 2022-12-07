@@ -92,7 +92,6 @@ public partial class MainVM : BaseMinVM
     catch (Exception ex) { Logger.LogError(ex, "│   ▄─▀─▄─▀─▄ -- Ignore"); }
   }
 
-
   protected readonly LetDbChgStore _letDbChStore;
   public SrvrNameStore SrvrNameStore { get; }
   public DtBsNameStore DtBsNameStore { get; }
