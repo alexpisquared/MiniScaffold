@@ -1,5 +1,6 @@
 ﻿global using System;
 global using DB.QStats.Std.Models;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
 global using Microsoft.UI.Xaml;
@@ -16,4 +17,3 @@ global using QStatsTS4WinUI.Services;
 global using QStatsTS4WinUI.ViewModels;
 global using QStatsTS4WinUI.Views;
 global using WinUIEx;
-global using Microsoft.Extensions.Configuration;

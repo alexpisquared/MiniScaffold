@@ -7,3 +7,5 @@ using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Style", "IDE0040:Add accessibility modifiers", Justification = "<Pending>", Scope = "member", Target = "~F:MinNavTpl.VM.VMs.BaseDbVM.includeClosed")]
 [assembly: SuppressMessage("Style", "IDE0040:Add accessibility modifiers", Justification = "<Pending>", Scope = "member", Target = "~F:MinNavTpl.VM.VMs.Page01VM.currentEmail")]
+[assembly: SuppressMessage("Style", "IDE0040:Add accessibility modifiers", Justification = "<Pending>", Scope = "member", Target = "~F:MinNavTpl.VM.VMs.Page02VM.currentEmail")]
+[assembly: SuppressMessage("Style", "IDE0040:Add accessibility modifiers", Justification = "<Pending>", Scope = "type", Target = "~T:MinNavTpl.VM.VMs.Page02VM")]

@@ -3,7 +3,7 @@ public partial class Page02VM : BaseEmVM
 {
     public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
       : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
-    public override async Task<bool> InitAsync()
+    public async override Task<bool> InitAsync()
     {
         try
         {
@@ -30,8 +30,5 @@ public partial class Page02VM : BaseEmVM
     }
 
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] VEmailAvailProd? currentEmail; // demo only.
-    [ObservableProperty] VEmailAvailProd? selectdEmail; partial void OnSelectdEmailChanged(VEmailAvailProd? value)
-    {
-        if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); }
-    } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
+    [ObservableProperty] VEmailAvailProd? selectdEmail; partial void OnSelectdEmailChanged(VEmailAvailProd? value) { if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); } } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 }
