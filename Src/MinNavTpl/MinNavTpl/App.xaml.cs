@@ -21,7 +21,7 @@ public partial class App : System.Windows.Application
     ShutdownMode = ShutdownMode.OnMainWindowClose;
   }
 
-  protected override async void OnStartup(StartupEventArgs e)
+  protected async override void OnStartup(StartupEventArgs e)
   {
     UnhandledExceptionHndlr.Logger = _serviceProvider.GetRequiredService<ILogger>();
     Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
@@ -42,7 +42,7 @@ public partial class App : System.Windows.Application
     var mainVM = (MainVM)MainWindow.DataContext;  // mainVM.DeploymntSrcExe = Settings.Default.DeplSrcExe; //todo: for future only.    
     _ = await mainVM.InitAsync();                 // blocking due to vesrion checker.
   }
-  protected override async void OnExit(ExitEventArgs e)
+  protected async override void OnExit(ExitEventArgs e)
   {
     if (Current is not null) Current.DispatcherUnhandledException -= UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
     _serviceProvider.GetRequiredService<QstatsRlsContext>().Dispose();

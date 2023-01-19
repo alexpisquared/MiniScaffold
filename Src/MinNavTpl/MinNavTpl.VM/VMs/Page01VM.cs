@@ -61,13 +61,14 @@ public partial class Page01VM : BaseEmVM
         }
         catch (Exception ex) { ex.Pop(); }
     }
-
     static bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
+
     [RelayCommand]
     void PBR()
     {
         Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); }
     }
+    
     [RelayCommand]
     void AddNewEmail()
     {
@@ -92,6 +93,7 @@ public partial class Page01VM : BaseEmVM
         }
         catch (Exception ex) { ex.Pop(); }
     }
+    
     [RelayCommand]
     async Task GetTopDetail()
     {
