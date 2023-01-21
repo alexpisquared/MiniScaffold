@@ -68,7 +68,7 @@ public partial class Page01VM : BaseEmVM
     {
         Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); }
     }
-    
+
     [RelayCommand]
     void AddNewEmail()
     {
@@ -93,7 +93,7 @@ public partial class Page01VM : BaseEmVM
         }
         catch (Exception ex) { ex.Pop(); }
     }
-    
+
     [RelayCommand]
     async Task GetTopDetail()
     {
