@@ -263,7 +263,7 @@
                       <ComboBox ItemsSource="{Binding SqlServrs}" SelectedItem="{Binding SrvrName}" BorderThickness="0" />
                       <ComboBox ItemsSource="{Binding DtBsNames}" SelectedItem="{Binding DtBsName}"  BorderThickness="0" />
                       <!--
-                      <MenuItem Header="S_QL Server Selection..." Command="{Binding OpenAppConfigCommand}" Visibility="{Binding CanSelectSQL, Converter={cnv:UniConverter}, FallbackValue=Collapsed}" />
+                      <MenuItem Header="S_QL Server Selection..."  Command="{Binding OpenAppConfigCommand}" Visibility="{Binding CanSelectSQL, Converter={cnv:UniConverter}, FallbackValue=Collapsed}" />
                       <Separator/>
                       <MenuItem Header="_All Cash by Group"        Command="{Binding UpdateViewCommand}" CommandParameter="AllCashByGroupVM" />
                       <MenuItem Header="_SP Fallback Runner"       Command="{Binding UpdateViewCommand}" CommandParameter="SPFallbackRunrVM" />
