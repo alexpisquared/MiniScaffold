@@ -9,9 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\NavigationDrawerControl\NavigationDrawerControl.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\NavigationDrawerControl\NavigationDrawerControl.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
     <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>

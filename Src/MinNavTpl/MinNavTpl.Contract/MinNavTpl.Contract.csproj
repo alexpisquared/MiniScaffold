@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj" />
   </ItemGroup>
 

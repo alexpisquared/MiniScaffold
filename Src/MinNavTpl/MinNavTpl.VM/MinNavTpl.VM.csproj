@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\EfDbHelperLib\EfDbHelperLib.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardContractsLib\StandardContractsLib.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\StandardLib\StandardLib.csproj" />
-    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Net.CI\WpfUserControlLib\WpfUserControlLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardLib\StandardLib.csproj" />
+    <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />
     <ProjectReference Include="..\..\..\..\CI-DPL-IMP\Src\SharedLib\CI.LDAP.Lib\CI.LDAP.Lib.csproj" />
     <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\Emailing.NET6\Emailing.NET6.csproj" />
     <ProjectReference Include="..\..\..\..\Util\Src\GenderApiLib\GenderApiLib.csproj" />
