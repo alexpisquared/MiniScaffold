@@ -90,7 +90,7 @@ public partial class App : System.Windows.Application
   {
     if (MessageBox.Show($"{reason}\n\nTry to fix config ecosystem?", "App Cfg Problem", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
     {
-      _ = ConfigHelper.AutoInitConfigHardcoded(enforceCreation: true);
+      _ = ConfigHelper.AutoInitConfigHardcoded(/*enforceCreation: true*/);
       _serviceProvider.GetRequiredService<ILogger>().LogWarning(reason);
       _ = Process.Start(new ProcessStartInfo(Assembly.GetEntryAssembly()?.Location.Replace(".dll", ".exe") ?? "Notepad.exe"));
     }

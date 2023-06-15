@@ -1,5 +1,5 @@
 ﻿namespace MinNavTpl.VM.Stores;
-public class UserSettings : UserSettingsBase // ..actually, not a store/store - just a concidence in naming.
+public class UserSettings : UserSettingsStore // ..actually, not a store/store - just a concidence in naming.
 {
   readonly bool _loaded;
   readonly ILogger? _logger;

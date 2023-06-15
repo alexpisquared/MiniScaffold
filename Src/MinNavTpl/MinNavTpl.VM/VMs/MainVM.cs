@@ -112,7 +112,7 @@ public partial class MainVM : BaseMinVM
   string _em = ""; public string EmailOfI { get => _em; set { if (SetProperty(ref _em, value, true) && value is not null && _loaded) { Bpr.Tick(); EmailOfIStore.Change(value); UsrStgns.EmailOfI = value; } } }
   bool _aw; public bool LetDbChg { get => _aw; set { if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Tick(); UsrStgns.LetDbChg = value; _letDbChStore.Change(value); } } }
 
-  string? _ds; public string DeploymntSrcExe { get => _ds ?? Deployment.DeplSrcExe; set => _ds = value; }
+  string? _ds; public string DeploymntSrcExe { get => _ds ?? "??Deployment.DeplSrcExe??"; set => _ds = value; }
   public IBpr Bpr { get; }
   public ILogger Logger { get; }
   public UserSettings UsrStgns { get; }
