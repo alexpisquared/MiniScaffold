@@ -3,7 +3,7 @@ public partial class Page04VM : BaseDbVM
 {
   int _thisCampaign;
 
-  public Page04VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
+  public Page04VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
     try
@@ -13,33 +13,33 @@ public partial class Page04VM : BaseDbVM
 
       await Task.Delay(22); // <== does not show up without this...............................
 
-      _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
+      _thisCampaign = Dbq.Campaigns.Max(r => r.Id);
 
 #if true
-      await Dbx.
+      await Dbq.
         Emails.
         Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaign)).
         //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
         LoadAsync();
 #else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
-     await Dbx.Emails.LoadAsync();
-     await Dbx.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
+     await Dbq.Emails.LoadAsync();
+     await Dbq.Leads.Where(r => r.CampaignId == _thisCampaign).LoadAsync();
 #endif 
 
-      await Dbx.LkuLeadStatuses.LoadAsync();
+      await Dbq.LkuLeadStatuses.LoadAsync();
 
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Leads.ToListAsync());
+      PageCvs = CollectionViewSource.GetDefaultView(Dbq.Leads.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Leads.ToListAsync());
 
       PageCvs.SortDescriptions.Add(new SortDescription(nameof(Lead.AddedAt), ListSortDirection.Descending));
       PageCvs.Filter = obj => obj is not Lead r || r is null || string.IsNullOrEmpty(SearchText) ||
         r.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
         r.OppCompany?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Leads.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
+      PageCvs = CollectionViewSource.GetDefaultView(Dbq.Leads.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-      LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbx.LkuLeadStatuses.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
+      LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbq.LkuLeadStatuses.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.Leads.Local.Count:N0} + {Dbx.Leads.Local.Count:N0} + {Dbx.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbq.Leads.Local.Count:N0} + {Dbq.Leads.Local.Count:N0} + {Dbq.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }
@@ -58,7 +58,7 @@ public partial class Page04VM : BaseDbVM
     try
     {
       var nl = new Lead { AddedAt = DateTime.Now, CampaignId = _thisCampaign, Note = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Lead" : Clipboard.GetText() };
-      Dbx.Leads.Local.Add(nl);
+      Dbq.Leads.Local.Add(nl);
 
       SelectdLead = nl;
     }

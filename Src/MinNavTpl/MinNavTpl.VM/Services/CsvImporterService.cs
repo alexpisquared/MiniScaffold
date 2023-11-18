@@ -3,10 +3,10 @@ public class CsvImporterService
 {
   int _nullRec = 0, _existDb = 0, _succss = 0;
 
-  public CsvImporterService(QstatsRlsContext dbx, ILogger lgr, DateTimeOffset now) => (Dbx, Lgr, Now) = (dbx, lgr, now);
+  public CsvImporterService(QstatsRlsContext dbq, ILogger lgr, DateTimeOffset now) => (Dbq, Lgr, Now) = (dbq, lgr, now);
 
   public ILogger Lgr { get; }
-  public QstatsRlsContext Dbx { get; }
+  public QstatsRlsContext Dbq { get; }
   public DateTimeOffset Now { get; }
 
   public async Task ImportCsvAsync(Action<string> ReportProgress)
@@ -74,9 +74,9 @@ public class CsvImporterService
 
     var eml = record.Email.Replace("@CI", "@unknwn").Replace("@ci", "@unknwn");
 
-    if (await Dbx.Emails.FindAsync(eml) is not null) { _existDb++; return "Already exists in DB"; }
+    if (await Dbq.Emails.FindAsync(eml) is not null) { _existDb++; return "Already exists in DB"; }
 
-    await Dbx.Emails.AddAsync(new Email
+    await Dbq.Emails.AddAsync(new Email
     {
       Id = eml,
       Fname = record.NameL.Split("|").LastOrDefault(),
@@ -96,9 +96,9 @@ public class CsvImporterService
   {
     if (co is null) { _nullRec++; return "co is NULL"; }
 
-    if (Dbx.Agencies.Find(co) is not null) { _existDb++; return "Already exists in DB"; }
+    if (Dbq.Agencies.Find(co) is not null) { _existDb++; return "Already exists in DB"; }
 
-    Dbx.Agencies.Add(new Agency
+    Dbq.Agencies.Add(new Agency
     {
       Id = co,
       Note = "from Pg00",

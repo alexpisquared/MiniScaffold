@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page05VM : BaseDbVM
 {
-  public Page05VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
+  public Page05VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
     try
@@ -10,12 +10,12 @@ public partial class Page05VM : BaseDbVM
       await Task.Delay(22); // <== does not show up without this...............................
       var sw = Stopwatch.StartNew();
 
-      await Dbx.PhoneAgencyXrefs.LoadAsync();
-      await Dbx.Phones.LoadAsync();
-      await Dbx.Emails.LoadAsync();
+      await Dbq.PhoneAgencyXrefs.LoadAsync();
+      await Dbq.Phones.LoadAsync();
+      await Dbq.Emails.LoadAsync();
 
-      await Dbx.Agencies.OrderBy(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
-      PageCvs = CollectionViewSource.GetDefaultView(Dbx.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Agencies.ToListAsync());
+      await Dbq.Agencies.OrderBy(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
+      PageCvs = CollectionViewSource.GetDefaultView(Dbq.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Agencies.ToListAsync());
       //PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.AddedAt), ListSortDirection.Descending));
       PageCvs.Filter = obj => obj is not Agency row || row is null || (
         string.IsNullOrEmpty(SearchText) ||
@@ -23,7 +23,7 @@ public partial class Page05VM : BaseDbVM
         row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
         (row.IsBroadcastee || IncludeClosed);
 
-      Lgr.Log(LogLevel.Trace, GSReport = $" {Dbx.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+      Lgr.Log(LogLevel.Trace, GSReport = $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
       return true;
     }
@@ -42,13 +42,13 @@ public partial class Page05VM : BaseDbVM
     await Task.Delay(222); // <== does not show busy anime up without this...............................
     try
     {
-      var emailAdrss = await Dbx.Emails.
+      var emailAdrss = await Dbq.Emails.
         GroupBy(e => e.Company).
         Select(r => new { Company = r.Key, Count = r.Count() }).ToListAsync();
 
       emailAdrss.ForEach(eml =>
       {
-        var exstg = Dbx.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
+        var exstg = Dbq.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
         if (exstg is not null)
         {
           if (exstg.TtlAgents != eml.Count)
@@ -60,11 +60,11 @@ public partial class Page05VM : BaseDbVM
         else
         {
           var nl = new Agency { Id = eml.Company ?? "■■ No way ■■", TtlAgents = eml.Count, AddedAt = Now };
-          Dbx.Agencies.Local.Add(nl);
+          Dbq.Agencies.Local.Add(nl);
         }
       });
 
-      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbx, "new agencies");
+      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbq, "new agencies");
     }
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = false; }

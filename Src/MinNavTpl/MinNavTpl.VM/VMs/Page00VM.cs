@@ -2,7 +2,7 @@
 public partial class Page00VM : BaseDbVM
 {
   readonly DateTimeOffset _now = DateTimeOffset.Now;
-  public Page00VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) => _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+  public Page00VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, 8110) => _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
   public override async Task<bool> InitAsync()
   {
     try
@@ -39,7 +39,7 @@ public partial class Page00VM : BaseDbVM
     {
       await Bpr.ClickAsync();
 
-      await new CsvImporterService(Dbx, Lgr, _now).ImportCsvAsync(ReportProgress);
+      await new CsvImporterService(Dbq, Lgr, _now).ImportCsvAsync(ReportProgress);
       await Bpr.TickAsync();
     }
     catch (Exception ex) { IsBusy = false; WriteLine(ex.Message); ex.Pop(Lgr); }

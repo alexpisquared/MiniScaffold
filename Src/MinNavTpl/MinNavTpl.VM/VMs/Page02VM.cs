@@ -1,8 +1,8 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
-    public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
-      : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
+    public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
+      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
     public async override Task<bool> InitAsync()
     {
         try
@@ -13,14 +13,14 @@ public partial class Page02VM : BaseEmVM
             var sw = Stopwatch.StartNew();
             var rv = await base.InitAsync();
 
-            await Dbx.VEmailAvailProds.LoadAsync();
-            PageCvs = CollectionViewSource.GetDefaultView(Dbx.VEmailAvailProds.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.VEmailAvailProds.ToListAsync());
+            await Dbq.VEmailAvailProds.LoadAsync();
+            PageCvs = CollectionViewSource.GetDefaultView(Dbq.VEmailAvailProds.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
             PageCvs.SortDescriptions.Add(new SortDescription(nameof(VEmailAvailProd.AddedAt), ListSortDirection.Descending));
             PageCvs.Filter = obj => obj is not VEmailAvailProd r || r is null || string.IsNullOrEmpty(SearchText) ||
               r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbx.VEmailAvailProds.Local.Count:N0} + {Dbx.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbq.VEmailAvailProds.Local.Count:N0} + {Dbq.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             Bpr.Finish(8);
             return rv;

@@ -4,7 +4,7 @@ public partial class BaseEmVM : BaseDbVM
 {
     protected List<string>? _badEmails;
     int _thisCampaign;
-    public BaseEmVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, UserSettings stg, EmailOfIStore eml, EmailDetailVM evm, int oid) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, oid)
+    public BaseEmVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, UserSettings stg, EmailOfIStore eml, EmailDetailVM evm, int oid) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, oid)
     {
         EmailOfIStore = eml; //EmailOfIStore.Changed += EmailOfIStore_Chngd;
         EmailOfIVM = evm;
@@ -15,9 +15,9 @@ public partial class BaseEmVM : BaseDbVM
         await Task.Delay(22); // <== does not show up without this...............................
         try
         {
-            _thisCampaign = Dbx.Campaigns.Max(r => r.Id);
+            _thisCampaign = Dbq.Campaigns.Max(r => r.Id);
 
-            _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbx.Database.GetConnectionString() ?? "??");
+            _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbq.Database.GetConnectionString() ?? "??");
         }
         catch (Exception ex) { ex.Pop(Lgr); return false; }
 

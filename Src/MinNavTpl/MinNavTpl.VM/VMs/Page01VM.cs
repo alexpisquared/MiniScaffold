@@ -1,8 +1,8 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page01VM : BaseEmVM
 {
-    public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
-      : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
+    public Page01VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
+      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
     public async override Task<bool> InitAsync()
     {
         try
@@ -13,11 +13,11 @@ public partial class Page01VM : BaseEmVM
             var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or else...
 
             var sw = Stopwatch.StartNew();
-            await Dbx.PhoneEmailXrefs.LoadAsync();
-            await Dbx.Phones.LoadAsync();
+            await Dbq.PhoneEmailXrefs.LoadAsync();
+            await Dbq.Phones.LoadAsync();
 
-            await Dbx.Emails.LoadAsync();
-            PageCvs = CollectionViewSource.GetDefaultView(Dbx.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbx.Emails.ToListAsync());
+            await Dbq.Emails.LoadAsync();
+            PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Emails.ToListAsync());
             PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
             PageCvs.Filter = obj => obj is not Email r || r is null ||
               ((string.IsNullOrEmpty(SearchText) ||
@@ -28,7 +28,7 @@ public partial class Page01VM : BaseEmVM
             await GetTopDetail();
             _ = PageCvs?.MoveCurrentToFirst();
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs?.Cast<Email>().Count():N0} / {Dbx.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs?.Cast<Email>().Count():N0} / {Dbq.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             Bpr.Finish(8);
             return rv;
@@ -55,9 +55,9 @@ public partial class Page01VM : BaseEmVM
         try
         {
             ArgumentNullException.ThrowIfNull(SelectdEmail, nameof(SelectdEmail));
-            var rowsAffected = await Dbx.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = Dbx.Emails.Local.Remove(SelectdEmail!);
+            var rowsAffected = await Dbq.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = Dbq.Emails.Local.Remove(SelectdEmail!);
             GSReport = $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
-            _ = Dbx.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
+            _ = Dbq.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
         }
         catch (Exception ex) { ex.Pop(); }
     }
@@ -72,7 +72,7 @@ public partial class Page01VM : BaseEmVM
     [RelayCommand]
     void AddNewEmail()
     {
-        try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() }; Dbx.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { ex.Pop(); }
+        try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() }; Dbq.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { ex.Pop(); }
     }
 
     [RelayCommand]
@@ -131,10 +131,10 @@ public partial class Page01VM : BaseEmVM
             var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
 
             SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
-            SelectdEmail.Ttl_Rcvd = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
-            SelectdEmail.Ttl_Sent = await Dbx.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
-            if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
-            if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbx.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
+            SelectdEmail.Ttl_Rcvd = await Dbq.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
+            SelectdEmail.Ttl_Sent = await Dbq.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
+            if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
+            if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
         }
     }
 }

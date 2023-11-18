@@ -6,7 +6,7 @@ public partial class BaseDbVM : BaseMinVM
     readonly ISecurityForcer _secForcer;
     protected bool _saving, _loading, _inited;
     protected readonly DateTime Now = DateTime.Now;
-    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
+    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
     {
         IsDevDbg = VersionHelper.IsDbg;
 
@@ -14,7 +14,7 @@ public partial class BaseDbVM : BaseMinVM
 
         Lgr = lgr;
         Cfg = cfg;
-        Dbx = dbx;
+        Dbq = dbq;
         Bpr = bpr;
         MainWin = (Window)win;
         UsrStgns = usrStgns;
@@ -37,7 +37,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         IsBusy = false;
         _inited = true;
-        //Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}");
+        //Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}");
         //too many: Bpr.Finish();
         return await base.InitAsync();
     }
@@ -45,14 +45,14 @@ public partial class BaseDbVM : BaseMinVM
     {
         try
         {
-            if (LetDbChg && Dbx.HasUnsavedChanges())
+            if (LetDbChg && Dbq.HasUnsavedChanges())
             {
                 switch (MessageBox.Show("Would you like to save the changes?\r\n\n..or select Cancel to stay on the page", "There are unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
                 {
                     default:
                     case MessageBoxResult.Cancel: return false;
-                    case MessageBoxResult.Yes: _ = await SaveLogReportOrThrowAsync(Dbx); break;
-                    case MessageBoxResult.No: Dbx.DiscardChanges(); break;
+                    case MessageBoxResult.Yes: _ = await SaveLogReportOrThrowAsync(Dbq); break;
+                    case MessageBoxResult.No: Dbq.DiscardChanges(); break;
                 }
             }
 
@@ -68,7 +68,7 @@ public partial class BaseDbVM : BaseMinVM
         catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); return false; }
         finally
         {
-            Lgr.LogInformation($"└── {GetType().Name} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbx.GetType().GetHashCode(),-10}  ");
+            Lgr.LogInformation($"└── {GetType().Name} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
         }
     }
     public override void Dispose()
@@ -89,11 +89,11 @@ public partial class BaseDbVM : BaseMinVM
         GSReport = msg; Lgr.Log(LogLevel.Trace, msg);
     }
 
-    async Task<string> SaveLogReportOrThrowAsync(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
+    async Task<string> SaveLogReportOrThrowAsync(DbContext dbq, string note = "", [CallerMemberName] string? cmn = "")
     {
         if (LetDbChg)
         {
-            var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrowAsync)} called by {cmn} on {dbx.GetType().Name}.  {note}");
+            var (success, rowsSaved, report) = await dbq.TrySaveReportAsync($" {nameof(SaveLogReportOrThrowAsync)} called by {cmn} on {dbq.GetType().Name}.  {note}");
             if (!success)
             {
                 throw new Exception(report);
@@ -166,7 +166,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         get;
     }
-    public QstatsRlsContext Dbx
+    public QstatsRlsContext Dbq
     {
         get;
     }
@@ -206,11 +206,11 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected void ChkDb4Cngs()
     {
-        Bpr.Click(); GSReport = Dbx.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbx.HasUnsavedChanges(); WriteLine(GSReport);
+        Bpr.Click(); GSReport = Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
     }
     [RelayCommand]
     protected async Task Save2Db()
     {
-        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
+        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }
 }
