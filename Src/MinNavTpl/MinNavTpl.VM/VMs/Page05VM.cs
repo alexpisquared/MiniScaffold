@@ -64,7 +64,7 @@ public partial class Page05VM : BaseDbVM
         }
       });
 
-      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrow(Dbx, "new agencies");
+      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbx, "new agencies");
     }
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = false; }

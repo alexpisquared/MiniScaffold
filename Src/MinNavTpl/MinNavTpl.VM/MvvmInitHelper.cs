@@ -1,4 +1,7 @@
-﻿namespace MinNavTpl.VM;
+﻿using Db.MinFinInv.PowerTools.Models;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace MinNavTpl.VM;
 public static class MvvmInitHelper
 {
     public static void InitMVVM(IServiceCollection services)
@@ -53,6 +56,7 @@ public static class MvvmInitHelper
         _ = services.AddTransient<UserSettings>();
 
         _ = services.AddTransient(sp => new QstatsRlsContext(CalcConStr<QstatsRlsContext>(sp, CfgName.SqlVerIpm)));
+        _ = services.AddTransient(sp => new MinFinInvDbContext());
     }
     public static string CalcConStr<T>(IServiceProvider sp, string sqlver)
     {

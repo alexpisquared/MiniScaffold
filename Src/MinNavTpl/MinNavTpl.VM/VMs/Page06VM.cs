@@ -1,7 +1,9 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using Db.MinFinInv.PowerTools.Models;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page06VM : BaseDbVM
 {
-  public Page06VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
+  public Page06VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbx, MinFinInvDbContext dbi, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbx, win, svr, dbs, gsr, awd, stg, 8110) { }
   public override async Task<bool> InitAsync()
   {
     try
@@ -64,7 +66,7 @@ public partial class Page06VM : BaseDbVM
         }
       });
 
-      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrow(Dbx, "new agencies");
+      ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbx, "new agencies");
     }
     catch (Exception ex) { ex.Pop(); }
     finally { IsBusy = false; }

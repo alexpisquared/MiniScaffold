@@ -51,7 +51,7 @@ public partial class BaseDbVM : BaseMinVM
                 {
                     default:
                     case MessageBoxResult.Cancel: return false;
-                    case MessageBoxResult.Yes: _ = await SaveLogReportOrThrow(Dbx); break;
+                    case MessageBoxResult.Yes: _ = await SaveLogReportOrThrowAsync(Dbx); break;
                     case MessageBoxResult.No: Dbx.DiscardChanges(); break;
                 }
             }
@@ -89,11 +89,11 @@ public partial class BaseDbVM : BaseMinVM
         GSReport = msg; Lgr.Log(LogLevel.Trace, msg);
     }
 
-    async Task<string> SaveLogReportOrThrow(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
+    async Task<string> SaveLogReportOrThrowAsync(DbContext dbx, string note = "", [CallerMemberName] string? cmn = "")
     {
         if (LetDbChg)
         {
-            var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrow)} called by {cmn} on {dbx.GetType().Name}.  {note}");
+            var (success, rowsSaved, report) = await dbx.TrySaveReportAsync($" {nameof(SaveLogReportOrThrowAsync)} called by {cmn} on {dbx.GetType().Name}.  {note}");
             if (!success)
             {
                 throw new Exception(report);
@@ -104,7 +104,7 @@ public partial class BaseDbVM : BaseMinVM
         }
         else
         {
-            GSReport = $"Current user permisssion \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
+            GSReport = $"Current user permission \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
             Lgr.LogWarning(GSReport.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
             await Bpr.BeepAsync(333, 2.5); // _ = MessageBox.Show(report, $"Not enough priviliges \t\t {DateTime.Now:MMM-dd HH:mm}", MessageBoxButton.OK, MessageBoxImage.Hand);
         }
@@ -211,6 +211,6 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected async Task Save2Db()
     {
-        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrow(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
+        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbx); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }
 }
