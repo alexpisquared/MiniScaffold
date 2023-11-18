@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="MinNavTpl.View.Spec.Page06View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page06VM}" 
+             d:DesignHeight="360" d:DesignWidth="1100" Padding="8" >
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type Label}"      BasedOn="{StaticResource lblTopLeft}" />
+      <Style TargetType="{x:Type TextBox}"    BasedOn="{StaticResource tbxRW}" >
+        <Setter Property="Margin"             Value="1"  />
+      </Style>
+      <Style TargetType="{x:Type Button}"     BasedOn="{StaticResource BtnBase}" >
+        <Setter Property="Margin"             Value="1"  />
+      </Style>
+
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="8"/>
+      <RowDefinition Height="200"/>
+    </Grid.RowDefinitions>
+
+    <Grid Name="ctrlPnl" Height="30">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <TextBlock  Text="Companies" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+
+        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="+_Bads " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+
+        <Button Content=" _Get " Command="{Binding Scan4newCoCommand}"  ToolTip="Scan Email table for new companies" Foreground="#0a0" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
+
+        <TextBlock>
+          <Run Text="     Slctd:" FontWeight="Light" />
+          <Run Text="{Binding SelectdAgency.Id}" FontWeight="Medium" />
+        </TextBlock>
+        <TextBlock>
+          <Run Text="     Crrnt:" FontWeight="Light" />
+          <Run Text="{Binding CurrentAgency.Id}" FontWeight="Medium" />
+        </TextBlock>
+      </StackPanel>
+
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
+    </Grid>
+
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentAgency}" SelectedItem="{Binding SelectdAgency}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
+              IsSynchronizedWithCurrentItem="True" >
+      <DataGrid.Columns>
+        <DataGridTextColumn     Header=" Agency"    Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
+        <DataGridCheckBoxColumn Header="Is OK  "    Binding="{Binding IsBroadcastee}" />
+        <DataGridTextColumn     Header=" Agents"    Binding="{Binding Emails.Count}"           IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneAgencyXrefs.Count}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Address"   Binding="{Binding Address}"   Width="180"/>
+        <DataGridTextColumn     Header=" Note"      Binding="{Binding Note}"      Width="*" />
+        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Grid Grid.Row="3" DataContext="{Binding SelectdAgency}" Background="#4888">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="240"/>
+        <ColumnDefinition Width="8"/>
+        <ColumnDefinition Width="130"/>
+        <ColumnDefinition Width="8"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="5"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <TextBlock                      Grid.Column="6" Grid.Row="1" Text="{Binding Id, FallbackValue='ABC Co'}"           HorizontalAlignment="Right"  />
+
+      <Label Content="   Agents"      Grid.Column="0" Grid.Row="1" />
+      <ListBox                        Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Emails}" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
+
+      <Label Content="   Phones"      Grid.Column="2" Grid.Row="1" />
+      <ListBox                        Grid.Column="2" Grid.Row="2" ItemsSource="{Binding PhoneAgencyXrefs}" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneFormatConverter}}" ToolTip="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneToolTipConverter}}" Foreground="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneBrushConverter}}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <Label Content="Address"			  Grid.Column="4" Grid.Row="1" />
+      <TextBox                        Grid.Column="4" Grid.Row="2" Text="{Binding Address}"   />
+      <!--<Label Content="A_dded"         Grid.Column="5" Grid.Row="1" />
+      <TextBlock                      Grid.Column="5" Grid.Row="2" Text="{Binding AddedAt,    StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
+      <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" />
+      <TextBlock                      Grid.Column="7" Grid.Row="2" Text="{Binding ModifiedAt, StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />-->
+
+      <TextBox                        Grid.Column="4" Grid.Row="4" Text="{Binding Note,                     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="8" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
+    </Grid>
+
+    <GridSplitter Grid.Row="2" Grid.Column="0" />
+
+  </Grid>
+</UserControl>

@@ -19,6 +19,7 @@
     <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
     <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
     <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
+    <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F5" />
   </UserControl.InputBindings>
   <StackPanel Margin="0 10" >
     <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Page 01">
@@ -51,8 +52,9 @@
     <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-orange.ico"      Width="32" />
-          <TextBlock Text="$" Padding="8 0 0 0" FontWeight="Bold" FontSize="18" Foreground="#0e0" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
+          <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
+          <TextBlock Text="&#x0091;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#fff" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Leads"/>
       </StackPanel>
@@ -85,14 +87,13 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" EmlDtl"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="UserPermissionerVM" ToolTip="Permission Manager" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
+    <nav:NavDrawerItem Command="{Binding NavigatePage06Command}" CommandParameter="UserPermissionerVM" ToolTip="Min Fin Inv" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
-          <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
-          <TextBlock Text="&#x0091;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#fff" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
+          <TextBlock Text="$" Padding="8 0 0 0" FontWeight="Bold" FontSize="18" Foreground="#0e0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Page04"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Min Fin Inv"/>
       </StackPanel>
     </nav:NavDrawerItem>
 

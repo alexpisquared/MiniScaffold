@@ -25,6 +25,9 @@
   <DataTemplate DataType="{x:Type vv:Page05VM}">
     <view_Spec______________________:Page05View/>
   </DataTemplate>
+  <DataTemplate DataType="{x:Type vv:Page06VM}">
+    <view_Spec______________________:Page06View/>
+  </DataTemplate>
   <DataTemplate DataType="{x:Type vv:EmailDetailVM}">
     <view_Spec______________________:EmailDetailView/>
   </DataTemplate>
