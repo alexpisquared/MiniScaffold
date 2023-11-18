@@ -17,6 +17,7 @@
     <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
     <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
     <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
+    <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F6" />
   </UserControl.InputBindings>
   <Grid x:Name="ZommablePanel" Tag="//tu: Grid with round corners!!! => must be a Style. ???????">
     <Grid.ColumnDefinitions>

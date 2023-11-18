@@ -19,7 +19,7 @@
     <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
     <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
     <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
-    <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F5" />
+    <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F6" />
   </UserControl.InputBindings>
   <StackPanel Margin="0 10" >
     <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Page 01">

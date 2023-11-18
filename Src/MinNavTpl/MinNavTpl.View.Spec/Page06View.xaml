@@ -70,55 +70,25 @@
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentInvAccount}" SelectedItem="{Binding SelectdInvAccount}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
               IsSynchronizedWithCurrentItem="True" >
       <DataGrid.Columns>
-        <DataGridTextColumn     Header=" InvAccount"    Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
         <DataGridCheckBoxColumn Header="Is OK  "    Binding="{Binding IsBroadcastee}" />
-        <DataGridTextColumn     Header=" Agents"    Binding="{Binding Emails.Count}"           IsReadOnly="True" />
-        <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneInvAccountXrefs.Count}" IsReadOnly="True" />
-        <DataGridTextColumn     Header=" Address"   Binding="{Binding Address}"   Width="180"/>
-        <DataGridTextColumn     Header=" Note"      Binding="{Binding Note}"      Width="*" />
-        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
-        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Id"       Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
+        <DataGridTextColumn     Header=" Txns"     Binding="{Binding AcntHists.Count}"           IsReadOnly="True" />
+        
+        <DataGridTextColumn     Header=" Note"      Binding="{Binding Notes}"     Width="*" />
+        <DataGridTextColumn     Header=" Added"     Binding="{Binding RowAddedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
       </DataGrid.Columns>
     </DataGrid>
 
     <Grid Grid.Row="3" DataContext="{Binding SelectdInvAccount}" Background="#4888">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" MinWidth="240"/>
-        <ColumnDefinition Width="8"/>
-        <ColumnDefinition Width="130"/>
-        <ColumnDefinition Width="8"/>
-        <ColumnDefinition Width="*"/>
-      </Grid.ColumnDefinitions>
       <Grid.RowDefinitions>
-        <RowDefinition Height="5"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
 
-      <TextBlock                      Grid.Column="6" Grid.Row="1" Text="{Binding Id, FallbackValue='ABC Co'}"           HorizontalAlignment="Right"  />
+      <Label Content="   Txns" Grid.Row="0" />
+      <TextBlock               Grid.Row="0" Text="{Binding Id, FallbackValue='ABC Co'}"           HorizontalAlignment="Center"  />
+      <DataGrid                Grid.Row="1" ItemsSource="{Binding AcntHists}" AutoGenerateColumns="True" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
 
-      <Label Content="   Agents"      Grid.Column="0" Grid.Row="1" />
-      <ListBox                        Grid.Column="0" Grid.Row="2" ItemsSource="{Binding Emails}" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
-
-      <Label Content="   Phones"      Grid.Column="2" Grid.Row="1" />
-      <ListBox                        Grid.Column="2" Grid.Row="2" ItemsSource="{Binding PhoneInvAccountXrefs}" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
-        <ListBox.ItemTemplate>
-          <DataTemplate>
-            <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneFormatConverter}}" ToolTip="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneToolTipConverter}}" Foreground="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneBrushConverter}}" />
-          </DataTemplate>
-        </ListBox.ItemTemplate>
-      </ListBox>
-
-      <Label Content="Address"			  Grid.Column="4" Grid.Row="1" />
-      <TextBox                        Grid.Column="4" Grid.Row="2" Text="{Binding Address}"   />
-      <!--<Label Content="A_dded"         Grid.Column="5" Grid.Row="1" />
-      <TextBlock                      Grid.Column="5" Grid.Row="2" Text="{Binding AddedAt,    StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt" />
-      <Label Content="ModifiedAt"     Grid.Column="7" Grid.Row="1" />
-      <TextBlock                      Grid.Column="7" Grid.Row="2" Text="{Binding ModifiedAt, StringFormat='{}{0:y-M-d}'}" Height="24" Margin="0,1" Width="102"  Name="dpAdAt2" />-->
-
-      <TextBox                        Grid.Column="4" Grid.Row="4" Text="{Binding Note,                     Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" Grid.ColumnSpan="8" TextWrapping="WrapWithOverflow" VerticalAlignment="Stretch" SpellCheck.IsEnabled="True" AcceptsReturn="True" x:Name="tbxNote" />
     </Grid>
 
     <GridSplitter Grid.Row="2" Grid.Column="0" />
