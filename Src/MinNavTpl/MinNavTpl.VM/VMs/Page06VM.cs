@@ -1,5 +1,4 @@
 ﻿using Db.MinFinInv.PowerTools.Models;
-using static CommunityToolkit.Mvvm.ComponentModel.__Internals.__TaskExtensions.TaskAwaitableWithoutEndValidation;
 
 namespace MinNavTpl.VM.VMs;
 public partial class Page06VM : BaseDbVM
@@ -8,7 +7,7 @@ public partial class Page06VM : BaseDbVM
     {
         Dbi = dbi;
     }
-    public override async Task<bool> InitAsync()
+    public async override Task<bool> InitAsync()
     {
         try
         {
@@ -23,17 +22,19 @@ public partial class Page06VM : BaseDbVM
 
             PageCvs.SortDescriptions.Add(new SortDescription(nameof(InvAccount.RowAddedAt), ListSortDirection.Descending));
 
-            PageCvs.Filter = obj => obj is not InvAccount row || row is null || (
+            PageCvs.Filter = obj => obj is not InvAccount row || row is null ||
               string.IsNullOrEmpty(SearchText) ||
               row.AcntNumber?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               row.DfsPlanNum?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               row.DfsClientId?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true);
+              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
             Lgr.Log(LogLevel.Trace, GSReport = $" {Dbi.InvAccounts.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             return true;
-        } catch (Exception ex) { ex.Pop(Lgr); return false; } finally { _ = await base.InitAsync(); }
+        }
+        catch (Exception ex) { ex.Pop(Lgr); return false; }
+        finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
 
@@ -44,7 +45,6 @@ public partial class Page06VM : BaseDbVM
     {
         get;
     }
-
 
     [RelayCommand]
     void ChkDb4CngsMfi()
