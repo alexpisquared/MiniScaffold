@@ -14,7 +14,7 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<LetDbChgStore>();
 
         if (VersionHelper.IsDbg) //tu: Start Page controller.
-            _ = services.AddSingleton<INavSvc, Page01NavSvc>();
+            _ = services.AddSingleton<INavSvc, Page06NavSvc>();
         else if (Environment.GetCommandLineArgs().Length > 4)
             _ = services.AddSingleton<INavSvc, Page04NavSvc>();
         else

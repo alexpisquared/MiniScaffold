@@ -1,4 +1,5 @@
 ﻿using Db.MinFinInv.PowerTools.Models;
+using static CommunityToolkit.Mvvm.ComponentModel.__Internals.__TaskExtensions.TaskAwaitableWithoutEndValidation;
 
 namespace MinNavTpl.VM.VMs;
 public partial class Page06VM : BaseDbVM
@@ -15,7 +16,7 @@ public partial class Page06VM : BaseDbVM
             await Task.Delay(22); // <== does not show up without this...............................
             var sw = Stopwatch.StartNew();
 
-            await Dbi.AcntHists.LoadAsync();
+            await Dbi.AcntHists.OrderByDescending(r => r.Date).LoadAsync();
             await Dbi.InvAccounts.OrderBy(r => r.AcntHists.Count).ThenBy(r => r.RowAddedAt).ThenBy(r => r.Id).LoadAsync();
 
             PageCvs = CollectionViewSource.GetDefaultView(Dbi.InvAccounts.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbi.InvAccounts.ToListAsync());
@@ -44,17 +45,16 @@ public partial class Page06VM : BaseDbVM
         get;
     }
 
+
     [RelayCommand]
-    async void Scan4newCo()
+    void ChkDb4CngsMfi()
     {
-        IsBusy = true;
-        await Task.Delay(222); // <== does not show busy anime up without this...............................
-        try { } catch (Exception ex) { ex.Pop(); } finally { IsBusy = false; }
+        Bpr.Click(); GSReport = Dbi.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbi.HasUnsavedChanges(); WriteLine(GSReport);
     }
 
     [RelayCommand]
-    void CloseInvAccount()
+    async Task Save2DbMfiAsync()
     {
-        if (SelectdInvAccount is not null) { SelectdInvAccount.Notes += " Blacklisted"; /*SelectdInvAccount.ModifiedAt = DateTime.Now;*/ }
+        try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
     }
 }

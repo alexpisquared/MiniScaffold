@@ -89,7 +89,7 @@ public partial class BaseDbVM : BaseMinVM
         GSReport = msg; Lgr.Log(LogLevel.Trace, msg);
     }
 
-    async Task<string> SaveLogReportOrThrowAsync(DbContext dbq, string note = "", [CallerMemberName] string? cmn = "")
+    protected async Task<string> SaveLogReportOrThrowAsync(DbContext dbq, string note = "", [CallerMemberName] string? cmn = "")
     {
         if (LetDbChg)
         {
@@ -204,12 +204,13 @@ public partial class BaseDbVM : BaseMinVM
     }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
     [RelayCommand]
-    protected void ChkDb4Cngs()
+    protected  void ChkDb4Cngs()
     {
         Bpr.Click(); GSReport = Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
     }
+    
     [RelayCommand]
-    protected async Task Save2Db()
+    protected async  Task Save2Db()
     {
         try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }

@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="MinNavTpl.View.Spec.Page06View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
              xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:Page06VM}" 
-             d:DesignHeight="360" d:DesignWidth="1100" Padding="8" >
+             d:DesignHeight="260" d:DesignWidth="1100" Padding="8" >
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
@@ -31,7 +31,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="8"/>
-      <RowDefinition Height="200"/>
+      <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
 
     <Grid Name="ctrlPnl" Height="30">
@@ -42,7 +42,7 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Companies" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
+      <TextBlock  Text="Min Fin Inv" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
 
@@ -50,9 +50,8 @@
         <TextBox Margin="6 0" Width="120" FontSize="16" Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="+_Bads " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
-        <Button Content=" _Get " Command="{Binding Scan4newCoCommand}"  ToolTip="Scan Email table for new companies" Foreground="#0a0" />
-        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
-        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsMfiCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbMfiCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock>
           <Run Text="     Slctd:" FontWeight="Light" />
@@ -63,19 +62,31 @@
           <Run Text="{Binding CurrentInvAccount.Id}" FontWeight="Medium" />
         </TextBlock>
       </StackPanel>
-
-      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
-    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentInvAccount}" SelectedItem="{Binding SelectdInvAccount}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4"
-              IsSynchronizedWithCurrentItem="True" >
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentInvAccount}" SelectedItem="{Binding SelectdInvAccount}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" IsSynchronizedWithCurrentItem="True" >
       <DataGrid.Columns>
-        <DataGridCheckBoxColumn Header="Is OK  "    Binding="{Binding IsBroadcastee}" />
-        <DataGridTextColumn     Header=" Id"       Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
-        <DataGridTextColumn     Header=" Txns"     Binding="{Binding AcntHists.Count}"           IsReadOnly="True" />
-        
-        <DataGridTextColumn     Header=" Note"      Binding="{Binding Notes}"     Width="*" />
-        <DataGridTextColumn     Header=" Added"     Binding="{Binding RowAddedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <!--<DataGridCheckBoxColumn Header="Is OK "           Binding="{Binding IsBroadcastee}" />-->
+        <DataGridTextColumn     Header=" Id"              Binding="{Binding Id}"              IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Txns"            Binding="{Binding AcntHists.Count}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Institution"     Binding="{Binding Institution}"     IsReadOnly="True" Width="100" />
+        <DataGridTextColumn     Header=" AcntNumber"      Binding="{Binding AcntNumber}"      IsReadOnly="True" />
+        <DataGridTextColumn     Header=" DfsPlanNum"      Binding="{Binding DfsPlanNum}"      IsReadOnly="True" />
+        <DataGridTextColumn     Header=" DfsClientId"     Binding="{Binding DfsClientId}"     IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Advisor"         Binding="{Binding Advisor}"         IsReadOnly="True" Width="100" />
+        <DataGridTextColumn     Header=" Src"             Binding="{Binding SrcAccount}"      IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Trg"             Binding="{Binding TrgAccount}"      IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Opened On"       Binding="{Binding OpenedOn, Converter={cnv:SmartDateConverter}}"  IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Closed On"       Binding="{Binding ClosedOn, Converter={cnv:SmartDateConverter}}"  IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Bal Opening"     Binding="{Binding BalanceOpening, StringFormat='{}{0:N0}'}"       IsReadOnly="True" ElementStyle="{StaticResource RightAlignStyle}" />
+        <DataGridTextColumn     Header=" Bal Closing"     Binding="{Binding BalanceClosing, StringFormat='{}{0:N0}'}"       IsReadOnly="True" ElementStyle="{StaticResource RightAlignStyle}" />
+        <DataGridTextColumn     Header=" Total In"        Binding="{Binding TotalIn, StringFormat='{}{0:N0}'}"              IsReadOnly="True" ElementStyle="{StaticResource RightAlignStyle}" />
+        <DataGridTextColumn     Header=" Acnt Type"       Binding="{Binding AcntType}"        IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Acnt Holder"     Binding="{Binding AcntHolder}"      IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Sortable Flags"  Binding="{Binding SortableFlags}"   IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Acnt Added"      Binding="{Binding RowAddedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Notes"           Binding="{Binding Notes}"           IsReadOnly="False" Width="*" />
+        <DataGridTextColumn     Header=" Note 2023"       Binding="{Binding Note2023}"        IsReadOnly="False" Width="*" />
       </DataGrid.Columns>
     </DataGrid>
 
@@ -87,11 +98,9 @@
 
       <Label Content="   Txns" Grid.Row="0" />
       <TextBlock               Grid.Row="0" Text="{Binding Id, FallbackValue='ABC Co'}"           HorizontalAlignment="Center"  />
-      <DataGrid                Grid.Row="1" ItemsSource="{Binding AcntHists}" AutoGenerateColumns="True" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" />
+      <DataGrid                Grid.Row="1" ItemsSource="{Binding AcntHists}" DisplayMemberPath="Id" Grid.RowSpan="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" AutoGenerateColumns="True" ></DataGrid>
 
     </Grid>
-
     <GridSplitter Grid.Row="2" Grid.Column="0" />
-
   </Grid>
 </UserControl>
