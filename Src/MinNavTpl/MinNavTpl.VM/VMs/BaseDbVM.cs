@@ -82,7 +82,8 @@ public partial class BaseDbVM : BaseMinVM
     }
     public async virtual Task RefreshReloadAsync([CallerMemberName] string? cmn = "")
     {
-        WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() "); await Task.Yield();
+        WriteLine($"TrWL:> {cmn}->BaseDbVM.RefreshReloadAsync() ");
+        await Task.Yield();
     }
     protected void ReportProgress(string msg)
     {
@@ -118,7 +119,7 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly GSReportStore _GSReportStore;
     async void SrvrNameStore_Chngd(string val)
     {
-        SrvrName = val; await RefreshReloadAsync();
+        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { Lgr.LogError(ex, $"SrvrNameStore_Chngd({val})"); }
     }
     async void DtBsNameStore_Chngd(string val)
     {
@@ -204,13 +205,13 @@ public partial class BaseDbVM : BaseMinVM
     }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
     [RelayCommand]
-    protected  void ChkDb4Cngs()
+    protected void ChkDb4Cngs()
     {
         Bpr.Click(); GSReport = Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
     }
-    
+
     [RelayCommand]
-    protected async  Task Save2Db()
+    protected async Task Save2Db()
     {
         try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }
