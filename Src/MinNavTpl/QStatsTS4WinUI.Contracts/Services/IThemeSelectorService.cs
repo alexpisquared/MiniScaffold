@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml;
+﻿
+using Microsoft.UI.Xaml;
 
 namespace QStatsTS4WinUI.Contracts.Services;
 
