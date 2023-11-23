@@ -1,0 +1,23 @@
+{
+  "solution": {
+    "path": "MinNavTpl.sln",
+    "projects": [
+      "..\\..\\..\\AAV.Shared\\Src\\Db\\Db.MinFinInv.PowerTools\\Db.MinFinInv.PowerTools.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\Ambience\\AmbienceLib.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\EfDbHelperLib\\EfDbHelperLib.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\NavigationDrawerControl\\NavigationDrawerControl.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\StandardContractsLib\\StandardContractsLib.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\StandardLib\\StandardLib.csproj",
+      "..\\..\\..\\AAV.Shared\\Src\\NetLts\\WpfUserControlLib\\WpfUserControlLib.csproj",
+      "..\\..\\..\\CI-DPL-IMP\\Src\\SharedLib\\CI.LDAP.Lib\\CI.LDAP.Lib.csproj",
+      "..\\..\\..\\GigaHunt\\Src\\sln\\DB.QStats.Std\\DB.QStats.Std.csproj",
+      "..\\..\\..\\GigaHunt\\Src\\sln\\Emailing.NET6\\Emailing.NET6.csproj",
+      "..\\..\\..\\Util\\Src\\GenderApiLib\\GenderApiLib.csproj",
+      "MinNavTpl.Contract\\MinNavTpl.Contract.csproj",
+      "MinNavTpl.VM\\MinNavTpl.VM.csproj",
+      "MinNavTpl.View.Spec\\MinNavTpl.View.Spec.csproj",
+      "MinNavTpl.View\\MinNavTpl.View.csproj",
+      "MinNavTpl\\MinNavTpl.csproj"
+    ]
+  }
+}

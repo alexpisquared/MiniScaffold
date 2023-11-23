@@ -1,6 +1,4 @@
-﻿using Emailing.NET6;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
   readonly OutlookHelper6 _oh = new();

@@ -1,21 +1,18 @@
-﻿<Application x:Class="MinNavTpl.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:MinNavTpl">
+﻿<Application x:Class="MinNavTpl.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <Application.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/Anime.Base.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Anime.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Anime/IsObsoleteBurronStyle.xaml" />
         <ResourceDictionary Source="/WpfUserControlLib;component/Anime/SmartOpacityToggleAnimStyle.xaml" />
-        <!--<ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Iress.xaml" />-->
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
+        <!-- ^ For some reason ComboBox styling does not work off App.xaml: must be present in the target page ^
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Iress.xaml" />-->
         <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
       </ResourceDictionary.MergedDictionaries>
-
-      <!--<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />-->
-
     </ResourceDictionary>
-
   </Application.Resources>
 </Application>

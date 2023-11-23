@@ -22,16 +22,16 @@
     <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F6" />
   </UserControl.InputBindings>
   <StackPanel Margin="0 10" >
-    <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Page 01">
+    <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Agents / Emails">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <TextBlock Text="" Padding="2 2 0 0" FontFamily="Webdings" FontWeight="Normal" FontSize="22" Foreground="#cfd" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Emails/Agents"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Agents / Emails"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage02Command}" CommandParameter="MaxWithdrawSetupVM" ToolTip="Max Withdrawal Setup">
+    <nav:NavDrawerItem Command="{Binding NavigatePage02Command}" CommandParameter="MaxWithdrawSetupVM" ToolTip="Broadcast Emailer">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-yellow.ico"      Width="32" />
@@ -40,7 +40,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Broadcast"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage03Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
+    <nav:NavDrawerItem Command="{Binding NavigatePage03Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Outlook to DB updater">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
@@ -49,7 +49,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Outlook"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
+    <nav:NavDrawerItem Command="{Binding NavigatePage04Command}" CommandParameter="MinWithdrawSetupVM" ToolTip="Leads">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
@@ -59,7 +59,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Leads"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigatePage05Command}" CommandParameter="PmtProcessExportVM" ToolTip="Export RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding NavigatePage05Command}" CommandParameter="PmtProcessExportVM" ToolTip="Companies" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
@@ -68,7 +68,7 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Companies"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Import RIF-LIF Excel Files" >
+    <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="Email Detail" >
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
@@ -77,14 +77,14 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Email Detail"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="MinWithdrawSetupVM" ToolTip="Min Withdrawal Setup">
+    <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="MinWithdrawSetupVM" ToolTip="Email Detail">
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-green.ico"      Width="32" />
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
           <TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" EmlDtl"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Email Detail"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigatePage06Command}" CommandParameter="UserPermissionerVM" ToolTip="Min Fin Inv" Visibility="{Binding IsDevDbgViz, FallbackValue=Collapsed}" d:Visibility="Visible">

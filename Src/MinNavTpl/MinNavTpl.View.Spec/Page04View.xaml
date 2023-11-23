@@ -5,8 +5,8 @@
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
-        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+        <!--For some reason ComboBox styling does not work off App.xaml: must be present in the target page-->
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
@@ -134,8 +134,8 @@
       <TextBlock                    Grid.Column="5" Grid.Row="1" Text="{Binding Agency}"    FontSize="16"/>
 
       <Label    Grid.Column="0" Grid.Row="1"     Target="{Binding ElementName=cbxAgentLead}" Content="Agent E_mail" />
-      <ComboBox Grid.Column="1" Grid.Row="1" Height="22" Margin="0,2" x:Name="cbxAgentLead" IsEditable="False" 
-                ItemsSource="{Binding DataContext.PageCvs, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" DisplayMemberPath="Id" SelectedValuePath="Id" 
+      <ComboBox Grid.Column="1" Grid.Row="1" Margin="0" x:Name="cbxAgentLead" IsEditable="True" HorizontalAlignment="Stretch" 
+                ItemsSource="{Binding DataContext.AllEmailsList, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" DisplayMemberPath="Id" SelectedValuePath="Id" 
                 SelectedValue="{Binding AgentEmail, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=PropertyChanged}" >
         <ComboBox.ItemsPanel>
           <ItemsPanelTemplate>
