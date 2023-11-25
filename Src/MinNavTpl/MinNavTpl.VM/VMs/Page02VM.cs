@@ -46,7 +46,7 @@ public partial class Page02VM : BaseEmVM
     {
         if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = new(); partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
         GSReport = $" {value.Count:N0}  rows selected"; ;
     }
