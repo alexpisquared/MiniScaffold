@@ -84,7 +84,7 @@ public class CsvImporterService
       LastAction = record.Last,
       Company = GetCompany(record.Email),
       PermBanReason = "naa",
-      NotifyPriority = 999,
+      NotifyPriority = 7654,
       AddedAt = Now.Date
     });
 

@@ -74,12 +74,9 @@
               IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                        Width="200" IsReadOnly="True" />
-        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                     Width="100" />
-        <!--
-        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                     Width="100" />
-        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                   Width="100" />-->
+        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                     />
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                   />
-        <DataGridTemplateColumn Header=" Phone"   Width="31" >
+        <DataGridTemplateColumn Header=" Phone"                                                                 Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
@@ -88,16 +85,15 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             Width="100" Foreground="#f60" />
-        <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"  IsReadOnly="True"  />
+        <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
+        <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"     IsReadOnly="True"  />
         <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Rcvd"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#08f" />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                  IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#fa0" />
-        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                     FontSize="8" Width="*"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#08f" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#ff0" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" />
       </DataGrid.Columns>
     </DataGrid>
 
@@ -115,7 +111,7 @@
       </Grid.RowDefinitions>
 
       <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" HorizontalAlignment="Center">
-        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country" />
+        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country"               Visibility="Collapsed" />
         <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
         <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
         <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Delete from DB " Margin="48,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />

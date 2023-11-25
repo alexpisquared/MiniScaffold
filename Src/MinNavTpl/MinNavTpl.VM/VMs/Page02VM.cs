@@ -17,10 +17,7 @@ public partial class Page02VM : BaseEmVM
             await Dbq.Phones.LoadAsync();
             await Dbq.Emails
                 .Where(r => Dbq.VEmailAvailProds.Select(r => r.Id).Contains(r.Id))
-                .OrderBy(r => r.NotifyPriority).ThenByDescending(r => r.AddedAt)
-                .ThenByDescending(r => r.LastAction) //todo: add logic to set LastAction to the sent date of the last email sent to this email address, excluding the ASU emails.
-                .ThenByDescending(r => r.Fname)      // assuming that the a-z people are more busy closer to the a.
-                .ThenBy(r => r.Company)
+                .OrderBy(r => r.NotifyPriority)
                 .LoadAsync();
 
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());

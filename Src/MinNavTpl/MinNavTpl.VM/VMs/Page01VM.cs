@@ -8,7 +8,7 @@ public partial class Page01VM : BaseEmVM
         try
         {
             IsBusy = true;
-            Bpr.Start(8);
+            await Bpr.StartAsync(8);
             await Task.Delay(2); // <== does not show up without this...............................
             var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or else...
 
@@ -25,12 +25,12 @@ public partial class Page01VM : BaseEmVM
                 r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
               (IncludeClosed == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))));
 
-            await GetTopDetail();
+            await GetTopDetailAsync();
             _ = PageCvs?.MoveCurrentToFirst();
 
             Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs?.Cast<Email>().Count():N0} / {Dbq.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
-            Bpr.Finish(8);
+            await Bpr.FinishAsync(8);
             return rv;
         }
         catch (Exception ex) { ex.Pop(Lgr); return false; }
@@ -43,15 +43,16 @@ public partial class Page01VM : BaseEmVM
         if (value is not null && _loaded)
         {
             Bpr.Tick();
-            UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id);
-            Task.Run(GetDetailsForSelRow);
+            UsrStgns.EmailOfI = value.Id;
+            EmailOfIStore.Change(value.Id);
+            _ = Task.Run(GetDetailsForSelRowAsync);
         }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
     [RelayCommand(CanExecute = nameof(CanDel))]
-    async Task Del(Email? email)
+    async Task DelAsync(Email? email)
     {
-        Bpr.Click();
+        await Bpr.ClickAsync();
         try
         {
             ArgumentNullException.ThrowIfNull(SelectdEmail, nameof(SelectdEmail));
@@ -66,7 +67,7 @@ public partial class Page01VM : BaseEmVM
     [RelayCommand]
     void PBR()
     {
-        Bpr.Click(); try { if (SelectdEmail is null) return; SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. "; Nxt(); } catch (Exception ex) { ex.Pop(); }
+        Bpr.Click(); try { if (SelectdEmail is null) { return; } SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-exMsg}. "; Nxt(); } catch (Exception ex) { ex.Pop(); }
     }
 
     [RelayCommand]
@@ -76,31 +77,39 @@ public partial class Page01VM : BaseEmVM
     }
 
     [RelayCommand]
-    async void Cou()
+    async Task CouAsync()
     {
-        Bpr.Click();
+        await Bpr.ClickAsync();
+        await GetCountryFromWebServiceTaskAsync();
+    }
+
+    private async Task GetCountryFromWebServiceTaskAsync()
+    {
         try
         {
-            if (SelectdEmail?.Fname is not null)
+            if (SelectdEmail?.Fname is not null && SelectdEmail.Country is null)
             {
                 WriteLine($"■ ■ ■ cfg?[\"WhereAmI\"]: '{new ConfigurationBuilder().AddUserSecrets<Application>().Build()?["WhereAmI"]}'   \t <== ConfigurationBuilder().AddUserSecrets<Application>().");
 
                 ArgumentNullException.ThrowIfNull(Cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
-                var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
+                var (_, exMsg, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname);
 
-                SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
+                SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? exMsg ?? "?***?";
             }
         }
         catch (Exception ex) { ex.Pop(); }
     }
 
     [RelayCommand]
-    async Task GetTopDetail()
+    async Task GetTopDetailAsync()
     {
         //Bpr.Start(8);
         try
         {
-            if (PageCvs is null) return;
+            if (PageCvs is null)
+            {
+                return;
+            }
 
             var curpos = PageCvs.CurrentPosition;
 
@@ -108,33 +117,43 @@ public partial class Page01VM : BaseEmVM
             {
                 WriteLine($"== {i,3} {SelectdEmail?.Id}");
 
-                await GetDetailsForSelRow();
+                await GetDetailsForSelRowAsync();
 
                 j++;
 
                 if (PageCvs?.MoveCurrentToNext() != true)
+                {
                     break;
+                }
             }
 
             if (curpos > 0)
+            {
                 _ = (PageCvs?.MoveCurrentToPosition(curpos));
+            }
 
             //Bpr.Finish(8);
         }
         catch (Exception ex) { ex.Pop(); }
     }
 
-    async Task GetDetailsForSelRow()
+    async Task GetDetailsForSelRowAsync()
     {
         if (SelectdEmail is not null && SelectdEmail.Ttl_Sent is null)
         {
-            var (ts, dd, root) = await GenderApi.CallOpenAI(Cfg, SelectdEmail.Fname ?? throw new ArgumentNullException(), true);
-
-            SelectdEmail.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? dd ?? "?***?";
+            await GetCountryFromWebServiceTaskAsync();
+            
             SelectdEmail.Ttl_Rcvd = await Dbq.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R");
             SelectdEmail.Ttl_Sent = await Dbq.Ehists.CountAsync(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S");
-            if (SelectdEmail.Ttl_Rcvd > 0) SelectdEmail.LastRcvd = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
-            if (SelectdEmail.Ttl_Sent > 0) SelectdEmail.LastSent = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
+            if (SelectdEmail.Ttl_Rcvd > 0)
+            {
+                SelectdEmail.LastRcvd = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
+            }
+
+            if (SelectdEmail.Ttl_Sent > 0)
+            {
+                SelectdEmail.LastSent = await Dbq.Ehists.Where(r => r.EmailId == SelectdEmail.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
+            }
         }
     }
 }
