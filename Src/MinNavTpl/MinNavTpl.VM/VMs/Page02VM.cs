@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using Newtonsoft.Json.Linq;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
     public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
@@ -36,9 +38,34 @@ public partial class Page02VM : BaseEmVM
         return rv;
     }
 
+    [ObservableProperty] int topNumber = 10;
+    [ObservableProperty] string thisEmail = "pigida@gmail.com";
+    [ObservableProperty] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
     [ObservableProperty] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
     {
         if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
+    {
+        GSReport = $" {value.Count:N0}  rows selected"; ;
+    }
+
+    [RelayCommand]
+    void SendTopN()
+    {
+        GSReport = $" Sendging top {TopNumber} ..."; ;
+    }
+    [RelayCommand]
+    void SendSlct()
+    {
+        GSReport = $" Sendging {SelectedEmails.Count} selects"; ;
+        ; ;
+    }
+    [RelayCommand]
+    void SendThis()
+    {
+        GSReport = $" Sending to {ThisEmail}"; ;
+        ; ;
+    }
 }

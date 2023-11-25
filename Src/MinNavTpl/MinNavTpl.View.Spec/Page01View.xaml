@@ -85,6 +85,7 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
+        <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
         <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"     IsReadOnly="True"  />
@@ -176,8 +177,8 @@
     <GridSplitter Grid.Row="2" Grid.Column="0" />
     <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
 
-    <Viewbox Grid.RowSpan="4" Grid.ColumnSpan="3" >
-      <TextBlock Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" Text="Loading..." Foreground="Magenta" />
+    <Viewbox Grid.RowSpan="4" Grid.ColumnSpan="3" Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" d:Visibility="Collapsed">
+      <TextBlock Text="Loading..." Foreground="Magenta" />
     </Viewbox>
 
   </Grid>
