@@ -39,7 +39,7 @@ global using MinNavTpl.Stores;
 global using MinNavTpl.VM.Services;
 global using MinNavTpl.VM.Stores;
 global using MinNavTpl.VM.VMs;
-global using OutlookToDbWpfApp;
+global using Emailing.NET6.Helpers;
 global using StandardContractsLib;
 global using StandardLib.Base;
 global using StandardLib.Helpers;

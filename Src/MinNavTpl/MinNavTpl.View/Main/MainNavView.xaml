@@ -8,7 +8,7 @@
                 xmlns:vws="clr-namespace:MinNavTpl.View.Main"
                 xmlns:nav="clr-namespace:NavigationDrawerControl;assembly=NavigationDrawerControl"            
                 xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type=vms:MainVM}"  
-                Title="CI Permission Managers" MinWidth="1000" MinHeight="160" Style="{DynamicResource WindowStyle_Aav0}" Loaded="OnLoaded">
+                Title="Giga Hunt as MVVM" MinWidth="1000" MinHeight="160" Style="{DynamicResource WindowStyle_Aav0}" Loaded="OnLoaded">
   <WindowChrome.WindowChrome>
     <WindowChrome CaptionHeight="0" ResizeBorderThickness="10" />
   </WindowChrome.WindowChrome>

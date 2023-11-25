@@ -73,11 +73,11 @@
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
               IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                        MaxWidth="200" IsReadOnly="True" />
-        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                     MaxWidth="100" />
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                        Width="200" IsReadOnly="True" />
+        <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                     Width="100" />
         <!--
-        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                     MaxWidth="100" />
-        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                   MaxWidth="100" />-->
+        <DataGridTextColumn Header=" Lname"       Binding="{Binding Lname}"                                     Width="100" />
+        <DataGridTextColumn Header=" Company"     Binding="{Binding Company}"                                   Width="100" />-->
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                   />
         <DataGridTemplateColumn Header=" Phone"   Width="31" >
           <DataGridTemplateColumn.CellTemplate>
@@ -90,7 +90,7 @@
         </DataGridTemplateColumn>
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !OffMt"      Binding="{Binding DoNotNotifyOnOffMarketForCampaignId}"       IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             MaxWidth="100" Foreground="#f60" />
+        <DataGridTextColumn Header=" PermBan"     Binding="{Binding PermBanReason}"                             Width="100" Foreground="#f60" />
         <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"  IsReadOnly="True"  />
         <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
