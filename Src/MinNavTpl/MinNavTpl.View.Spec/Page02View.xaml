@@ -103,7 +103,7 @@
 
     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Left" Background="#4888" >
       <Label   Content="          _Mail to" Target="{Binding ElementName=tbMail}" />
-      <TextBox Text="{Binding ThisEmail, FallbackValue='pigida@gmail.com'}" Width="320" Margin="5" FontSize="16" ToolTip=""                        Foreground="#fcf" />
+      <TextBox Text="{Binding ThisEmail, FallbackValue='pigida@gmail.com'}" Width="320" Margin="5" FontSize="16" ToolTip=""       x:Name="tbMail"  modelForeground="#fcf" />
       <TextBox Text="{Binding ThisFName, FallbackValue='Sirs'}"             Width="110" Margin="5" FontSize="16" ToolTip="Fist name"               Foreground="#fcf" />
       <Button Content="Send" Command="{Binding SendThisCommand}"                        Margin="5"               ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" />
     </StackPanel>

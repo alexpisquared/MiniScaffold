@@ -18,7 +18,7 @@ public partial class Page02VM : BaseEmVM
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
             await Dbq.Emails
-                .Where(r => Dbq.VEmailAvailProds.Select(r => r.Id).Contains(r.Id))
+                .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id))
                 .OrderBy(r => r.NotifyPriority)
                 .LoadAsync();
 
