@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
     public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
@@ -11,7 +9,7 @@ public partial class Page02VM : BaseEmVM
         try
         {
             IsBusy = true;
-            Bpr.Start(8);
+            await Bpr.StartAsync(8);
 
             var sw = Stopwatch.StartNew();
 
@@ -28,9 +26,9 @@ public partial class Page02VM : BaseEmVM
               r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbq.VEmailAvailProds.Local.Count:N0} + {Dbq.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport = $"//todo: ({Dbq.VEmailAvailProds.Local.Count:N0} + {Dbq.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
-            Bpr.Finish(8);
+            await Bpr.FinishAsync(8);
         }
         catch (Exception ex) { ex.Pop(Lgr); return false; }
         finally { rv = await base.InitAsync(); }
@@ -46,26 +44,57 @@ public partial class Page02VM : BaseEmVM
     {
         if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = new(); partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
-        GSReport = $" {value.Count:N0}  rows selected"; ;
+        GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
     }
 
     [RelayCommand]
     void SendTopN()
     {
-        GSReport = $" Sendging top {TopNumber} ..."; ;
+        GSReport = $"//todo: Sendging top {TopNumber} ..."; ;
     }
     [RelayCommand]
     void SendSlct()
     {
-        GSReport = $" Sendging {SelectedEmails.Count} selects"; ;
+        GSReport = $"//todo: Sendging {SelectedEmails.Count} selects"; ;
         ; ;
     }
     [RelayCommand]
-    void SendThis()
+    async Task SendThisAsync()
     {
-        GSReport = $" Sending to {ThisEmail}"; ;
-        ; ;
+        try
+        {
+            GSReport = $"Sending to {ThisEmail}...";
+
+            var firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((ThisFName ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
+
+            var timestamp = DateTime.Now;
+            var (success, report) = await QStatusBroadcaster.SendLetter(ThisEmail, firstName, isAvailable: true, timestamp);
+            if (success)
+            {
+                var em = Dbq.Emails.FirstOrDefault(r => r.Id == ThisEmail && r.ReSendAfter != null);
+                if (em != null)
+                {
+                    em.ReSendAfter = null;
+                }
+
+                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, ThisEmail, firstName, "", "ASU Subj", "ASU Body + 4 CVs", timestamp, timestamp, "..from std broadcast send", "S");
+            }
+            else
+            {
+                var em = Dbq.Emails.FirstOrDefault(r => r.Id == ThisEmail);
+                if (em != null)
+                {
+                    em.PermBanReason = $"Err: {report}   {em.PermBanReason}";
+                }
+            }
+
+            var (_, _, report2) = await Dbq.TrySaveReportAsync();
+
+            GSReport = $"Sending to {ThisEmail}... done.   {report2}";
+        }
+        catch (Exception ex) { GSReport = $"Sending to {ThisEmail}... failed.   {ex.Message}"; ex.Pop(Lgr); }
+        finally { }
     }
 }
