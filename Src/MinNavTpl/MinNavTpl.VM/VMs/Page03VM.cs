@@ -271,7 +271,7 @@ public partial class Page03VM : BaseDbVM
               }
               else
               {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (a) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (v3) ");
               }
 
               ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@-");
@@ -288,7 +288,7 @@ public partial class Page03VM : BaseDbVM
               }
               else
               {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (b) ");
+                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v3b) ");
               }
 
               foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))

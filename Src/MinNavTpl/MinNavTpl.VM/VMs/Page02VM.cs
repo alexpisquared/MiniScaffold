@@ -37,8 +37,8 @@ public partial class Page02VM : BaseEmVM
     }
 
     [ObservableProperty] int topNumber = 10;
-    [ObservableProperty] string thisEmail = "pigida@gmail.com";
-    [ObservableProperty] string thisFName = "Oleksa";
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
     [ObservableProperty] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
     {
@@ -60,17 +60,15 @@ public partial class Page02VM : BaseEmVM
         GSReport = $"//todo: Sendging {SelectedEmails.Count} selects"; ;
         ; ;
     }
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
         try
         {
             GSReport = $"Sending to {ThisEmail}...";
 
-            var firstName = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase((ThisFName ?? "Sirs").ToLower()); // ALEX will be ALEX without .ToLower() (2020-12-03)
-
             var timestamp = DateTime.Now;
-            var (success, report) = await QStatusBroadcaster.SendLetter(ThisEmail, firstName, isAvailable: true, timestamp);
+            var (success, report) = await QStatusBroadcaster.SendLetter(ThisEmail, ThisFName, isAvailable: true, timestamp);
             if (success)
             {
                 var em = Dbq.Emails.FirstOrDefault(r => r.Id == ThisEmail && r.ReSendAfter != null);
@@ -79,7 +77,7 @@ public partial class Page02VM : BaseEmVM
                     em.ReSendAfter = null;
                 }
 
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, ThisEmail, firstName, "", "ASU Subj", "ASU Body + 4 CVs", timestamp, timestamp, "..from std broadcast send", "S");
+                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, ThisEmail, ThisFName, "", "ASU Subj", "ASU Body + 4 CVs", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
             {
@@ -97,4 +95,7 @@ public partial class Page02VM : BaseEmVM
         catch (Exception ex) { GSReport = $"Sending to {ThisEmail}... failed.   {ex.Message}"; ex.Pop(Lgr); }
         finally { }
     }
+    bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
+
+    string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo
 }

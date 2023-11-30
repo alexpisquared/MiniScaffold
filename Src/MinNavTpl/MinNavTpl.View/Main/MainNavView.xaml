@@ -407,7 +407,7 @@
                 <ListBoxItem Content="123 wonderful color" Foreground="#f88" />
                 <ListBoxItem Content="123 wonderful color" Foreground="#faa" />
               </ListBox>-->
-              <Button Content="r" FontFamily="Webdings" FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding HidePnlCommand}" Background="#555" Margin="0 -0" IsCancel="True" ToolTip="Close Popup" />
+              <Button Content="r" FontFamily="Webdings" FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" VerticalAlignment="Top" HorizontalAlignment="Right" Command="{Binding HidePnlCommand}" Background="Transparent" Margin="-3" IsCancel="True" ToolTip="Close Popup" />
             </Grid>
           </Border>
         </Grid>

@@ -232,7 +232,6 @@ public partial class MainVM : BaseMinVM
     [RelayCommand]
     void HidePnl()
     {
-        GSReport = "";
-        GSRepViz = Visibility.Collapsed;
+        GSReport = ""; GSRepViz = Visibility.Collapsed;
     }
 }

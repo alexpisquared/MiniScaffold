@@ -67,11 +67,14 @@
         </DataTemplate>
       </DataGrid.Resources>
       <DataGrid.Columns>
-        <DataGridTextColumn Binding="{Binding AgentEmailId}"    Header="Agent"  Width="Auto"/>
-        <DataGridTemplateColumn  Header="Rate" Width="Auto" SortMemberPath="HourlyRate">
+        <DataGridTextColumn Header="Agent"   Binding="{Binding AgentEmailId}" Width="Auto"/>
+
+        <DataGridTextColumn Header="   Rate" Binding="{Binding HourlyRate, StringFormat='{}{0:N1}'}" FontWeight="SemiBold" ElementStyle="{StaticResource RightAlignStyle}" Foreground="#aa0" />
+        <DataGridTextColumn Header="Hr/Day"	 Binding="{Binding HourPerDay, StringFormat='{}{0:N2}'}" FontWeight="SemiBold" ElementStyle="{StaticResource RightAlignStyle}" Foreground="#0af" />
+        <DataGridTemplateColumn  Header=" Ef. Rate " Width="Auto" SortMemberPath="HourlyRate">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBox Text="{Binding Path='HourlyRate'}" Foreground="{Binding Path='HourlyRate', Converter={cnv:QStatsConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
+              <TextBox Text="{Binding Path='RealRate', Mode=OneWay, StringFormat='{}{0:N1}'}" Foreground="{Binding Path='RealRate', Converter={cnv:QStatsConverter}}" FontWeight="Bold" Background="Transparent" BorderThickness="0" TextAlignment="Center" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
