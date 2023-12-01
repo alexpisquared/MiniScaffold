@@ -16,7 +16,7 @@ public partial class Page02VM : BaseEmVM
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
             await Dbq.Emails
-                .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id))
+                .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) != DevOps.IsDbg)
                 .OrderBy(r => r.NotifyPriority)
                 .LoadAsync();
 
@@ -42,7 +42,14 @@ public partial class Page02VM : BaseEmVM
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
     [ObservableProperty] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
     {
-        if (value is not null && _loaded) { Bpr.Tick(); UsrStgns.EmailOfI = value.Id; EmailOfIStore.Change(value.Id); }
+        if (!(value is not null && _loaded)) return;
+
+        Bpr.Tick();
+        UsrStgns.EmailOfI = value.Id;
+        EmailOfIStore.Change(value.Id);
+
+        ThisEmail = value.Id;
+
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
@@ -50,51 +57,77 @@ public partial class Page02VM : BaseEmVM
     }
 
     [RelayCommand]
-    void SendTopN()
+    async Task SendTopNAsync()
     {
-        GSReport = $"//todo: Sendging top {TopNumber} ..."; ;
+        GSReport = $"...";
+        await Bpr.StartAsync(8);
+
+        var i = 0;
+        foreach (Email email in PageCvs ?? throw new ArgumentNullException("@#@#@#@#!@#@!"))
+        {
+            if (++i >= TopNumber)
+            {
+                break;
+            }
+
+            await SendThisOneAsync(email.Id);
+        }
+
+        await Bpr.FinishAsync(8);
     }
     [RelayCommand]
-    void SendSlct()
+    async Task SendSlctAsync()
     {
-        GSReport = $"//todo: Sendging {SelectedEmails.Count} selects"; ;
-        ; ;
+        GSReport = $"...";
+        await Bpr.StartAsync(8);
+
+        foreach (var email in SelectedEmails ?? throw new ArgumentNullException("@#@#@#@#!@#@!"))
+        {
+            await SendThisOneAsync(email.Id);
+        }
+
+        await Bpr.FinishAsync(8);
     }
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
+        GSReport = $"...";
+        await Bpr.StartAsync(8);
+        await SendThisOneAsync(ThisEmail);
+        await Bpr.FinishAsync(8);
+    }
+
+    async Task SendThisOneAsync(string email)
+    {
         try
         {
-            GSReport = $"Sending to {ThisEmail}...";
+            GSReport += $"Sending to {email}... ";
 
             var timestamp = DateTime.Now;
-            var (success, report) = await QStatusBroadcaster.SendLetter(ThisEmail, ThisFName, isAvailable: true, timestamp);
+            var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp);
             if (success)
             {
-                var em = Dbq.Emails.FirstOrDefault(r => r.Id == ThisEmail && r.ReSendAfter != null);
+                var em = Dbq.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
                 if (em != null)
                 {
                     em.ReSendAfter = null;
                 }
 
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, ThisEmail, ThisFName, "", "ASU Subj", "ASU Body + 4 CVs", timestamp, timestamp, "..from std broadcast send", "S");
+                GSReport += "succeeded";
+                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
             {
-                var em = Dbq.Emails.FirstOrDefault(r => r.Id == ThisEmail);
-                if (em != null)
-                {
-                    em.PermBanReason = $"Err: {report}   {em.PermBanReason}";
-                }
+                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
+                GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
+                Lgr.Log(LogLevel.Error, GSReport);
+
+                //todo: need logic to inflict the PermaBan on the email address.
             }
-
-            var (_, _, report2) = await Dbq.TrySaveReportAsync();
-
-            GSReport = $"Sending to {ThisEmail}... done.   {report2}";
         }
-        catch (Exception ex) { GSReport = $"Sending to {ThisEmail}... failed.   {ex.Message}"; ex.Pop(Lgr); }
-        finally { }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
     }
+
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
     string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo

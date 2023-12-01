@@ -26,12 +26,12 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="36"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="2*"/>
       <ColumnDefinition Width="Auto"/>
-      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="1*"/>
     </Grid.ColumnDefinitions>
 
     <Grid x:Name="ctrlPnl" Height="30">
@@ -52,8 +52,8 @@
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
         <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
-        <Label Content="          Send" />
-        <Label Content="          _Send" Target="{Binding ElementName=tbFilter}" />
+        <Label Content="          Se_nd" Target="{Binding ElementName=tbFilte2}" />
+        <TextBox Margin="6 0" Width="27" FontSize="16" x:Name="tbFilte2" Text="{Binding TopNumber, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content=" Top # " Command="{Binding SendTopNCommand}" ToolTip="Set PBR to 'Not an Agent'" />
         <Button Content="Selects" Command="{Binding SendSlctCommand}" ToolTip="Do Not Notify - Available for this Camp-n" />
 
@@ -64,8 +64,8 @@
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
-    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" lcl:DataGridExtensions.SelectedItems="{Binding SelectedEmails}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
-              CanUserAddRows="False" SelectionMode="Extended" >
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" lcl:DataGridExtensions.SelectedItems="{Binding SelectedEmails}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" InitializingNewItem="OnInitNewItem" IsReadOnly="False" 
+              Margin="2 8 2 3" CanUserAddRows="False" SelectionMode="Extended" >
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="160" IsReadOnly="True" />
         <DataGridTextColumn Header=" Fname"       Binding="{Binding Fname}"                                        />
