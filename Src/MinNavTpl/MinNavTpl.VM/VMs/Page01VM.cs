@@ -10,7 +10,7 @@ public partial class Page01VM : BaseEmVM
             IsBusy = true;
             await Bpr.StartAsync(8);
             await Task.Delay(2); // <== does not show up without this...............................
-            var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or else...
+            var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
 
             var sw = Stopwatch.StartNew();
             await Dbq.PhoneEmailXrefs.LoadAsync();
@@ -28,7 +28,7 @@ public partial class Page01VM : BaseEmVM
             await GetTopDetailAsync();
             _ = PageCvs?.MoveCurrentToFirst();
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" {PageCvs?.Cast<Email>().Count():N0} / {Dbq.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ");
 
             await Bpr.FinishAsync(8);
             return rv;

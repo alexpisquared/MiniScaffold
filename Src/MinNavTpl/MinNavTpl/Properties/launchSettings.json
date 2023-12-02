@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MinNavTpl": {
+      "commandName": "Project",
+      "commandLineArgs": "Broad"
+    }
+  }
+}

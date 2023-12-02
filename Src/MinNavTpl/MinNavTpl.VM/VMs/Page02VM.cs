@@ -10,15 +10,25 @@ public partial class Page02VM : BaseEmVM
         {
             IsBusy = true;
             await Bpr.StartAsync(8);
+            await Task.Delay(2); // <== does not show up without this...............................
+            rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
 
             var sw = Stopwatch.StartNew();
 
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
-            await Dbq.Emails
-                .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) != DevOps.IsDbg)
-                .OrderBy(r => r.NotifyPriority)
-                .LoadAsync();
+
+            var emailQuery = DevOps.IsDbg ?
+                Dbq.Emails
+                    .Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f") )
+                    .OrderBy(r => r.NotifyPriority) :
+                Dbq.Emails
+                    .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true)
+                    .OrderBy(r => r.NotifyPriority);
+
+            Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
+
+            await emailQuery.LoadAsync();
 
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
             //redundant: PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
@@ -26,7 +36,13 @@ public partial class Page02VM : BaseEmVM
               r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-            Lgr.Log(LogLevel.Trace, GSReport = $"//todo: ({Dbq.VEmailAvailProds.Local.Count:N0} + {Dbq.VEmailAvailProds.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
+
+            if (Environment.GetCommandLineArgs().Contains("Broad")) //tu: Start Page startup controller.
+            {
+                //todo: .SpeakFAF($"Sending top {topmost} emails...");
+                await SendTopNAsync();                
+            }
 
             await Bpr.FinishAsync(8);
         }
@@ -36,7 +52,7 @@ public partial class Page02VM : BaseEmVM
         return rv;
     }
 
-    [ObservableProperty] int topNumber = 10;
+    [ObservableProperty] int topNumber = 2;
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
@@ -63,16 +79,17 @@ public partial class Page02VM : BaseEmVM
         await Bpr.StartAsync(8);
 
         var i = 0;
-        foreach (Email email in PageCvs ?? throw new ArgumentNullException("@#@#@#@#!@#@!"))
+        foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
         {
-            if (++i >= TopNumber)
+            if (++i > TopNumber)
             {
                 break;
             }
 
             await SendThisOneAsync(email.Id);
         }
-
+        
+        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         await Bpr.FinishAsync(8);
     }
     [RelayCommand]
@@ -81,7 +98,7 @@ public partial class Page02VM : BaseEmVM
         GSReport = $"...";
         await Bpr.StartAsync(8);
 
-        foreach (var email in SelectedEmails ?? throw new ArgumentNullException("@#@#@#@#!@#@!"))
+        foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
         {
             await SendThisOneAsync(email.Id);
         }
