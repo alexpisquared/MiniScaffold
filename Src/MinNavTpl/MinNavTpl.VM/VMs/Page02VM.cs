@@ -1,8 +1,13 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using AmbienceLib;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
-    public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm)
-      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, 8110) { }
+    public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm, ISpeechSynth synth)
+      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, 8110)
+    {
+        Synth = synth;
+    }
     public async override Task<bool> InitAsync()
     {
         var rv = false;
@@ -40,7 +45,7 @@ public partial class Page02VM : BaseEmVM
 
             if (Environment.GetCommandLineArgs().Contains("Broad")) //tu: Start Page startup controller.
             {
-                //todo: .SpeakFAF($"Sending top {topmost} emails...");
+                Synth.SpeakFAF($"Sending top {TopNumber} emails...");
                 await SendTopNAsync();                
             }
 
@@ -67,7 +72,14 @@ public partial class Page02VM : BaseEmVM
         ThisEmail = value.Id;
 
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = [];
+
+    public ISpeechSynth Synth
+    {
+        get;
+    }
+
+    partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
         GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
     }
@@ -130,7 +142,7 @@ public partial class Page02VM : BaseEmVM
                     em.ReSendAfter = null;
                 }
 
-                GSReport += "succeeded";
+                GSReport += "succeeded \r\n";
                 _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
@@ -142,7 +154,7 @@ public partial class Page02VM : BaseEmVM
                 //todo: need logic to inflict the PermaBan on the email address.
             }
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
     }
 
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
