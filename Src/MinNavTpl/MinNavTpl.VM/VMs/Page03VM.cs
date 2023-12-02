@@ -22,7 +22,7 @@ public partial class Page03VM : BaseDbVM
       ReportOL += $"{r1}{r2}";
       LoadVwSrcs();
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
@@ -37,7 +37,7 @@ public partial class Page03VM : BaseDbVM
       ReportOL += rv;
       LoadVwSrcs();
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
@@ -54,7 +54,7 @@ public partial class Page03VM : BaseDbVM
       WriteLine(rv);
       LoadVwSrcs();
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
@@ -71,7 +71,7 @@ public partial class Page03VM : BaseDbVM
       WriteLine(rv);
       LoadVwSrcs();
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
   [RelayCommand]
@@ -88,10 +88,10 @@ public partial class Page03VM : BaseDbVM
       WriteLine(rv);
       LoadVwSrcs();
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = !true; Bpr.Finish(); }
   }
-  [RelayCommand] void UpdateOL() { Bpr.Click(); try { MessageBox.Show("■"); } catch (Exception ex) { ex.Pop(); } }
+  [RelayCommand] void UpdateOL() { Bpr.Click(); try { MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); } }
   async Task DoReFaLa()
   {
     try
@@ -124,7 +124,7 @@ public partial class Page03VM : BaseDbVM
         }
       }
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { Bpr.Finish(); }
   }
   async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
@@ -221,7 +221,7 @@ public partial class Page03VM : BaseDbVM
               OutlookHelper6.MoveIt(trgFolder, mailItem);
             }
           }
-          catch (Exception ex) { ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
+          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
         } // for
 #if DEBUG
       } while (false);
@@ -232,7 +232,7 @@ public partial class Page03VM : BaseDbVM
       _newEmailsAdded += newEmailsAdded;
       report += OutlookHelper6.ReportSectionTtl(folderName, cnt, newEmailsAdded);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { WriteLine(""); }
 
     return report;
@@ -309,13 +309,13 @@ public partial class Page03VM : BaseDbVM
             else if (Debugger.IsAttached)
               Debugger.Break();
           }
-          catch (Exception ex) { ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
         }
 
         itemsFailes = _oh.GetItemsFromFolder(folderName);
       } while (prev != itemsFailes.Count);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
     _newEmailsAdded += newEmailsAdded;
     report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
@@ -375,13 +375,13 @@ public partial class Page03VM : BaseDbVM
             else
             if (Debugger.IsAttached) Debugger.Break(); else throw new Exception("AP: Review this case of missing row: must be something wrong.");
           }
-          catch (Exception ex) { ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
         }
 
         itemsTempAway = _oh.GetItemsFromFolder(folderName);
       } while (prev != itemsTempAway.Count);
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
     _newEmailsAdded += newEmailsAdded;
     report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
@@ -473,14 +473,14 @@ public partial class Page03VM : BaseDbVM
 
           WriteLine($"{rptLine}");
         }
-        catch (Exception ex) { ex.Pop($":{senderEmail}."); }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($":{senderEmail}."); }
 
         if (ttlProcessed % 10 == 0) ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
       }
 
       ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... \n";
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
     _newEmailsAdded += newEmailsAdded;
     report___ += OutlookHelper6.ReportSectionTtl(folderName, ttlProcessed, 0, newEmailsAdded);

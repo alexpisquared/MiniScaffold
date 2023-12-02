@@ -45,7 +45,7 @@ public partial class Page04VM : BaseDbVM
 
             return true;
         }
-        catch (Exception ex) { ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -65,7 +65,7 @@ public partial class Page04VM : BaseDbVM
 
             SelectdLead = nl;
         }
-        catch (Exception ex) { ex.Pop(); }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]

@@ -29,7 +29,7 @@ public partial class BaseDbVM : BaseMinVM
         _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_Chngd;
         _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_Chngd;
 
-        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
         Lgr.LogInformation($"┌── {GetType().Name} eo-ctor      PageRank:{oid}");
     }
@@ -65,7 +65,7 @@ public partial class BaseDbVM : BaseMinVM
 
             return true;
         }
-        catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }
         finally
         {
             Lgr.LogInformation($"└── {GetType().Name} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
@@ -119,7 +119,7 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly GSReportStore _GSReportStore;
     async void SrvrNameStore_Chngd(string val)
     {
-        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { Lgr.LogError(ex, $"SrvrNameStore_Chngd({val})"); }
+        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_Chngd({val})"); }
     }
     async void DtBsNameStore_Chngd(string val)
     {
@@ -213,6 +213,6 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected async Task Save2Db()
     {
-        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
+        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }
 }

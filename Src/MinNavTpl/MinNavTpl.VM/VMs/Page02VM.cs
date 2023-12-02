@@ -30,7 +30,7 @@ public partial class Page02VM : BaseEmVM
 
             await Bpr.FinishAsync(8);
         }
-        catch (Exception ex) { ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { rv = await base.InitAsync(); }
 
         return rv;
@@ -104,7 +104,7 @@ public partial class Page02VM : BaseEmVM
             GSReport += $"Sending to {email}... ";
 
             var timestamp = DateTime.Now;
-            var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp);
+            var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp, Lgr);
             if (success)
             {
                 var em = Dbq.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
@@ -125,7 +125,7 @@ public partial class Page02VM : BaseEmVM
                 //todo: need logic to inflict the PermaBan on the email address.
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));

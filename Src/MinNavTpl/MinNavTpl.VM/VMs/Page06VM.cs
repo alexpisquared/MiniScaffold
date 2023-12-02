@@ -33,7 +33,7 @@ public partial class Page06VM : BaseDbVM
 
             return true;
         }
-        catch (Exception ex) { ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -55,6 +55,6 @@ public partial class Page06VM : BaseDbVM
     [RelayCommand]
     async Task Save2DbMfiAsync()
     {
-        try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
+        try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
     }
 }

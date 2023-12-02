@@ -27,7 +27,7 @@ public partial class Page05VM : BaseDbVM
 
       return true;
     }
-    catch (Exception ex) { ex.Pop(Lgr); return false; }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
     finally { _ = await base.InitAsync(); }
   }
   public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -66,7 +66,7 @@ public partial class Page05VM : BaseDbVM
 
       ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbq, "new agencies");
     }
-    catch (Exception ex) { ex.Pop(); }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     finally { IsBusy = false; }
   }
 

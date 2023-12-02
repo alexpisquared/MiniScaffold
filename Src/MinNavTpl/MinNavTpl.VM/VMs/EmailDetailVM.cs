@@ -41,7 +41,7 @@ public partial class EmailDetailVM : BaseDbVM
 
       return true;
     }
-    catch (Exception ex) { ex.Pop(Lgr); return false; }
+    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
     finally { IsBusy = false; }
   }
   public override void Dispose()

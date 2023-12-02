@@ -18,7 +18,7 @@ public partial class BaseEmVM : BaseDbVM
 
             _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbq.Database.GetConnectionString() ?? "??");
         }
-        catch (Exception ex) { ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
 
         return await base.InitAsync();
     }
@@ -35,16 +35,16 @@ public partial class BaseEmVM : BaseDbVM
     [RelayCommand]
     protected void Nxt()
     {
-        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { ex.Pop(); }
+        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
     [RelayCommand]
     void OLk()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { ex.Pop(); }
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
     [RelayCommand]
     void DNN()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { ex.Pop(); }
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 }
