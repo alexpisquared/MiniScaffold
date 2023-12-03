@@ -80,11 +80,8 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendTopNAsync()
     {
-        var antiSpamSec = DevOps.IsDbg ? 5 : 60;
-
-        await Synth.SpeakAsync($"Sending top {TopNumber} emails anti spam pause {antiSpamSec} seconds ...");
-
         GSReport = $"";
+        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ...");
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -99,21 +96,28 @@ public partial class Page02VM : BaseEmVM
             await Task.Delay(antiSpamSec * 1000);
         }
 
-        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         await Bpr.FinishAsync(8);
+        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...");
+        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
+        MainVM.NavBarVM.NavigatePage03Command.Execute(null);
     }
     [RelayCommand]
     async Task SendSlctAsync()
     {
         GSReport = $"";
+        await Synth.SpeakAsync($"Sending selected emails; anti spam pause is {antiSpamSec} seconds ...");
         await Bpr.StartAsync(8);
 
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
         {
             await SendThisOneAsync(email.Id);
+            await Task.Delay(antiSpamSec * 1000);
         }
 
         await Bpr.FinishAsync(8);
+        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...");
+        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
+        MainVM.NavBarVM.NavigatePage03Command.Execute(null);
     }
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
@@ -158,4 +162,5 @@ public partial class Page02VM : BaseEmVM
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
     string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo
+    readonly int antiSpamSec = DevOps.IsDbg ? 5 : 60;
 }

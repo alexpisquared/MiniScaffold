@@ -137,7 +137,7 @@ public partial class Page03VM : BaseDbVM
       if (!string.IsNullOrEmpty(newEmail[i]))
       {
         var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
-        var em = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ");
+        var em = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ", DateTime.Now);
         if (!isAnyNew) isAnyNew = em?.AddedAt == Now;
       }
     }
@@ -192,7 +192,7 @@ public partial class Page03VM : BaseDbVM
               {
                 var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ");
+                var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
                 isNew = email?.AddedAt == Now;
                 if (isNew) newEmailsAdded++;
                 report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
@@ -453,7 +453,7 @@ public partial class Page03VM : BaseDbVM
             {
               var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-              var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ");
+              var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now);
               isNew = email?.AddedAt == Now;
               if (isNew) newEmailsAdded++;
               rptLine += OutlookHelper6.ReportLine(folderName, re.Address, isNew);

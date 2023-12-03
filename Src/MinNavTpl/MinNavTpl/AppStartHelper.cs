@@ -13,6 +13,7 @@ public static class AppStartHelper
 
         _ = services.AddSingleton<ISpeechSynth>(sp => SpeechSynth.Factory(
             sp.GetRequiredService<IConfigurationRoot>()["AppSecrets:MagicSpeech"] ?? throw new ArgumentNullException("\"AppSecrets:MagicSpeech\" ia not available."),
-            sp.GetRequiredService<ILogger>()));
+            sp.GetRequiredService<ILogger>(),
+            voice: "en-GB-SoniaNeural"));
     }
 }

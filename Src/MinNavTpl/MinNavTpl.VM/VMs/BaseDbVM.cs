@@ -2,7 +2,7 @@
 public partial class BaseDbVM : BaseMinVM
 {
     readonly int _hashCode;
-    readonly MainVM _mainVM;
+    protected MainVM MainVM    {        get;}
     readonly ISecurityForcer _secForcer;
     protected bool _saving, _loading, _inited;
     protected readonly DateTime Now = DateTime.Now;
@@ -18,7 +18,7 @@ public partial class BaseDbVM : BaseMinVM
         Bpr = bpr;
         MainWin = (Window)win;
         UsrStgns = usrStgns;
-        _mainVM = mainVM;
+        MainVM = mainVM;
         _secForcer = sec;
         _hashCode = GetType().GetHashCode();
 
@@ -199,10 +199,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         Bpr.Tick(); PageCvs?.Refresh();
     } //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    partial void OnIsBusyChanged(bool value)
-    {
-        _mainVM.IsBusy = value; ;
-    }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+    partial void OnIsBusyChanged(bool value)    {        MainVM.IsBusy = value; ;    }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
     [RelayCommand]
     protected void ChkDb4Cngs()
