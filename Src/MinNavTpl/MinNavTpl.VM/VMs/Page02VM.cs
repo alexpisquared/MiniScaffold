@@ -1,6 +1,4 @@
-﻿using AmbienceLib;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
     public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm, ISpeechSynth synth)
@@ -24,12 +22,8 @@ public partial class Page02VM : BaseEmVM
             await Dbq.Phones.LoadAsync();
 
             var emailQuery = DevOps.IsDbg ?
-                Dbq.Emails
-                    .Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f") )
-                    .OrderBy(r => r.NotifyPriority) :
-                Dbq.Emails
-                    .Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true)
-                    .OrderBy(r => r.NotifyPriority);
+                Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+                Dbq.Emails.Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
 
             Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
 
@@ -45,8 +39,7 @@ public partial class Page02VM : BaseEmVM
 
             if (Environment.GetCommandLineArgs().Contains("Broad")) //tu: Start Page startup controller.
             {
-                Synth.SpeakFAF($"Sending top {TopNumber} emails...");
-                await SendTopNAsync();                
+                await SendTopNAsync();
             }
 
             await Bpr.FinishAsync(8);
@@ -87,7 +80,11 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendTopNAsync()
     {
-        GSReport = $"...";
+        var antiSpamSec = DevOps.IsDbg ? 5 : 60;
+
+        await Synth.SpeakAsync($"Sending top {TopNumber} emails anti spam pause {antiSpamSec} seconds ...");
+
+        GSReport = $"";
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -99,15 +96,16 @@ public partial class Page02VM : BaseEmVM
             }
 
             await SendThisOneAsync(email.Id);
+            await Task.Delay(antiSpamSec * 1000);
         }
-        
+
         GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         await Bpr.FinishAsync(8);
     }
     [RelayCommand]
     async Task SendSlctAsync()
     {
-        GSReport = $"...";
+        GSReport = $"";
         await Bpr.StartAsync(8);
 
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
@@ -120,7 +118,7 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
-        GSReport = $"...";
+        GSReport = "";
         await Bpr.StartAsync(8);
         await SendThisOneAsync(ThisEmail);
         await Bpr.FinishAsync(8);
@@ -130,7 +128,7 @@ public partial class Page02VM : BaseEmVM
     {
         try
         {
-            GSReport += $"Sending to {email}... ";
+            GSReport += $"Sending to {email} ... ";
 
             var timestamp = DateTime.Now;
             var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp, Lgr);
