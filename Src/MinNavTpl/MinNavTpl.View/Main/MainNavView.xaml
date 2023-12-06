@@ -26,14 +26,14 @@
       </Style>
 
       <Storyboard x:Key="sbFwd">
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                           From="1" To="0" Duration="{StaticResource du257}" EasingFunction="{StaticResource si}" />
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                           From="0" To="1" Duration="{StaticResource du257}" EasingFunction="{StaticResource so}" BeginTime="{StaticResource bt257}"/>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                                From="1" To="0"    Duration="{StaticResource du257}" EasingFunction="{StaticResource si}" />
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                                From="0" To="1"    Duration="{StaticResource du257}" EasingFunction="{StaticResource so}" BeginTime="{StaticResource bt257}"/>
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" From="0" To="-217" Duration="{StaticResource du257}" EasingFunction="{StaticResource si}" />
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" From="+217" To="0" Duration="{StaticResource du257}" EasingFunction="{StaticResource so}" BeginTime="{StaticResource bt257}"/>
       </Storyboard>
       <Storyboard x:Key="sbBwd">
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                           From="1" To="0" Duration="{StaticResource du257}" EasingFunction="{StaticResource si}" />
-        <DoubleAnimation Storyboard.TargetProperty="Opacity"                           From="0" To="1" Duration="{StaticResource du257}" EasingFunction="{StaticResource so}" BeginTime="{StaticResource bt257}"/>
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                                From="1" To="0"    Duration="{StaticResource du257}" EasingFunction="{StaticResource si}" />
+        <DoubleAnimation Storyboard.TargetProperty="Opacity"                                From="0" To="1"    Duration="{StaticResource du257}" EasingFunction="{StaticResource so}" BeginTime="{StaticResource bt257}"/>
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" From="0" To="+217" Duration="{StaticResource du257}" EasingFunction="{StaticResource ci}"/>
         <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.X)" From="-217" To="0" Duration="{StaticResource du257}" EasingFunction="{StaticResource co}" BeginTime="{StaticResource bt257}"/>
       </Storyboard>

@@ -30,7 +30,7 @@ public partial class MainVM : BaseMinVM
 
         _ctored = true;
     }
-    public override async Task<bool> InitAsync()
+    public async override Task<bool> InitAsync()
     {
         SrvrName = UsrStgns.SrvrName;
         DtBsName = UsrStgns.DtBsName;

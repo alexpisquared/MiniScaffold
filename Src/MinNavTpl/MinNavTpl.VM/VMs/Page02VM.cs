@@ -37,7 +37,7 @@ public partial class Page02VM : BaseEmVM
 
             Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
 
-            if (Environment.GetCommandLineArgs().Contains("Broad")) //tu: Start Page startup controller.
+            if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
             {
                 await SendTopNAsync();
             }
@@ -50,7 +50,7 @@ public partial class Page02VM : BaseEmVM
         return rv;
     }
 
-    [ObservableProperty] int topNumber = 2;
+    [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 5;
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
@@ -92,15 +92,18 @@ public partial class Page02VM : BaseEmVM
                 break;
             }
 
-            await SendThisOneAsync(email.Id);
+            GSReport += $"{i} / {TopNumber}  ";
             await Task.Delay(antiSpamSec * 1000);
+            await SendThisOneAsync(email.Id);
+            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...");
         }
 
         await Bpr.FinishAsync(8);
         await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...");
         GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
-        MainVM.NavBarVM.NavigatePage03Command.Execute(null);
+        MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
     }
+
     [RelayCommand]
     async Task SendSlctAsync()
     {
@@ -119,6 +122,7 @@ public partial class Page02VM : BaseEmVM
         GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         MainVM.NavBarVM.NavigatePage03Command.Execute(null);
     }
+
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
@@ -132,7 +136,7 @@ public partial class Page02VM : BaseEmVM
     {
         try
         {
-            GSReport += $"Sending to {email} ... ";
+            GSReport += $"{email} ... ";
 
             var timestamp = DateTime.Now;
             var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp, Lgr);
