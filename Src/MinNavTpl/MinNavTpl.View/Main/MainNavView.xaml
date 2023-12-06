@@ -447,6 +447,7 @@
         <Button	Margin="2" Content="_£" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Maximize Window" Click="OnWindowMaximize" x:Name="wm"                   />
         <Button	Margin="2" Content="_-"                          FontSize="26" Height="26" Padding="2 -0" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Minimize Window" Click="OnWindowMiniBase"                               />
         <Button	Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Click="OnClosShutdnBase" x:Name="btnExit" />
+        <Button Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Command="{Binding TryCloseCommand}" />
       </StackPanel>
     </Grid>
   </Border>

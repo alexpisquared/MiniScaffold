@@ -61,8 +61,6 @@ public partial class BaseDbVM : BaseMinVM
             _GSReportStore.Changed -= GSReportStore_Chngd;
             _LetDbChgStore.Changed -= LetDbChgStore_Chngd;
 
-            //PopupMsg(GSReport = "");
-
             return true;
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }

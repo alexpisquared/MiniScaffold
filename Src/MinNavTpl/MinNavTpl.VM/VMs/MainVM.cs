@@ -20,8 +20,8 @@ public partial class MainVM : BaseMinVM
         EmailOfIStore = eml; EmailOfIStore.Changed += EmailOfIStore_Chngd;
         _letDbChStore = alw; _letDbChStore.Changed += LetDbChgStore_Chngd;
 
-        cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => SqlServrs.Add(r));
-        cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(r => DtBsNames.Add(r));
+        cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(SqlServrs.Add);
+        cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(DtBsNames.Add);
 
         Bpr.SuppressTicks = Bpr.SuppressAlarm = !(IsAudible = UsrStgns.IsAudible);
         IsAnimeOn = UsrStgns.IsAnimeOn;
@@ -42,7 +42,7 @@ public partial class MainVM : BaseMinVM
 
         var rv = await base.InitAsync();
 
-        try { await KeepCheckingForUpdatesAndNeverReturn(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Logger); }
+        try { await KeepCheckingForUpdatesAndNeverReturnAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Logger); }
 
         return rv;
     }
@@ -60,7 +60,7 @@ public partial class MainVM : BaseMinVM
 
         base.Dispose();
     }
-    async Task KeepCheckingForUpdatesAndNeverReturn()
+    async Task KeepCheckingForUpdatesAndNeverReturnAsync()
     {
         await Task.Delay(150000); // 2.5 min
         OnCheckForNewVersion();
@@ -109,27 +109,15 @@ public partial class MainVM : BaseMinVM
     {
         get;
     }
-    void SrvrNameStore_Chngd(string val)
-    {
-        SrvrName = val;   /* await RefreshReloadAsync(); */
-    }
-    void DtBsNameStore_Chngd(string val)
-    {
-        DtBsName = val;   /* await RefreshReloadAsync(); */
-    }
-    void GSReportStore_Chngd(string val)
-    {
-        GSReport = val;   /* await RefreshReloadAsync(); */
-    }
+    void SrvrNameStore_Chngd(string val) => SrvrName = val;   /* await RefreshReloadAsync(); */
+    void DtBsNameStore_Chngd(string val) => DtBsName = val;   /* await RefreshReloadAsync(); */
+    void GSReportStore_Chngd(string val) => GSReport = val;   /* await RefreshReloadAsync(); */
     void EmailOfIStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
     {
         WriteLine($"■■ MAIN  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load as it were ..." : "==>----")}");
         EmailOfI = emailOfI;   /* await RefreshReloadAsync(); */
     }
-    void LetDbChgStore_Chngd(bool value)
-    {
-        LetDbChg = value; /* await RefreshReloadAsync(); */
-    }
+    void LetDbChgStore_Chngd(bool value) => LetDbChg = value; /* await RefreshReloadAsync(); */
     string _qs = ""; public string SrvrName
     {
         get => _qs; set
@@ -187,9 +175,8 @@ public partial class MainVM : BaseMinVM
         get;
     }
     public BaseMinVM? CurrentVM => _navigationStore.CurrentVM;
-    public List<string> SqlServrs { get; } = new();
-    public List<string> DtBsNames { get; } = new();
-
+    public List<string> SqlServrs { get; } = [];
+    public List<string> DtBsNames { get; } = [];
 
     [ObservableProperty] double upgradeUrgency = 1;         // in days
     [ObservableProperty] string appVerNumber = "0.0";
@@ -201,7 +188,7 @@ public partial class MainVM : BaseMinVM
     [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible;
     [ObservableProperty] Visibility gSRepViz = Visibility.Visible;
     [ObservableProperty] bool isBusy;// /*BusyBlur = value ? 8 : 0;*/  }
-    [ObservableProperty] ObservableCollection<string?> validationMessages = new();
+    [ObservableProperty] ObservableCollection<string?> validationMessages = [];
     bool _au; public bool IsAudible
     {
         get => _au; set
@@ -224,14 +211,21 @@ public partial class MainVM : BaseMinVM
         //OnPropertyChanged(nameof(IsOpen));
     }
 
-    [RelayCommand]
-    async Task UpgradeSelf()
-    {
-        await Task.Yield(); ;
-    }
+    [RelayCommand] async Task UpgradeSelfAsync() => await Task.Yield();
+
     [RelayCommand]
     void HidePnl()
     {
         GSReport = ""; GSRepViz = Visibility.Collapsed;
+    }
+
+    [RelayCommand]
+    async Task TryCloseAsync()
+    {
+        var isReadyToClose = CurrentVM != null && await CurrentVM.WrapAsync();
+        if (isReadyToClose)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

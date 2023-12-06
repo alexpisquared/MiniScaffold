@@ -2,7 +2,7 @@
   "profiles": {
     "MinNavTpl": {
       "commandName": "Project",
-      "commandLineArgs": "Broad"
+      "commandLineArgs": "B-road"
     }
   }
 }
