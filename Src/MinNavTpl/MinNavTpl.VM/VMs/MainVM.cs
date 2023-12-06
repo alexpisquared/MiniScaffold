@@ -222,7 +222,8 @@ public partial class MainVM : BaseMinVM
     [RelayCommand]
     async Task TryCloseAsync()
     {
-        var isReadyToClose = CurrentVM != null && await CurrentVM.WrapAsync();
+        var vm = CurrentVM as LayoutVM;
+        var isReadyToClose = vm is not null && await vm.ContentVM.WrapAsync();
         if (isReadyToClose)
         {
             Application.Current.Shutdown();

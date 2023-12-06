@@ -11,6 +11,7 @@ public partial class MainNavView : WpfUserControlLib.Base.WindowBase
         //themeSelector1.ThemeApplier = ApplyTheme; //dnf theming 1/2
 
         btnExit.IsCancel = VersionHelper.IsDbg;
+        IgnoreEscape = true;
     }
 
     void OnLoaded(object s, RoutedEventArgs e) => themeSelector1.SetCurThemeToMenu(Thm); //dnf theming 2/2
