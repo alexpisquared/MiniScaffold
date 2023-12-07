@@ -2,10 +2,7 @@
 public partial class Page02VM : BaseEmVM
 {
     public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm, ISpeechSynth synth)
-      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, 8110)
-    {
-        Synth = synth;
-    }
+      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, synth, 8110) { }
     public async override Task<bool> InitAsync()
     {
         var rv = false;
@@ -35,6 +32,9 @@ public partial class Page02VM : BaseEmVM
               r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
+            _ = PageCvs?.MoveCurrentToFirst();
+            await GetTopDetailAsync();
+
             Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
 
             if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
@@ -51,28 +51,8 @@ public partial class Page02VM : BaseEmVM
     }
 
     [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
-    [ObservableProperty] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
-    {
-        if (!(value is not null && _loaded)) return;
-
-        Bpr.Tick();
-        UsrStgns.EmailOfI = value.Id;
-        EmailOfIStore.Change(value.Id);
-
-        ThisEmail = value.Id;
-
-    } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = [];
-
-    public ISpeechSynth Synth
-    {
-        get;
-    }
-
-    partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
         GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
     }
@@ -123,48 +103,5 @@ public partial class Page02VM : BaseEmVM
         MainVM.NavBarVM.NavigatePage03Command.Execute(null);
     }
 
-    [RelayCommand(CanExecute = nameof(CanSendThis))]
-    async Task SendThisAsync()
-    {
-        GSReport = "";
-        await Bpr.StartAsync(8);
-        await SendThisOneAsync(ThisEmail);
-        await Bpr.FinishAsync(8);
-    }
-
-    async Task SendThisOneAsync(string email)
-    {
-        try
-        {
-            GSReport += $"{email} ... ";
-
-            var timestamp = DateTime.Now;
-            var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp, Lgr);
-            if (success)
-            {
-                var em = Dbq.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
-                if (em != null)
-                {
-                    em.ReSendAfter = null;
-                }
-
-                GSReport += "succeeded \r\n";
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
-            }
-            else
-            {
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
-                GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
-                Lgr.Log(LogLevel.Error, GSReport);
-
-                //todo: need logic to inflict the PermaBan on the email address.
-            }
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
-    }
-
-    bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
-
-    string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo
     readonly int antiSpamSec = DevOps.IsDbg ? 5 : 80;
 }

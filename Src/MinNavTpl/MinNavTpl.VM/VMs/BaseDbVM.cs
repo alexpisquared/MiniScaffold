@@ -6,7 +6,7 @@ public partial class BaseDbVM : BaseMinVM
     readonly ISecurityForcer _secForcer;
     protected bool _saving, _loading, _inited;
     protected readonly DateTime Now = DateTime.Now;
-    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, int oid)
+    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, ISpeechSynth synth, int oid)
     {
         IsDevDbg = VersionHelper.IsDbg;
 
@@ -19,6 +19,7 @@ public partial class BaseDbVM : BaseMinVM
         MainWin = (Window)win;
         UsrStgns = usrStgns;
         MainVM = mainVM;
+        Synth = synth;
         _secForcer = sec;
         _hashCode = GetType().GetHashCode();
 
@@ -86,6 +87,11 @@ public partial class BaseDbVM : BaseMinVM
     protected void ReportProgress(string msg)
     {
         GSReport = msg; Lgr.Log(LogLevel.Trace, msg);
+    }
+
+    public ISpeechSynth Synth
+    {
+        get;
     }
 
     protected async Task<string> SaveLogReportOrThrowAsync(DbContext dbq, string note = "", [CallerMemberName] string? cmn = "")

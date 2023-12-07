@@ -41,7 +41,7 @@
 
       <StackPanel Grid.Column="1" Orientation="Horizontal" Grid.ColumnSpan="3">
 
-        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <Label Content="    _Q" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <!--
         <CheckBox Content="+_Bads " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />

@@ -1,671 +1,777 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM : BaseDbVM
 {
-  readonly OutlookHelper6 _oh = new();
-  int _newEmailsAdded = 0;
-  public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, 8110) { }
-  public override async Task<bool> InitAsync() { await DoReFaLa(); return await base.InitAsync(); }
-
-  [ObservableProperty] string reportOL = "";
-  [RelayCommand] void ClearText() { ReportOL += ""; ; }
-
-  [RelayCommand]
-  async Task DoReglr()
-  {
-    IsBusy = !false; Bpr.Click(); await Task.Delay(222); 
-
-    try
+    readonly OutlookHelper6 _oh = new();
+    int _newEmailsAdded = 0;
+    public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, ISpeechSynth synth) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, synth, 8110) { }
+    public async override Task<bool> InitAsync()
     {
-      var r1 = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
-      var r2 = await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
-      var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += $"{r1}{r2}";
-      LoadVwSrcs();
+        await DoReFaLaAsync(); return await base.InitAsync();
     }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { IsBusy = !true; Bpr.Finish(); }
-  }
-  [RelayCommand]
-  async Task DoJunkM()
-  {
-    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
-    try
+    [ObservableProperty] string reportOL = "";
+
+    [RelayCommand]
+    void ClearText()
     {
-      var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
-      var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      LoadVwSrcs();
+        ReportOL += ""; ;
     }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { IsBusy = !true; Bpr.Finish(); }
-  }
-  [RelayCommand]
-  async Task DoFails()
-  {
-    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
 
-    try
+    [RelayCommand]
+    async Task DoReglrAsync()
     {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_FailsAsync(OuFolder.qFail);
-      var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { IsBusy = !true; Bpr.Finish(); }
-  }
-  [RelayCommand]
-  async Task DoLater()
-  {
-    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
+        IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
 
-    try
-    {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_LaterAsync(OuFolder.qLate);
-      var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { IsBusy = !true; Bpr.Finish(); }
-  }
-  [RelayCommand]
-  async Task DoDoneR()
-  {
-    IsBusy = !false; Bpr.Click(); await Task.Delay(222);
-
-    try
-    {
-      var sw = Stopwatch.StartNew();
-      var rv = await OutlookFolderToDb_DoneRAsync(OuFolder.qRcvdDone);
-      var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
-      ReportOL += rv;
-      WriteLine(rv);
-      LoadVwSrcs();
-    }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { IsBusy = !true; Bpr.Finish(); }
-  }
-  [RelayCommand] void UpdateOL() { Bpr.Click(); try { MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); } }
-  async Task DoReFaLa()
-  {
-    try
-    {
-      var qF = _oh.GetItemsFromFolder(OuFolder.qFail).Count;
-      var qR = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count;
-      var qS = _oh.GetItemsFromFolder(OuFolder.qSent).Count;
-      var qL = _oh.GetItemsFromFolder(OuFolder.qLate).Count;
-      var qSD = _oh.GetItemsFromFolder(OuFolder.qSentDone).Count;
-      var qRD = _oh.GetItemsFromFolder(OuFolder.qRcvdDone).Count;
-      var ttl = qR + qS + qF + qL;
-
-      if (ttl == 0)
-      {
-        ReportOL += "Nothing new in Outlook to for DB.";
-      }
-      else
-      {
-        ReportOL += $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
-
-        await Dbq.Emails.LoadAsync();
-
-        await DoReglr();
-        await DoFails();
-        await DoLater();
-
-        if (_newEmailsAdded > 0)
+        try
         {
-          ReportOL += $"Done. {_newEmailsAdded} new emails found.  //todo: AgentAdminnWindow().Show();";
+            var r1 = await OutlookFolderToDb_ReglrAsync(OuFolder.qRcvd);
+            var r2 = await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
+            var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
+            ReportOL += $"{r1}{r2}";
+            LoadVwSrcs();
         }
-      }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { Bpr.Finish(); }
-  }
-  async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
-  {
-    var newEmail = RegexHelper.FindEmails(body);
-    var isAnyNew = false;
-
-    for (var i = 0; i < newEmail.Length; i++)
+    [RelayCommand]
+    async Task DoJunkMAsync()
     {
-      if (!string.IsNullOrEmpty(newEmail[i]))
-      {
-        var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
-        var em = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ", DateTime.Now);
-        if (!isAnyNew) isAnyNew = em?.AddedAt == Now;
-      }
-    }
+        IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
 
-    return new TupleSubst { HasNewEmails = isAnyNew, NewEmails = newEmail };
-  }
-  class TupleSubst { public bool HasNewEmails { get; set; } public string[]? NewEmails { get; set; } }
-  async Task<string> OutlookFolderToDb_ReglrAsync(string folderName)
-  {
-    int cnt = 0, ttl = 0, newEmailsAdded = 0;
-    var rcvdDoneFolder = _oh.GetMapiFOlder(OuFolder.qRcvdDone);
-    var sentDoneFolder = _oh.GetMapiFOlder(OuFolder.qSentDone);
-    var deletedsFolder = _oh.GetMapiFOlder(OuFolder.qDltd);
-    var report = "";
-
-    try
-    {
-      var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
-      ttl = items.Count;
-
-      WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:");
-      do
-      {
-        foreach (OL.MailItem mailItem in items)
+        try
         {
-          ttl--;
-          cnt++;
-          ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:\n";
-          try
-          {
-            if (folderName == OuFolder.qRcvd || folderName == OuFolder.qJunkMail)
+            var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
+            var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
+            ReportOL += rv;
+            LoadVwSrcs();
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { IsBusy = !true; await Bpr.FinishAsync(); }
+    }
+    [RelayCommand]
+    async Task DoFailsAsync()
+    {
+        IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
+
+        try
+        {
+            var sw = Stopwatch.StartNew();
+            var rv = await OutlookFolderToDb_FailsAsync(OuFolder.qFail);
+            var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
+            ReportOL += rv;
+            WriteLine(rv);
+            LoadVwSrcs();
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { IsBusy = !true; await Bpr.FinishAsync(); }
+    }
+    [RelayCommand]
+    [Obsolete]
+    async Task DoLaterAsync()
+    {
+        IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
+
+        try
+        {
+            var sw = Stopwatch.StartNew();
+            var rv = await OutlookFolderToDb_LaterAsync(OuFolder.qLate);
+            var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
+            ReportOL += rv;
+            WriteLine(rv);
+            LoadVwSrcs();
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { IsBusy = !true; await Bpr.FinishAsync(); }
+    }
+    [RelayCommand]
+    async Task DoDoneRAsync()
+    {
+        IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
+
+        try
+        {
+            var sw = Stopwatch.StartNew();
+            var rv = await OutlookFolderToDb_DoneRAsync(OuFolder.qRcvdDone);
+            var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
+            ReportOL += rv;
+            WriteLine(rv);
+            LoadVwSrcs();
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { IsBusy = !true; await Bpr.FinishAsync(); }
+    }
+    [RelayCommand]
+    void UpdateOL()
+    {
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+    }
+    async Task DoReFaLaAsync()
+    {
+        try
+        {
+            var qF = _oh.GetItemsFromFolder(OuFolder.qFail).Count;
+            var qR = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count;
+            var qS = _oh.GetItemsFromFolder(OuFolder.qSent).Count;
+            var qL = _oh.GetItemsFromFolder(OuFolder.qLate).Count;
+            var qSD = _oh.GetItemsFromFolder(OuFolder.qSentDone).Count;
+            var qRD = _oh.GetItemsFromFolder(OuFolder.qRcvdDone).Count;
+            var ttl = qR + qS + qF + qL;
+            if (ttl == 0)
             {
-              var senderEmail = OutlookHelper6.FigureOutSenderEmail(mailItem);
-              var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
-              if (isNew) newEmailsAdded++;
-              report += OutlookHelper6.ReportLine(folderName, senderEmail, isNew);
+                ReportOL += "Nothing new in Outlook to for DB.";
+            }
+            else
+            {
+                ReportOL += $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
 
-              if (!string.IsNullOrEmpty(mailItem.Body))
-              {
-                //await checkInsertEHistAsync(Dbq, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "R", em); //2022-10 - added next line, as it was missing functionality of inseing received boides to Hist table:
+                await Dbq.Emails.LoadAsync();
 
-                var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
-                var ii = await FindInsertEmailsFromBodyAsync(mailItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
-                if (ii.HasNewEmails)
+                await DoReglrAsync();
+                await DoFailsAsync();
+                await DoLaterAsync();
+
+                if (_newEmailsAdded > 0)
                 {
-                  for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAdded++; report += OutlookHelper6.ReportLine(folderName, ii.NewEmails[i], isNew); } }
+                    ReportOL += $"\nDone. {_newEmailsAdded} new emails found.";
+                    await Synth.SpeakAsync($"Done. {_newEmailsAdded} new emails found.");
                 }
-              }
 
-              Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
-              foreach (OL.Recipient re in mailItem.Recipients)
-              {
-                var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+                var rowsAffected = await Dbq.Database.ExecuteSqlRawAsync(@"
+                    UPDATE EMail SET NotifyPriority = 
+	                    1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
+                    WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
 
-                var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
-                isNew = email?.AddedAt == Now;
-                if (isNew) newEmailsAdded++;
-                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
-              }
-
-              ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
-
-              OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
+                ReportOL += ($"\nDone. {rowsAffected} rows affected with new priorities.");
+                await Synth.SpeakAsync($"Done. {rowsAffected} rows affected with new priorities.");
             }
-            else if (folderName == OuFolder.qSent)
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { await Bpr.FinishAsync(); }
+    }
+
+    async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
+    {
+        var newEmail = RegexHelper.FindEmails(body);
+        var isAnyNew = false;
+
+        for (var i = 0; i < newEmail.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(newEmail[i]))
             {
-              foreach (OL.Recipient re in mailItem.Recipients) // must use ReplyAll for this to work
-              {
-                var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
-
-                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, mailItem?.Subject, mailItem?.Body, mailItem?.SentOn, mailItem?.ReceivedTime, $"..from Sent folder. ", "S");
-                if (isNew) { newEmailsAdded++; }
-
-                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
-              }
-
-              var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
-
-              ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
-
-              OutlookHelper6.MoveIt(trgFolder, mailItem);
+                var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
+                var em = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ", DateTime.Now);
+                if (!isAnyNew)
+                {
+                    isAnyNew = em?.AddedAt == Now;
+                }
             }
-          }
-          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
-        } // for
+        }
+
+        return new TupleSubst { HasNewEmails = isAnyNew, NewEmails = newEmail };
+    }
+    class TupleSubst
+    {
+        public bool HasNewEmails
+        {
+            get; set;
+        }
+        public string[]? NewEmails
+        {
+            get; set;
+        }
+    }
+    async Task<string> OutlookFolderToDb_ReglrAsync(string folderName)
+    {
+        int cnt = 0, ttl = 0, newEmailsAdded = 0;
+        var rcvdDoneFolder = _oh.GetMapiFOlder(OuFolder.qRcvdDone);
+        var sentDoneFolder = _oh.GetMapiFOlder(OuFolder.qSentDone);
+        var deletedsFolder = _oh.GetMapiFOlder(OuFolder.qDltd);
+        var report = "";
+
+        try
+        {
+            var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
+            ttl = items.Count;
+
+            WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:");
+            do
+            {
+                foreach (OL.MailItem mailItem in items)
+                {
+                    ttl--;
+                    cnt++;
+                    ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:\n";
+                    try
+                    {
+                        if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
+                        {
+                            var senderEmail = OutlookHelper6.FigureOutSenderEmail(mailItem);
+                            var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
+                            if (isNew)
+                            {
+                                newEmailsAdded++;
+                            }
+
+                            report += OutlookHelper6.ReportLine(folderName, senderEmail, isNew);
+
+                            if (!string.IsNullOrEmpty(mailItem.Body))
+                            {
+                                //await checkInsertEHistAsync(Dbq, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "R", em); //2022-10 - added next line, as it was missing functionality of inseing received boides to Hist table:
+
+                                var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
+                                var ii = await FindInsertEmailsFromBodyAsync(mailItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
+                                if (ii.HasNewEmails)
+                                {
+                                    for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAdded++; report += OutlookHelper6.ReportLine(folderName, ii.NewEmails[i], isNew); } }
+                                }
+                            }
+
+                            Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
+                            foreach (OL.Recipient re in mailItem.Recipients)
+                            {
+                                var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+
+                                var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {mailItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
+                                isNew = email?.AddedAt == Now;
+                                if (isNew)
+                                {
+                                    newEmailsAdded++;
+                                }
+
+                                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                            }
+
+                            ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
+
+                            OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
+                        }
+                        else if (folderName == OuFolder.qSent)
+                        {
+                            foreach (OL.Recipient re in mailItem.Recipients) // must use ReplyAll for this to work
+                            {
+                                var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+
+                                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, mailItem?.Subject, mailItem?.Body, mailItem?.SentOn, mailItem?.ReceivedTime, $"..from Sent folder. ", "S");
+                                if (isNew) { newEmailsAdded++; }
+
+                                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                            }
+
+                            var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+
+                            ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
+
+                            OutlookHelper6.MoveIt(trgFolder, mailItem);
+                        }
+                    }
+                    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {mailItem?.SenderEmailAddress}. GSReport: {report}."); }
+                } // for
 #if DEBUG
-      } while (false);
+            } while (false);
 #else
       } while ((items = _oh.GetItemsFromFolder(folderName, "IPM.Note")).Count > 0); //not sure why, but it keeps skipping/missing items when  Move to OL folder, thus, this logic.
 #endif
 
-      _newEmailsAdded += newEmailsAdded;
-      report += OutlookHelper6.ReportSectionTtl(folderName, cnt, newEmailsAdded);
-    }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-    finally { WriteLine(""); }
-
-    return report;
-  }
-  async Task<string> OutlookFolderToDb_FailsAsync(string folderName)
-  {
-    var report = "";
-    int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
-    try
-    {
-      var failsDoneFolder = _oh.GetMapiFOlder(OuFolder.qFailsDone);
-      var itemsFailes = _oh.GetItemsFromFolder(folderName);
-      int prev;
-      do
-      {
-        var cnt = itemsFailes.Count;
-        prev = cnt;
-#if !DEBUG_ // save as then delete - to get the body and other stuff.
-        if (DateTime.Now == DateTime.MinValue) foreach (OL.ReportItem item in itemsFailes) { TestAllKeys(item); }
-#endif
-        foreach (var item in itemsFailes)
-        {
-          ttl0++;
-          ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
-          try
-          {
-            if (item is OL.ReportItem reportItem)
-            {
-              var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
-              var emr = Dbq.Emails.Find(senderEmail);
-              if (emr == null)
-              {
-                var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"));
-                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, reportItem.Body, null, reportItem.CreationTime, "..banned upon delivery fail BUT not existed !!! ", "R");
-                if (isNew) { newEmailsAdded++; }
-              }
-              else
-              {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (v3) ");
-              }
-
-              ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@-");
-              OutlookHelper6.MoveIt(failsDoneFolder, reportItem);
-            }
-            else if (item is OL.MailItem mailItem)
-            {
-              var senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
-              var emr = Dbq.Emails.Find(senderEmail);
-              if (emr == null)
-              {
-                var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, "..banned upon delivery fail BUT not existed !!! "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..banned upon delivery fail BUT not existed !!!", "R");
-                if (isNew) { newEmailsAdded++; }
-              }
-              else
-              {
-                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v3b) ");
-              }
-
-              foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
-              {
-                // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
-
-                if (Dbq.Emails.Find(emailFromBody) == null)
-                {
-                  var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
-                  var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
-                  if (isNew) { newEmailsAdded++; }
-                }
-              }
-
-              ArgumentNullException.ThrowIfNull(failsDoneFolder, "senderEmail is nul @@@@@@@@@@@@@@@-");
-              OutlookHelper6.MoveIt(failsDoneFolder, mailItem);
-            }
-            else if (Debugger.IsAttached)
-              Debugger.Break();
-          }
-          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+            _newEmailsAdded += newEmailsAdded;
+            report += OutlookHelper6.ReportSectionTtl(folderName, cnt, newEmailsAdded);
         }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        finally { WriteLine(""); }
 
-        itemsFailes = _oh.GetItemsFromFolder(folderName);
-      } while (prev != itemsFailes.Count);
+        return report;
     }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-
-    _newEmailsAdded += newEmailsAdded;
-    report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
-    return report;
-  }
-  async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
-  {
-    var report = "";
-    int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
-    try
+    async Task<string> OutlookFolderToDb_FailsAsync(string folderName)
     {
-      var rcvdDoneFolder = _oh.GetMapiFOlder(OuFolder.qRcvdDone);
-      var itemsTempAway = _oh.GetItemsFromFolder(folderName);
-      int prev;
-      do
-      {
-        var cnt = itemsTempAway.Count;
-        prev = cnt;
-#if !DEBUG_ // save as then delete - to get the body and other stuff.
-        if (DateTime.Now == DateTime.MinValue) foreach (OL.ReportItem item in itemsTempAway) { TestAllKeys(item); }
-#endif
-        foreach (var item in itemsTempAway)
-        {
-          ttl0++;
-          ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
-          try
-          {
-            if (item is OL.ReportItem reportItem)
-            {
-              if (Debugger.IsAttached) Debugger.Break(); else throw new Exception("AP: //todo: ReportItem in Q\\ToResend !!!");
-            }
-            else if (item is OL.MailItem mailItem)
-            {
-              var isNew = await CheckDbInsertIfMissing_sender(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
-              if (isNew) newEmailsAdded++;
-
-              foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
-              {
-                if (Dbq.Emails.Find(emailFromBody) == null)
-                {
-                  var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
-                  isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
-                  if (isNew) { newEmailsAdded++; }
-                }
-              }
-
-              if (Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
-              {
-                ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
-
-                var fnm = Dbq.Emails.Find(mailItem.SenderEmailAddress)?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
-                var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
-                if (scs)
-                  OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
-              }
-            }
-            else
-            if (Debugger.IsAttached) Debugger.Break(); else throw new Exception("AP: Review this case of missing row: must be something wrong.");
-          }
-          catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
-        }
-
-        itemsTempAway = _oh.GetItemsFromFolder(folderName);
-      } while (prev != itemsTempAway.Count);
-    }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
-
-    _newEmailsAdded += newEmailsAdded;
-    report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
-    return report;
-  }
-  async Task<string> OutlookFolderToDb_DoneRAsync(string folderName)
-  {
-    var report___ = ReportOL = "";
-    var msg = "..was done before && not existed in DB ?!?! ";
-    int ttlProcessed = 0, newEmailsAdded = 0;
-    try
-    {
-      var itemsRcvdDone = _oh.GetItemsFromFolder(folderName);
-      var ttl = itemsRcvdDone.Count;
-      foreach (var item in itemsRcvdDone)
-      {
-        var senderEmail = "?";
-        var rptLine = "";
-
-        ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
+        var report = "";
+        int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
         try
         {
-          if (item is OL.ReportItem reportItem)
-          {
-            if (DateTime.Now == DateTime.MinValue) TestAllKeys(reportItem);
-
-            senderEmail = reportItem.PropertyAccessor.GetProperty("http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
-            ArgumentNullException.ThrowIfNull(senderEmail, "senderEmail is nul @@@@@@@@@@@@@@@-");
-            senderEmail = OutlookHelper6.RemoveBadEmailParts(senderEmail);
-            if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
-
-            if (Dbq.Emails.Find(senderEmail) == null)
+            var failsDoneFolder = _oh.GetMapiFOlder(OuFolder.qFailsDone);
+            var itemsFailes = _oh.GetItemsFromFolder(folderName);
+            int prev;
+            do
             {
-              var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail);
-              var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, "under constr-n", null, reportItem.CreationTime, msg, "R");
-              if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
-            }
+                var cnt = itemsFailes.Count;
+                prev = cnt;
+#if !DEBUG_ // save as then delete - to get the body and other stuff.
+                if (DateTime.Now == DateTime.MinValue)
+                {
+                    foreach (OL.ReportItem item in itemsFailes) { TestAllKeys(item); }
+                }
+#endif
+                foreach (var item in itemsFailes)
+                {
+                    ttl0++;
+                    ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
+                    try
+                    {
+                        if (item is OL.ReportItem reportItem)
+                        {
+                            var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
+                            var emr = await Dbq.Emails.FindAsync(senderEmail);
+                            if (emr == null)
+                            {
+                                var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"));
+                                var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, reportItem.Body, null, reportItem.CreationTime, "..banned upon delivery fail BUT not existed !!! ", "R");
+                                if (isNew) { newEmailsAdded++; }
+                            }
+                            else
+                            {
+                                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"), "Delivery failed (v3) ");
+                            }
 
-            rptLine += $"report\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
-          }
-          else if (item is OL.MailItem mailItem)
-          {
-            senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
-            if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
+                            ArgumentNullException.ThrowIfNull(failsDoneFolder, "failsdonefolder is nul @@@@@@@@@@@@@@@-");
+                            OutlookHelper6.MoveIt(failsDoneFolder, reportItem);
+                        }
+                        else if (item is OL.MailItem mailItem)
+                        {
+                            var senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
+                            var emr = await Dbq.Emails.FindAsync(senderEmail);
+                            if (emr == null)
+                            {
+                                var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, "..banned upon delivery fail BUT not existed !!! "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, mailItem.Subject, mailItem.Body, mailItem.ReceivedTime, "..banned upon delivery fail BUT not existed !!!", "R");
+                                if (isNew) { newEmailsAdded++; }
+                            }
+                            else
+                            {
+                                BanPremanentlyInDB(ref report, ref newBansAdded, senderEmail, "Delivery failed (v3b) ");
+                            }
 
-            WriteLine($"   SentOn:{mailItem.SentOn:MM-dd HH:mm:ss}   Receiv:{(mailItem.ReceivedTime- mailItem.SentOn):hh\\:mm\\:ss}   Creati:{(mailItem.CreationTime - mailItem.SentOn).TotalDays:N5}   LastMo:{(mailItem.LastModificationTime - mailItem.SentOn).TotalDays:N5}   Expiry:{(mailItem.ExpiryTime- mailItem.SentOn).TotalDays:N5}");
+                            foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
+                            {
+                                // banPremanentlyInDB(ref report, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
-            var isNew = await CheckDbInsertIfMissing_sender(mailItem, senderEmail, msg);
-            if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                                if (await Dbq.Emails.FindAsync(emailFromBody) == null)
+                                {
+                                    var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
+                                    var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
+                                    if (isNew) { newEmailsAdded++; }
+                                }
+                            }
 
-            foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
-            {
-              senderEmail = OutlookHelper6.RemoveBadEmailParts(emailFromBody);
-              if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
+                            ArgumentNullException.ThrowIfNull(failsDoneFolder, "senderEmail is nul @@@@@@@@@@@@@@@-");
+                            OutlookHelper6.MoveIt(failsDoneFolder, mailItem);
+                        }
+                        else if (Debugger.IsAttached)
+                        {
+                            Debugger.Break();
+                        }
+                    }
+                    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+                }
 
-              if (Dbq.Emails.Find(senderEmail) == null)
-              {
-                var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, senderEmail);
-                isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from body. ", "R");
-                if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
-              }
-
-              rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
-            }
-
-            Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
-            var cnt = 0;
-            foreach (OL.Recipient re in mailItem.Recipients)
-            {
-              var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
-
-              var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now);
-              isNew = email?.AddedAt == Now;
-              if (isNew) newEmailsAdded++;
-              rptLine += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
-            }
-
-            rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
-          }
-          else if (item is OL.AppointmentItem itm0) /**/ { ReportOL += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {OneLineAndTrunkate(itm0.Body)} \r\n"; }
-          else if (item is OL.DistListItem itm1)    /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
-          else if (item is OL.DocumentItem itm2)    /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
-          else if (item is OL.JournalItem itm3)     /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
-          else if (item is OL.MeetingItem itm4)     /**/ { ReportOL += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
-          else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
-          else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
-          else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
-          else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); } else throw new Exception("AP: Review this case of missing type: must be something worth processing.");
-
-          WriteLine($"{rptLine}");
+                itemsFailes = _oh.GetItemsFromFolder(folderName);
+            } while (prev != itemsFailes.Count);
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($":{senderEmail}."); }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
-        if (ttlProcessed % 10 == 0) ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
-      }
-
-      ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... \n";
+        _newEmailsAdded += newEmailsAdded;
+        report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
+        return report;
     }
-    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
-    _newEmailsAdded += newEmailsAdded;
-    report___ += OutlookHelper6.ReportSectionTtl(folderName, ttlProcessed, 0, newEmailsAdded);
-    return report___;
-  }
-  static string OneLineAndTrunkate(string body, int max = 55)
-  {
-    if (string.IsNullOrEmpty(body)) return "";
-
-    body = body.Replace("\r", " CR ").Replace("\n", " LF ");
-
-    var len = body.Length;
-
-    return len <= max ? body : (body[..max] + "...");
-  }
-  async Task<bool> CheckDbInsertIfMissing_sender(OL.MailItem mailItem, string senderEmail, string note)
-  {
-    //if (Dbq.Emails.Find(senderEmail) == null)
-    var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
-    var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
-    return isNew;
-  }
-  void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
-  {
-    var emr = Dbq.Emails.Find(email);
-    if (emr == null)
+    [Obsolete]
+    async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
     {
-      if (Debugger.IsAttached) Debugger.Break(); else throw new Exception("AP: Review this case of missing row: must be something wrong.");
+        var report = "";
+        int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
+        try
+        {
+            var rcvdDoneFolder = _oh.GetMapiFOlder(OuFolder.qRcvdDone);
+            var itemsTempAway = _oh.GetItemsFromFolder(folderName);
+            int prev;
+            do
+            {
+                var cnt = itemsTempAway.Count;
+                prev = cnt;
+#if !DEBUG_ // save as then delete - to get the body and other stuff.
+                if (DateTime.Now == DateTime.MinValue)
+                {
+                    foreach (OL.ReportItem item in itemsTempAway) { TestAllKeys(item); }
+                }
+#endif
+                foreach (var item in itemsTempAway)
+                {
+                    ttl0++;
+                    ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
+                    try
+                    {
+                        if (item is OL.ReportItem reportItem)
+                        {
+                            if (Debugger.IsAttached)
+                            {
+                                Debugger.Break();
+                            }
+                            else
+                            {
+                                throw new Exception("AP: //todo: ReportItem in Q\\ToResend !!!");
+                            }
+                        }
+                        else if (item is OL.MailItem mailItem)
+                        {
+                            var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
+                            if (isNew)
+                            {
+                                newEmailsAdded++;
+                            }
+
+                            foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
+                            {
+                                if (await Dbq.Emails.FindAsync(emailFromBody) == null)
+                                {
+                                    var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
+                                    isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
+                                    if (isNew) { newEmailsAdded++; }
+                                }
+                            }
+
+                            if (Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
+                            {
+                                ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
+
+                                var fnm = (await Dbq.Emails.FindAsync(mailItem.SenderEmailAddress))?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
+                                var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
+                                if (scs)
+                                {
+                                    OutlookHelper6.MoveIt(rcvdDoneFolder, mailItem);
+                                }
+                            }
+                        }
+                        else
+                        if (Debugger.IsAttached)
+                        {
+                            Debugger.Break();
+                        }
+                        else
+                        {
+                            throw new Exception("AP: Review this case of missing row: must be something wrong.");
+                        }
+                    }
+                    catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+                }
+
+                itemsTempAway = _oh.GetItemsFromFolder(folderName);
+            } while (prev != itemsTempAway.Count);
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+
+        _newEmailsAdded += newEmailsAdded;
+        report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
+        return report;
     }
-    else
+    async Task<string> OutlookFolderToDb_DoneRAsync(string folderName)
     {
-      if (emr.PermBanReason == null || !emr.PermBanReason.Contains(rsn)) // if new reason
-      {
-        emr.PermBanReason += rsn + Now.ToString("yyyy-MM-dd");
-        emr.ModifiedAt = Now;
-        rv += $"{OuFolder.qFail,-15}  {email,-48}banned since: {rsn}\n";
-        newBansAdded++;
-      }
-      else if (emr.PermBanReason.Contains(rsn)) // same reason already there
-      {
-        rv += $"{OuFolder.qFail,-15}  {email,-48}banned before with the same reason: {rsn}\n";
-      }
-      else
-      {
-        if (Debugger.IsAttached) Debugger.Break(); else throw new Exception("AP: Review this case of missing row: must be something wrong.");
-      }
+        var report___ = ReportOL = "";
+        var msg = "..was done before && not existed in DB ?!?! ";
+        int ttlProcessed = 0, newEmailsAdded = 0;
+        try
+        {
+            var itemsRcvdDone = _oh.GetItemsFromFolder(folderName);
+            var ttl = itemsRcvdDone.Count;
+            foreach (var item in itemsRcvdDone)
+            {
+                var senderEmail = "?";
+                var rptLine = "";
+
+                ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
+                try
+                {
+                    if (item is OL.ReportItem reportItem)
+                    {
+                        if (DateTime.Now == DateTime.MinValue)
+                        {
+                            TestAllKeys(reportItem);
+                        }
+
+                        senderEmail = reportItem.PropertyAccessor.GetProperty("http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
+                        ArgumentNullException.ThrowIfNull(senderEmail, "senderEmail is nul @@@@@@@@@@@@@@@-");
+                        senderEmail = OutlookHelper6.RemoveBadEmailParts(senderEmail);
+                        if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
+
+                        if (await Dbq.Emails.FindAsync(senderEmail) == null)
+                        {
+                            var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail);
+                            var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, "under constr-n", null, reportItem.CreationTime, msg, "R");
+                            if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                        }
+
+                        rptLine += $"report\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
+                    }
+                    else if (item is OL.MailItem mailItem)
+                    {
+                        senderEmail = OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress);
+                        if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
+
+                        WriteLine($"   SentOn:{mailItem.SentOn:MM-dd HH:mm:ss}   Receiv:{mailItem.ReceivedTime - mailItem.SentOn:hh\\:mm\\:ss}   Creati:{(mailItem.CreationTime - mailItem.SentOn).TotalDays:N5}   LastMo:{(mailItem.LastModificationTime - mailItem.SentOn).TotalDays:N5}   Expiry:{(mailItem.ExpiryTime - mailItem.SentOn).TotalDays:N5}");
+
+                        var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, msg);
+                        if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+
+                        foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
+                        {
+                            senderEmail = OutlookHelper6.RemoveBadEmailParts(emailFromBody);
+                            if (!OutlookHelper6.ValidEmailAddress(senderEmail)) { ReportOL += $" ! {senderEmail}  \t <- invalid!!!\r\n"; continue; }
+
+                            if (await Dbq.Emails.FindAsync(senderEmail) == null)
+                            {
+                                var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, senderEmail);
+                                isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from body. ", "R");
+                                if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                            }
+
+                            rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
+                        }
+
+                        Write($"\n{ttl,2})  rcvd: {mailItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {mailItem.Recipients.Count} rcpnts: (");
+                        var cnt = 0;
+                        foreach (OL.Recipient re in mailItem.Recipients)
+                        {
+                            var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+
+                            var email = await OutlookToDbWindowHelpers.CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now);
+                            isNew = email?.AddedAt == Now;
+                            if (isNew)
+                            {
+                                newEmailsAdded++;
+                            }
+
+                            rptLine += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                        }
+
+                        rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
+                    }
+                    else if (item is OL.AppointmentItem itm0) /**/ { ReportOL += $" ? Appointment {itm0.CreationTime:yyyy-MM-dd} {itm0.Subject} \t {OneLineAndTrunkate(itm0.Body)} \r\n"; }
+                    else if (item is OL.DistListItem itm1)    /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
+                    else if (item is OL.DocumentItem itm2)    /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
+                    else if (item is OL.JournalItem itm3)     /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
+                    else if (item is OL.MeetingItem itm4)     /**/ { ReportOL += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
+                    else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
+                    else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
+                    else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
+                    else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); }
+                    else
+                    {
+                        throw new Exception("AP: Review this case of missing type: must be something worth processing.");
+                    }
+
+                    WriteLine($"{rptLine}");
+                }
+                catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($":{senderEmail}."); }
+
+                if (ttlProcessed % 10 == 0)
+                {
+                    ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... ";
+                }
+            }
+
+            ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... \n";
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+
+        _newEmailsAdded += newEmailsAdded;
+        report___ += OutlookHelper6.ReportSectionTtl(folderName, ttlProcessed, 0, newEmailsAdded);
+        return report___;
     }
-  }
-  static void LoadVwSrcs()
-  {
-    //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
-    //((CollectionViewSource)(FindResource("eMailVwSrc"))).View.MoveCurrentTo(null);
-    //((CollectionViewSource)(FindResource("eHistVwSrc"))).Source = ctx.EHists.Where(p => p.AddedAt >= before).ToList();
-    //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
-  }
-  static void TestOneKey(OL.ReportItem item, string key, bool isBinary = false)
-  {
-    try
+    static string OneLineAndTrunkate(string body, int max = 55)
     {
-      Write($"==> {key}: ");
+        if (string.IsNullOrEmpty(body))
+        {
+            return "";
+        }
 
-      var pa = item.PropertyAccessor;
-      var url = $"http://schemas.microsoft.com/mapi/proptag/{key}";
+        body = body.Replace("\r", " CR ").Replace("\n", " LF ");
 
-      object prop;
-      prop = pa.GetProperty(url);
+        var len = body.Length;
 
-      if (isBinary)
-        prop = pa.BinaryToString(pa.GetProperty(url));
-
-      if (prop is byte[])
-      {
-        var snd = pa.BinaryToString(prop);
-        Write($"  === snd: {snd.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
-
-        var s = item.Session.GetAddressEntryFromID(snd);
-        Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
-        Write($"  *** Address: {s.Address}"); //.PrimarySmtpAddress;
-      }
-      else
-      {
-        Write($"==> {prop.GetType().Name}  {prop.ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
-      }
+        return len <= max ? body : (body[..max] + "...");
     }
-    catch (Exception ex) { Write($"  !!! ex: {ex.Message.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); }
-
-    WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
-  }
-  static void TestAllKeys(OL.ReportItem item) // body for report item ...is hard to find; need more time, but really, who cares. // Aug 2019
-  {
-    if (item.Body.Length > 0)
+    async Task<bool> CheckDbInsertIfMissing_senderAsync(OL.MailItem mailItem, string senderEmail, string note)
     {
-      WriteLine($"\n\n@@@ Body: {item.Body}");
-      item.SaveAs(@"C:\temp\NDR.txt");
+        //if (Dbq.Emails.Find(senderEmail) == null)
+        var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
+        var isNew = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
+        return isNew;
     }
+    void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
+    {
+        var emr = Dbq.Emails.Find(email);
+        if (emr == null)
+        {
+            if (Debugger.IsAttached)
+            {
+                Debugger.Break();
+            }
+            else
+            {
+                throw new Exception("AP: Review this case of missing row: must be something wrong.");
+            }
+        }
+        else
+        {
+            if (emr.PermBanReason == null || !emr.PermBanReason.Contains(rsn)) // if new reason
+            {
+                emr.PermBanReason += rsn + Now.ToString("yyyy-MM-dd");
+                emr.ModifiedAt = Now;
+                rv += $"{OuFolder.qFail,-15}  {email,-48}banned since: {rsn}\n";
+                newBansAdded++;
+            }
+            else if (emr.PermBanReason.Contains(rsn)) // same reason already there
+            {
+                rv += $"{OuFolder.qFail,-15}  {email,-48}banned before with the same reason: {rsn}\n";
+            }
+            else
+            {
+                if (Debugger.IsAttached)
+                {
+                    Debugger.Break();
+                }
+                else
+                {
+                    throw new Exception("AP: Review this case of missing row: must be something wrong.");
+                }
+            }
+        }
+    }
+    static void LoadVwSrcs()
+    {
+        //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
+        //((CollectionViewSource)(FindResource("eMailVwSrc"))).View.MoveCurrentTo(null);
+        //((CollectionViewSource)(FindResource("eHistVwSrc"))).Source = ctx.EHists.Where(p => p.AddedAt >= before).ToList();
+        //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
+    }
+    static void TestOneKey(OL.ReportItem item, string key, bool isBinary = false)
+    {
+        try
+        {
+            Write($"==> {key}: ");
 
-    TestOneKey(item, "0x0E04001E"); //tu: email !!!
-    TestOneKey(item, "0x007D001F");
-    TestOneKey(item, "0x007D001E");
-    TestOneKey(item, "0x0065001f");
-    TestOneKey(item, "0x0078001f");
-    TestOneKey(item, "0x0076001f");
-    TestOneKey(item, "0x0C1F001F");
-    TestOneKey(item, "0x5D01001F");
-    TestOneKey(item, "0x5D02001F");
-    TestOneKey(item, "0x0C190102");
-    TestOneKey(item, "0x4030001F");
-    TestOneKey(item, "0x003F0102");
-    TestOneKey(item, "0x0076001F");
+            var pa = item.PropertyAccessor;
+            var url = $"http://schemas.microsoft.com/mapi/proptag/{key}";
 
-    TestOneKey(item, "0x001A001E"); // "PR_MESSAGE_CLASS"
-    TestOneKey(item, "0x0037001E"); // "PR_SUBJECT"
-    TestOneKey(item, "0x00390040"); // "PR_CLIENT_SUBMIT_TIME"
-    TestOneKey(item, "0x003D001E"); // "PR_SUBJECT_PREFIX PT_STRING8"
-    TestOneKey(item, "0x0040001E"); // "PR_RECEIVED_BY_NAME"
-    TestOneKey(item, "0x0042001E"); // "PR_SENT_REPRESENTING_NAME"
-    TestOneKey(item, "0x0050001E"); // "PR_REPLY_RECIPIENT_NAMES"
+            object prop;
+            prop = pa.GetProperty(url);
 
-    TestOneKey(item, "0x0064001E"); // "PR_SENT_REPRESENTING_ADDRTYPE"
-    TestOneKey(item, "0x0065001E"); // "PR_SENT_REPRESENTING_EMAIL_ADDRESS"
-    TestOneKey(item, "0x0070001E"); // "PR_CONVERSATION_TOPIC"
-    TestOneKey(item, "0x0075001E"); // "PR_RECEIVED_BY_ADDRTYPE"
-    TestOneKey(item, "0x0076001E"); // "PR_RECEIVED_BY_EMAIL_ADDRESS"
-    TestOneKey(item, "0x007D001E"); // "PR_TRANSPORT_MESSAGE_HEADERS"
-    TestOneKey(item, "0x0C1A001E"); // "PR_SENDER_NAME"
+            if (isBinary)
+            {
+                prop = pa.BinaryToString(pa.GetProperty(url));
+            }
 
-    TestOneKey(item, "0x0C1E001E"); // "PR_SENDER_ADDRTYPE"
-    TestOneKey(item, "0x0C1F001E"); // "PR_SENDER_EMAIL_ADDRESS"
-    TestOneKey(item, "0x0E02001E"); // "PR_DISPLAY_BCC"
-    TestOneKey(item, "0x0E03001E"); // "PR_DISPLAY_CC"
-    TestOneKey(item, "0x0E04001E"); // "PR_DISPLAY_TO"
-    TestOneKey(item, "0x0E060040"); // "PR_MESSAGE_DELIVERY_TIME"
-    TestOneKey(item, "0x0E070003"); // "PR_MESSAGE_FLAGS"
-    TestOneKey(item, "0x0E080003"); // "PR_MESSAGE_SIZE"
+            if (prop is byte[])
+            {
+                var snd = pa.BinaryToString(prop);
+                Write($"  === snd: {snd.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
 
-    TestOneKey(item, "0x0E12000D"); // "PR_MESSAGE_RECIPIENTS"
-    TestOneKey(item, "0x0E13000D"); // "PR_MESSAGE_ATTACHMENTS"
-    TestOneKey(item, "0x0E1B000B"); // "PR_HASATTACH"
-    TestOneKey(item, "0x0E1D001E"); // "PR_NORMALIZED_SUBJECT"
-    TestOneKey(item, "0x0E1F000B"); // "PR_RTF_IN_SYNC"
-    TestOneKey(item, "0x0E28001E"); // "PR_PRIMARY_SEND_ACCT"
-    TestOneKey(item, "0x0E29001E"); // "PR_NEXT_SEND_ACCT"
-    TestOneKey(item, "0x0FF40003"); // "PR_ACCESS"
-    TestOneKey(item, "0x0FF70003"); // "PR_ACCESS_LEVEL"
+                var s = item.Session.GetAddressEntryFromID(snd);
+                Write($"  *** GetExchangeDistributionList(): {s.GetExchangeDistributionList().ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); //.PrimarySmtpAddress;
+                Write($"  *** Address: {s.Address}"); //.PrimarySmtpAddress;
+            }
+            else
+            {
+                Write($"==> {prop.GetType().Name}  {prop.ToString()?.Replace("\n", "-LF-").Replace("\r", "-CR-")}");
+            }
+        }
+        catch (Exception ex) { Write($"  !!! ex: {ex.Message.Replace("\n", "-LF-").Replace("\r", "-CR-")}"); }
 
-    TestOneKey(item, "0x0FFE0003"); // "PR_OBJECT_TYPE"
-    TestOneKey(item, "0x1000001E"); // "PR_BODY"
-    TestOneKey(item, "0x1035001E"); // "PR_INTERNET_MESSAGE_ID"
-    TestOneKey(item, "0x1045001E"); // "PR_LIST_UNSUBSCRIBE"
+        WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
+    }
+    static void TestAllKeys(OL.ReportItem item) // body for report item ...is hard to find; need more time, but really, who cares. // Aug 2019
+    {
+        if (item.Body.Length > 0)
+        {
+            WriteLine($"\n\n@@@ Body: {item.Body}");
+            item.SaveAs(@"C:\temp\NDR.txt");
+        }
 
-    TestOneKey(item, "0x1046001E"); // "N/A"
-    TestOneKey(item, "0x30070040"); // "PR_CREATION_TIME"
-    TestOneKey(item, "0x30080040"); // "PR_LAST_MODIFICATION_TIME"
-    TestOneKey(item, "0x340D0003"); // "PR_STORE_SUPPORT_MASK"
-    TestOneKey(item, "0x340F0003"); // "N/A"
-    TestOneKey(item, "0x3FDE0003"); // "PR_INTERNET_CPID"
-    TestOneKey(item, "0x80050003"); // "SideEffects"
-    TestOneKey(item, "0x802A001E"); // "InetAcctID"
-    TestOneKey(item, "0x804F001E"); // "InetAcctName"
-    TestOneKey(item, "0x80AD001E"); // "x-rcpt-to"
+        TestOneKey(item, "0x0E04001E"); //tu: email !!!
+        TestOneKey(item, "0x007D001F");
+        TestOneKey(item, "0x007D001E");
+        TestOneKey(item, "0x0065001f");
+        TestOneKey(item, "0x0078001f");
+        TestOneKey(item, "0x0076001f");
+        TestOneKey(item, "0x0C1F001F");
+        TestOneKey(item, "0x5D01001F");
+        TestOneKey(item, "0x5D02001F");
+        TestOneKey(item, "0x0C190102");
+        TestOneKey(item, "0x4030001F");
+        TestOneKey(item, "0x003F0102");
+        TestOneKey(item, "0x0076001F");
 
-    TestOneKey(item, "0x003B0102", false); // "PR_SENT_REPRESENTING_SEARCH_KEY"
-    TestOneKey(item, "0x003B0102", true); // "PR_SENT_REPRESENTING_SEARCH_KEY"
+        TestOneKey(item, "0x001A001E"); // "PR_MESSAGE_CLASS"
+        TestOneKey(item, "0x0037001E"); // "PR_SUBJECT"
+        TestOneKey(item, "0x00390040"); // "PR_CLIENT_SUBMIT_TIME"
+        TestOneKey(item, "0x003D001E"); // "PR_SUBJECT_PREFIX PT_STRING8"
+        TestOneKey(item, "0x0040001E"); // "PR_RECEIVED_BY_NAME"
+        TestOneKey(item, "0x0042001E"); // "PR_SENT_REPRESENTING_NAME"
+        TestOneKey(item, "0x0050001E"); // "PR_REPLY_RECIPIENT_NAMES"
 
-    TestOneKey(item, "0x003F0102", true); // "PR_RECEIVED_BY_ENTRYID"
-    TestOneKey(item, "0x00410102", true); // "PR_SENT_REPRESENTING_ENTRYID"
-    TestOneKey(item, "0x004F0102", true); // "PR_REPLY_RECIPIENT_ENTRIES"
-    TestOneKey(item, "0x00510102", true); // "PR_RECEIVED_BY_SEARCH_KEY"
-    TestOneKey(item, "0x00710102", true); // "PR_CONVERSATION_INDEX"
-    TestOneKey(item, "0x0C190102", true); // "PR_SENDER_ENTRYID"
-    TestOneKey(item, "0x0C1D0102", true); // "PR_SENDER_SEARCH_KEY"
-    TestOneKey(item, "0x0E090102", true); // "PR_PARENT_ENTRYID"
-    TestOneKey(item, "0x0FF80102", true); // "PR_MAPPING_SIGNATURE"
-    TestOneKey(item, "0x0FF90102", true); // "PR_RECORD_KEY"
-    TestOneKey(item, "0x0FFA0102", true); // "PR_STORE_RECORD_KEY"
-    TestOneKey(item, "0x0FFB0102", true); // "PR_STORE_ENTRYID"
-    TestOneKey(item, "0x0FFF0102", true); // "PR_ENTRYID"
-    TestOneKey(item, "0x10090102", true); // "PR_RTF_COMPRESSED"
-    TestOneKey(item, "0x10130102", true); // "PR_HTML"
-    TestOneKey(item, "0x300B0102", true); // "PR_SEARCH_KEY"
-    TestOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
-    TestOneKey(item, "0x80660102", true); // "RemoteEID"
+        TestOneKey(item, "0x0064001E"); // "PR_SENT_REPRESENTING_ADDRTYPE"
+        TestOneKey(item, "0x0065001E"); // "PR_SENT_REPRESENTING_EMAIL_ADDRESS"
+        TestOneKey(item, "0x0070001E"); // "PR_CONVERSATION_TOPIC"
+        TestOneKey(item, "0x0075001E"); // "PR_RECEIVED_BY_ADDRTYPE"
+        TestOneKey(item, "0x0076001E"); // "PR_RECEIVED_BY_EMAIL_ADDRESS"
+        TestOneKey(item, "0x007D001E"); // "PR_TRANSPORT_MESSAGE_HEADERS"
+        TestOneKey(item, "0x0C1A001E"); // "PR_SENDER_NAME"
 
-    WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
-  }
+        TestOneKey(item, "0x0C1E001E"); // "PR_SENDER_ADDRTYPE"
+        TestOneKey(item, "0x0C1F001E"); // "PR_SENDER_EMAIL_ADDRESS"
+        TestOneKey(item, "0x0E02001E"); // "PR_DISPLAY_BCC"
+        TestOneKey(item, "0x0E03001E"); // "PR_DISPLAY_CC"
+        TestOneKey(item, "0x0E04001E"); // "PR_DISPLAY_TO"
+        TestOneKey(item, "0x0E060040"); // "PR_MESSAGE_DELIVERY_TIME"
+        TestOneKey(item, "0x0E070003"); // "PR_MESSAGE_FLAGS"
+        TestOneKey(item, "0x0E080003"); // "PR_MESSAGE_SIZE"
+
+        TestOneKey(item, "0x0E12000D"); // "PR_MESSAGE_RECIPIENTS"
+        TestOneKey(item, "0x0E13000D"); // "PR_MESSAGE_ATTACHMENTS"
+        TestOneKey(item, "0x0E1B000B"); // "PR_HASATTACH"
+        TestOneKey(item, "0x0E1D001E"); // "PR_NORMALIZED_SUBJECT"
+        TestOneKey(item, "0x0E1F000B"); // "PR_RTF_IN_SYNC"
+        TestOneKey(item, "0x0E28001E"); // "PR_PRIMARY_SEND_ACCT"
+        TestOneKey(item, "0x0E29001E"); // "PR_NEXT_SEND_ACCT"
+        TestOneKey(item, "0x0FF40003"); // "PR_ACCESS"
+        TestOneKey(item, "0x0FF70003"); // "PR_ACCESS_LEVEL"
+
+        TestOneKey(item, "0x0FFE0003"); // "PR_OBJECT_TYPE"
+        TestOneKey(item, "0x1000001E"); // "PR_BODY"
+        TestOneKey(item, "0x1035001E"); // "PR_INTERNET_MESSAGE_ID"
+        TestOneKey(item, "0x1045001E"); // "PR_LIST_UNSUBSCRIBE"
+
+        TestOneKey(item, "0x1046001E"); // "N/A"
+        TestOneKey(item, "0x30070040"); // "PR_CREATION_TIME"
+        TestOneKey(item, "0x30080040"); // "PR_LAST_MODIFICATION_TIME"
+        TestOneKey(item, "0x340D0003"); // "PR_STORE_SUPPORT_MASK"
+        TestOneKey(item, "0x340F0003"); // "N/A"
+        TestOneKey(item, "0x3FDE0003"); // "PR_INTERNET_CPID"
+        TestOneKey(item, "0x80050003"); // "SideEffects"
+        TestOneKey(item, "0x802A001E"); // "InetAcctID"
+        TestOneKey(item, "0x804F001E"); // "InetAcctName"
+        TestOneKey(item, "0x80AD001E"); // "x-rcpt-to"
+
+        TestOneKey(item, "0x003B0102", false); // "PR_SENT_REPRESENTING_SEARCH_KEY"
+        TestOneKey(item, "0x003B0102", true); // "PR_SENT_REPRESENTING_SEARCH_KEY"
+
+        TestOneKey(item, "0x003F0102", true); // "PR_RECEIVED_BY_ENTRYID"
+        TestOneKey(item, "0x00410102", true); // "PR_SENT_REPRESENTING_ENTRYID"
+        TestOneKey(item, "0x004F0102", true); // "PR_REPLY_RECIPIENT_ENTRIES"
+        TestOneKey(item, "0x00510102", true); // "PR_RECEIVED_BY_SEARCH_KEY"
+        TestOneKey(item, "0x00710102", true); // "PR_CONVERSATION_INDEX"
+        TestOneKey(item, "0x0C190102", true); // "PR_SENDER_ENTRYID"
+        TestOneKey(item, "0x0C1D0102", true); // "PR_SENDER_SEARCH_KEY"
+        TestOneKey(item, "0x0E090102", true); // "PR_PARENT_ENTRYID"
+        TestOneKey(item, "0x0FF80102", true); // "PR_MAPPING_SIGNATURE"
+        TestOneKey(item, "0x0FF90102", true); // "PR_RECORD_KEY"
+        TestOneKey(item, "0x0FFA0102", true); // "PR_STORE_RECORD_KEY"
+        TestOneKey(item, "0x0FFB0102", true); // "PR_STORE_ENTRYID"
+        TestOneKey(item, "0x0FFF0102", true); // "PR_ENTRYID"
+        TestOneKey(item, "0x10090102", true); // "PR_RTF_COMPRESSED"
+        TestOneKey(item, "0x10130102", true); // "PR_HTML"
+        TestOneKey(item, "0x300B0102", true); // "PR_SEARCH_KEY"
+        TestOneKey(item, "0x34140102", true); // "PR_MDB_PROVIDER"
+        TestOneKey(item, "0x80660102", true); // "RemoteEID"
+
+        WriteLine($"++++++++++++++++++++++++++++++++++++++ --------------------\n");
+    }
 }
 /* Cache of https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
 
