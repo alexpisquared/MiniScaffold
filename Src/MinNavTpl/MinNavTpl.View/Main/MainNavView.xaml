@@ -442,12 +442,11 @@
         <!--<xui:ThemeSelectorUsrCtrl x:Name="themeSelector4" Height="26" Margin="5 0" />        <xui:ThemeSelectorUsrCtrl x:Name="themeSelector3" Header="Dark Mode" FontFml="Arial" FontSze="16"/>-->
 
         <xui:Zoomer x:Name="ZoomSlider2" ZmValue="{Binding ZV, ElementName=wnd, Mode=TwoWay}"	VerticalAlignment="Top" Margin="5 0" />
-        <Button	Margin="2" Content="_æ" FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#00F" BorderThickness="0" ToolTip="Toggle Audio"      Click="OnAudio"                           Visibility="Collapsed" />
-        <Button	Margin="2" Content="_+" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Restore Window"    Click="OnWindowRestoree" x:Name="wr"      Visibility="Collapsed" />
-        <Button	Margin="2" Content="_£" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Maximize Window"   Click="OnWindowMaximize" x:Name="wm"                   />
-        <Button	Margin="2" Content="_-"                          FontSize="26" Height="26" Padding="2 -0" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Minimize Window"   Click="OnWindowMiniBase"                               />
-        <Button	Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Click="OnClosShutdnBase" x:Name="btnExit" Visibility="Collapsed"/>
-        <Button Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Command="{Binding TryCloseCommand}" IsCancel="True" />
+        <Button	Margin="2" Content="_æ" FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#00F" BorderThickness="0" ToolTip="Toggle Audio"      Click="OnAudio"                      Visibility="Collapsed" />
+        <Button	Margin="2" Content="_-"                          FontSize="26" Height="26" Padding="2 -0" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Minimize Window"   Click="OnWindowMiniBase"                                    />
+        <Button	Margin="2" Content="_+" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Restore Window"    Click="OnWindowRestoree" x:Name="wr" Visibility="Collapsed" />
+        <Button	Margin="2" Content="_£" FontFamily="Wingdings 2" FontSize="16" Height="26" Padding="0 -1" Width="26" Foreground="#111" BorderThickness="0" ToolTip="Maximize Window"   Click="OnWindowMaximize" x:Name="wm"                        />
+        <Button Margin="2" Content="r"  FontFamily="Webdings"    FontSize="18" Height="26" Padding="0 -1" Width="26" Foreground="#F00" BorderThickness="0" ToolTip="Close Application" Command="{Binding TryCloseCommand}"  x:Name="btnExit"       />
       </StackPanel>
     </Grid>
   </Border>

@@ -50,7 +50,7 @@ public partial class Page02VM : BaseEmVM
         return rv;
     }
 
-    [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 5;
+    [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
@@ -166,5 +166,5 @@ public partial class Page02VM : BaseEmVM
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
     string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo
-    readonly int antiSpamSec = DevOps.IsDbg ? 5 : 60;
+    readonly int antiSpamSec = DevOps.IsDbg ? 5 : 80;
 }
