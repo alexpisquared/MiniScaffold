@@ -132,12 +132,12 @@
           <TextBox Text="{Binding Fname, FallbackValue='John '}" MinWidth="100" />
         </StackPanel>
         <StackPanel>
-          <Label Content="Last Name" />
-          <TextBox Text="{Binding Lname, FallbackValue='Smith'}" MinWidth="100"   />
+          <Label Content="Phone" />
+          <TextBox Text="{Binding Phone}" MinWidth="100"   />
         </StackPanel>
         <StackPanel>
           <Label Content="Perm Ban Rsn" Target="{Binding ElementName=tbPbr}" />
-          <TextBox                      Text="{Binding PermBanReason}" MinWidth="100" x:Name="tbPbr" />
+          <TextBox                        Text="{Binding PermBanReason}" MinWidth="100" x:Name="tbPbr" />
         </StackPanel>
         <StackPanel>
           <Label Content="_Re-send after"   Target="{Binding ElementName=tbRa}" Margin="-1 0"/>

@@ -37,10 +37,9 @@ public partial class Page01VM : BaseEmVM
         finally { _ = await base.InitAsync(); }
     }
 
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
     [RelayCommand]
     void AddNewEmail()
     {
         try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Email" : Clipboard.GetText() }; Dbq.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
-       }
+}

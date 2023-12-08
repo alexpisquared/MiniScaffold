@@ -18,8 +18,7 @@ public partial class Page02VM : BaseEmVM
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 
-            var emailQuery = DevOps.IsDbg ?
-                Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+            var emailQuery = // DevOps.IsDbg ? Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
                 Dbq.Emails.Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
 
             Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
@@ -51,7 +50,6 @@ public partial class Page02VM : BaseEmVM
     }
 
     [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
         GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
