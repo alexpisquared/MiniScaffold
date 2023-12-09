@@ -10,8 +10,8 @@ public partial class MainNavView : WpfUserControlLib.Base.WindowBase
 
         //themeSelector1.ThemeApplier = ApplyTheme; //dnf theming 1/2
 
-        btnExit.IsCancel = VersionHelper.IsDbg;
-        IgnoreEscape = true;
+        btnExit.IsCancel = true; // for enterpise only: = VersionHelper.IsDbg;
+        IgnoreEscape = true;     // prevent WindowBase from messing things up.   
     }
 
     void OnLoaded(object s, RoutedEventArgs e) => themeSelector1.SetCurThemeToMenu(Thm); //dnf theming 2/2

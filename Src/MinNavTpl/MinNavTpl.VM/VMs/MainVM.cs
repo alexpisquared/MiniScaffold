@@ -1,6 +1,7 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class MainVM : BaseMinVM
 {
+    readonly bool _ctored;
     readonly NavigationStore _navigationStore;
     public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore alw, UserSettings usr) : base()
     {

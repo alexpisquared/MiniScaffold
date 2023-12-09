@@ -5,13 +5,12 @@ public partial class Page02VM : BaseEmVM
       : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, synth, 8110) { }
     public async override Task<bool> InitAsync()
     {
-        var rv = false;
         try
         {
             IsBusy = true;
+            //await Task.Delay(0); // <== does not show up without this...............................
             await Bpr.StartAsync(8);
-            await Task.Delay(2); // <== does not show up without this...............................
-            rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
+            //var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
 
             var sw = Stopwatch.StartNew();
 
@@ -42,11 +41,9 @@ public partial class Page02VM : BaseEmVM
             }
 
             await Bpr.FinishAsync(8);
+            return await base.InitAsync();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
-        finally { rv = await base.InitAsync(); }
-
-        return rv;
     }
 
     [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;

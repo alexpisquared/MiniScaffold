@@ -9,12 +9,14 @@ public partial class Page01VM : BaseEmVM
         {
             IsBusy = true;
             await Bpr.StartAsync(8);
-            await Task.Delay(2); // <== does not show up without this...............................
-            var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
+            //await Task.Delay(2); // <== does not show up without this...............................
+            //var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
 
             var sw = Stopwatch.StartNew();
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
+
+            _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbq.Database.GetConnectionString() ?? "??");
 
             await Dbq.Emails.LoadAsync();
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await dbq.Emails.ToListAsync());
@@ -31,10 +33,9 @@ public partial class Page01VM : BaseEmVM
             Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ");
 
             await Bpr.FinishAsync(8);
-            return rv;
+            return await base.InitAsync();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
-        finally { _ = await base.InitAsync(); }
     }
 
     [RelayCommand]

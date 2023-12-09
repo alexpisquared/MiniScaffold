@@ -13,13 +13,7 @@ public partial class BaseEmVM : BaseDbVM
     public async override Task<bool> InitAsync()
     {
         await Task.Delay(22); // <== does not show up without this...............................
-        try
-        {
-            //_thisCampaign = Dbq.Campaigns.Max(r => r.Id);
-
-            _badEmails = await MiscEfDb.GetBadEmails("Select Id from [dbo].[BadEmails]()", Dbq.Database.GetConnectionString() ?? "??");
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        try { } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
 
         return await base.InitAsync();
     }
@@ -75,11 +69,11 @@ public partial class BaseEmVM : BaseDbVM
                 }
 
                 GSReport += "succeeded \r\n";
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
+                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
             {
-                _ = await OutlookToDbWindowHelpers.CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
+                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
                 GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
 
@@ -148,15 +142,13 @@ public partial class BaseEmVM : BaseDbVM
 
             var curpos = PageCvs.CurrentPosition;
 
-            for (var i = 0; i < 26 && PageCvs?.MoveCurrentToNext() == true; i++)
+            for (var i = 0; i < 52 && PageCvs?.MoveCurrentToNext() == true; i++)
             {
                 await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
             }
 
-            if (curpos > 0)
-            {
-                _ = (PageCvs?.MoveCurrentToPosition(curpos));
-            }
+            _ = (PageCvs?.MoveCurrentToPosition(curpos));
+            await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
@@ -186,23 +178,25 @@ public partial class BaseEmVM : BaseDbVM
     }
     protected static async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {
-        if (email is not null && email.Ttl_Sent is null)
+        if (email is null) // ??? || email.Ttl_Sent is not null)
         {
-            _ = await GetCountryFromWebServiceTaskAsync(email, cfg);
+            return;
+        }
 
-            var rcvds = await dbq.Ehists.CountAsync(r => r.EmailId == email.Id && r.RecivedOrSent == "R");
-            if (rcvds > 0)
-            {
-                email.Ttl_Rcvd = rcvds;
-                email.LastRcvd = await dbq.Ehists.Where(r => r.EmailId == email.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
-            }
+        _ = await GetCountryFromWebServiceTaskAsync(email, cfg);
 
-            var sends = await dbq.Ehists.CountAsync(r => r.EmailId == email.Id && r.RecivedOrSent == "S");
-            if (sends > 0)
-            {
-                email.Ttl_Sent = sends;
-                email.LastSent = await dbq.Ehists.Where(r => r.EmailId == email.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
-            }
+        var rcvds = await dbq.Ehists.CountAsync(r => r.EmailId == email.Id && r.RecivedOrSent == "R");
+        if (rcvds > 0)
+        {
+            email.Ttl_Rcvd = rcvds;
+            email.LastRcvd = await dbq.Ehists.Where(r => r.EmailId == email.Id && r.RecivedOrSent == "R").MaxAsync(r => r.EmailedAt);
+        }
+
+        var sends = await dbq.Ehists.CountAsync(r => r.EmailId == email.Id && r.RecivedOrSent == "S");
+        if (sends > 0)
+        {
+            email.Ttl_Sent = sends;
+            email.LastSent = await dbq.Ehists.Where(r => r.EmailId == email.Id && r.RecivedOrSent == "S").MaxAsync(r => r.EmailedAt);
         }
     }
     string? ExtractFirstNameFromEmailUsingDb(string value) => value; //todo

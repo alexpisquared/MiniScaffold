@@ -1,10 +1,13 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using System.Windows.Threading;
+
+namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM
 {
     readonly int _hashCode;
-    protected MainVM MainVM    {        get;}
     readonly ISecurityForcer _secForcer;
-    protected bool _saving, _loading, _inited;
+    bool _inited;
+    protected MainVM MainVM    {        get;}
+    protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
     public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, ISpeechSynth synth, int oid)
     {
@@ -30,7 +33,7 @@ public partial class BaseDbVM : BaseMinVM
         _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_Chngd;
         _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_Chngd;
 
-        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } });    //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
         Lgr.LogInformation($"┌── {GetType().Name} eo-ctor      PageRank:{oid}");
     }
