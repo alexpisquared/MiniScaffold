@@ -69,7 +69,8 @@ public partial class Page02VM : BaseEmVM
             GSReport += $"{i} / {TopNumber}  ";
             await Task.Delay(antiSpamSec * 1000);
             await SendThisOneAsync(email.Id);
-            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 10);
+            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...");
+            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 5);
         }
 
         await Bpr.FinishAsync(8);
