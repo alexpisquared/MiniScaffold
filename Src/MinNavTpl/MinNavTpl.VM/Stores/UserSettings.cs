@@ -4,7 +4,7 @@ public class UserSettings : UserSettingsStore // ..actually, not a store/store -
   readonly bool _loaded;
   readonly ILogger? _logger;
 
-  public UserSettings() => WriteLine("    UserSettings.Ctor(): Deserialized => Loading is done?");
+  public UserSettings() => WriteLine("[--:--:-- ---]     UserSettings.Ctor(): Deserialized => Loading is done?");
   public UserSettings(ILogger lgr)
   {
     _logger = lgr;

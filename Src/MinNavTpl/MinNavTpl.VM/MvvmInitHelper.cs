@@ -53,7 +53,7 @@ public static class MvvmInitHelper
 
         _ = services.AddTransient<ISecurityForcer, SecurityForcer>();
 
-        _ = services.AddTransient<UserSettings>();
+        _ = services.AddSingleton<UserSettings>();
 
         _ = services.AddTransient(sp => new QstatsRlsContext(CalcConStr<QstatsRlsContext>(sp, CfgName.SqlVerIpm)));
         _ = services.AddTransient(sp => new MinFinInvDbContext());

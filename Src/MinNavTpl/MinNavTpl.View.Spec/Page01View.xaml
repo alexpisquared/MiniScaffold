@@ -41,7 +41,7 @@
       <ColumnDefinition Width="1*" />
     </Grid.ColumnDefinitions>
 
-    <Grid x:Name="ctrlPnl" Height="30">
+    <Grid x:Name="ctrlPnl" Grid.ColumnSpan="3" Height="30">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
@@ -49,9 +49,8 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
 
-      <TextBlock  Text="Agents" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
-
-      <StackPanel Grid.Column="1" Orientation="Horizontal">
+      <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
+        <TextBlock  Text="Agents" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
@@ -122,10 +121,7 @@
           <Label Content="Id" />
           <TextBlock Text="{Binding Id, FallbackValue='abc@efg.com'}" />
         </StackPanel>
-        <StackPanel>
-          <Label Content="Co" />
-          <TextBlock Text="{Binding Company, FallbackValue='ABC Co'}"  />
-        </StackPanel>
+        <!-- tmi: <StackPanel><Label Content="Co" /><TextBlock Text="{Binding Company, FallbackValue='ABC Co'}"  /></StackPanel>-->
         <StackPanel Margin="40 0 0 0">
           <Label Content="First Name" />
           <TextBox Text="{Binding Fname, FallbackValue='John '}" MinWidth="100" />

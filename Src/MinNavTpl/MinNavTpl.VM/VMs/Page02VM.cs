@@ -42,8 +42,7 @@ public partial class Page02VM : BaseEmVM
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
     }
 
     [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
@@ -56,7 +55,7 @@ public partial class Page02VM : BaseEmVM
     async Task SendTopNAsync()
     {
         GSReport = $"";
-        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ...");
+        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you at {DateTime.Now.AddSeconds(TopNumber * (antiSpamSec + 5)):HH:mm}.");
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -70,7 +69,7 @@ public partial class Page02VM : BaseEmVM
             GSReport += $"{i} / {TopNumber}  ";
             await Task.Delay(antiSpamSec * 1000);
             await SendThisOneAsync(email.Id);
-            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...");
+            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 10);
         }
 
         await Bpr.FinishAsync(8);
