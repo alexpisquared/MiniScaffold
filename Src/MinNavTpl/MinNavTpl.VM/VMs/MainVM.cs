@@ -27,8 +27,6 @@ public partial class MainVM : BaseMinVM
         Bpr.SuppressTicks = Bpr.SuppressAlarm = !(IsAudible = UsrStgns.IsAudible);
         IsAnimeOn = UsrStgns.IsAnimeOn;
 
-        Bpr.Start();
-
         _ctored = true;
     }
     public async override Task<bool> InitAsync()

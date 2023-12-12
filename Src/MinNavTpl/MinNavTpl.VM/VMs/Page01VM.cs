@@ -7,10 +7,9 @@ public partial class Page01VM : BaseEmVM
     {
         try
         {
-            IsBusy = true;
+            await Task.Delay(250); // <== does not show up without this...............................
             await Bpr.StartAsync(8);
-            //await Task.Delay(2); // <== does not show up without this...............................
-            //var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
+            IsBusy = true;
 
             var sw = Stopwatch.StartNew();
             await Dbq.PhoneEmailXrefs.LoadAsync();

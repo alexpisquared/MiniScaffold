@@ -7,22 +7,17 @@ public partial class Page02VM : BaseEmVM
     {
         try
         {
-            IsBusy = true;
-            //await Task.Delay(0); // <== does not show up without this...............................
+            await Task.Delay(230); // <== does not show up without this...............................
             await Bpr.StartAsync(8);
-            //var rv = await base.InitAsync(); _loaded = false; IsBusy = true; // or GSReport does not work (store is not ready yet?)...
+            IsBusy = true;
 
             var sw = Stopwatch.StartNew();
 
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 
-            var emailQuery = // DevOps.IsDbg ? Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
-                Dbq.Emails.Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
-
-            Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
-
-            await emailQuery.LoadAsync();
+            var emailQuery = Dbq.Emails.Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority); // DevOps.IsDbg ? Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+            await emailQuery.LoadAsync(); //tmi: Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
 
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
             //redundant: PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
@@ -55,7 +50,7 @@ public partial class Page02VM : BaseEmVM
     async Task SendTopNAsync()
     {
         GSReport = $"";
-        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you at {DateTime.Now.AddSeconds(TopNumber * (antiSpamSec + 5)):HH:mm}.");
+        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/((antiSpamSec + 5) * TopNumber / 60.0):N0} minutes.");
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -69,7 +64,6 @@ public partial class Page02VM : BaseEmVM
             GSReport += $"{i} / {TopNumber}  ";
             await Task.Delay(antiSpamSec * 1000);
             await SendThisOneAsync(email.Id);
-            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...");
             await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 5);
         }
 
