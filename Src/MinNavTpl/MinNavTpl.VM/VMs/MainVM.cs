@@ -61,7 +61,7 @@ public partial class MainVM : BaseMinVM
     }
     async Task KeepCheckingForUpdatesAndNeverReturnAsync()
     {
-        await Task.Delay(150000); // 2.5 min
+        await Task.Delay(3_600_000); // 1 hr
         OnCheckForNewVersion();
 
         var nextHour = DateTime.Now.AddHours(1);
@@ -69,7 +69,7 @@ public partial class MainVM : BaseMinVM
         await Task.Delay(nextHH00 - DateTime.Now);
         OnCheckForNewVersion(true);
 
-        while (await new PeriodicTimer(TimeSpan.FromMinutes(10)).WaitForNextTickAsync()) { OnCheckForNewVersion(); }
+        while (await new PeriodicTimer(TimeSpan.FromHours(1)).WaitForNextTickAsync()) { OnCheckForNewVersion(); }
     }
     void OnCheckForNewVersion(bool logNetVer = false)
     {
