@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using Newtonsoft.Json.Linq;
+
+namespace MinNavTpl.VM.VMs;
 
 public partial class BaseEmVM : BaseDbVM
 {
@@ -17,6 +19,11 @@ public partial class BaseEmVM : BaseDbVM
 
         return await base.InitAsync();
     }
+    public override Task<bool> WrapAsync()
+    {
+        _ = EmailOfIVM.WrapAsync();
+        return base.WrapAsync();
+    }
 
     public EmailOfIStore EmailOfIStore
     {
@@ -28,7 +35,7 @@ public partial class BaseEmVM : BaseDbVM
     }
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Oleksa";
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Sir/Madam";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
@@ -49,17 +56,18 @@ public partial class BaseEmVM : BaseDbVM
     {
         GSReport = "";
         await Bpr.StartAsync(8);
-        await SendThisOneAsync(ThisEmail);
+        await SendThisOneAsync(ThisEmail, ThisFName);
         await Bpr.FinishAsync(8);
     }
-    protected async Task SendThisOneAsync(string email)
+    protected async Task SendThisOneAsync(string email, string? fname)
     {
         try
         {
-            GSReport += $"{email} ... ";
+            var fName = string.IsNullOrEmpty(fname) ? (GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(email) ?? ExtractFirstNameFromEmailUsingDb(email) ?? "Sirs") : fname;
+            GSReport += $"{fName,-15}\t{email,-47}\t ...  ";
 
             var timestamp = DateTime.Now;
-            var (success, report1) = await QStatusBroadcaster.SendLetter(email, ThisFName, isAvailable: true, timestamp, Lgr);
+            var (success, report1) = await QStatusBroadcaster.SendLetter(email, fName, isAvailable: true, timestamp, Lgr);
             if (success)
             {
                 var em = Dbq.Emails.FirstOrDefault(r => r.Id == email && r.ReSendAfter != null);
@@ -69,18 +77,17 @@ public partial class BaseEmVM : BaseDbVM
                 }
 
                 GSReport += "succeeded \r\n";
-                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
+                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
             {
-                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, ThisFName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
+                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
                 GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
 
                 //todo: need logic to inflict the PermaBan on the email address.
             }
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
     }
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
@@ -94,8 +101,7 @@ public partial class BaseEmVM : BaseDbVM
             var rowsAffected = await Dbq.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = dbq.Emails.Local.Remove(email!);
             GSReport = $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
             _ = Dbq.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
     static bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 
@@ -149,8 +155,7 @@ public partial class BaseEmVM : BaseDbVM
 
             _ = (PageCvs?.MoveCurrentToPosition(curpos));
             await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
     protected static async Task<string> GetCountryFromWebServiceTaskAsync(Email? email, IConfigurationRoot cfg)
@@ -173,8 +178,7 @@ public partial class BaseEmVM : BaseDbVM
             }
 
             return "";
-        }
-        catch (Exception ex) { ex.Pop(); return $"FAILED. \r\n  {ex.Message}"; }
+        } catch (Exception ex) { ex.Pop(); return $"FAILED. \r\n  {ex.Message}"; }
     }
     protected static async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {

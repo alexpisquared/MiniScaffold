@@ -15,7 +15,7 @@ public partial class NavBarVM : BaseMinVM
 
         _SrvrNameStore.Changed += SrvrNameStore_Chngd;
         _DtBsNameStore.Changed += DtBsNameStore_Chngd;
-        //_GSReportStore.Changed += GSReportStore_Chngd;
+        //_GSReportStore.Changed += GSReportStore_ChngdAsync;
         __letDbChStore.Changed += LetDbChgStore_Chngd;
 
         UsrStgns = usrStgns;
@@ -44,7 +44,7 @@ public partial class NavBarVM : BaseMinVM
 
     void SrvrNameStore_Chngd(string srvr) => PrefSrvrName = srvr;  //OnPropertyChanged(nameof(SrvrName)); }
     void DtBsNameStore_Chngd(string dtbs) => PrefDtBsName = dtbs;  //OnPropertyChanged(nameof(DtBsName)); }
-                                                                   //void GSReportStore_Chngd(string dtbs) => PrefGSReport = dtbs;  //OnPropertyChanged(nameof(DtBsName)); }
+                                                                   //void GSReportStore_ChngdAsync(string dtbs) => PrefGSReport = dtbs;  //OnPropertyChanged(nameof(DtBsName)); }
     void LetDbChgStore_Chngd(bool value) => LetDbChg = value;
 
     bool _awd; public bool LetDbChg

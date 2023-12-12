@@ -7,11 +7,12 @@ public partial class Page01VM : BaseEmVM
     {
         try
         {
-            await Task.Delay(250); // <== does not show up without this...............................
+            await Task.Delay(20); // <== does not show up without this...............................
             await Bpr.StartAsync(8);
             IsBusy = true;
 
             var sw = Stopwatch.StartNew();
+            
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 

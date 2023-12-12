@@ -6,7 +6,10 @@ public partial class BaseDbVM : BaseMinVM
     readonly int _hashCode;
     readonly ISecurityForcer _secForcer;
     bool _inited;
-    protected MainVM MainVM    {        get;}
+    protected MainVM MainVM
+    {
+        get;
+    }
     protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
     public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, ISpeechSynth synth, int oid)
@@ -28,14 +31,14 @@ public partial class BaseDbVM : BaseMinVM
 
         letDbChg = UsrStgns.LetDbChg;
 
-        _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_Chngd;
-        _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_Chngd;
-        _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_Chngd;
-        _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_Chngd;
+        _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_ChngdAsync;
+        _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsync;
+        _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsync;
+        _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsync;
 
         _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
-        Lgr.LogInformation($"┌── {GetType().Name} eo-ctor      PageRank:{oid}");
+        Lgr.LogInformation($"┌── {GetType().Name,-16} eo-ctor      PageRank:{oid}");
     }
     public async override Task<bool> InitAsync()
     {
@@ -60,25 +63,23 @@ public partial class BaseDbVM : BaseMinVM
                 }
             }
 
-            _SrvrNameStore.Changed -= SrvrNameStore_Chngd;
-            _DtBsNameStore.Changed -= DtBsNameStore_Chngd;
-            _GSReportStore.Changed -= GSReportStore_Chngd;
-            _LetDbChgStore.Changed -= LetDbChgStore_Chngd;
+            _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsync;
+            _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
+            _GSReportStore.Changed -= GSReportStore_ChngdAsync;
+            _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
 
             return true;
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }
-        finally
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; } finally
         {
-            Lgr.LogInformation($"└── {GetType().Name} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
+            Lgr.LogInformation($"└── {GetType().Name,-16} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
         }
     }
     public override void Dispose()
     {
-        _SrvrNameStore.Changed -= SrvrNameStore_Chngd;
-        _DtBsNameStore.Changed -= DtBsNameStore_Chngd;
-        _GSReportStore.Changed -= GSReportStore_Chngd;
-        _LetDbChgStore.Changed -= LetDbChgStore_Chngd;
+        _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsync;
+        _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
+        _GSReportStore.Changed -= GSReportStore_ChngdAsync;
+        _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
 
         base.Dispose();
     }
@@ -124,19 +125,19 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly SrvrNameStore _SrvrNameStore;
     protected readonly DtBsNameStore _DtBsNameStore;
     protected readonly GSReportStore _GSReportStore;
-    async void SrvrNameStore_Chngd(string val)
+    async void SrvrNameStore_ChngdAsync(string val)
     {
-        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_Chngd({val})"); }
+        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
     }
-    async void DtBsNameStore_Chngd(string val)
+    async void DtBsNameStore_ChngdAsync(string val)
     {
         DtBsName = val; await RefreshReloadAsync();
     }
-    async void GSReportStore_Chngd(string val)
+    async void GSReportStore_ChngdAsync(string val)
     {
         GSReport = val; await RefreshReloadAsync();
     }
-    async void LetDbChgStore_Chngd(bool value)
+    async void LetDbChgStore_ChngdAsync(bool value)
     {
         LetDbChg = value; await RefreshReloadAsync();
     }
@@ -204,9 +205,15 @@ public partial class BaseDbVM : BaseMinVM
     }  //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
     partial void OnIncludeClosedChanged(bool value)
     {
-        Bpr.Tick(); PageCvs?.Refresh();
-    } //tu: https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-    partial void OnIsBusyChanged(bool value)    {        MainVM.IsBusy = value; ;    }     /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+        var emailQuery = DevOps.IsDbg ? Dbq.Emails.Where(r => IncludeClosed || r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+            Dbq.Emails.Where(r => IncludeClosed || Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
+        emailQuery.Load(); //tmi: Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
+
+        PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
+
+        PageCvs?.Refresh();
+    }
+    partial void OnIsBusyChanged(bool value) => MainVM.IsBusy = value; /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
     [RelayCommand]
     protected void ChkDb4Cngs()

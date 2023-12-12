@@ -7,7 +7,7 @@ public partial class Page02VM : BaseEmVM
     {
         try
         {
-            await Task.Delay(230); // <== does not show up without this...............................
+            await Task.Delay(20); // <== does not show up without this...............................
             await Bpr.StartAsync(8);
             IsBusy = true;
 
@@ -16,7 +16,8 @@ public partial class Page02VM : BaseEmVM
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 
-            var emailQuery = Dbq.Emails.Where(r => Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority); // DevOps.IsDbg ? Dbq.Emails.Where(r => r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+            var emailQuery = // DevOps.IsDbg ? Dbq.Emails.Where(r => IncludeClosed || r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
+                Dbq.Emails.Where(r => IncludeClosed || Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
             await emailQuery.LoadAsync(); //tmi: Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
 
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
@@ -61,9 +62,9 @@ public partial class Page02VM : BaseEmVM
                 break;
             }
 
-            GSReport += $"{i} / {TopNumber}  ";
+            GSReport += $"{i,3} / {TopNumber}\t";
             await Task.Delay(antiSpamSec * 1000);
-            await SendThisOneAsync(email.Id);
+            await SendThisOneAsync(email.Id, email.Fname);
             await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 5);
         }
 
@@ -82,7 +83,7 @@ public partial class Page02VM : BaseEmVM
 
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
         {
-            await SendThisOneAsync(email.Id);
+            await SendThisOneAsync(email.Id, email.Fname);
             await Task.Delay(antiSpamSec * 1000);
         }
 
