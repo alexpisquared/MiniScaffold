@@ -34,7 +34,7 @@ public partial class BaseEmVM : BaseDbVM
         get;
     }
 
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Sir/Madam";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
 
@@ -59,11 +59,14 @@ public partial class BaseEmVM : BaseDbVM
         await SendThisOneAsync(ThisEmail, ThisFName);
         await Bpr.FinishAsync(8);
     }
-    protected async Task SendThisOneAsync(string email, string? fname)
+    protected async Task SendThisOneAsync(string email, string? rawName)
     {
         try
         {
-            var fName = string.IsNullOrEmpty(fname) ? (GigaHunt.Helpers.FirstLastNameParser.ExtractFirstNameFromEmail(email) ?? ExtractFirstNameFromEmailUsingDb(email) ?? "Sirs") : fname;
+            var fName = string.IsNullOrEmpty(rawName)
+                ? (FirstLastNameParser.ExtractFirstNameFromEmail(email) ?? ExtractFirstNameFromEmailUsingDb(email) ?? "Sirs")
+                : FirstLastNameParser.ToTitleCase(rawName);
+
             GSReport += $"{fName,-15}\t{email,-47}\t ...  ";
 
             var timestamp = DateTime.Now;

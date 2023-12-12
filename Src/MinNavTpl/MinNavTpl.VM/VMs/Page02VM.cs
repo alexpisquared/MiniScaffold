@@ -29,7 +29,7 @@ public partial class Page02VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
+            Lgr.Log(LogLevel.Trace, GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
 
             if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
             {
