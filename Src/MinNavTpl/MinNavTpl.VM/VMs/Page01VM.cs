@@ -12,7 +12,7 @@ public partial class Page01VM : BaseEmVM
             IsBusy = true;
 
             var sw = Stopwatch.StartNew();
-            
+
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 
@@ -30,12 +30,12 @@ public partial class Page01VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            Lgr.Log(LogLevel.Trace, GSReport = $"╞   Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ");
+            GSReport = $"├── Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ";
+            Lgr.Log(LogLevel.Trace, GSReport);
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
-        }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; } finally { IsBusy = false; }
     }
 
     [RelayCommand]

@@ -38,14 +38,12 @@ public partial class BaseDbVM : BaseMinVM
 
         _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
-        Lgr.LogInformation($"┌── {GetType().Name,-16} eo-ctor      PageRank:{oid}");
+        Lgr.LogInformation($"┌──{GetType().Name,-16} eo-ctor      PageRank:{oid}");
     }
     public async override Task<bool> InitAsync()
     {
         IsBusy = false;
         _inited = true;
-        //Lgr.LogInformation($"├── {GetType().Name} eo-init     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}");
-        //too many: Bpr.Finish();
         return await base.InitAsync();
     }
     public async override Task<bool> WrapAsync()
@@ -54,12 +52,16 @@ public partial class BaseDbVM : BaseMinVM
         {
             if (LetDbChg && Dbq.HasUnsavedChanges())
             {
-                switch (MessageBox.Show("Would you like to save the changes?\r\n\n..or select Cancel to stay on the page", "There are unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Question))
+                var rv = MessageBoxResult.Yes; // MessageBox.Show("Would you like to save the changes?\r\n\n..or select Cancel to stay on the page", "There are unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                switch (rv)
                 {
                     default:
                     case MessageBoxResult.Cancel: return false;
-                    case MessageBoxResult.Yes: _ = await SaveLogReportOrThrowAsync(Dbq); break;
                     case MessageBoxResult.No: Dbq.DiscardChanges(); break;
+                    case MessageBoxResult.Yes:
+                        var report = await SaveLogReportOrThrowAsync(Dbq);
+                        GSReport += $"\n{report}";
+                        break;
                 }
             }
 
@@ -71,7 +73,7 @@ public partial class BaseDbVM : BaseMinVM
             return true;
         } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; } finally
         {
-            Lgr.LogInformation($"└── {GetType().Name,-16} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
+            Lgr.LogInformation($"└──{GetType().Name,-16} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
         }
     }
     public override void Dispose()
@@ -102,7 +104,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         if (LetDbChg)
         {
-            var (success, rowsSaved, report) = await dbq.TrySaveReportAsync($" {nameof(SaveLogReportOrThrowAsync)} called by {cmn} on {dbq.GetType().Name}.  {note}");
+            var (success, rowsSaved, report) = await dbq.TrySaveReportAsync($"{note} {cmn} calls ");
             if (!success)
             {
                 throw new Exception(report);
@@ -152,7 +154,7 @@ public partial class BaseDbVM : BaseMinVM
     }
     [ObservableProperty] string? gSReport; partial void OnGSReportChanged(string? value)
     {
-        if (value is not null && _inited) { _GSReportStore.Change(value); }
+        if (value is not null /*&& _inited*/) { _GSReportStore.Change(value); }
     }
     [ObservableProperty] bool letDbChg; partial void OnLetDbChgChanged(bool value)
     {
@@ -213,7 +215,7 @@ public partial class BaseDbVM : BaseMinVM
 
         PageCvs?.Refresh();
     }
-    partial void OnIsBusyChanged(bool value) => MainVM.IsBusy = value; /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├── BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+    partial void OnIsBusyChanged(bool value) => MainVM.IsBusy = value; /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├──BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
 
     [RelayCommand]
     protected void ChkDb4Cngs()

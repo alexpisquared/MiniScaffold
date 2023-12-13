@@ -3,8 +3,8 @@ public partial class BaseMinVM : ObservableValidator, IDisposable
 {
   protected bool _loaded;
 
-  public virtual async Task<bool> InitAsync() { await Task.Yield(); _loaded = true; return true; }
-  public virtual async Task<bool> WrapAsync() { await Task.Yield(); return true; }
+  public async virtual Task<bool> InitAsync() { await Task.Yield(); _loaded = true; return true; }
+  public async virtual Task<bool> WrapAsync() { await Task.Yield(); return true; }
 
   bool _disposedValue;
   protected virtual void Dispose(bool disposing)

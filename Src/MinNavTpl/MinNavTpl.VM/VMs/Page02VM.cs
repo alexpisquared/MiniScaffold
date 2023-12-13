@@ -29,7 +29,8 @@ public partial class Page02VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            Lgr.Log(LogLevel.Trace, GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ");
+            GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ";
+            Lgr.Log(LogLevel.Trace, GSReport);
 
             if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
             {
@@ -38,7 +39,7 @@ public partial class Page02VM : BaseEmVM
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
-        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; } finally { IsBusy = false; }
     }
 
     [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
@@ -51,7 +52,7 @@ public partial class Page02VM : BaseEmVM
     async Task SendTopNAsync()
     {
         GSReport = $"";
-        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/((antiSpamSec + 5) * TopNumber / 60.0):N0} minutes.");
+        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/(antiSpamSec + 5) * TopNumber / 60.0:N0} minutes.");
         await Bpr.StartAsync(8);
 
         var i = 0;
