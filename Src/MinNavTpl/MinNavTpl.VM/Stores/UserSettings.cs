@@ -23,7 +23,7 @@ public class UserSettings : UserSettingsStore // ..actually, not a store/store -
     LetDbChg = fromFile.LetDbChg;
     IsAudible = fromFile.IsAudible;
     IsAnimeOn = fromFile.IsAnimeOn;
-    AplctnId = fromFile.AplctnId;
+    DailyDose = fromFile.DailyDose;
 
     _loaded = true;
   }
@@ -34,7 +34,7 @@ public class UserSettings : UserSettingsStore // ..actually, not a store/store -
   bool _o;                      /**/ public bool LetDbChg { get => _o; set { if (_o != value) { _o = value; SaveIfLoaded(); } } }
   bool _u;                      /**/ public bool IsAudible { get => _u; set { if (_u != value) { _u = value; SaveIfLoaded(); } } }
   bool _n;                      /**/ public bool IsAnimeOn { get => _n; set { if (_n != value) { _n = value; SaveIfLoaded(); } } }
-  int _a = -2;                  /**/ public int AplctnId { get => _a; set { if (_a != value) { _a = value; SaveIfLoaded(); } } }
+  int _a = 5;                   /**/ public int DailyDose { get => _a; set { if (_a != value) { _a = value; SaveIfLoaded(); } } }
 
 
   void SaveIfLoaded() { if (_loaded) { LastSave = DateTimeOffset.Now; Save(this); } }

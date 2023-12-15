@@ -53,7 +53,7 @@
         <Button Content=" _Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <Label Content="          Se_nd" Target="{Binding ElementName=tbFilte2}" />
-        <TextBox Margin="6 0" Width="27" FontSize="16" x:Name="tbFilte2" Text="{Binding TopNumber, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBox Margin="6 0" Width="27" FontSize="16" x:Name="tbFilte2" Text="{Binding DailyDose, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content=" Top # " Command="{Binding SendTopNCommand}" ToolTip="Set PBR to 'Not an Agent'" />
         <Button Content="Selects" Command="{Binding SendSlctCommand}" ToolTip="Do Not Notify - Available for this Camp-n" />
 

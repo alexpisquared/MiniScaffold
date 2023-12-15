@@ -13,6 +13,9 @@ public partial class Page02VM : BaseEmVM
 
             var sw = Stopwatch.StartNew();
 
+            DailyDose = // DevOps.IsDbg ? 2 : 
+                UsrStgns.DailyDose;
+
             await Dbq.PhoneEmailXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
 
@@ -29,7 +32,7 @@ public partial class Page02VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} cvs / {Dbq.Emails.Local.Count:N0} local / {sw.Elapsed.TotalSeconds:N1} sec ";
+            GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ";
             Lgr.Log(LogLevel.Trace, GSReport);
 
             if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
@@ -42,7 +45,10 @@ public partial class Page02VM : BaseEmVM
         } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; } finally { IsBusy = false; }
     }
 
-    [ObservableProperty] int topNumber = DevOps.IsDbg ? 2 : 15;
+    [ObservableProperty] int dailyDose; partial void OnDailyDoseChanged(int value)
+    {
+        if (_loaded) { UsrStgns.DailyDose = value; }
+    }
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
         GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
@@ -52,21 +58,21 @@ public partial class Page02VM : BaseEmVM
     async Task SendTopNAsync()
     {
         GSReport = $"";
-        await Synth.SpeakAsync($"Sending top {TopNumber} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/(antiSpamSec + 5) * TopNumber / 60.0:N0} minutes.");
+        await Synth.SpeakAsync($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
         await Bpr.StartAsync(8);
 
         var i = 0;
         foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
         {
-            if (++i > TopNumber)
+            if (++i > DailyDose)
             {
                 break;
             }
 
-            GSReport += $"{i,3} / {TopNumber}\t";
+            GSReport += $"{i,3} / {DailyDose}\t";
             await Task.Delay(antiSpamSec * 1000);
             await SendThisOneAsync(email.Id, email.Fname);
-            await Synth.SpeakAsync($"{i} down, {TopNumber - i} to go...", volumePercent: 5);
+            await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 5);
         }
 
         await Bpr.FinishAsync(8);
