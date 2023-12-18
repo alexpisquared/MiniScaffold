@@ -84,11 +84,8 @@ public partial class BaseEmVM : BaseDbVM
             }
             else
             {
-                _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - FAILURE", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S", notes: report1);
                 GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
-
-                //todo: need logic to inflict the PermaBan on the email address.
             }
         } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
     }
