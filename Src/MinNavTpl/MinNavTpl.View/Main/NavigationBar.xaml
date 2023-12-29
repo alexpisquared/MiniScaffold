@@ -57,7 +57,7 @@
           <TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />
           <TextBlock Text="&#x0091;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#fff" />
           -->
-          <TextBlock Text="L" FontSize="24" FontFamily="Times New Roman" Margin="8 1 0 0" Foreground="#fff" FontWeight="Bold" />
+          <TextBlock Text="L" FontSize="24" FontFamily="Times New Roman" Margin="8 1 0 0" Foreground="#ff0" FontWeight="Bold" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Leads"/>
       </StackPanel>
@@ -76,7 +76,7 @@
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
-          <TextBlock Text="&#x0088;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#00f" />
+          <TextBlock Text="&#x0088;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#888" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ***"/>
       </StackPanel>
@@ -86,7 +86,7 @@
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
           <!--<TextBlock Text="&#x0087;" Padding="5 0 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#ff0" />-->
-          <TextBlock Text="&#x0087;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#00f" />
+          <TextBlock Text="&#x0087;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#888" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ***"/>
       </StackPanel>
@@ -107,7 +107,7 @@
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-red.ico"      Width="32" />
-          <TextBlock Text="" Padding="1 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#def" />
+          <TextBlock Text="" Padding="3 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#ff0" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" User Prefs"/>
       </StackPanel>
@@ -116,8 +116,7 @@
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
-          <TextBlock Text="" Padding="3 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#ffc" />
-          <TextBlock Text="&#x0087;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#00f" />
+          <TextBlock Text="&#x0089;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#888" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ***"/>
       </StackPanel>
@@ -126,8 +125,8 @@
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
-          <TextBlock Text="" Padding="5 0 0 0" FontFamily="Segoe MDL2 assets" Foreground="#00d" />
-          <TextBlock Text="&#x0087;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#00f" />
+          <!--<TextBlock Text="" Padding="5 0 0 0" FontFamily="Segoe MDL2 assets" Foreground="#00d" />-->
+          <TextBlock Text="&#x0087;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#888" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ***"/>
       </StackPanel>
