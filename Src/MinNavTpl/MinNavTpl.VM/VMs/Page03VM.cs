@@ -194,7 +194,7 @@ public partial class Page03VM : BaseDbVM
             var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
             ttl = items.Count;
 
-            WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:");
+            WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:\n");
             do
             {
                 foreach (OL.MailItem mailItem in items)
@@ -303,7 +303,7 @@ public partial class Page03VM : BaseDbVM
                 foreach (var item in itemsFailes)
                 {
                     ttl0++;
-                    ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:";
+                    ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -394,7 +394,7 @@ public partial class Page03VM : BaseDbVM
                 foreach (var item in itemsTempAway)
                 {
                     ttl0++;
-                    ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:";
+                    ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -474,7 +474,7 @@ public partial class Page03VM : BaseDbVM
                 var senderEmail = "?";
                 var rptLine = "";
 
-                ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:";
+                ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:\n";
                 try
                 {
                     if (item is OL.ReportItem reportItem)
