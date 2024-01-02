@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 
 public partial class BaseEmVM : BaseDbVM
 {
@@ -87,7 +85,8 @@ public partial class BaseEmVM : BaseDbVM
                 GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
             }
-        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
     }
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
@@ -101,7 +100,8 @@ public partial class BaseEmVM : BaseDbVM
             var rowsAffected = await Dbq.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = dbq.Emails.Local.Remove(email!);
             GSReport = $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
             _ = Dbq.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
-        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
     static bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 
@@ -133,7 +133,7 @@ public partial class BaseEmVM : BaseDbVM
     async Task CouAsync()
     {
         await Bpr.ClickAsync();
-        _ = await GetCountryFromWebServiceTaskAsync(SelectdEmail, Cfg);
+        _ = await SetCountryFromWebServiceTaskAsync(SelectdEmail, Cfg);
     }
 
     [RelayCommand]
@@ -155,30 +155,32 @@ public partial class BaseEmVM : BaseDbVM
 
             _ = (PageCvs?.MoveCurrentToPosition(curpos));
             await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
-        } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
-    protected static async Task<string> GetCountryFromWebServiceTaskAsync(Email? email, IConfigurationRoot cfg)
+    protected static async Task<string> SetCountryFromWebServiceTaskAsync(Email? email, IConfigurationRoot cfg)
     {
         if (email is null)
-        {
             return "";
-        }
 
         try
         {
-            if (email.Fname is not null && email.Country is null)
+            var allBad = "[no idea]";
+            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || email.Country == "limit reached." || email.Country == allBad))
             {
-                WriteLine($"■ ■ ■ cfg?[\"WhereAmI\"]: '{new ConfigurationBuilder().AddUserSecrets<Application>().Build()?["WhereAmI"]}'   \t <== ConfigurationBuilder().AddUserSecrets<Application>().");
-
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
                 var (_, exMsg, root) = await GenderApi.CallOpenAI(cfg, email.Fname);
 
-                email.Country = root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? exMsg ?? "?***?";
+                email.Country =
+                    root is null ? "[root is null]" :
+                    root?.country_of_origin.FirstOrDefault() is null ? "[country[0] is null]" :
+                    root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? exMsg ?? allBad;
             }
 
             return "";
-        } catch (Exception ex) { ex.Pop(); return $"FAILED. \r\n  {ex.Message}"; }
+        }
+        catch (Exception ex) { ex.Pop(); return $"FAILED. \r\n  {ex.Message}"; }
     }
     protected static async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {
@@ -187,7 +189,7 @@ public partial class BaseEmVM : BaseDbVM
             return;
         }
 
-        _ = await GetCountryFromWebServiceTaskAsync(email, cfg);
+        _ = await SetCountryFromWebServiceTaskAsync(email, cfg);
 
         var rcvds = await dbq.Ehists.CountAsync(r => r.EmailId == email.Id && r.RecivedOrSent == "R");
         if (rcvds > 0)
