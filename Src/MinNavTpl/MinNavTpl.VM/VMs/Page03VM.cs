@@ -194,14 +194,14 @@ public partial class Page03VM : BaseDbVM
             var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
             ttl = items.Count;
 
-            WriteLine($"\n ****** {items.Count,4}   IPM.Note   items in  {folderName}:\n");
+            WriteLine($"\n ****** {items.Count,4}  IPM.Note items in  {folderName}:\n");
             do
             {
                 foreach (OL.MailItem mailItem in items)
                 {
                     ttl--;
                     cnt++;
-                    ReportOL += $"{ttl}  {cnt}  {items.Count,4}   IPM.Note   items in  {folderName}:\n";
+                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}:\n";
                     try
                     {
                         if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
@@ -303,7 +303,7 @@ public partial class Page03VM : BaseDbVM
                 foreach (var item in itemsFailes)
                 {
                     ttl0++;
-                    ReportOL += $"{ttl0}  {cnt}  {itemsFailes.Count,4}   IPM.Note   items in  {folderName}:\n";
+                    ReportOL += $"{ttl0,2}{cnt,3}  {itemsFailes.Count,4}  IPM.Note items in  {folderName}:\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -394,7 +394,7 @@ public partial class Page03VM : BaseDbVM
                 foreach (var item in itemsTempAway)
                 {
                     ttl0++;
-                    ReportOL += $"{ttl0}    {itemsTempAway.Count,4}      items in  {folderName}:\n";
+                    ReportOL += $"{ttl0,2}    {itemsTempAway.Count,4}      items in  {folderName}:\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -474,7 +474,7 @@ public partial class Page03VM : BaseDbVM
                 var senderEmail = "?";
                 var rptLine = "";
 
-                ReportOL += $"{ttl}    {itemsRcvdDone.Count,4}      items in  {folderName}:\n";
+                ReportOL += $"{ttl,2}    {itemsRcvdDone.Count,4}      items in  {folderName}:\n";
                 try
                 {
                     if (item is OL.ReportItem reportItem)
