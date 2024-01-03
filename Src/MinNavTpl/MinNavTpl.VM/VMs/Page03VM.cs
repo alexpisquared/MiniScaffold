@@ -194,14 +194,14 @@ public partial class Page03VM : BaseDbVM
             var items = _oh.GetItemsFromFolder(folderName, "IPM.Note");
             ttl = items.Count;
 
-            WriteLine($"\n ****** {items.Count,4}  IPM.Note items in  {folderName}:\n");
+            WriteLine($"\n ****** {items.Count,4}  IPM.Note items in  {folderName}\n");
             do
             {
                 foreach (OL.MailItem mailItem in items)
                 {
                     ttl--;
                     cnt++;
-                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}:\n";
+                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
                     try
                     {
                         if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
@@ -284,26 +284,26 @@ public partial class Page03VM : BaseDbVM
     async Task<string> OutlookFolderToDb_FailsAsync(string folderName)
     {
         var report = "";
-        int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
+        int ttl = 0, newBansAdded = 0, newEmailsAdded = 0;
         try
         {
             var failsDoneFolder = _oh.GetMapiFOlder(OuFolder.qFailsDone);
-            var itemsFailes = _oh.GetItemsFromFolder(folderName);
+            var items = _oh.GetItemsFromFolder(folderName);
             int prev;
             do
             {
-                var cnt = itemsFailes.Count;
+                var cnt = items.Count;
                 prev = cnt;
 #if !DEBUG_ // save as then delete - to get the body and other stuff.
                 if (DateTime.Now == DateTime.MinValue)
                 {
-                    foreach (OL.ReportItem item in itemsFailes) { TestAllKeys(item); }
+                    foreach (OL.ReportItem item in items) { TestAllKeys(item); }
                 }
 #endif
-                foreach (var item in itemsFailes)
+                foreach (var item in items)
                 {
-                    ttl0++;
-                    ReportOL += $"{ttl0,2}{cnt,3}  {itemsFailes.Count,4}  IPM.Note items in  {folderName}:\n";
+                    ttl++;
+                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -361,13 +361,13 @@ public partial class Page03VM : BaseDbVM
                     catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
                 }
 
-                itemsFailes = _oh.GetItemsFromFolder(folderName);
-            } while (prev != itemsFailes.Count);
+                items = _oh.GetItemsFromFolder(folderName);
+            } while (prev != items.Count);
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
         _newEmailsAdded += newEmailsAdded;
-        report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
+        report += OutlookHelper6.ReportSectionTtl(folderName, ttl, newBansAdded, newEmailsAdded);
         return report;
     }
 
@@ -375,7 +375,7 @@ public partial class Page03VM : BaseDbVM
     async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
     {
         var report = "";
-        int ttl0 = 0, newBansAdded = 0, newEmailsAdded = 0;
+        int ttl = 0, newBansAdded = 0, newEmailsAdded = 0;
         try
         {
             var rcvdDoneFolder = _oh.GetMapiFOlder(OuFolder.qRcvdDone);
@@ -393,8 +393,8 @@ public partial class Page03VM : BaseDbVM
 #endif
                 foreach (var item in itemsTempAway)
                 {
-                    ttl0++;
-                    ReportOL += $"{ttl0,2}    {itemsTempAway.Count,4}      items in  {folderName}:\n";
+                    ttl++;
+                    ReportOL += $"{ttl,2}     {itemsTempAway.Count,4}           items in  {folderName}\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)
@@ -457,7 +457,7 @@ public partial class Page03VM : BaseDbVM
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
 
         _newEmailsAdded += newEmailsAdded;
-        report += OutlookHelper6.ReportSectionTtl(folderName, ttl0, newBansAdded, newEmailsAdded);
+        report += OutlookHelper6.ReportSectionTtl(folderName, ttl, newBansAdded, newEmailsAdded);
         return report;
     }
     async Task<string> OutlookFolderToDb_DoneRAsync(string folderName)
@@ -474,7 +474,7 @@ public partial class Page03VM : BaseDbVM
                 var senderEmail = "?";
                 var rptLine = "";
 
-                ReportOL += $"{ttl,2}    {itemsRcvdDone.Count,4}      items in  {folderName}:\n";
+                ReportOL += $"{ttl,2}     {itemsRcvdDone.Count,4}           items in  {folderName}\n";
                 try
                 {
                     if (item is OL.ReportItem reportItem)
