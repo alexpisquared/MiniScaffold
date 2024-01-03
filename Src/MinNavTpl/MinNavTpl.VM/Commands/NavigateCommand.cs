@@ -6,5 +6,5 @@ public class NavigateCommand : CommandBase
 
   public NavigateCommand(INavSvc navigationService) => _navigationService = navigationService;
 
-  public override void Execute(object? parameter) => _navigationService.Navigate();
+  public override void Execute(object? parameter) => _navigationService.NavigateAsync();
 }

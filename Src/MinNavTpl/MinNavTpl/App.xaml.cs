@@ -28,7 +28,7 @@ public partial class App : System.Windows.Application
     EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox ?? new TextBox()).SelectAll(); }));
     ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
 
-    _serviceProvider.GetRequiredService<INavSvc>().Navigate();
+    _serviceProvider.GetRequiredService<INavSvc>().NavigateAsync();
 
     MainWindow = _serviceProvider.GetRequiredService<MainNavView>();
     MainWindow.Show();

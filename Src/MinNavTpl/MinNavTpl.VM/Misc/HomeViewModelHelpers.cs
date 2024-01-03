@@ -10,11 +10,11 @@ internal static class Page01VMHelpers
 
     _ = Application.Current.Dispatcher.InvokeAsync(async () => //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
     {
-      _ = await LoadSrvrDtBssTask(srvr, dtBsList, setLoadedFlag, connectionString, lgr);
+      _ = await LoadSrvrDtBssAsyncTask(srvr, dtBsList, setLoadedFlag, connectionString, lgr);
     });
   }
 
-  public static async Task<bool> LoadSrvrDtBssTask(string srvr, IEnumerable dtBsList, Action<int> setLoadedFlag, string connectionString, ILogger lgr)
+  public static async Task<bool> LoadSrvrDtBssAsyncTask(string srvr, IEnumerable dtBsList, Action<int> setLoadedFlag, string connectionString, ILogger lgr)
   {
     try
     {

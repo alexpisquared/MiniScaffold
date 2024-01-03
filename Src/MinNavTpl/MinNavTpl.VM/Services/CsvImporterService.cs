@@ -30,7 +30,7 @@ public class CsvImporterService
     using (var reader = new StreamReader(csvFile))
     using (var csv = new CsvReader(reader, config))
       // csv.ReadHeader();
-      while (csv.Read())
+      while (await csv.ReadAsync())
       {
         var r1 = await TryAddEmailAsync(csv.GetRecord<CsvRow>());
         if (++i % 1000 == 0)

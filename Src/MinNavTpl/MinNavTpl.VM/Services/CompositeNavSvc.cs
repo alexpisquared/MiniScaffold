@@ -8,5 +8,5 @@ public class CompositeNavSvc : ICompositeNavSvc
 
   public CompositeNavSvc(params INavSvc[] navigationServices) => _navigationServices = navigationServices;
 
-  public void Navigate() => _navigationServices.ToList().ForEach(navigationService => navigationService.Navigate());
+  public void NavigateAsync() => _navigationServices.ToList().ForEach(navigationService => navigationService.NavigateAsync());
 }

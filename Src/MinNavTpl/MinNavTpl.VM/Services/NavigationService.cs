@@ -15,5 +15,5 @@ public class NavSvc<TVM> : INavSvc where TVM : BaseMinVM
     _createVM = createVM;
   }
 
-  public void Navigate() => _navigationStore.CurrentVM = _createVM();
+  public void NavigateAsync() => _navigationStore.CurrentVM = _createVM();
 }

@@ -12,7 +12,7 @@ public class LayoutNavSvc<TVM> : INavSvc where TVM : BaseMinVM
     _createNavBarVM = createNavBarVM;
   }
 
-  public async void Navigate()
+  public async void NavigateAsync()
   {
     if (_navigationStore.CurrentVM is not null && 
       ((LayoutVM)_navigationStore.CurrentVM).ContentVM is not null &&
