@@ -28,7 +28,6 @@ public partial class Page03VM : BaseDbVM
             var r2 = await OutlookFolderToDb_ReglrAsync(OuFolder.qSent);
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += $"{r1}{r2}";
-            LoadVwSrcs();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
@@ -43,7 +42,6 @@ public partial class Page03VM : BaseDbVM
             var rv = await OutlookFolderToDb_ReglrAsync(OuFolder.qJunkMail);
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += rv;
-            LoadVwSrcs();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
@@ -60,13 +58,11 @@ public partial class Page03VM : BaseDbVM
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += rv;
             WriteLine(rv);
-            LoadVwSrcs();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
-    [Obsolete]
     async Task DoLaterAsync()
     {
         IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
@@ -78,7 +74,6 @@ public partial class Page03VM : BaseDbVM
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += rv;
             WriteLine(rv);
-            LoadVwSrcs();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
@@ -95,7 +90,6 @@ public partial class Page03VM : BaseDbVM
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += rv;
             WriteLine(rv);
-            LoadVwSrcs();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
@@ -142,7 +136,7 @@ public partial class Page03VM : BaseDbVM
 	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
                     WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
 
-                ReportOL += ($"\nDone. {rowsAffected} rows affected with new priorities.");
+                ReportOL += $"\nDone. {rowsAffected} rows affected with new priorities.";
                 await Synth.SpeakAsync($"Done. All !PermBanReason rows affected with updated priorities.");
             }
         }
@@ -632,13 +626,6 @@ public partial class Page03VM : BaseDbVM
                 }
             }
         }
-    }
-    static void LoadVwSrcs()
-    {
-        //((CollectionViewSource)(FindResource("eMailVwSrc"))).Source = ctx.Emails.Where(p => p.AddedAt >= before).ToList();
-        //((CollectionViewSource)(FindResource("eMailVwSrc"))).View.MoveCurrentTo(null);
-        //((CollectionViewSource)(FindResource("eHistVwSrc"))).Source = ctx.EHists.Where(p => p.AddedAt >= before).ToList();
-        //((CollectionViewSource)(FindResource("eHistVwSrc"))).View.MoveCurrentTo(null);
     }
     static void TestOneKey(OL.ReportItem item, string key, bool isBinary = false)
     {
