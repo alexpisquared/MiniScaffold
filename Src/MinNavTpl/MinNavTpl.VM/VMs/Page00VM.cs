@@ -38,11 +38,10 @@ public partial class Page00VM : BaseDbVM
     try
     {
       await Bpr.ClickAsync();
-
       await new CsvImporterService(Dbq, Lgr, _now).ImportCsvAsync(ReportProgress);
       await Bpr.TickAsync();
     }
     catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; WriteLine(ex.Message); ex.Pop(Lgr); }
-    finally { IsBusy = _saving = false; Bpr.Tick(); }
+    finally { IsBusy = _saving = false; }
   }
 }

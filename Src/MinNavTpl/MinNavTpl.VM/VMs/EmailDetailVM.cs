@@ -10,9 +10,9 @@ public partial class EmailDetailVM : BaseDbVM
     }
     public async override Task<bool> InitAsync()
     {
-        IsBusy = true; _ = await InitAsyncTask(EmailOfI); return await base.InitAsync();
+        IsBusy = true; _ = await InitTaskAsync(EmailOfI); return await base.InitAsync();
     }
-    async Task<bool> InitAsyncTask(string emailOfI, [CallerMemberName] string? cmn = "")
+    async Task<bool> InitTaskAsync(string emailOfI, [CallerMemberName] string? cmn = "")
     {
         WriteLine($"■■ Init  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22} ■■■■");
         try
@@ -29,7 +29,7 @@ public partial class EmailDetailVM : BaseDbVM
         LoadAsync();
 #else //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
 
-            //This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.   NotSupportedException at C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\EmailDetailVM.cs(40): InitAsyncTask() 
+            //This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.   NotSupportedException at C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\EmailDetailVM.cs(40): InitTaskAsync() 
             //System.NotSupportedException: This type of CollectionView does not support changes to its SourceCollection from a thread different from the Dispatcher thread.
             //await Dbq.Emails.Where(r => r.Id == EmailOfI).LoadAsync();
             //await Dbq.Ehists.Where(r => r.EmailId == EmailOfI).LoadAsync();
@@ -65,7 +65,7 @@ public partial class EmailDetailVM : BaseDbVM
     {
         WriteLine($"■■ EmDt  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load" : "==>----")}");
         if (EmailOfI != emailOfI)
-            _ = await InitAsyncTask(emailOfI);
+            _ = await InitTaskAsync(emailOfI);
     }
     public EmailOfIStore EmailOfIStore
     {

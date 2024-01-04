@@ -63,7 +63,7 @@ public partial class Page03VM : BaseDbVM
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
-    async Task DoLaterAsync()
+        async Task DoLaterAsync()
     {
         IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
 
@@ -252,7 +252,7 @@ public partial class Page03VM : BaseDbVM
                                 report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
                             }
 
-                            var trgFolder = (mailItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+                            var trgFolder = (mailItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
 
                             ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
 
@@ -365,8 +365,7 @@ public partial class Page03VM : BaseDbVM
         return report;
     }
 
-    [Obsolete]
-    async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
+        async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
     {
         var report = "";
         int ttl = 0, newBansAdded = 0, newEmailsAdded = 0;
