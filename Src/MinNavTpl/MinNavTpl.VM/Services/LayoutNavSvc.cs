@@ -31,4 +31,5 @@ public class Page03NavSvc : LayoutNavSvc<Page03VM> { public Page03NavSvc(Navigat
 public class Page04NavSvc : LayoutNavSvc<Page04VM> { public Page04NavSvc(NavigationStore ns, Func<Page04VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
 public class Page05NavSvc : LayoutNavSvc<Page05VM> { public Page05NavSvc(NavigationStore ns, Func<Page05VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
 public class Page06NavSvc : LayoutNavSvc<Page06VM> { public Page06NavSvc(NavigationStore ns, Func<Page06VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
+public class Page07NavSvc : LayoutNavSvc<Page07VM> { public Page07NavSvc(NavigationStore ns, Func<Page07VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
 public class EmailDetailNavSvc : LayoutNavSvc<EmailDetailVM> { public EmailDetailNavSvc(NavigationStore ns, Func<EmailDetailVM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }

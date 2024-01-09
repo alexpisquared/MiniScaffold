@@ -13,7 +13,9 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<EmailOfIStore>();
         _ = services.AddSingleton<LetDbChgStore>();
 
-        if (VersionHelper.IsDbg || Environment.GetCommandLineArgs().Contains("Broad")) //tu: Start Page startup controller.
+        if (VersionHelper.IsDbg) //tu: Start Page startup controller.
+            _ = services.AddSingleton<INavSvc, Page07NavSvc>();
+        else if (Environment.GetCommandLineArgs().Contains("Broad"))
             _ = services.AddSingleton<INavSvc, Page02NavSvc>();
         else if (Environment.GetCommandLineArgs().Length > 4)
             _ = services.AddSingleton<INavSvc, Page04NavSvc>();
@@ -28,6 +30,7 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<Page04NavSvc>();
         _ = services.AddSingleton<Page05NavSvc>();
         _ = services.AddSingleton<Page06NavSvc>();
+        _ = services.AddSingleton<Page07NavSvc>();
         _ = services.AddSingleton<EmailDetailNavSvc>();
 
         _ = services.AddSingleton(s => new Func<NavBarVM>(() => s.GetRequiredService<NavBarVM>()!));
@@ -38,6 +41,7 @@ public static class MvvmInitHelper
         _ = services.AddSingleton(s => new Func<Page04VM>(() => s.GetRequiredService<Page04VM>()!));
         _ = services.AddSingleton(s => new Func<Page05VM>(() => s.GetRequiredService<Page05VM>()!));
         _ = services.AddSingleton(s => new Func<Page06VM>(() => s.GetRequiredService<Page06VM>()!));
+        _ = services.AddSingleton(s => new Func<Page07VM>(() => s.GetRequiredService<Page07VM>()!));
         _ = services.AddSingleton(s => new Func<EmailDetailVM>(() => s.GetRequiredService<EmailDetailVM>()!));
 
         _ = services.AddTransient<NavBarVM>();
@@ -49,6 +53,7 @@ public static class MvvmInitHelper
         _ = services.AddTransient<Page04VM>();
         _ = services.AddTransient<Page05VM>();
         _ = services.AddTransient<Page06VM>();
+        _ = services.AddTransient<Page07VM>();
         _ = services.AddTransient<EmailDetailVM>();
 
         _ = services.AddTransient<ISecurityForcer, SecurityForcer>();

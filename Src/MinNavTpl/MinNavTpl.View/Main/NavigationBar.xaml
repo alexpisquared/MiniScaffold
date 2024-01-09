@@ -20,6 +20,7 @@
     <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
     <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
     <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F6" />
+    <KeyBinding Command="{Binding NavigatePage07Command}" Gesture="F7" />
   </UserControl.InputBindings>
   <StackPanel Margin="0 10" >
     <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Agents / Emails">
@@ -72,13 +73,13 @@
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Companies"/>
       </StackPanel>
     </nav:NavDrawerItem>
-    <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="XlsOneTimeImportVM" ToolTip="***" >
+    <nav:NavDrawerItem Command="{Binding NavigatePage07Command}" CommandParameter="XlsOneTimeImportVM" ToolTip="***" >
       <StackPanel Orientation="Horizontal">
         <Grid>
-          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-grey.ico"      Width="32" />
-          <TextBlock Text="&#x0088;" Padding="5 1 0 0" FontFamily="Bookshelf Symbol 7" Foreground="#888" />
+          <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
+          <TextBlock Text="&#x0029;" Padding="3 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#ff0" />
         </Grid>
-        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" ***"/>
+        <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Phone Numbers"/>
       </StackPanel>
     </nav:NavDrawerItem>
     <nav:NavDrawerItem Command="{Binding NavigateEmlDtlCommand}" CommandParameter="MinWithdrawSetupVM" ToolTip="***">

@@ -1,0 +1,198 @@
+﻿<UserControl x:Class="MinNavTpl.View.Spec.Page07View" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" 
+             xmlns:stb="clr-namespace:WpfUserControlLib.Helpers;assembly=WpfUserControlLib" 
+             xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
+             xmlns:vms="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" d:DataContext="{d:DesignInstance Type={x:Type vms:Page07VM}}" 
+             xmlns:lcl="clr-namespace:MinNavTpl.View.Spec" 
+             d:DesignHeight="380" d:DesignWidth="1800" Padding="8">
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="{x:Type TextBlock}"  BasedOn="{StaticResource TbkVCenteredInfoClr}" />
+      <Style TargetType="{x:Type Label}"      BasedOn="{StaticResource lblTopLeft}" />
+      <Style TargetType="{x:Type TextBox}"    BasedOn="{StaticResource tbxRW}" >
+        <Setter Property="Margin"             Value="1"  />
+      </Style>
+      <Style TargetType="{x:Type Button}"     BasedOn="{StaticResource BtnBase}" >
+        <Setter Property="Margin"             Value="1"  />
+      </Style>
+
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid>
+    <Grid.LayoutTransform>
+      <TransformGroup>
+        <ScaleTransform ScaleX="{Binding ZV, ElementName=wnd, FallbackValue=1}" ScaleY="{Binding ZV, ElementName=wnd, FallbackValue=1}" />
+      </TransformGroup>
+    </Grid.LayoutTransform>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="8"/>
+      <RowDefinition Height="200"/>
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="2*"/>
+      <ColumnDefinition Width="6" />
+      <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+
+    <Grid x:Name="ctrlPnl" Grid.ColumnSpan="3" Height="30">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
+        <TextBlock  Text="Phones" Margin="4 0" FontSize="23" FontFamily="Orbitron" Foreground="{DynamicResource LogoTextBrush}" />
+
+        <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
+        <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
+        <CheckBox Content="+C_losed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+
+        <Button Content=" _Dtl " Command="{Binding GetTopDetailCommand}"  ToolTip="Get details for the top XX rows."        Foreground="#f80" />
+        <Button Content=" New "  Command="{Binding AddNewPhoneCommand}"   ToolTip="Add _New Phone"        Foreground="#f80" />
+        <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"    ToolTip="Check DB for changes"  Foreground="#0a0" />
+        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
+
+        <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
+        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdPhone.Id}" FontWeight="Medium" /></TextBlock>
+      </StackPanel>
+
+      <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
+    </Grid>
+
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" SelectedItem="{Binding SelectdPhone}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
+              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
+      <DataGrid.Columns>
+        <DataGridTemplateColumn Header=" Phone" Width="131" SortMemberPath="PhoneNumber" >
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding       PhoneNumber, Converter={cnv:PhoneFormatConverter}}"
+                         ToolTip="{Binding    PhoneNumber, Converter={cnv:PhoneToolTipConverter}}"
+                         Foreground="{Binding PhoneNumber, Converter={cnv:PhoneBrushConverter}}"/>
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header=" Last"    Binding="{Binding SeenFirst, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ce" />
+        <DataGridTextColumn Header=" Last"    Binding="{Binding SeenLast,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                         Width="*" FontSize="8" />
+        <DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="80" IsReadOnly="True" />
+        <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="128" />
+        <DataGridTextColumn Header=" Added ▼" Binding="{Binding AddedAt,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Grid Grid.Row="3" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition />
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="12"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="12"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" HorizontalAlignment="Center">
+        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country"               Visibility="Collapsed" />
+        <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
+        <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
+        <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Delete from DB " Margin="48,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+      </StackPanel>
+
+      <WrapPanel Grid.Row="2"  >
+        <StackPanel>
+          <Label Content="Id" />
+          <TextBlock Text="{Binding Id, FallbackValue='abc@efg.com'}" />
+        </StackPanel>
+        <!-- tmi: <StackPanel><Label Content="Co" /><TextBlock Text="{Binding Company, FallbackValue='ABC Co'}"  /></StackPanel>-->
+        <StackPanel Margin="40 0 0 0">
+          <Label Content="First Name" />
+          <TextBox Text="{Binding Fname, FallbackValue='John '}" MinWidth="100" />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="Phone" />
+          <TextBox Text="{Binding Phone}" MinWidth="100"   />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="Perm Ban Rsn" Target="{Binding ElementName=tbPbr}" />
+          <TextBox                        Text="{Binding PermBanReason}" MinWidth="100" x:Name="tbPbr" />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="_Re-send after"   Target="{Binding ElementName=tbRa}" Margin="-1 0"/>
+          <DatePicker                       SelectedDate="{Binding ReSendAfter}"  x:Name="tbRa" Margin="1.5" />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="DNN Avl"         />
+          <TextBox                          Grid.Column="4" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId}"  MinWidth="100" />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="Priority" />
+          <TextBox Text="{Binding NotifyPriority}" MinWidth="40"  />
+        </StackPanel>
+      </WrapPanel>
+
+      <TextBox Grid.Row="4" Text="{Binding Notes}" VerticalAlignment="Stretch" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
+
+      <StackPanel Grid.Column="1" Grid.RowSpan="5" >
+        <Label Content="   Phones"        Grid.Column="5" Grid.Row="3" />
+        <ListBox                          Grid.Column="6" Grid.Row="3" ItemsSource="{Binding PhoneEmailXrefs}" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Padding="1" >
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneFormatConverter}}" 
+                         ToolTip="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneToolTipConverter}}"
+                         Foreground="{Binding Path=Phone.PhoneNumber, Converter={cnv:PhoneBrushConverter}}" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </StackPanel>
+
+    </Grid>
+
+    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
+      <DataGrid ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" 
+              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
+        <DataGrid.Columns>
+          <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
+          <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
+          <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
+          <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
+            <DataGridTemplateColumn.CellTemplate>
+              <DataTemplate>
+                <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
+                         ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
+                         Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}"/>
+              </DataTemplate>
+            </DataGridTemplateColumn.CellTemplate>
+          </DataGridTemplateColumn>
+          <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" />
+          <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+          <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
+          <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+          <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+          <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+          <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+          <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+          <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </Grid>
+
+    <GridSplitter Grid.Row="2" Grid.Column="0" />
+    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
+
+    <Viewbox Grid.RowSpan="4" Grid.ColumnSpan="3" Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" d:Visibility="Collapsed">
+      <TextBlock Text="Loading..." Foreground="Magenta" />
+    </Viewbox>
+
+  </Grid>
+</UserControl>

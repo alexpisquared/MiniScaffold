@@ -30,6 +30,9 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Page07View.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Page06View.xaml">
       <SubType>Designer</SubType>
     </Page>
