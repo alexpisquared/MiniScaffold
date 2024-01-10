@@ -65,7 +65,9 @@ public partial class EmailDetailVM : BaseDbVM
     {
         WriteLine($"■■ EmDt  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load" : "==>----")}");
         if (EmailOfI != emailOfI)
+        {
             _ = await InitTaskAsync(emailOfI);
+        }
     }
     public EmailOfIStore EmailOfIStore
     {

@@ -33,6 +33,8 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
       <RowDefinition Height="8"/>
+      <RowDefinition Height="60"/>
+      <RowDefinition Height="8"/>
       <RowDefinition Height="200"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
@@ -80,14 +82,30 @@
         </DataGridTemplateColumn>
         <DataGridTextColumn Header=" Last"    Binding="{Binding SeenFirst, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ce" />
         <DataGridTextColumn Header=" Last"    Binding="{Binding SeenLast,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                         Width="*" FontSize="8" />
+        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                         Width="*" />
         <DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="50"  IsReadOnly="True" />
         <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="100" IsReadOnly="True" />
         <DataGridTextColumn Header=" Added ▼" Binding="{Binding AddedAt,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
       </DataGrid.Columns>
     </DataGrid>
 
-    <Grid Grid.Row="3" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
+    <DataGrid Grid.Row="3" ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" Loaded="DataGrid_Loaded">
+      <DataGrid.Columns>
+        <!--<DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
+          <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
+          -->
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
+        <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="*" Foreground="#f60" />
+      </DataGrid.Columns>
+    </DataGrid>
+
+    <Grid Grid.Row="5" DataContext="{Binding SelectdEmail}" Background="#4888" VerticalAlignment="Stretch" >
       <Grid.ColumnDefinitions>
         <ColumnDefinition />
         <ColumnDefinition Width="Auto"/>
@@ -153,28 +171,15 @@
 
     </Grid>
 
-    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
-      <DataGrid ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" Loaded="DataGrid_Loaded">
-        <DataGrid.Columns>
-          <!--<DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
-          <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
-          -->
-          <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
-          <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" />
-          <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
-          <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-          <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-          <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-          <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-          <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="*" Foreground="#f60" />
-        </DataGrid.Columns>
-      </DataGrid>
+    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="6" >
+      <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
     </Grid>
 
+    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="6" />
     <GridSplitter Grid.Row="2" Grid.Column="0" />
-    <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" />
+    <GridSplitter Grid.Row="4" Grid.Column="0" />
 
-    <Viewbox Grid.RowSpan="4" Grid.ColumnSpan="3" Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" d:Visibility="Collapsed">
+    <Viewbox Grid.RowSpan="6" Grid.ColumnSpan="3" Visibility="{Binding GetTopDetailCommand.IsRunning, Converter={cnv:UniConverter}}" d:Visibility="Collapsed">
       <TextBlock Text="Loading..." Foreground="Magenta" />
     </Viewbox>
 

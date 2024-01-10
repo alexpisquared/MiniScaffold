@@ -2,7 +2,8 @@
 public partial class Page07VM : BaseEmVM
 {
     public Page07VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, EmailDetailVM evm, ISpeechSynth synth)
-      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, synth, 8110) { }
+//    : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg,           synth, 8990) { }
+      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, synth, 8880) { }
     public async override Task<bool> InitAsync()
     {
         try
@@ -26,10 +27,11 @@ public partial class Page07VM : BaseEmVM
               );
 
             _ = PageCvs?.MoveCurrentToFirst();
-            await GetTopDetailAsync();
 
             GSReport = $"├── Phones: {PageCvs?.Cast<Phone>().Count():N0} good / {Dbq.Phones.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ";
             Lgr.Log(LogLevel.Trace, GSReport);
+
+            SelectdPhone = null;
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
@@ -44,7 +46,7 @@ public partial class Page07VM : BaseEmVM
 
     [ObservableProperty] ICollectionView? emailCvs;
 
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Phone? selectdPhone; partial void OnSelectdPhoneChanged(Phone? value)
+    [ObservableProperty] Phone? selectdPhone; partial void OnSelectdPhoneChanged(Phone? value)
     {
         if (value is not null && _loaded)
         {
@@ -64,22 +66,21 @@ public partial class Page07VM : BaseEmVM
         var emails = Dbq.PhoneEmailXrefs.Local
             .Where(x => x.PhoneId == phone.Id)
             .Join(Dbq.Emails.Local,
-            xref => xref.EmailId,
-            email => email.Id,
-            (xref, email) => email);
+                xref => xref.EmailId,
+                email => email.Id,
+                (xref, email) => email);
 
-        var emls = Dbq.PhoneEmailXrefs.Local.Where(x => x.PhoneId == phone.Id).Select(x => x.EmailId).ToList();
-        var emls2 = Dbq.Emails.Local.Where(x => emls.Contains(x.Id));
+        //var emls = Dbq.PhoneEmailXrefs.Local.Where(x => x.PhoneId == phone.Id).Select(x => x.EmailId).ToList();
+        //var emls2 = Dbq.Emails.Local.Where(x => emls.Contains(x.Id));
 
         EmailCvs = CollectionViewSource.GetDefaultView(emails.ToList()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Phones.ToListAsync());
         EmailCvs.SortDescriptions.Add(new SortDescription(nameof(Phone.AddedAt), ListSortDirection.Descending));
         EmailCvs.Filter = obj => obj is not Phone r || r is null ||
-          ((string.IsNullOrEmpty(SearchText) ||
+          string.IsNullOrEmpty(SearchText) ||
             r.PhoneNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-            r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) // && (IncludeClosed == true)
-          );
+            r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-        await Task.Delay(1);
+        await Task.Delay(2);
         SelectdEmail = null;
     }
 }
