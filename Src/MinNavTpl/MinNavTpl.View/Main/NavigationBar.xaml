@@ -77,7 +77,7 @@
       <StackPanel Orientation="Horizontal">
         <Grid>
           <Image RenderOptions.BitmapScalingMode="HighQuality" Source="/MinNavTpl.View;component/Assets/Box-blue.ico"      Width="32" />
-          <TextBlock Text="&#x0029;" Padding="3 2 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="22" Foreground="#ff0" />
+          <TextBlock Text="&#x0029;" Padding=".5 1 0 0" FontFamily="Wingdings" FontWeight="Normal" FontSize="27" Foreground="#ff0" />
         </Grid>
         <TextBlock Foreground="{StaticResource InfoForegroundBrush}" Text=" Phone Numbers"/>
       </StackPanel>

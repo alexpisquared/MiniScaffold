@@ -14,9 +14,10 @@ public partial class Page07VM : BaseEmVM
             var sw = Stopwatch.StartNew();
 
             await Dbq.PhoneEmailXrefs.LoadAsync();
+            await Dbq.Emails.LoadAsync();
 
             await Dbq.Phones.LoadAsync();
-            PageCvs = CollectionViewSource.GetDefaultView(Dbq.Phones.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await dbq.Phones.ToListAsync());
+            PageCvs = CollectionViewSource.GetDefaultView(Dbq.Phones.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Phones.ToListAsync());
             PageCvs.SortDescriptions.Add(new SortDescription(nameof(Phone.AddedAt), ListSortDirection.Descending));
             PageCvs.Filter = obj => obj is not Phone r || r is null ||
               ((string.IsNullOrEmpty(SearchText) ||
@@ -49,17 +50,36 @@ public partial class Page07VM : BaseEmVM
         {
             Bpr.Tick();
 
-            _ = Task.Run(async () => await GetEmailsForSelRowAsync(SelectdPhone, Cfg, Dbq)); // _ = Task.Run(GetDetailsForSelRowAsync);
+            _ = Task.Run(async () => await GetEmailsForSelRowAsync(SelectdPhone)); // _ = Task.Run(GetDetailsForSelRowAsync);
         }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
-    protected static async Task GetEmailsForSelRowAsync(Phone? phone, IConfigurationRoot cfg, QstatsRlsContext dbq)
+    async Task GetEmailsForSelRowAsync(Phone? phone)
     {
         if (phone is null) // ??? || phone.Ttl_Sent is not null)
         {
             return;
         }
 
-        //todo: load corresponding emails:
+        var emails = Dbq.PhoneEmailXrefs.Local
+            .Where(x => x.PhoneId == phone.Id)
+            .Join(Dbq.Emails.Local,
+            xref => xref.EmailId,
+            email => email.Id,
+            (xref, email) => email);
+
+        var emls = Dbq.PhoneEmailXrefs.Local.Where(x => x.PhoneId == phone.Id).Select(x => x.EmailId).ToList();
+        var emls2 = Dbq.Emails.Local.Where(x => emls.Contains(x.Id));
+
+        EmailCvs = CollectionViewSource.GetDefaultView(emails.ToList()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Phones.ToListAsync());
+        EmailCvs.SortDescriptions.Add(new SortDescription(nameof(Phone.AddedAt), ListSortDirection.Descending));
+        EmailCvs.Filter = obj => obj is not Phone r || r is null ||
+          ((string.IsNullOrEmpty(SearchText) ||
+            r.PhoneNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+            r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) // && (IncludeClosed == true)
+          );
+
+        await Task.Delay(1);
+        SelectdEmail = null;
     }
 }

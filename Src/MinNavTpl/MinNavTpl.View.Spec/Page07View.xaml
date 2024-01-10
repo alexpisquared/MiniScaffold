@@ -36,9 +36,9 @@
       <RowDefinition Height="200"/>
     </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="2*"/>
-      <ColumnDefinition Width="6" />
-      <ColumnDefinition Width="1*" />
+      <ColumnDefinition Width="3*"/>
+      <ColumnDefinition Width="8" />
+      <ColumnDefinition Width="2*" />
     </Grid.ColumnDefinitions>
 
     <Grid x:Name="ctrlPnl" Grid.ColumnSpan="3" Height="30">
@@ -56,8 +56,6 @@
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
         <CheckBox Content="+C_losed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
-        <Button Content=" _Dtl " Command="{Binding GetTopDetailCommand}"  ToolTip="Get details for the top XX rows."        Foreground="#f80" />
-        <Button Content=" New "  Command="{Binding AddNewPhoneCommand}"   ToolTip="Add _New Phone"        Foreground="#f80" />
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"    ToolTip="Check DB for changes"  Foreground="#0a0" />
         <Button Content=" _Sve " Command="{Binding Save2DbCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
 
@@ -69,9 +67,9 @@
     </Grid>
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" SelectedItem="{Binding SelectdPhone}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
-              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
+              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22" Loaded="DataGrid_Loaded">
       <DataGrid.Columns>
-        <DataGridTemplateColumn Header=" Phone" Width="131" SortMemberPath="PhoneNumber" >
+        <DataGridTemplateColumn Header=" Phone" Width="111" SortMemberPath="PhoneNumber" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding       PhoneNumber, Converter={cnv:PhoneFormatConverter}}"
@@ -83,8 +81,8 @@
         <DataGridTextColumn Header=" Last"    Binding="{Binding SeenFirst, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ce" />
         <DataGridTextColumn Header=" Last"    Binding="{Binding SeenLast,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
         <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                         Width="*" FontSize="8" />
-        <DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="80" IsReadOnly="True" />
-        <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="128" />
+        <DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="50"  IsReadOnly="True" />
+        <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="100" IsReadOnly="True" />
         <DataGridTextColumn Header=" Added ▼" Binding="{Binding AddedAt,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
       </DataGrid.Columns>
     </DataGrid>
@@ -104,9 +102,6 @@
 
       <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" HorizontalAlignment="Center">
         <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country"               Visibility="Collapsed" />
-        <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
-        <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
-        <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Delete from DB " Margin="48,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
       </StackPanel>
 
       <WrapPanel Grid.Row="2"  >
@@ -159,30 +154,19 @@
     </Grid>
 
     <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="4" >
-      <DataGrid ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" 
-              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
+      <DataGrid ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" Loaded="DataGrid_Loaded">
         <DataGrid.Columns>
-          <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
-          <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
+          <!--<DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
           <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
-          <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
-            <DataGridTemplateColumn.CellTemplate>
-              <DataTemplate>
-                <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
-                         ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
-                         Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}"/>
-              </DataTemplate>
-            </DataGridTemplateColumn.CellTemplate>
-          </DataGridTemplateColumn>
+          -->
+          <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
           <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" />
-          <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-          <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
           <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
           <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
           <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
           <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
           <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-          <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" />
+          <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="*" Foreground="#f60" />
         </DataGrid.Columns>
       </DataGrid>
     </Grid>
