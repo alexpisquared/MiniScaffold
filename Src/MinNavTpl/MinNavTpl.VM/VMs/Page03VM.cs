@@ -130,14 +130,14 @@ public partial class Page03VM : BaseDbVM
                     await Synth.SpeakAsync($"Done. {_newEmailsAdded} new emails found.");
                 }
 
-                var rowsAffected = await Dbq.Database.ExecuteSqlRawAsync(@"
+                var rowsSaved = await Dbq.Database.ExecuteSqlRawAsync(@"
                     UPDATE EMail SET NotifyPriority = 
 	                    1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
 	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
                     WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
 
-                ReportOL += $"\nDone. {rowsAffected} rows affected with new priorities.";
-                await Synth.SpeakAsync($"Done. All !PermBanReason rows affected with updated priorities.");
+                ReportOL += $"Done!  {rowsSaved} agents updated with new priorities.";
+                Synth.SpeakFAF($"Done! All valid agents updated with new priorities.");
             }
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }

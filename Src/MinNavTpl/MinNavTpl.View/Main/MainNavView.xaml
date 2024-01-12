@@ -394,8 +394,10 @@
               <DropShadowEffect BlurRadius="16" />
             </Border.Effect>
             <Grid>
-              <TextBlock Text="{Binding GSReport}" MaxHeight="320" MaxWidth="1220" Background="Transparent" Margin="12 8 26 5" VerticalAlignment="Top" HorizontalAlignment="Left" d:Text="Hello! Here it is."/>
-              <!--<ListBox MaxHeight="160" MaxWidth="920" Background="Transparent" BorderThickness="0" Margin="5 8 15 5" ItemsSource="{Binding ValidationMessages}" VerticalAlignment="Top" HorizontalAlignment="Left" >
+              <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                <TextBlock Text="{Binding GSReport}" MaxHeight="320" MaxWidth="1220" Background="Transparent" Margin="12 8 26 5" VerticalAlignment="Top" HorizontalAlignment="Left" d:Text="Hello! Here it is."/>
+              </ScrollViewer>
+              <!--<ListBox ItemsSource="{Binding ValidationMessages}" MaxHeight="160" MaxWidth="920" Background="Transparent" BorderThickness="0" Margin="5 8 15 5" VerticalAlignment="Top" HorizontalAlignment="Left" >
                 <ListBox.ItemContainerStyle>
                   <Style TargetType="{x:Type ListBoxItem}" >
                     <Setter Property="Template" Value="{StaticResource ColoredValidationMsgStyle}"/>
