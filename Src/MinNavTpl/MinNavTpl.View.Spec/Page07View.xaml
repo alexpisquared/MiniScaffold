@@ -68,8 +68,8 @@
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
-    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" SelectedItem="{Binding SelectdPhone}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
-              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22" Loaded="DataGrid_Loaded">
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" SelectedItem="{Binding SelectdPhone}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" x:Name="dgPage"
+              IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22" Loaded="DataGrid_Loaded" Background="#4111" >
       <DataGrid.Columns>
         <DataGridTemplateColumn Header=" Phone" Width="111" SortMemberPath="PhoneNumber" >
           <DataGridTemplateColumn.CellTemplate>
@@ -89,7 +89,7 @@
       </DataGrid.Columns>
     </DataGrid>
 
-    <DataGrid Grid.Row="3" ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Margin="4" Loaded="DataGrid_Loaded">
+    <DataGrid Grid.Row="3" ItemsSource="{Binding EmailCvs}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" IsReadOnly="False" Loaded="DataGrid_Loaded" Background="#4111" >
       <DataGrid.Columns>
         <!--<DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
           <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
@@ -171,9 +171,7 @@
 
     </Grid>
 
-    <Grid Grid.Column="2" Grid.Row="1" Background="#4888" Grid.RowSpan="6" >
-      <lcl:EmailDetailView Margin="0" DataContext="{Binding EmailOfIVM}"/>
-    </Grid>
+    <lcl:EmailDetailView Grid.Column="2" Grid.Row="1" Grid.RowSpan="6" DataContext="{Binding EmailOfIVM}" Background="#4111" />
 
     <GridSplitter Grid.Row="0" Grid.Column="1" Grid.RowSpan="6" />
     <GridSplitter Grid.Row="2" Grid.Column="0" />
