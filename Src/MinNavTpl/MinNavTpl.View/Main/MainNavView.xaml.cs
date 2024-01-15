@@ -50,5 +50,4 @@ public partial class MainNavView : WpfUserControlLib.Base.WindowBase
 
     void OnGoToLink(object s, RoutedEventArgs e) => _ = Process.Start("Explorer.exe", ((MenuItem)s)?.Tag?.ToString() ?? "C:\\");
     void OnUnchecked(object s, RoutedEventArgs e) => ((CheckBox)s).IsChecked = true;
-    void OnHideGSReport(object s, RoutedEventArgs e) => Opener0.IsChecked = false;
 }
