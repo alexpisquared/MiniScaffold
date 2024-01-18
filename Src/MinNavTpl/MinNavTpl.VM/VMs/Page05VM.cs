@@ -14,7 +14,7 @@ public partial class Page05VM : BaseDbVM
       await Dbq.Phones.LoadAsync();
       await Dbq.Emails.LoadAsync();
 
-      await Dbq.Agencies.OrderBy(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
+      await Dbq.Agencies.OrderByDescending(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
       PageCvs = CollectionViewSource.GetDefaultView(Dbq.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Agencies.ToListAsync());
       //PageCvs.SortDescriptions.Add(new SortDescription(nameof(Agency.AddedAt), ListSortDirection.Descending));
       PageCvs.Filter = obj => obj is not Agency row || row is null || (

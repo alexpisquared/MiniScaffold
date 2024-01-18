@@ -72,7 +72,7 @@
       <DataGrid.Columns>
         <DataGridTextColumn     Header=" Agency"    Binding="{Binding Id}"        Width="200" FontWeight="SemiBold" />
         <DataGridCheckBoxColumn Header="Is OK  "    Binding="{Binding IsBroadcastee}" />
-        <DataGridTextColumn     Header=" Agents"    Binding="{Binding Emails.Count}"           IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Agents▼"   Binding="{Binding Emails.Count}"           IsReadOnly="True" />
         <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneAgencyXrefs.Count}" IsReadOnly="True" />
         <DataGridTextColumn     Header=" Address"   Binding="{Binding Address}"   Width="180"/>
         <DataGridTextColumn     Header=" Note"      Binding="{Binding Note}"      Width="*" />
