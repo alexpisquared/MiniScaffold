@@ -64,18 +64,6 @@
 
     </ResourceDictionary>
   </lnk:WindowBase.Resources>
-  <lnk:WindowBase.InputBindings>
-    <!-- //todo: defined in NavBarVM ??? how to use from here ??? 
-    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-None" />
-    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Ctrl" Modifiers="Ctrl" />
-    <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Alt"  Modifiers="Alt"  />
-    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" />
-    <KeyBinding Command="{Binding NavigatePage02Command}" Gesture="F2" />
-    <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
-    <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
-    <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
-    -->
-  </lnk:WindowBase.InputBindings>
   <Border Style="{StaticResource BorderStyle_Aav0}">
     <Grid>
       <Grid x:Name="ZommablePanel" >

@@ -1,28 +1,24 @@
 ﻿namespace MinNavTpl.Services;
 public class LayoutNavSvc<TVM> : INavSvc where TVM : BaseMinVM
 {
-  readonly NavigationStore _navigationStore;
-  readonly Func<NavBarVM> _createNavBarVM;
-  readonly Func<TVM> _createVM;
+    readonly NavigationStore _store;
+    readonly Func<NavBarVM> _createNB;
+    readonly Func<TVM> _createVM;
 
-  public LayoutNavSvc(NavigationStore navigationStore, Func<TVM> createVM, Func<NavBarVM> createNavBarVM)
-  {
-    _navigationStore = navigationStore;
-    _createVM = createVM;
-    _createNavBarVM = createNavBarVM;
-  }
+    public LayoutNavSvc(NavigationStore store, Func<TVM> createVM, Func<NavBarVM> createNB) => (_store, _createVM, _createNB) = (store, createVM, createNB);
 
-  public async void NavigateAsync()
-  {
-    if (_navigationStore.CurrentVM is not null && 
-      ((LayoutVM)_navigationStore.CurrentVM).ContentVM is not null &&
-      await ((LayoutVM)_navigationStore.CurrentVM).ContentVM.WrapAsync() == false)
-      return;
+    public async void NavigateAsync()
+    {
+        Console.Beep(7000, 50);
 
-    _navigationStore.CurrentVM = new LayoutVM(_createNavBarVM(), _createVM());
-    await ((LayoutVM)_navigationStore.CurrentVM).ContentVM.InitAsync();
-  }
+        if (_store.CurrentVM is not null && ((LayoutVM)_store.CurrentVM).ContentVM is not null && await ((LayoutVM)_store.CurrentVM).ContentVM.WrapAsync() == false) return;
+
+        _store.CurrentVM = new LayoutVM(_createNB(), _createVM());
+
+        _ = await ((LayoutVM)_store.CurrentVM).ContentVM.InitAsync();
+    }
 }
+
 
 public class Page00NavSvc : LayoutNavSvc<Page00VM> { public Page00NavSvc(NavigationStore ns, Func<Page00VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }
 public class Page01NavSvc : LayoutNavSvc<Page01VM> { public Page01NavSvc(NavigationStore ns, Func<Page01VM> vm, Func<NavBarVM> nb) : base(ns, vm, nb) { } }

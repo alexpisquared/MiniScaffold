@@ -11,16 +11,35 @@
     </ResourceDictionary>
   </UserControl.Resources>
   <UserControl.InputBindings>
+    <!-- 2024-01 - Works only when any of the nav:NavDrawerItem control has focus - 2024-01 
+    2024-01: very bizzare intermittent behaviour: keeps failing all the time.
+    -->
     <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-None" />
     <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Ctrl" Modifiers="Ctrl" />
     <KeyBinding Command="{Binding NavigatePage00Command}" Gesture="Home" CommandParameter="Mdfr-Alt"  Modifiers="Alt"  />
+
     <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" />
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" Modifiers="Alt" />
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" Modifiers="Ctrl" />
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="F1" Modifiers="Shift" />
     <KeyBinding Command="{Binding NavigatePage02Command}" Gesture="F2" />
     <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="F3" />
     <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="F4" />
     <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="F5" />
     <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="F6" />
     <KeyBinding Command="{Binding NavigatePage07Command}" Gesture="F7" />
+    
+    <KeyBinding Command="{Binding NavigatePage07Command}" Gesture="End" />
+    
+    <KeyBinding Command="{Binding NavigatePage01Command}" Gesture="Ctrl+A" />
+    <KeyBinding Command="{Binding NavigatePage02Command}" Gesture="Ctrl+B" />
+    <KeyBinding Command="{Binding NavigatePage03Command}" Gesture="Ctrl+O" />
+    <KeyBinding Command="{Binding NavigatePage04Command}" Gesture="Ctrl+L" />
+    <KeyBinding Command="{Binding NavigatePage05Command}" Gesture="Ctrl+C" />
+    <KeyBinding Command="{Binding NavigatePage06Command}" Gesture="Ctrl+M" />
+    <KeyBinding Command="{Binding NavigatePage07Command}" Gesture="Ctrl+P" />
+    <KeyBinding Command="{Binding NavigateEmlDtlCommand}" Gesture="Ctrl+E" />
+    
   </UserControl.InputBindings>
   <StackPanel Margin="0 10" >
     <nav:NavDrawerItem Command="{Binding NavigatePage01Command}" IsChecked="True" ToolTip="Agents / Emails">
