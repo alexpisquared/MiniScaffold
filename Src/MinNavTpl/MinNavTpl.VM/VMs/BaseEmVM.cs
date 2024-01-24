@@ -13,7 +13,10 @@ public partial class BaseEmVM : BaseDbVM
     public async override Task<bool> InitAsync()
     {
         await Task.Delay(22); // <== does not show up without this...............................
-        try { } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        try
+        {
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
 
         return await base.InitAsync();
     }
@@ -34,6 +37,7 @@ public partial class BaseEmVM : BaseDbVM
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Sir/Madam";
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisCntry = "Ukraine";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
@@ -45,7 +49,11 @@ public partial class BaseEmVM : BaseDbVM
             EmailOfIStore.Change(value.Id);
             ThisEmail = value.Id;
 
-            _ = Task.Run(async () => await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq)); // _ = Task.Run(GetDetailsForSelRowAsync);
+            _ = Task.Run(async () =>
+            {
+                await GetDetailsForSelRowAsync(value, Cfg, Dbq);
+                ThisCntry = value.Country ?? "??";
+            }); // _ = Task.Run(GetDetailsForSelRowAsync);
         }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
@@ -120,7 +128,9 @@ public partial class BaseEmVM : BaseDbVM
     [RelayCommand]
     void DNN()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click();
+        ArgumentNullException.ThrowIfNull(SelectdEmail);
+        SelectdEmail.DoNotNotifyOnAvailableForCampaignId = _thisCampaignId;
     }
 
     [RelayCommand]
@@ -141,14 +151,11 @@ public partial class BaseEmVM : BaseDbVM
     {
         try
         {
-            if (PageCvs is null)
-            {
-                return;
-            }
+            if (PageCvs is null) return;
 
             var curpos = PageCvs.CurrentPosition;
 
-            for (var i = 0; i < 52 && PageCvs?.MoveCurrentToNext() == true; i++)
+            for (var i = 0; i < 33 && PageCvs?.MoveCurrentToNext() == true; i++)
             {
                 await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
             }
@@ -161,12 +168,12 @@ public partial class BaseEmVM : BaseDbVM
 
     protected static async Task<string> SetCountryFromWebServiceTaskAsync(Email? email, IConfigurationRoot cfg)
     {
-        if (email is null)
-            return "";
+        if (email is null) return "";
 
         try
         {
-            var retries = new[] { "[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]" };
+            string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]"];
+
             if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
@@ -175,12 +182,12 @@ public partial class BaseEmVM : BaseDbVM
                 email.Country =
                     root is null ? retries[2] :
                     root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
-                    root?.country_of_origin.First().country_name ?? (root?.errmsg ?? exMsg ?? retries[1]);
+                    root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
             }
 
             return "";
         }
-        catch (Exception ex) { ex.Pop(); return $"FAILED. \r\n  {ex.Message}"; }
+        catch (Exception ex) { ex.Pop(); return $"FAILED. \n  {ex.Message}"; }
     }
     protected static async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {

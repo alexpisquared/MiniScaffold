@@ -119,7 +119,7 @@
       </Grid.RowDefinitions>
 
       <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" HorizontalAlignment="Center">
-        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country"               Visibility="Collapsed" />
+        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country" Visibility="Collapsed" />
       </StackPanel>
 
       <WrapPanel Grid.Row="2"  >

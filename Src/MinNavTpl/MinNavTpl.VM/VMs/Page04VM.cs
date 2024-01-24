@@ -1,8 +1,6 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page04VM : BaseDbVM
 {
-    int _thisCampaign;
-
     public Page04VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, ISpeechSynth synth) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, synth, 8110) { }
     public async override Task<bool> InitAsync()
     {
@@ -13,12 +11,10 @@ public partial class Page04VM : BaseDbVM
 
             await Task.Delay(22); // <== does not show up without this...............................
 
-            _thisCampaign = Dbq.Campaigns.Max(r => r.Id);
-
 #if true
             await Dbq.
               Emails.
-              Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaign)).
+              Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaignId)).
               //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
               LoadAsync();
 #else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
@@ -60,7 +56,7 @@ public partial class Page04VM : BaseDbVM
     {
         try
         {
-            var nl = new Lead { AddedAt = DateTime.Now, CampaignId = _thisCampaign, Note = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Lead" : Clipboard.GetText() };
+            var nl = new Lead { AddedAt = DateTime.Now, CampaignId = _thisCampaignId, Note = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Lead" : Clipboard.GetText() };
             Dbq.Leads.Local.Add(nl);
 
             SelectdLead = nl;

@@ -12,6 +12,7 @@ public partial class BaseDbVM : BaseMinVM
     }
     protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
+    protected int _thisCampaignId;
     public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, ISpeechSynth synth, int oid)
     {
         IsDevDbg = VersionHelper.IsDbg;
@@ -35,6 +36,8 @@ public partial class BaseDbVM : BaseMinVM
         _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsync;
         _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsync;
         _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsync;
+
+        _thisCampaignId = Dbq.Campaigns.Max(r => r.Id);
 
         _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
