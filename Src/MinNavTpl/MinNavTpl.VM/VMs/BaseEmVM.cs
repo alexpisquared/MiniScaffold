@@ -166,16 +166,16 @@ public partial class BaseEmVM : BaseDbVM
 
         try
         {
-            var allBad = "[no idea]";
-            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || email.Country == "limit reached." || email.Country == allBad))
+            var retries = new[] { "[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]" };
+            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
-                var (_, exMsg, root) = await GenderApi.CallOpenAI(cfg, email.Fname);
+                var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname);
 
                 email.Country =
-                    root is null ? "[root is null]" :
-                    root?.country_of_origin.FirstOrDefault() is null ? "[country[0] is null]" :
-                    root?.country_of_origin.FirstOrDefault()?.country_name ?? root?.errmsg ?? exMsg ?? allBad;
+                    root is null ? retries[2] :
+                    root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
+                    root?.country_of_origin.First().country_name ?? (root?.errmsg ?? exMsg ?? retries[1]);
             }
 
             return "";
