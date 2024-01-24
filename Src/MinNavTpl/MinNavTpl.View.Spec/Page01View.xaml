@@ -72,10 +72,10 @@
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4" x:Name="dgPage"
               IsSynchronizedWithCurrentItem="True" SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="200" IsReadOnly="True" />
-        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
-        <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
-        <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                     Width="200" IsReadOnly="True" />
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                  />
+        <DataGridTextColumn Header=" Country"     Binding="{Binding Country, Mode=TwoWay}"   />
+        <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
@@ -116,35 +116,27 @@
         <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Delete from DB " Margin="48,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
       </StackPanel>
 
-      <WrapPanel Grid.Row="2"  >
-        <StackPanel>
+      <WrapPanel Grid.Row="2" >
+        <StackPanel Margin="4 0">
           <Label Content="Id" />
-          <TextBlock Text="{Binding Id, FallbackValue='abc@efg.com'}" />
+          <TextBlock Text="{Binding Id, FallbackValue='abc@efg.com'}" MinWidth="280"/>
         </StackPanel>
         <!-- tmi: <StackPanel><Label Content="Co" /><TextBlock Text="{Binding Company, FallbackValue='ABC Co'}"  /></StackPanel>-->
-        <StackPanel Margin="40 0 0 0">
+        <StackPanel>
           <Label Content="First Name" />
           <TextBox Text="{Binding Fname, FallbackValue='John '}" MinWidth="100" />
+        </StackPanel>
+        <StackPanel>
+          <Label Content="Country" />
+          <TextBox Text="{Binding Country}" MinWidth="100"   />
         </StackPanel>
         <StackPanel>
           <Label Content="Phone" />
           <TextBox Text="{Binding Phone}" MinWidth="100"   />
         </StackPanel>
         <StackPanel>
-          <Label Content="Perm Ban Rsn" Target="{Binding ElementName=tbPbr}" />
-          <TextBox                        Text="{Binding PermBanReason}" MinWidth="100" x:Name="tbPbr" />
-        </StackPanel>
-        <StackPanel>
           <Label Content="_Re-send after"   Target="{Binding ElementName=tbRa}" Margin="-1 0"/>
-          <DatePicker                       SelectedDate="{Binding ReSendAfter}"  x:Name="tbRa" Margin="1.5" />
-        </StackPanel>
-        <StackPanel>
-          <Label Content="DNN Avl"         />
-          <TextBox                          Grid.Column="4" Grid.Row="3" Text="{Binding DoNotNotifyOnAvailableForCampaignId}"  MinWidth="100" />
-        </StackPanel>
-        <StackPanel>
-          <Label Content="Priority" />
-          <TextBox Text="{Binding NotifyPriority}" MinWidth="40"  />
+          <DatePicker                       SelectedDate="{Binding ReSendAfter}" x:Name="tbRa" Margin="1.5" />
         </StackPanel>
       </WrapPanel>
 
