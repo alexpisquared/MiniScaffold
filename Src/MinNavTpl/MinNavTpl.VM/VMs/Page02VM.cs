@@ -80,11 +80,11 @@ public partial class Page02VM : BaseEmVM
             GSReport += $"{i,3} / {DailyDose}\t";
             await Task.Delay(antiSpamSec * 1000);
             await SendThisOneAsync(email.Id, email.Fname);
-            await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 5);
+            await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 3);
         }
 
         await Bpr.FinishAsync(8);
-        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...");
+        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
         GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
     }
@@ -103,7 +103,7 @@ public partial class Page02VM : BaseEmVM
         }
 
         await Bpr.FinishAsync(8);
-        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...");
+        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
         GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
         MainVM.NavBarVM.NavigatePage03Command.Execute(null);
     }
