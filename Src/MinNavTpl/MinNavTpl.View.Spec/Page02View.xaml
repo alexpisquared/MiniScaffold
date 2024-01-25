@@ -71,7 +71,7 @@
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="160" IsReadOnly="True" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
-        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>

@@ -2,6 +2,7 @@
 
 public partial class BaseEmVM : BaseDbVM
 {
+    bool _limitReached;
     protected List<string>? _badEmails;
     public BaseEmVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, UserSettings stg, EmailOfIStore eml, EmailDetailVM evm, ISpeechSynth synth, int oid)
         : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, synth, oid)
@@ -49,11 +50,7 @@ public partial class BaseEmVM : BaseDbVM
             EmailOfIStore.Change(value.Id);
             ThisEmail = value.Id;
 
-            _ = Task.Run(async () =>
-            {
-                await GetDetailsForSelRowAsync(value, Cfg, Dbq);
-                ThisCntry = value.Country ?? "??";
-            }); // _ = Task.Run(GetDetailsForSelRowAsync);
+            _ = Task.Run(async () => { await GetDetailsForSelRowAsync(value, Cfg, Dbq); ThisCntry = value.Country ?? "??"; });
         }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
@@ -153,43 +150,56 @@ public partial class BaseEmVM : BaseDbVM
         {
             if (PageCvs is null) return;
 
-            var curpos = PageCvs.CurrentPosition;
+            var prevPos = PageCvs.CurrentPosition;
 
             for (var i = 0; i < 33 && PageCvs?.MoveCurrentToNext() == true; i++)
             {
                 await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
             }
 
-            _ = (PageCvs?.MoveCurrentToPosition(curpos));
+            _ = (PageCvs?.MoveCurrentToPosition(prevPos));
             await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
-    protected static async Task<string> SetCountryFromWebServiceTaskAsync(Email? email, IConfigurationRoot cfg)
+    protected async Task<string> SetCountryFromWebServiceTaskAsync(Email email, IConfigurationRoot cfg)
     {
-        if (email is null) return "";
+        string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]", "*no name*"];
+
+        if (string.IsNullOrEmpty(email.Fname)) return retries[5];
+
+        if (_limitReached)
+        {
+            if (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country))
+                email.Country = retries[3];
+
+            return retries[3];
+        }
 
         try
         {
-            string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]"];
-
             if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
                 var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname);
 
                 email.Country =
-                    root is null ? retries[2] :
+                    root is null ? (exMsg ?? retries[2]) :
                     root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
                     root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
+
+                if (email.Country == retries[3])
+                {
+                    _limitReached = true;
+                }
             }
 
             return "";
         }
         catch (Exception ex) { ex.Pop(); return $"FAILED. \n  {ex.Message}"; }
     }
-    protected static async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
+    protected async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {
         if (email is null) // ??? || email.Ttl_Sent is not null)
         {
