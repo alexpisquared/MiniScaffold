@@ -7,6 +7,9 @@
       <ResourceDictionary.MergedDictionaries>
         <!--For some reason ComboBox styling does not work off App.xaml: must be present in the target page-->
         <ResourceDictionary Source="/WpfUserControlLib;component/Base/ComboBox.Base.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/ColorScheme/Theme.Color.Dark.Google.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/BasicDefaultsLayout.xaml" />
+        <ResourceDictionary Source="/WpfUserControlLib;component/Base/DataGrid.Base.xaml" />
       </ResourceDictionary.MergedDictionaries>
 
       <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource TbkVCenteredInfoClr}" />
@@ -60,8 +63,7 @@
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
     </Grid>
 
-    <DataGrid ItemsSource="{Binding PageCvs}" Grid.Row="1" x:Name="dgLeads" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8"
-              CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False">
+    <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentLead}" SelectedItem="{Binding SelectdLead}" CanUserAddRows="False" InitializingNewItem="OnInitNewItem" IsReadOnly="False" Margin="4 8">
       <DataGrid.Resources>
         <DataTemplate x:Key="DateTemplate" >
         </DataTemplate>

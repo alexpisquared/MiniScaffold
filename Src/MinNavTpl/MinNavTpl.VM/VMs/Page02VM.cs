@@ -5,7 +5,7 @@ public partial class Page02VM : BaseEmVM
       : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, eml, evm, synth, 8110) { }
     public async override Task<bool> InitAsync()
     {
-        for (int i = 0; i < 26; i++)
+        for (var i = 0; i < 26; i++)
         {
             try
             {
@@ -72,21 +72,12 @@ public partial class Page02VM : BaseEmVM
         var i = 0;
         foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
         {
-            if (++i > DailyDose)
-            {
-                break;
-            }
+            if (++i > DailyDose) { break; }
 
-            GSReport += $"{i,3} / {DailyDose}\t";
-            await Task.Delay(antiSpamSec * 1000);
-            await SendThisOneAsync(email.Id, email.Fname);
-            await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 3);
+            await SendAndReportOneAsync(i, DailyDose, email);
         }
 
-        await Bpr.FinishAsync(8);
-        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
-        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
-        MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
+        await FinishJobAsync();
     }
 
     [RelayCommand]
@@ -96,16 +87,28 @@ public partial class Page02VM : BaseEmVM
         await Synth.SpeakAsync($"Sending selected emails; anti spam pause is {antiSpamSec} seconds ...");
         await Bpr.StartAsync(8);
 
+        var i = 0;
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
         {
-            await SendThisOneAsync(email.Id, email.Fname);
-            await Task.Delay(antiSpamSec * 1000);
+            await SendAndReportOneAsync(++i, SelectedEmails.Count, email);
         }
 
+        await FinishJobAsync();
+    }
+
+    async Task SendAndReportOneAsync(int i, int j, Email email)
+    {
+        GSReport += $"{i,3} / {j}\t";
+        await Task.Delay(antiSpamSec * 1000);
+        await SendThisOneAsync(email.Id, email.Fname);
+        await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 3);
+    }
+    async Task FinishJobAsync()
+    {
         await Bpr.FinishAsync(8);
+        GSReport += "\n\tRunning Outlook-to-DB now (to avoid double sending!) ...";
         await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
-        GSReport += "\n\t!!! MUST RUN OUTLOOK --> DB SYNC NOW !!!";
-        MainVM.NavBarVM.NavigatePage03Command.Execute(null);
+        MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
     }
 
     readonly int antiSpamSec = DevOps.IsDbg ? 5 : 80;

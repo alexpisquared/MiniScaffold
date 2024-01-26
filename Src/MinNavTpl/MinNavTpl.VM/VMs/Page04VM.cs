@@ -15,7 +15,7 @@ public partial class Page04VM : BaseDbVM
             await Dbq.
               Emails.
               Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaignId)).
-              //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of mlulti agents per role
+              //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of multi agents per role
               LoadAsync();
 #else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
      await Dbq.Emails.LoadAsync();

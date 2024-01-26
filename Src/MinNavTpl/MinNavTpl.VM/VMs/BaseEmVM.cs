@@ -38,7 +38,6 @@ public partial class BaseEmVM : BaseDbVM
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisEmail = "pigida@gmail.com"; partial void OnThisEmailChanged(string value) => ThisFName = FirstLastNameParser.ExtractFirstNameFromEmail(value) ?? ExtractFirstNameFromEmailUsingDb(value) ?? "Sirs";
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Sir/Madam";
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisCntry = "Ukraine";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
 
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
@@ -50,7 +49,11 @@ public partial class BaseEmVM : BaseDbVM
             EmailOfIStore.Change(value.Id);
             ThisEmail = value.Id;
 
-            _ = Task.Run(async () => { await GetDetailsForSelRowAsync(value, Cfg, Dbq); ThisCntry = value.Country ?? "??"; });
+            _ = Task.Run(async () =>
+            {
+                await GetDetailsForSelRowAsync(value, Cfg, Dbq);
+                //PageCvs?.Refresh();
+            }).ContinueWith(_ => PageCvs?.Refresh(), TaskScheduler.FromCurrentSynchronizationContext()); //prevents from using up/down arrows to navigate thru the list.
         }
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
@@ -159,6 +162,8 @@ public partial class BaseEmVM : BaseDbVM
 
             _ = (PageCvs?.MoveCurrentToPosition(prevPos));
             await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
+            
+            PageCvs?.Refresh();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
