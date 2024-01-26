@@ -45,7 +45,7 @@ public partial class Page02VM : BaseEmVM
                 await Bpr.FinishAsync(8);
                 return await base.InitAsync();
             }
-            catch (SqlException ex) { GSReport = $"FAILED {i,2}/{26}  {ex.Message}"; Synth.SpeakFAF("Retrying many times."); }
+            catch (SqlException ex) { GSReport = $"FAILED {i,2}/{26}  {ex.Message}"; Synth.SpeakFAF($"Retrying {25 - i} times."); }
             catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
             finally { IsBusy = false; }
         } // for
@@ -59,7 +59,7 @@ public partial class Page02VM : BaseEmVM
     }
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
-        GSReport = $"//todo: {value.Count:N0}  rows selected"; ;
+        GSReport = $"{value.Count,4} / {SelectedEmails.Count} rows selected"; ;
     }
 
     [RelayCommand]

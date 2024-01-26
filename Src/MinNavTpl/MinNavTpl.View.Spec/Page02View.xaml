@@ -57,9 +57,16 @@
         <Button Content=" Top # " Command="{Binding SendTopNCommand}" ToolTip="Set PBR to 'Not an Agent'" />
         <Button Content="Selects" Command="{Binding SendSlctCommand}" ToolTip="Do Not Notify - Available for this Camp-n" />
 
-        <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
-        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" /></TextBlock>
-        <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
+        <TextBlock>
+          <Run Text="     Slctd/Total:" FontWeight="Light" />
+          <Run Text="{Binding SelectedEmails.Count, Mode=OneWay}"  FontWeight="Medium" />
+          <Run Text=" / "/>
+          <Run Text="{Binding PageCvs.Count, Mode=OneWay}"         FontWeight="Medium" />        
+          <Run Text="     Slctd:" FontWeight="Light" />
+          <Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" />
+          <Run Text="     Crrnt:" FontWeight="Light" />
+          <Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" />
+        </TextBlock>
       </StackPanel>
 
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->

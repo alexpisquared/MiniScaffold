@@ -61,9 +61,11 @@
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"    ToolTip="Check DB for changes"  Foreground="#0a0" />
         <Button Content=" _Sve " Command="{Binding Save2DbCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
 
-        <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
-        <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" /></TextBlock>
-        <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" /></TextBlock>
+        <TextBlock>
+          <Run Text="     Count:" FontWeight="Light" /><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" />
+          <Run Text="     Slctd:" FontWeight="Light" /><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" />
+          <Run Text="     Crrnt:" FontWeight="Light" /><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" />
+        </TextBlock>
       </StackPanel>
 
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->
