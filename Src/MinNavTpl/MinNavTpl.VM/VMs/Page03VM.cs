@@ -136,8 +136,9 @@ public partial class Page03VM : BaseDbVM
 	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
                     WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
 
-                ReportOL += $"Done!  {rowsSaved} agents updated with new priorities.";
-                Synth.SpeakFAF($"Done! All valid agents updated with new priorities.");
+                GSReport += $"\n\tAll {rowsSaved} agents updated with new priorities.\t";
+                ReportOL += $"Done!   {rowsSaved} agents updated with new priorities.";
+                Synth.SpeakFAF($"Done!  All valid agents updated with new priorities.");
             }
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
