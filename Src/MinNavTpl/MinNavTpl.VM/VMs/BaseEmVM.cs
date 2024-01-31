@@ -73,7 +73,7 @@ public partial class BaseEmVM : BaseDbVM
                 ? (FirstLastNameParser.ExtractFirstNameFromEmail(email) ?? ExtractFirstNameFromEmailUsingDb(email) ?? "Sirs")
                 : FirstLastNameParser.ToTitleCase(rawName);
 
-            GSReport += $"{fName,-15}\t{email,-47}\t ...  ";
+            GSReport += $"{fName,-15}\t{email,-47}";
 
             var timestamp = DateTime.Now;
             var (success, report1) = await QStatusBroadcaster.SendLetter(email, fName, isAvailable: true, timestamp, Lgr);
@@ -85,12 +85,12 @@ public partial class BaseEmVM : BaseDbVM
                     em.ReSendAfter = null;
                 }
 
-                GSReport += "succeeded \r\n";
+                GSReport += "\r\n";
                 _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", timestamp, timestamp, "..from std broadcast send", "S");
             }
             else
             {
-                GSReport += $"FAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
+                GSReport += $"\tFAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
             }
         }
