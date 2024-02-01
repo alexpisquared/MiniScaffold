@@ -196,7 +196,7 @@ public partial class Page03VM : BaseDbVM
                 {
                     ttl--;
                     cnt++;
-                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
+                    //tmi: ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
                     try
                     {
                         if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
@@ -298,7 +298,7 @@ public partial class Page03VM : BaseDbVM
                 foreach (var item in items)
                 {
                     ttl++;
-                    ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
+                    //tmi: ReportOL += $"{ttl,2}{cnt,3}  {items.Count,4}  IPM.Note items in  {folderName}\n";
                     try
                     {
                         if (item is OL.ReportItem reportItem)

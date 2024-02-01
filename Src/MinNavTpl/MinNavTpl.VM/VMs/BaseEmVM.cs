@@ -131,12 +131,22 @@ public partial class BaseEmVM : BaseDbVM
         Bpr.Click();
         ArgumentNullException.ThrowIfNull(SelectdEmail);
         SelectdEmail.DoNotNotifyOnAvailableForCampaignId = _thisCampaignId;
+        SelectdEmail.ModifiedAt = DateTime.Now;
+        Nxt();
     }
 
     [RelayCommand]
     void PBR()
     {
-        Bpr.Click(); try { if (SelectdEmail is null) { return; } SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-exMsg}. "; Nxt(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click();
+        try
+        {
+            if (SelectdEmail is null) { return; }
+            SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. ";
+            SelectdEmail.ModifiedAt = DateTime.Now;
+            Nxt();
+        }
+        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]
@@ -162,7 +172,7 @@ public partial class BaseEmVM : BaseDbVM
 
             _ = (PageCvs?.MoveCurrentToPosition(prevPos));
             await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
-            
+
             PageCvs?.Refresh();
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
@@ -177,14 +187,18 @@ public partial class BaseEmVM : BaseDbVM
         if (_limitReached)
         {
             if (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country))
+            {
                 email.Country = retries[3];
+                email.ModifiedAt = DateTime.Now;
+            }
+
 
             return retries[3];
         }
 
         try
         {
-            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))
+            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))// || System.Text.RegularExpressions.Regex.IsMatch(email.Fname, @"[0-9\W]"))) // check if the email.Fname contains a number or a special character using regex
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
                 var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname);
@@ -193,6 +207,7 @@ public partial class BaseEmVM : BaseDbVM
                     root is null ? (exMsg ?? retries[2]) :
                     root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
                     root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
+                email.ModifiedAt = DateTime.Now;
 
                 if (email.Country == retries[3])
                 {

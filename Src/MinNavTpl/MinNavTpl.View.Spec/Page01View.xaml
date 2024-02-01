@@ -87,15 +87,16 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                               IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
-        <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
-        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-        <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" />
+        <DataGridTextColumn Header=" Priority"    Binding="{Binding NotifyPriority}"                                 IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"            IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                  IsReadOnly="False" Width="100" Foreground="#f60" />
+        <DataGridTextColumn Header=" Added ▼"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Modfd "      Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                       IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                       IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                          IsReadOnly="False" Width="*" FontSize="8" />
       </DataGrid.Columns>
     </DataGrid>
 
@@ -112,13 +113,13 @@
       </Grid.RowDefinitions>
 
       <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" Margin="5">
-        <TextBlock Text="{Binding Id, FallbackValue='abc@efg.com'}" MinWidth="380"/>
-        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Get country" Visibility="Collapsed" />
-        <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
-        <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
+        <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
+        <TextBlock Text="{Binding Id, FallbackValue=abc@efg.com}" MinWidth="380"/>
+        <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Get country" Visibility="Collapsed" />
+        <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
         <Label  Content="_Re-send after" Target="{Binding ElementName=tbRa}" Margin="5 0 0 0"/>
-        <DatePicker                     SelectedDate="{Binding ReSendAfter}" x:Name="tbRa" />
-        <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Width="78" ToolTip="Delete from DB " Margin="148,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+        <DatePicker                SelectedDate="{Binding ReSendAfter}" x:Name="tbRa" />
+        <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Delete from DB " Margin="148,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" />
       </StackPanel>
 
       <TextBox Grid.Row="3" Text="{Binding Notes}" VerticalAlignment="Stretch" x:Name="tbAN" AcceptsReturn="True" MinHeight="42" />
