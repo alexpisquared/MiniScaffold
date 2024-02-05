@@ -65,8 +65,7 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendTopNAsync()
     {
-        GSReport = $"";
-        await Synth.SpeakAsync($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {/*DateTime.Now.AddSeconds*/(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
+        await Synth.SpeakAsync(GSReport = $"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -83,8 +82,7 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendSlctAsync()
     {
-        GSReport = $"";
-        await Synth.SpeakAsync($"Sending selected emails; anti spam pause is {antiSpamSec} seconds ...");
+        await Synth.SpeakAsync(GSReport = $"Sending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.");
         await Bpr.StartAsync(8);
 
         var i = 0;
@@ -101,7 +99,7 @@ public partial class Page02VM : BaseEmVM
         GSReport += $"{i,3} / {j}\t";
         await Task.Delay(antiSpamSec * 1000);
         await SendThisOneAsync(email.Id, email.Fname);
-        await Synth.SpeakAsync($"{i} down, {DailyDose - i} to go...", volumePercent: 3);
+        await Synth.SpeakAsync($"{i} down, {j - i} to go...", volumePercent: 3);
     }
     async Task FinishJobAsync()
     {
