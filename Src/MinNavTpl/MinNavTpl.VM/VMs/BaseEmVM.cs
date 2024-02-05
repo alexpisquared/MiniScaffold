@@ -201,7 +201,7 @@ public partial class BaseEmVM : BaseDbVM
             if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))// || System.Text.RegularExpressions.Regex.IsMatch(email.Fname, @"[0-9\W]"))) // check if the email.Fname contains a number or a special character using regex
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
-                var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname);
+                var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth);
 
                 email.Country =
                     root is null ? (exMsg ?? retries[2]) :
