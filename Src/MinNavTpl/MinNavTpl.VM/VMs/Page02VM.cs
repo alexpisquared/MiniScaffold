@@ -99,7 +99,7 @@ public partial class Page02VM : BaseEmVM
         GSReport += $"{i,3} / {j}\t";
         await Task.Delay(antiSpamSec * 1000);
         await SendThisOneAsync(email.Id, email.Fname);
-        Synth.SpeakFree($"{i} down, {j - i} to go...", volumePercent: 3);
+        Synth.SpeakFree($"{i} down, {j - i} to go...", volumePercent: 9);
     }
     async Task FinishJobAsync()
     {

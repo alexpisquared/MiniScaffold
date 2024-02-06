@@ -212,11 +212,7 @@ public partial class MainVM : BaseMinVM
 
     [RelayCommand] async Task UpgradeSelfAsync() => await Task.Yield();
 
-    [RelayCommand]
-    void HidePnl()
-    {
-        GSReport = ""; GSRepViz = Visibility.Collapsed;
-    }
+    [RelayCommand]    void HidePnl()    {        GSReport = ""; GSRepViz = Visibility.Collapsed;    }
 
     [RelayCommand]
     async Task TryCloseAsync()

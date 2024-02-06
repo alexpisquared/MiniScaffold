@@ -60,7 +60,6 @@ public partial class BaseEmVM : BaseDbVM
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
-        GSReport = "";
         await Bpr.StartAsync(8);
         await SendThisOneAsync(ThisEmail, ThisFName);
         await Bpr.FinishAsync(8);
