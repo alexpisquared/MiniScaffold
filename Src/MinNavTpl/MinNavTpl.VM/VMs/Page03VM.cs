@@ -4,18 +4,11 @@ public partial class Page03VM : BaseDbVM
     readonly OutlookHelper6 _oh = new();
     int _newEmailsAdded = 0;
     public Page03VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, ISpeechSynth synth) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, synth, 8110) { }
-    public async override Task<bool> InitAsync()
-    {
-        await DoReFaLaAsync(); return await base.InitAsync();
-    }
+    public async override Task<bool> InitAsync()    {        await DoReFaLaAsync(); return await base.InitAsync();    }
 
     [ObservableProperty] string reportOL = "";
 
-    [RelayCommand]
-    void ClearText()
-    {
-        ReportOL += ""; ;
-    }
+    [RelayCommand] void ClearText() => ReportOL = "";
 
     [RelayCommand]
     async Task DoReglrAsync()
@@ -63,7 +56,7 @@ public partial class Page03VM : BaseDbVM
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
-        async Task DoLaterAsync()
+    async Task DoLaterAsync()
     {
         IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
 
@@ -136,9 +129,10 @@ public partial class Page03VM : BaseDbVM
 	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
                     WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
 
-                GSReport += $"\n\tAll {rowsSaved} agents updated with new priorities.\t";
-                ReportOL += $"Done!   {rowsSaved} agents updated with new priorities.";
-                Synth.SpeakFAF($"Done!  All valid agents updated with new priorities.");
+                var s = $"Done!   {rowsSaved} agents updated with new priorities.";
+                ReportOL += s;
+                GSReport += $"\n\t{s}\t";
+                Synth.SpeakFree(s);
             }
         }
         catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
@@ -366,7 +360,7 @@ public partial class Page03VM : BaseDbVM
         return report;
     }
 
-        async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
+    async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
     {
         var report = "";
         int ttl = 0, newBansAdded = 0, newEmailsAdded = 0;
