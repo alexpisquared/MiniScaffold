@@ -34,7 +34,7 @@ public partial class Page02VM : BaseEmVM
                 _ = PageCvs?.MoveCurrentToFirst();
                 await GetTopDetailAsync();
 
-                GSReport = $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ";
+                GSReport += $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ";
                 Lgr.Log(LogLevel.Trace, GSReport);
 
                 if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
@@ -45,8 +45,8 @@ public partial class Page02VM : BaseEmVM
                 await Bpr.FinishAsync(8);
                 return await base.InitAsync();
             }
-            catch (SqlException ex) { GSReport = $"FAILED {i,2}/{26}  {ex.Message}"; Synth.SpeakFAF($"Retrying {25 - i} times."); }
-            catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+            catch (SqlException ex) { GSReport += $"FAILED {i,2}/{26}  {ex.Message}"; Synth.SpeakFAF($"Retrying {25 - i} times."); }
+            catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
             finally { IsBusy = false; }
         } // for
 
@@ -59,14 +59,14 @@ public partial class Page02VM : BaseEmVM
     }
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] ObservableCollection<Email> selectedEmails = []; partial void OnSelectedEmailsChanged(ObservableCollection<Email> value)
     {
-        GSReport = $"{value.Count,4} / {SelectedEmails.Count} rows selected"; ;
+        GSReport += $"{value.Count,4} / {SelectedEmails.Count} rows selected"; ;
     }
 
     [RelayCommand]
     async Task SendTopNAsync()
     {
-        await Synth.SpeakAsync(GSReport = $"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
-        await Bpr.StartAsync(8);
+        GSReport += $"\nSending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.\n";
+        Synth.SpeakFreeFAF($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
 
         var i = 0;
         foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
@@ -82,8 +82,7 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendSlctAsync()
     {
-        await Synth.SpeakAsync(GSReport = $"Sending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.");
-        await Bpr.StartAsync(8);
+        Synth.SpeakFreeFAF(GSReport += $"\nSending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.\n");
 
         var i = 0;
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
@@ -96,10 +95,11 @@ public partial class Page02VM : BaseEmVM
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
     {
-        GSReport += $"{i,3} / {j}\t";
-        await Task.Delay(antiSpamSec * 1000);
+        if (i > 1) await Task.Delay(antiSpamSec * 1000);
+
+        GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,3} / {j}\t";
         await SendThisOneAsync(email.Id, email.Fname);
-        Synth.SpeakFree($"{i} down, {j - i} to go...", volumePercent: 9);
+        Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate: 6, volumePercent: 9);
     }
     async Task FinishJobAsync()
     {
@@ -109,5 +109,5 @@ public partial class Page02VM : BaseEmVM
         MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
     }
 
-    readonly int antiSpamSec = DevOps.IsDbg ? 5 : 80;
+    readonly int antiSpamSec = DevOps.IsDbg ? 5 : 118; // 2 min to better tell apart by the timestamps.
 }

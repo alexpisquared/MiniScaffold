@@ -37,11 +37,11 @@ public partial class Page04VM : BaseDbVM
 
             AllEmailsList = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" ({Dbq.Leads.Local.Count:N0} + {Dbq.Leads.Local.Count:N0} + {Dbq.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport += $" ({Dbq.Leads.Local.Count:N0} + {Dbq.Leads.Local.Count:N0} + {Dbq.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             return true;
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -61,7 +61,7 @@ public partial class Page04VM : BaseDbVM
 
             SelectdLead = nl;
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]

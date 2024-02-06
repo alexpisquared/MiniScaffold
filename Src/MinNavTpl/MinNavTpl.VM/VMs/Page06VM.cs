@@ -29,11 +29,11 @@ public partial class Page06VM : BaseDbVM
               row.DfsClientId?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" {Dbi.InvAccounts.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbi.InvAccounts.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             return true;
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -49,12 +49,12 @@ public partial class Page06VM : BaseDbVM
     [RelayCommand]
     void ChkDb4CngsMfi()
     {
-        Bpr.Click(); GSReport = Dbi.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbi.HasUnsavedChanges(); WriteLine(GSReport);
+        Bpr.Click(); GSReport += Dbi.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbi.HasUnsavedChanges(); WriteLine(GSReport);
     }
 
     [RelayCommand]
     async Task Save2DbMfiAsync()
     {
-        try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
+        try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
     }
 }

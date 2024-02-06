@@ -39,7 +39,7 @@ public partial class BaseDbVM : BaseMinVM
 
         _thisCampaignId = Dbq.Campaigns.Max(r => r.Id);
 
-        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
+        _ = Application.Current.Dispatcher.InvokeAsync(async () => { try { await Task.Yield(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); } }, DispatcherPriority.Normal); //tu: async prop - https://stackoverflow.com/questions/6602244/how-to-call-an-async-method-from-a-getter-or-setter
 
         Lgr.LogInformation($"┌──{GetType().Name,-16} eo-ctor      PageRank:{oid}");
     }
@@ -75,7 +75,7 @@ public partial class BaseDbVM : BaseMinVM
 
             return true;
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }
         finally
         {
             Lgr.LogInformation($"└──{GetType().Name,-16} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
@@ -97,7 +97,7 @@ public partial class BaseDbVM : BaseMinVM
     }
     protected void ReportProgress(string msg)
     {
-        GSReport = msg; Lgr.Log(LogLevel.Trace, msg);
+        GSReport += msg; Lgr.Log(LogLevel.Trace, msg);
     }
 
     public ISpeechSynth Synth
@@ -116,11 +116,11 @@ public partial class BaseDbVM : BaseMinVM
             }
 
             Lgr.LogInformation(report);
-            GSReport = report;
+            GSReport += report;
         }
         else
         {
-            GSReport = $"Current user permission \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
+            GSReport += $"Current user permission \n\n    {_secForcer.PermisssionCSV} \n\ndoes not include database modifications.";
             Lgr.LogWarning(GSReport.Replace("\n", "") + "▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ▓▓  ");
             await Bpr.BeepAsync(333, 2.5); // _ = MessageBox.Show(report, $"Not enough priviliges \t\t {DateTime.Now:MMM-dd HH:mm}", MessageBoxButton.OK, MessageBoxImage.Hand);
         }
@@ -134,7 +134,7 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly GSReportStore _GSReportStore;
     async void SrvrNameStore_ChngdAsync(string val)
     {
-        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
+        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
     }
     async void DtBsNameStore_ChngdAsync(string val)
     {
@@ -226,12 +226,12 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected void ChkDb4Cngs()
     {
-        Bpr.Click(); GSReport = Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
+        Bpr.Click(); GSReport += Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
     }
 
     [RelayCommand]
     protected async Task Save2Db()
     {
-        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
+        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }
 }

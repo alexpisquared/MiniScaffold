@@ -41,7 +41,7 @@ public partial class MainVM : BaseMinVM
 
         var rv = await base.InitAsync();
 
-        try { await KeepCheckingForUpdatesAndNeverReturnAsync(); } catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Logger); }
+        try { await KeepCheckingForUpdatesAndNeverReturnAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Logger); }
 
         return rv;
     }
@@ -88,7 +88,7 @@ public partial class MainVM : BaseMinVM
             UpgradeUrgency = .6 + Math.Abs((VersionHelper.TimedVer - setupExeTime).TotalDays);
             AppVerToolTip = IsObsolete ? $" New version is available:   0.{setupExeTime:M.d.HHmm} \n\t         from  {setupExeTime:yyyy-MM-dd HH:mm}.\n Click to update. " : $" This is the latest version  {VersionHelper.CurVerStr} \n\t               from  {VersionHelper.TimedVer:yyyy-MM-dd HH:mm}. ";
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; Logger.LogError(ex, "│   ▄─▀─▄─▀─▄ -- Ignore"); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Logger.LogError(ex, "│   ▄─▀─▄─▀─▄ -- Ignore"); }
     }
 
     protected readonly LetDbChgStore _letDbChStore;
@@ -212,7 +212,7 @@ public partial class MainVM : BaseMinVM
 
     [RelayCommand] async Task UpgradeSelfAsync() => await Task.Yield();
 
-    [RelayCommand]    void HidePnl()    {        GSReport = ""; GSRepViz = Visibility.Collapsed;    }
+    [RelayCommand]    void HidePnl()    {        GSReport += ""; GSRepViz = Visibility.Collapsed;    }
 
     [RelayCommand]
     async Task TryCloseAsync()

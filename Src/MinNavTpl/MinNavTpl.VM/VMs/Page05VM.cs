@@ -23,11 +23,11 @@ public partial class Page05VM : BaseDbVM
               row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
               (row.IsBroadcastee || IncludeClosed);
 
-            Lgr.Log(LogLevel.Trace, GSReport = $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
 
             return true;
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
         finally { _ = await base.InitAsync(); }
     }
     public override Task<bool> WrapAsync() => base.WrapAsync();
@@ -64,9 +64,9 @@ public partial class Page05VM : BaseDbVM
                 }
             });
 
-            ChkDb4Cngs();      //GSReport = await SaveLogReportOrThrowAsync(Dbq, "new agencies");
+            ChkDb4Cngs();      //GSReport += await SaveLogReportOrThrowAsync(Dbq, "new agencies");
         }
-        catch (Exception ex) { GSReport = $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = false; }
     }
 
