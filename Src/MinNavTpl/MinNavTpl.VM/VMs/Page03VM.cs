@@ -132,7 +132,7 @@ public partial class Page03VM : BaseDbVM
                 var s = $"Done!   {rowsSaved} agents updated with new priorities.";
                 ReportOL += s;
                 GSReport += $"\n\t{s}\t";
-                Synth.SpeakFree(s);
+                Synth.SpeakFreeFAF(s);
             }
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }

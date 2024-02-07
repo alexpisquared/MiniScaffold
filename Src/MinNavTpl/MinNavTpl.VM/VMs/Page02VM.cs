@@ -66,7 +66,7 @@ public partial class Page02VM : BaseEmVM
     async Task SendTopNAsync()
     {
         GSReport += $"\nSending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.\n";
-        Synth.SpeakFreeFAF($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.");
+        await Synth.SpeakFreeAsync($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * DailyDose / 60.0:N0} minutes.", speakingRate: 4, volumePercent: 26);
 
         var i = 0;
         foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
@@ -82,7 +82,8 @@ public partial class Page02VM : BaseEmVM
     [RelayCommand]
     async Task SendSlctAsync()
     {
-        Synth.SpeakFreeFAF(GSReport += $"\nSending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.\n");
+        GSReport += $"\nSending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.\n";
+        await Synth.SpeakFreeAsync($"Sending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * SelectedEmails.Count / 60.0:N0} minutes.", speakingRate: 4, volumePercent: 26);
 
         var i = 0;
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
