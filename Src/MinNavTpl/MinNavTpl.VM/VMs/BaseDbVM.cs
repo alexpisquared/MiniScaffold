@@ -142,7 +142,7 @@ public partial class BaseDbVM : BaseMinVM
     }
     async void GSReportStore_ChngdAsync(string val)
     {
-        if (GSReport != val) GSReport = val; await RefreshReloadAsync();
+         GSReport = val; await RefreshReloadAsync();
     }
     async void LetDbChgStore_ChngdAsync(bool value)
     {
@@ -226,7 +226,10 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected void ChkDb4Cngs()
     {
-        Bpr.Click(); GSReport += Dbq.GetDbChangesReport() + $"{(LetDbChg ? "" : "\n RO - user!!!")}"; HasChanges = Dbq.HasUnsavedChanges(); WriteLine(GSReport);
+        Bpr.Click(); 
+        GSReport += Dbq.GetDbChangesReport() + $"{(LetDbChg ? "\n" : "\n RO - user!!!\n")}"; 
+        HasChanges = Dbq.HasUnsavedChanges(); 
+        WriteLine(GSReport);
     }
 
     [RelayCommand]

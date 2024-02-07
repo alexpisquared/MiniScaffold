@@ -112,7 +112,7 @@ public partial class MainVM : BaseMinVM
     void DtBsNameStore_Chngd(string val) => DtBsName = val;   /* await RefreshReloadAsync(); */
     void GSReportStore_Chngd(string val)
     {
-        if (GSReport != val) GSReport = val; /*await RefreshReloadAsync();*/
+        GSReport = val; /*await RefreshReloadAsync();*/
     }
     void EmailOfIStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
     {
