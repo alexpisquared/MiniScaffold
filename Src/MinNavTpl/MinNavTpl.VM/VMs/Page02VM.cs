@@ -34,8 +34,8 @@ public partial class Page02VM : BaseEmVM
                 _ = PageCvs?.MoveCurrentToFirst();
                 await GetTopDetailAsync();
 
-                GSReport += $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ";
-                Lgr.Log(LogLevel.Trace, GSReport);
+                GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec :loaded.";
+                Lgr.Log(LogLevel.Trace, $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ");
 
                 if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
                 {
@@ -95,7 +95,7 @@ public partial class Page02VM : BaseEmVM
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
     {
-        if (i > 1) await Task.Delay(antiSpamSec * 1000);
+        if (i > 1) await Task.Delay(antiSpamSec * 1000 + 250);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,3} / {j}\t";
         await SendThisOneAsync(email.Id, email.Fname);

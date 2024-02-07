@@ -84,7 +84,7 @@ public partial class BaseEmVM : BaseDbVM
                     em.ReSendAfter = null;
                 }
 
-                Lgr.Log(LogLevel.Information, $":sent/timestamped: {now:HH:mm:ss.f} {fName,26}\t{email,-47}");
+                Lgr.Log(LogLevel.Information, $"│  :sent/timestamped:  {now:HH:mm:ss.f} {fName,26}\t{email,-47}");
 
                 GSReport += "\r\n";
                 _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", now, now, "..from std broadcast send", "S");

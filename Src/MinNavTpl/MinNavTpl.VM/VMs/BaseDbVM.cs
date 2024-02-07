@@ -134,19 +134,19 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly GSReportStore _GSReportStore;
     async void SrvrNameStore_ChngdAsync(string val)
     {
-        try { SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
+        try { if (SrvrName != val) SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
     }
     async void DtBsNameStore_ChngdAsync(string val)
     {
-        DtBsName = val; await RefreshReloadAsync();
+        if (DtBsName != val) DtBsName = val; await RefreshReloadAsync();
     }
     async void GSReportStore_ChngdAsync(string val)
     {
-        GSReport = val; await RefreshReloadAsync();
+        if (GSReport != val) GSReport = val; await RefreshReloadAsync();
     }
     async void LetDbChgStore_ChngdAsync(bool value)
     {
-        LetDbChg = value; await RefreshReloadAsync();
+        if (LetDbChg != value) LetDbChg = value; await RefreshReloadAsync();
     }
 
     [ObservableProperty] string? srvrName; partial void OnSrvrNameChanged(string? value)

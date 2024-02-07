@@ -110,7 +110,10 @@ public partial class MainVM : BaseMinVM
     }
     void SrvrNameStore_Chngd(string val) => SrvrName = val;   /* await RefreshReloadAsync(); */
     void DtBsNameStore_Chngd(string val) => DtBsName = val;   /* await RefreshReloadAsync(); */
-    void GSReportStore_Chngd(string val) => GSReport = val;   /* await RefreshReloadAsync(); */
+    void GSReportStore_Chngd(string val)
+    {
+        if (!GSReport.EndsWith(val)) GSReport += val; /*await RefreshReloadAsync();*/
+    }
     void EmailOfIStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
     {
         WriteLine($"■■ MAIN  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load as it were ..." : "==>----")}");
@@ -212,7 +215,11 @@ public partial class MainVM : BaseMinVM
 
     [RelayCommand] async Task UpgradeSelfAsync() => await Task.Yield();
 
-    [RelayCommand]    void HidePnl()    {        GSReport += ""; GSRepViz = Visibility.Collapsed;    }
+    [RelayCommand]
+    void HidePnl()
+    {
+        GSReport = ""; GSRepViz = Visibility.Collapsed;
+    }
 
     [RelayCommand]
     async Task TryCloseAsync()
