@@ -37,7 +37,7 @@ public partial class Page04VM : BaseDbVM
 
             AllEmailsList = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
-            Lgr.Log(LogLevel.Trace, GSReport += $" ({Dbq.Leads.Local.Count:N0} + {Dbq.Leads.Local.Count:N0} + {Dbq.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport += $" ({Dbq.Leads.Local.Count:N0} + {Dbq.Leads.Local.Count:N0} + {Dbq.LkuLeadStatuses.Local.Count:N0}) / {sw.Elapsed.TotalSeconds:N1} loaded rows / s\n");
 
             return true;
         }

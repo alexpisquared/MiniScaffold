@@ -23,7 +23,7 @@ public partial class Page05VM : BaseDbVM
               row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
               (row.IsBroadcastee || IncludeClosed);
 
-            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s");
+            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s\n");
 
             return true;
         }

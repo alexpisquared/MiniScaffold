@@ -116,7 +116,7 @@ public partial class BaseDbVM : BaseMinVM
             }
 
             Lgr.LogInformation(report);
-            GSReport += report;
+            GSReport += $"{report}\n";
         }
         else
         {

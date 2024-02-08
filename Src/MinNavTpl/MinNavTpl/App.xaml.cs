@@ -37,7 +37,7 @@ public partial class App : System.Windows.Application
 
     base.OnStartup(e);
 
-    _serviceProvider.GetRequiredService<ILogger>().LogInformation($"StU{(DateTime.Now - _appStarted).TotalSeconds,4:N1}s  {_audit}");
+    _serviceProvider.GetRequiredService<ILogger>().LogInformation($"│  {(DateTime.Now - _appStarted).TotalSeconds,4:N1}s  {_audit}");
 
     var mainVM = (MainVM)MainWindow.DataContext;  // mainVM.DeploymntSrcExe = Settings.Default.DeplSrcExe; //todo: for future only.    
     _ = await mainVM.InitAsync();                 // blocking due to vesrion checker.
