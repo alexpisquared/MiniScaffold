@@ -86,7 +86,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="{Binding LetterSubject, FallbackValue='Subject'}" />
-        <TextBlock Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm\}}" d:Text="123231" HorizontalAlignment="Right" />
+        <TextBlock Text="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm:ss\}}" ToolTip="{Binding EmailedAt, StringFormat=\{0:yyyy-MMM-dd HH:mm:ss\}}" d:Text="123231" HorizontalAlignment="Right" />
         <Label      Grid.Row="1" Content="Note" HorizontalAlignment="Center"/>
         <TextBox    Grid.Row="2" Text="{Binding Notes, Mode=TwoWay, NotifyOnValidationError=true, UpdateSourceTrigger=PropertyChanged, ValidatesOnExceptions=true}" Height="82" TextWrapping="WrapWithOverflow" x:Name="tbLN" AcceptsReturn="True"/>
         <!--<TextBlock  Grid.Row="4" Text="{Binding LetterBody}" TextWrapping="Wrap" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto" />-->

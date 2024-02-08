@@ -177,6 +177,7 @@ public partial class Page03VM : BaseDbVM
         var sentDoneFolder = _oh.GetMapiFOlder(OuFolder.qSentDone);
         var deletedsFolder = _oh.GetMapiFOlder(OuFolder.qDltd);
         var report = "";
+        _oh.ResetCurrentSectionCuount();
 
         try
         {
@@ -202,7 +203,7 @@ public partial class Page03VM : BaseDbVM
                                 newEmailsAdded++;
                             }
 
-                            report += OutlookHelper6.ReportLine(folderName, senderEmail, isNew);
+                            report += _oh.ReportLine(folderName, senderEmail, isNew);
 
                             if (!string.IsNullOrEmpty(mailItem.Body))
                             {
@@ -212,7 +213,7 @@ public partial class Page03VM : BaseDbVM
                                 var ii = await FindInsertEmailsFromBodyAsync(mailItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
                                 if (ii.HasNewEmails)
                                 {
-                                    for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAdded++; report += OutlookHelper6.ReportLine(folderName, ii.NewEmails[i], isNew); } }
+                                    for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAdded++; report += _oh.ReportLine(folderName, ii.NewEmails[i], isNew); } }
                                 }
                             }
 
@@ -228,7 +229,7 @@ public partial class Page03VM : BaseDbVM
                                     newEmailsAdded++;
                                 }
 
-                                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                                report += _oh.ReportLine(folderName, re.Address, isNew);
                             }
 
                             ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
@@ -244,7 +245,7 @@ public partial class Page03VM : BaseDbVM
                                 var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, mailItem?.Subject, mailItem?.Body, mailItem?.SentOn, mailItem?.ReceivedTime, $"..from Sent folder. ", "S");
                                 if (isNew) { newEmailsAdded++; }
 
-                                report += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                                report += _oh.ReportLine(folderName, re.Address, isNew);
                             }
 
                             var trgFolder = (mailItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
@@ -453,6 +454,7 @@ public partial class Page03VM : BaseDbVM
         var report___ = ReportOL = "";
         var msg = "..was done before && not existed in DB ?!?! ";
         int ttlProcessed = 0, newEmailsAdded = 0;
+        _oh.ResetCurrentSectionCuount();
         try
         {
             var itemsRcvdDone = _oh.GetItemsFromFolder(folderName);
@@ -524,7 +526,7 @@ public partial class Page03VM : BaseDbVM
                                 newEmailsAdded++;
                             }
 
-                            rptLine += OutlookHelper6.ReportLine(folderName, re.Address, isNew);
+                            rptLine += _oh.ReportLine(folderName, re.Address, isNew);
                         }
 
                         rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
