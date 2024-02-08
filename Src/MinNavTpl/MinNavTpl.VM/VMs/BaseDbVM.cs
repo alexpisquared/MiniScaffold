@@ -3,7 +3,6 @@
 namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM
 {
-    readonly int _hashCode;
     readonly ISecurityForcer _secForcer;
     bool _inited;
     protected MainVM MainVM
@@ -28,8 +27,7 @@ public partial class BaseDbVM : BaseMinVM
         MainVM = mainVM;
         Synth = synth;
         _secForcer = sec;
-        _hashCode = GetType().GetHashCode();
-
+        
         letDbChg = UsrStgns.LetDbChg;
 
         _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_ChngdAsync;
@@ -78,7 +76,7 @@ public partial class BaseDbVM : BaseMinVM
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); return false; }
         finally
         {
-            Lgr.LogInformation($"└──{GetType().Name,-16} eo-wrap     _hash:{_hashCode,-10}   br.hash:{Dbq.GetType().GetHashCode(),-10}  ");
+            Lgr.LogInformation($"└──{GetType().Name,-16} eo-wrap");
         }
     }
     public override void Dispose()
