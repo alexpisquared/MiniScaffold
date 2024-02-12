@@ -30,7 +30,7 @@ public partial class Page01VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            GSReport += $"├── Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ";
+            GSReport += $"├── Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
             Lgr.Log(LogLevel.Trace, GSReport);
 
             await Bpr.FinishAsync(8);

@@ -131,7 +131,7 @@ public partial class Page03VM : BaseDbVM
 
                 var s = $"Done!   {rowsSaved} agents updated with new priorities.";
                 ReportOL += s;
-                GSReport += $"\n\t{s}\t";
+                GSReport += s;
                 Synth.SpeakFreeFAF(s);
             }
         }

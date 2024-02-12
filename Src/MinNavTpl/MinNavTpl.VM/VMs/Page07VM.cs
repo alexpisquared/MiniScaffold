@@ -28,7 +28,7 @@ public partial class Page07VM : BaseEmVM
 
             _ = PageCvs?.MoveCurrentToFirst();
 
-            GSReport += $"├── Phones: {PageCvs?.Cast<Phone>().Count():N0} good / {Dbq.Phones.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec ";
+            GSReport += $"├── Phones: {PageCvs?.Cast<Phone>().Count():N0} good / {Dbq.Phones.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
             Lgr.Log(LogLevel.Trace, GSReport);
 
             SelectdPhone = null;
