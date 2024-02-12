@@ -80,11 +80,12 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header=" Last"    Binding="{Binding SeenFirst, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ce" />
-        <DataGridTextColumn Header=" Last"    Binding="{Binding SeenLast,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                         Width="*" />
-        <DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="50"  IsReadOnly="True" />
-        <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="100" IsReadOnly="True" />
+        <DataGridTextColumn Header=" Area"    Binding="{Binding PhoneNumber, Converter={cnv:PhoneToolTipConverter}}" IsReadOnly="True" Width="3*" />
+        <DataGridTextColumn Header=" Notes"   Binding="{Binding Notes}"                                                                Width="1*" />
+        <DataGridTextColumn Header=" First"   Binding="{Binding SeenFirst, Converter={cnv:SmartDateConverter}}"      IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ce" />
+        <DataGridTextColumn Header=" Last"    Binding="{Binding SeenLast,  Converter={cnv:SmartDateConverter}}"      IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
+        <!--<DataGridTextColumn Header=" Id"      Binding="{Binding Id}"          Width="50"  IsReadOnly="True" />
+        <DataGridTextColumn Header=" Phone"   Binding="{Binding PhoneNumber}" Width="100" IsReadOnly="True" />-->
         <DataGridTextColumn Header=" Added ▼" Binding="{Binding AddedAt,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
       </DataGrid.Columns>
     </DataGrid>

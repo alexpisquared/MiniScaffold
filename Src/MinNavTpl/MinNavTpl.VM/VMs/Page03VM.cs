@@ -125,9 +125,13 @@ public partial class Page03VM : BaseDbVM
 
                 var rowsSaved = await Dbq.Database.ExecuteSqlRawAsync(@"
                     UPDATE EMail SET NotifyPriority = 
-	                    1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
-	                    ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
-                    WHERE    EMail.PermBanReason is null and (Notes NOT LIKE '#TopPriority#%')");
+	                        1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+	                        ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
+                    WHERE   EMail.PermBanReason is null 
+                            AND (Notes NOT LIKE '#TopPriority#%') 
+                            AND NotifyPriority <> 
+                            1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+                            ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) ");
 
                 var s = $"Done!   {rowsSaved} agents updated with new priorities.";
                 ReportOL += s;
