@@ -96,7 +96,7 @@ public partial class Page02VM : BaseEmVM
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
     {
-        if (i > 1) await Task.Delay(antiSpamSec * 1000 + 128);
+        if (i > 1) await Task.Delay(antiSpamSec * 1000 + 32);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,5} / {j} \t";
         await SendThisOneAsync(email.Id, email.Fname);

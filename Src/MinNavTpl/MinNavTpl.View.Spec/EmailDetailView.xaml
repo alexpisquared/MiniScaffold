@@ -60,7 +60,17 @@
 
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" CurrentItem="{Binding CurrentEhist}" SelectedItem="{Binding SelectdEhist}" CanUserAddRows="False" RowHeight="42" IsReadOnly="True" Margin="4 8" Grid.RowSpan="3">
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" R/S "    Binding="{Binding RecivedOrSent}"  ElementStyle="{StaticResource CenterAlignStyle}" FontWeight="Medium" />
+        <DataGridTemplateColumn Header=" R/S " >
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding RecivedOrSent}" 
+                         Foreground="{Binding RecivedOrSent, Converter={cnv:UniConverter TextFalse='S', BrushFalse='#f05f', TextTrue='R', BrushTrue='#f0f'}}" 
+                         Background="{Binding RecivedOrSent, Converter={cnv:UniConverter TextFalse='S', BrushFalse='#405f', TextTrue='R', BrushTrue='#606'}}" 
+                         HorizontalAlignment="Center" Padding="8 9" FontWeight="Medium" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+
         <DataGridTextColumn Header=" Emailed" Binding="{Binding EmailedAt, Converter={cnv:SmartDateConverter}}" SortDirection="Descending"  />
         <DataGridTextColumn Header=" Subject" Binding="{Binding LetterSubject}"  Width="150" />
         <DataGridTextColumn Header=" Body"    Binding="{Binding LetterBody}"     Width="100" FontSize="10" Foreground="#6d1" />
