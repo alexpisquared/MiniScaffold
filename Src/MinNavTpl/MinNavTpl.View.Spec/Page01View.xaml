@@ -76,8 +76,8 @@
       <!--IsSynchronizedWithCurrentItem="True"-->
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                     Width="200" IsReadOnly="True" />
-        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                  />
-        <DataGridTextColumn Header=" Country"     Binding="{Binding Country, Mode=TwoWay}"   Foreground="#f7f" />
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                  Foreground="#96d" />
+        <DataGridTextColumn Header=" Country"     Binding="{Binding Country, Mode=TwoWay}"   Foreground="#a7f" />
         <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -94,9 +94,9 @@
         <DataGridTextColumn Header=" Modfd "      Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                       IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
         <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                       IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                          IsReadOnly="False" Width="*" FontSize="8" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                       IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f3c" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd,   Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f3c" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                          IsReadOnly="False" Width="*" FontSize="8" Foreground="#ccc" />
       </DataGrid.Columns>
     </DataGrid>
 

@@ -30,12 +30,19 @@ public partial class Page01VM : BaseEmVM
             _ = PageCvs?.MoveCurrentToFirst();
             await GetTopDetailAsync();
 
-            GSReport += $"├── Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
+            GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
             Lgr.Log(LogLevel.Trace, GSReport);
+
+            if (Clipboard.ContainsText() && Clipboard.GetText().Length < 32)
+            {
+                SearchText = Clipboard.GetText();
+            }
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
-        } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; } finally { IsBusy = false; }
+        }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        finally { IsBusy = false; }
     }
 
     [RelayCommand]

@@ -76,8 +76,8 @@
               Margin="2 8 2 3" CanUserAddRows="False" SelectionMode="Extended" RowHeight="22">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="160" IsReadOnly="True" />
-        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        />
-        <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      />
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        Foreground="#96d" />
+        <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      Foreground="#a7f" />
         <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
           <DataGridTemplateColumn.CellTemplate>
@@ -93,9 +93,9 @@
         <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
         <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
-        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#cc0" />
-        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" />
+        <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f3c" />
+        <DataGridTextColumn Header=" Last"        Binding="{Binding LastRcvd, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f3c" />
+        <DataGridTextColumn Header=" Notes"       Binding="{Binding Notes}"                                        Width="*" FontSize="8" Foreground="#bbb" />
         <!-- this is for the old view vEMail_Avail_Prod:
         <DataGridTextColumn Header=" ResndAftr"   Binding="{Binding ReSendAfter, StringFormat=\{0:yy-MM-dd\}}"     IsReadOnly="True"  />
         <DataGridTextColumn Header=" Email (Id)"  Binding="{Binding Id}"           Width="180"                    />

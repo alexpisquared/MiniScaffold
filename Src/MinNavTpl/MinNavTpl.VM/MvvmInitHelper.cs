@@ -1,5 +1,4 @@
 ﻿using Db.MinFinInv.PowerTools.Models;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MinNavTpl.VM;
 public static class MvvmInitHelper
@@ -13,15 +12,24 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<EmailOfIStore>();
         _ = services.AddSingleton<LetDbChgStore>();
 
-        if (VersionHelper.IsDbg) //tu: Start Page startup controller.
-            _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
-        else if (Environment.GetCommandLineArgs().Contains("Email")) _ = services.AddSingleton<INavSvc, Page01NavSvc>();
-        else if (Environment.GetCommandLineArgs().Contains("Broad")) _ = services.AddSingleton<INavSvc, Page02NavSvc>();
+        //if (VersionHelper.IsDbg) //tu: Start Page startup controller.
+        //    _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
+        //else
+        if (Environment.GetCommandLineArgs().Contains("Email")) _ = services.AddSingleton<INavSvc, Page01NavSvc>();      // Agent
+        else if (Environment.GetCommandLineArgs().Contains("Broad")) _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad   
         else if (Environment.GetCommandLineArgs().Contains("Phone")) _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
         else if (Environment.GetCommandLineArgs().Contains("Leads")) _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
         else if (Environment.GetCommandLineArgs().Length > 4) /*  */ _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
+        else if (Clipboard.ContainsText())
+        {
+            var txt = Clipboard.GetText();
+            if (txt.Length < 48 && RegexHelper.IsEmail(txt))
+                _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad
+        }
         else
-            _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
+        {
+            _ = services.AddSingleton<INavSvc, Page01NavSvc>();     // Agent
+        }
 
         _ = services.AddSingleton<ICompositeNavSvc, CompositeNavSvc>();
         _ = services.AddSingleton<Page00NavSvc>();
@@ -64,6 +72,7 @@ public static class MvvmInitHelper
         _ = services.AddTransient(sp => new QstatsRlsContext(CalcConStr<QstatsRlsContext>(sp, CfgName.SqlVerIpm)));
         _ = services.AddTransient(sp => new MinFinInvDbContext());
     }
+
     public static string CalcConStr<T>(IServiceProvider sp, string sqlver)
     {
         var stg = sp.GetRequiredService<UserSettings>();

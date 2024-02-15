@@ -42,6 +42,18 @@ public partial class Page02VM : BaseEmVM
                     await SendTopNAsync();
                 }
 
+                if (Clipboard.ContainsText() && Clipboard.GetText().Length < 48)
+                {
+                    if (RegexHelper.IsEmail(Clipboard.GetText()))
+                    {
+                        ThisEmail = Clipboard.GetText();
+                    }
+                    else
+                    {
+                        SearchText = Clipboard.GetText();
+                    }
+                }
+
                 await Bpr.FinishAsync(8);
                 return await base.InitAsync();
             }
