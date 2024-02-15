@@ -113,7 +113,7 @@ public partial class Page02VM : BaseEmVM
         if (i > 1) await Task.Delay(antiSpamSec * 1000 + 100);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,5} / {j} \t";
-        await SendThisOneAsync(email.Id, email.Fname);
+        await SendThisOneAsync(email.Id, email.Fname, i);
         Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9);
     }
     async Task FinishJobAsync(TimeSpan totalTime, int i)

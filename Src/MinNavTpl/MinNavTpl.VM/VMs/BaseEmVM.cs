@@ -61,10 +61,10 @@ public partial class BaseEmVM : BaseDbVM
     async Task SendThisAsync()
     {
         await Bpr.StartAsync(8);
-        await SendThisOneAsync(ThisEmail, ThisFName);
+        await SendThisOneAsync(ThisEmail, ThisFName, 1);
         await Bpr.FinishAsync(8);
     }
-    protected async Task SendThisOneAsync(string email, string? rawName)
+    protected async Task SendThisOneAsync(string email, string? rawName, int count)
     {
         try
         {
@@ -84,7 +84,7 @@ public partial class BaseEmVM : BaseDbVM
                     em.ReSendAfter = null;
                 }
 
-                Lgr.Log(LogLevel.Information, $"│  :sent/timestamped:  {now:MMddHHmmss}  {fName,-18}{email}");
+                Lgr.Log(LogLevel.Information, $"│  :sent/timestamped:  {now:MMddHHmmss} {count,3}  {fName,-18}{email}");
 
                 GSReport += "\r\n";
                 _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", now, now, "..from std broadcast send", "S");
