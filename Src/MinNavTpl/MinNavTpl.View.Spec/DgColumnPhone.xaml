@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="MinNavTpl.View.Spec.DgColumnPhone"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MinNavTpl.View.Spec"
+             mc:Ignorable="d" 
+             xmlns:cnv="clr-namespace:WpfUserControlLib.Converters;assembly=WpfUserControlLib"
+             d:DesignHeight="32" d:DesignWidth="180" d:Background="#888">
+  <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
+          ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
+       Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}" d:Text="416-888-88888" />
+</UserControl>

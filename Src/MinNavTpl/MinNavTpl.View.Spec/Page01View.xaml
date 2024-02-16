@@ -80,16 +80,14 @@
         <DataGridTemplateColumn Header=" Country"                                              >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Country}" Foreground="{Binding Country, Converter={cnv:CountryBrushConverter }}" />
+              <lcl:DgColumnCountry />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
         <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
-                      ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
-                   Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}" />
+              <lcl:DgColumnPhone />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

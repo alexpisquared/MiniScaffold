@@ -190,7 +190,7 @@ public partial class BaseEmVM : BaseDbVM
                 await ReuseAsync(email, cfg, GenderApiConst.Retries, true);
             }
 
-            return GenderApiConst.Retries[3];
+            return GenderApiConst.Retries[8];
         }
 
         try
@@ -202,7 +202,7 @@ public partial class BaseEmVM : BaseDbVM
 
                 await ReuseAsync(email, cfg, GenderApiConst.Retries, false);
 
-                if (email.Country == GenderApiConst.Retries[3])
+                if (GenderApiConst.IsLimitReached(email.Country))
                 {
                     _limitReached = true;
                 }

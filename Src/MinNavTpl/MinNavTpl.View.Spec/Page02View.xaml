@@ -78,16 +78,21 @@
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="160" IsReadOnly="True" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        Foreground="#96d" />
         <DataGridTextColumn Header=" Country"     Binding="{Binding Country}"                                      Foreground="#a7f" />
-        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTemplateColumn Header=" Phone"                                                                    Width="31" >
+        <DataGridTemplateColumn Header=" Country"                                              >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
-              <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
-                         ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
-                         Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}"/>
+              <lcl:DgColumnCountry />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
+        <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <lcl:DgColumnPhone />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
+        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
         <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
         <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />

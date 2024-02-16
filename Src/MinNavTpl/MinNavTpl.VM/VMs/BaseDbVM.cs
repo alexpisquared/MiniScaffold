@@ -27,7 +27,7 @@ public partial class BaseDbVM : BaseMinVM
         MainVM = mainVM;
         Synth = synth;
         _secForcer = sec;
-        
+
         letDbChg = UsrStgns.LetDbChg;
 
         _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_ChngdAsync;
@@ -59,10 +59,7 @@ public partial class BaseDbVM : BaseMinVM
                     default:
                     case MessageBoxResult.Cancel: return false;
                     case MessageBoxResult.No: Dbq.DiscardChanges(); break;
-                    case MessageBoxResult.Yes:
-                        var report = await SaveLogReportOrThrowAsync(Dbq);
-                        GSReport += $"\n{report}";
-                        break;
+                    case MessageBoxResult.Yes: await SaveLogReportOrThrowAsync(Dbq); break;
                 }
             }
 
@@ -140,7 +137,7 @@ public partial class BaseDbVM : BaseMinVM
     }
     async void GSReportStore_ChngdAsync(string val)
     {
-         GSReport = val; await RefreshReloadAsync();
+        GSReport = val; await RefreshReloadAsync();
     }
     async void LetDbChgStore_ChngdAsync(bool value)
     {
@@ -224,9 +221,9 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected void ChkDb4Cngs()
     {
-        Bpr.Click(); 
-        GSReport += Dbq.GetDbChangesReport() + $"{(LetDbChg ? "\n" : "\n RO - user!!!\n")}"; 
-        HasChanges = Dbq.HasUnsavedChanges(); 
+        Bpr.Click();
+        GSReport += Dbq.GetDbChangesReport() + $"{(LetDbChg ? "\n" : "\n RO - user!!!\n")}";
+        HasChanges = Dbq.HasUnsavedChanges();
         WriteLine(GSReport);
     }
 
