@@ -17,7 +17,7 @@ public partial class BaseEmVM : BaseDbVM
         try
         {
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); return false; }
 
         return await base.InitAsync();
     }
@@ -86,16 +86,16 @@ public partial class BaseEmVM : BaseDbVM
 
                 Lgr.Log(LogLevel.Information, $"│  :sent/timestamped:  {now:MMddHHmmss} {count,3}  {fName,-18}{email}");
 
-                GSReport += "\r\n";
+                GSReport += "\n";
                 _ = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, email, fName, "", "asu .net 8.0 - success", "ASU - 4 CVs - 2023-12", now, now, "..from std broadcast send", "S");
             }
             else
             {
-                GSReport += $"\tFAILED ■ ■ ■:  \r\n  {report1} \r\n  ";
+                GSReport += $"\tFAILED ■ ■ ■:  \n  {report1} \n  ";
                 Lgr.Log(LogLevel.Error, GSReport);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; GSReport += $"FAILED. \r\n  {ex.Message} \r\n"; ex.Pop(Lgr); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; GSReport += $"FAILED. \n  {ex.Message} \n"; ex.Pop(Lgr); }
     }
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
@@ -110,20 +110,20 @@ public partial class BaseEmVM : BaseDbVM
             GSReport += $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
             _ = Dbq.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
     static bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 
     [RelayCommand]
     protected void Nxt()
     {
-        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]
     void OLk()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]
@@ -147,7 +147,7 @@ public partial class BaseEmVM : BaseDbVM
             SelectdEmail.ModifiedAt = DateTime.Now;
             Nxt();
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
 
     [RelayCommand]
@@ -176,44 +176,33 @@ public partial class BaseEmVM : BaseDbVM
 
             PageCvs?.Refresh();
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
 
     protected async Task<string> SetCountryFromWebServiceTaskAsync(Email email, IConfigurationRoot cfg)
     {
-        string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]", "*no name*", "_NoCache_"];
-
-        if (string.IsNullOrEmpty(email.Fname)) return retries[5];
+        if (string.IsNullOrEmpty(email.Fname)) return GenderApiConst.Retries[5];
 
         if (_limitReached)
         {
-            if ((string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country))/* && email.Country != retries[3]*/)
+            if ((string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country))/* && email.Country != GenderApiConst.Retries[3]*/)
             {
-                var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth, cacheOnly: true);
-                email.Country =
-                    root is null ? (exMsg ?? retries[2]) :
-                    root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
-                    root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
-                email.ModifiedAt = DateTime.Now;
+                await ReuseAsync(email, cfg, GenderApiConst.Retries, true);
             }
 
-            return retries[3];
+            return GenderApiConst.Retries[3];
         }
 
         try
         {
-            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country)))// || System.Text.RegularExpressions.Regex.IsMatch(email.Fname, @"[0-9\W]"))) // check if the email.Fname contains a number or a special character using regex
+            if (email.Fname is not null && (string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country)))// || System.Text.RegularExpressions.Regex.IsMatch(email.Fname, @"[0-9\W]"))) // check if the email.Fname contains a number or a special character using regex
             {
                 ArgumentNullException.ThrowIfNull(cfg, "■▄▀■▄▀■▄▀■▄▀■▄▀■");
                 var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth);
 
-                email.Country =
-                    root is null ? (exMsg ?? retries[2]) :
-                    root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
-                    root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
-                email.ModifiedAt = DateTime.Now;
+                await ReuseAsync(email, cfg, GenderApiConst.Retries, false);
 
-                if (email.Country == retries[3])
+                if (email.Country == GenderApiConst.Retries[3])
                 {
                     _limitReached = true;
                 }
@@ -223,6 +212,17 @@ public partial class BaseEmVM : BaseDbVM
         }
         catch (Exception ex) { ex.Pop(); return $"FAILED. \n  {ex.Message}"; }
     }
+
+    async Task ReuseAsync(Email email, IConfigurationRoot cfg, string[] retries, bool cacheOnly)
+    {
+        var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth, cacheOnly: cacheOnly);
+        email.ModifiedAt = DateTime.Now;
+        email.Country =
+            root is null ? (exMsg ?? retries[2]) :
+            root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
+            root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
+    }
+
     protected async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
     {
         if (email is null) // ??? || email.Ttl_Sent is not null)

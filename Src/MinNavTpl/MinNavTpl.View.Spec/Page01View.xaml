@@ -77,13 +77,19 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                     Width="200" IsReadOnly="True" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                  Foreground="#96d" />
-        <DataGridTextColumn Header=" Country"     Binding="{Binding Country, Mode=TwoWay}"   Foreground="#a7f" />
+        <DataGridTemplateColumn Header=" Country"                                              >
+          <DataGridTemplateColumn.CellTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Country}" Foreground="{Binding Country, Converter={cnv:CountryBrushConverter }}" />
+            </DataTemplate>
+          </DataGridTemplateColumn.CellTemplate>
+        </DataGridTemplateColumn>
         <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <TextBlock Text="{Binding Phone, Converter={cnv:PhoneFormatConverter}}"
-                         ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
-                         Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}"/>
+                      ToolTip="{Binding Phone, Converter={cnv:PhoneToolTipConverter}}"
+                   Foreground="{Binding Phone, Converter={cnv:PhoneBrushConverter}}" />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>

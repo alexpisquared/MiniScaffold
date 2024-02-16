@@ -58,7 +58,7 @@ public partial class Page02VM : BaseEmVM
                 return await base.InitAsync();
             }
             catch (SqlException ex) { GSReport += $"FAILED {i,2}/{26}  {ex.Message}\n"; Synth.SpeakFAF($"Retrying {25 - i} times."); }
-            catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}\n"; ex.Pop(Lgr); return false; }
+            catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}\n"; ex.Pop(Lgr); return false; }
             finally { IsBusy = false; }
         } // for
 
