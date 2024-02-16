@@ -54,7 +54,7 @@
 
         <Label Content="    _F" Target="{Binding ElementName=tbFilter}" />
         <TextBox Margin="6 0" Width="120" FontSize="16" x:Name="tbFilter" Text="{Binding SearchText, Delay=750, UpdateSourceTrigger=PropertyChanged}"/>
-        <CheckBox Content="+C_losed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
+        <CheckBox Content="+_Bad   " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _Dtl " Command="{Binding GetTopDetailCommand}"  ToolTip="Get details for the top XX rows."        Foreground="#f80" />
         <Button Content=" New "  Command="{Binding AddNewEmailCommand}"   ToolTip="Add _New Email"        Foreground="#f80" />
@@ -76,7 +76,7 @@
       <!--IsSynchronizedWithCurrentItem="True"-->
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                     Width="200" IsReadOnly="True" />
-        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                  Foreground="#96d" />
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        Foreground="#a7f" />
         <DataGridTemplateColumn Header=" Country"                                              >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
