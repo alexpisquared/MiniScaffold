@@ -181,18 +181,21 @@ public partial class BaseEmVM : BaseDbVM
 
     protected async Task<string> SetCountryFromWebServiceTaskAsync(Email email, IConfigurationRoot cfg)
     {
-        string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]", "*no name*"];
+        string[] retries = ["[country[0] is null]", "[country[0].country_name is null]", "[root is null]", "limit reached.", "[no idea]", "*no name*", "_NoCache_"];
 
         if (string.IsNullOrEmpty(email.Fname)) return retries[5];
 
         if (_limitReached)
         {
-            if (string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country))
+            if ((string.IsNullOrEmpty(email.Country) || retries.Contains(email.Country))/* && email.Country != retries[3]*/)
             {
-                email.Country = retries[3];
+                var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth, cacheOnly: true);
+                email.Country =
+                    root is null ? (exMsg ?? retries[2]) :
+                    root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
+                    root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
                 email.ModifiedAt = DateTime.Now;
             }
-
 
             return retries[3];
         }
