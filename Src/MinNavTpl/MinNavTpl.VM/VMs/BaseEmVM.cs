@@ -185,12 +185,12 @@ public partial class BaseEmVM : BaseDbVM
 
         if (_limitReached)
         {
-            if ((string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country))/* && email.Country != GenderApiConst.Retries[3]*/)
+            if ((string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country))/* && email.Country != GenderApiConst.LimitReachedOld*/)
             {
                 await ReuseAsync(email, cfg, GenderApiConst.Retries, true);
             }
 
-            return GenderApiConst.Retries[8];
+            return GenderApiConst.LimitReachedNew;
         }
 
         try
