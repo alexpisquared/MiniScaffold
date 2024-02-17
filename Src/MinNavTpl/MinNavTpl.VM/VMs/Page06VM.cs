@@ -29,8 +29,6 @@ public partial class Page06VM : BaseDbVM
               row.DfsClientId?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
               row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbi.InvAccounts.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s\n");
-
             return true;
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); return false; }
