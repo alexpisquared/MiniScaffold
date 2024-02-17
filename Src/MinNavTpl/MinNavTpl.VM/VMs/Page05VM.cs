@@ -13,6 +13,7 @@ public partial class Page05VM : BaseDbVM
             await Dbq.PhoneAgencyXrefs.LoadAsync();
             await Dbq.Phones.LoadAsync();
             await Dbq.Emails.LoadAsync();
+            await Dbq.Agencies.LoadAsync();
 
             await Dbq.Agencies.OrderByDescending(r => r.Emails.Count).ThenBy(r => r.PhoneAgencyXrefs.Count).ThenBy(r => r.Id).LoadAsync();
             PageCvs = CollectionViewSource.GetDefaultView(Dbq.Agencies.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Agencies.ToListAsync());
@@ -20,10 +21,11 @@ public partial class Page05VM : BaseDbVM
             PageCvs.Filter = obj => obj is not Agency row || row is null || (
               string.IsNullOrEmpty(SearchText) ||
               row.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
-              (row.IsBroadcastee || IncludeClosed);
+              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) 
+              //&& (row.IsBroadcastee || IncludeClosed)
+              ;
 
-            Lgr.Log(LogLevel.Trace, GSReport += $" {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1} loaded rows / s\n");
+            Lgr.Log(LogLevel.Trace, GSReport += $"loaded   {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1}  rows/sec\n");
 
             return true;
         }
@@ -42,11 +44,17 @@ public partial class Page05VM : BaseDbVM
 
         try
         {
-            var emailAdrss = await Dbq.Emails.
-              GroupBy(e => e.Company).
-              Select(r => new { Company = r.Key, Count = r.Count() }).ToListAsync();
+            foreach (var item in Dbq.Emails.Local)
+            {
+                if (item.Company is not null && item.Company != CsvImporterService.GetCompany(item.Company))
+                    item.Company = CsvImporterService.GetCompany(item.Company);
+            }
 
-            emailAdrss.ForEach(eml =>
+            var companyCount = Dbq.Emails.Local.
+              GroupBy(e => e.Company).
+              Select(r => new { Company = r.Key, Count = r.Count() }).ToList();
+
+            companyCount.ForEach(eml =>
             {
                 var exstg = Dbq.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
                 if (exstg is not null)
@@ -62,9 +70,10 @@ public partial class Page05VM : BaseDbVM
                     var nl = new Agency { Id = eml.Company ?? "■■ No way ■■", TtlAgents = eml.Count, AddedAt = Now };
                     Dbq.Agencies.Local.Add(nl);
                 }
+                //await Task.Yeild();
             });
 
-            ChkDb4Cngs();      //GSReport += await SaveLogReportOrThrowAsync(Dbq, "new agencies");
+            //ChkDb4Cngs();      //GSReport += await SaveLogReportOrThrowAsync(Dbq, "new agencies");
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = false; }

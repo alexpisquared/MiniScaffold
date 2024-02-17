@@ -12,10 +12,9 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<EmailOfIStore>();
         _ = services.AddSingleton<LetDbChgStore>();
 
-        //if (VersionHelper.IsDbg) //tu: Start Page startup controller.
-        //    _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
-        //else
-        if (Environment.GetCommandLineArgs().Contains("Email")) _ = services.AddSingleton<INavSvc, Page01NavSvc>();      // Agent
+        //tu: Start Page startup Page controller.
+        if (VersionHelper.IsDbg) /*                               */ _ = services.AddSingleton<INavSvc, Page05NavSvc>(); // Compa
+        else if (Environment.GetCommandLineArgs().Contains("Email")) _ = services.AddSingleton<INavSvc, Page01NavSvc>(); // Agent
         else if (Environment.GetCommandLineArgs().Contains("Broad")) _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad   
         else if (Environment.GetCommandLineArgs().Contains("Phone")) _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
         else if (Environment.GetCommandLineArgs().Contains("Leads")) _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
