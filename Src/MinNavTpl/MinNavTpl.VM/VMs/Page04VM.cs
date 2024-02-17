@@ -7,14 +7,11 @@ public partial class Page04VM : BaseDbVM
         try
         {
             IsBusy = true;
+            await Task.Delay(22); // <== does not show up without this...............................
             var sw = Stopwatch.StartNew();
 
-            await Task.Delay(22); // <== does not show up without this...............................
-
 #if true
-            await Dbq.
-              Emails.
-              Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaignId)).
+            await Dbq.Emails.Include(r => r.Leads.Where(r => r.CampaignId == _thisCampaignId)).
               //adds 28 sec!!! ThenInclude(r => r.LeadEmails). // for the case of multi agents per role
               LoadAsync();
 #else      //^^ VS vv    //todo: https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/read-related-data?view=aspnetcore-6.0
@@ -36,6 +33,8 @@ public partial class Page04VM : BaseDbVM
             LeadStatusCvs = CollectionViewSource.GetDefaultView(Dbq.LkuLeadStatuses.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
 
             AllEmailsList = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); // https://learn.microsoft.com/en-us/dotnet/api/microsoft.entityframeworkcore.diagnostics.corestrings.databindingwithilistsource?view=efcore-6.0
+
+            //tmi: Lgr.Log(LogLevel.Trace, GSReport += $"loaded   {Dbq.Emails.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1}  emails/sec\n");
 
             return true;
         }

@@ -21,11 +21,11 @@ public partial class Page05VM : BaseDbVM
             PageCvs.Filter = obj => obj is not Agency row || row is null || (
               string.IsNullOrEmpty(SearchText) ||
               row.Note?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) 
+              row.Id?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true)
               //&& (row.IsBroadcastee || IncludeClosed)
               ;
 
-            Lgr.Log(LogLevel.Trace, GSReport += $"loaded   {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1}  rows/sec\n");
+            //tmi: Lgr.Log(LogLevel.Trace, GSReport += $"loaded   {Dbq.Agencies.Local.Count:N0} / {sw.Elapsed.TotalSeconds:N1}  agencies/sec\n");
 
             return true;
         }
@@ -54,15 +54,15 @@ public partial class Page05VM : BaseDbVM
               GroupBy(e => e.Company).
               Select(r => new { Company = r.Key, Count = r.Count() }).ToList();
 
-            companyCount.ForEach(eml =>
+            Parallel.ForEach(companyCount, eml =>
             {
-                var exstg = Dbq.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
-                if (exstg is not null)
+                var agency = Dbq.Agencies.Local.FirstOrDefault(r => r.Id.Equals(eml.Company, StringComparison.OrdinalIgnoreCase));
+                if (agency is not null)
                 {
-                    if (exstg.TtlAgents != eml.Count)
+                    if (agency.TtlAgents != eml.Count)
                     {
-                        exstg.TtlAgents = eml.Count;
-                        exstg.ModifiedAt = Now;
+                        agency.TtlAgents = eml.Count;
+                        agency.ModifiedAt = Now;
                     }
                 }
                 else
@@ -70,10 +70,9 @@ public partial class Page05VM : BaseDbVM
                     var nl = new Agency { Id = eml.Company ?? "■■ No way ■■", TtlAgents = eml.Count, AddedAt = Now };
                     Dbq.Agencies.Local.Add(nl);
                 }
-                //await Task.Yeild();
             });
 
-            //ChkDb4Cngs();      //GSReport += await SaveLogReportOrThrowAsync(Dbq, "new agencies");
+            Bpr.Tick();
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = false; }
