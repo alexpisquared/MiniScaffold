@@ -16,6 +16,7 @@ global using System.Windows;
 global using System.Windows.Data;
 global using System.Windows.Input;
 global using System.Windows.Markup;
+global using System.Windows.Threading;
 global using AmbienceLib;
 global using AutoMapper;
 global using CI.LDAP.Lib;
@@ -46,6 +47,6 @@ global using StandardLib.Base;
 global using StandardLib.Helpers;
 global using WpfUserControlLib.Extensions;
 global using static System.Diagnostics.Trace;
+global using Application = System.Windows.Application;
 //obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
 global using OL = Microsoft.Office.Interop.Outlook;
-global using Application = System.Windows.Application;

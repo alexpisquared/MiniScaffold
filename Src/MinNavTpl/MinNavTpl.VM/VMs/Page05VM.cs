@@ -80,7 +80,6 @@ public partial class Page05VM : BaseDbVM
             GSReport += gSReport;
             GSReport += $"Parallel.ForEach took  {sw.Elapsed:mm\\:ss}\n";
             ChkDb4Cngs();
-            await Bpr.TickAsync();
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
         finally { IsBusy = false; }

@@ -1,6 +1,4 @@
-﻿using System.Windows.Threading;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM
 {
     readonly ISecurityForcer _secForcer;
