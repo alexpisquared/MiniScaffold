@@ -59,7 +59,7 @@
         <CheckBox Content="+C_losed " IsChecked="{Binding IncludeClosed}" VerticalAlignment="Center" Margin="6 0" />
 
         <Button Content=" _Chk " Command="{Binding ChkDb4CngsCommand}"    ToolTip="Check DB for changes"  Foreground="#0a0" />
-        <Button Content=" _Sve " Command="{Binding Save2DbCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
+        <Button Content=" _Sve " Command="{Binding Save2DBaseCommand}"       ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdPhone.Id}" FontWeight="Medium" /></TextBlock>

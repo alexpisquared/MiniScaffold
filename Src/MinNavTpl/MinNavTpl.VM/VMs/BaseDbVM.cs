@@ -199,7 +199,7 @@ public partial class BaseDbVM : BaseMinVM
     [ObservableProperty] string searchText;
     [ObservableProperty] bool includeClosed;
     [ObservableProperty] bool isBusy;
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(Save2DbCommand))] bool hasChanges;
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(Save2DBaseCommand))] bool hasChanges;
 
     partial void OnSearchTextChanged(string value)
     {
@@ -231,7 +231,7 @@ public partial class BaseDbVM : BaseMinVM
     }
 
     [RelayCommand]
-    protected async Task Save2Db()
+    protected async Task Save2DBaseAsync()
     {
         try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
     }

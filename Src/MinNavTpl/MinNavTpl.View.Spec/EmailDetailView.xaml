@@ -49,7 +49,7 @@
         <Button Content=" _New " Command="{Binding AddNewEmailCommand}" ToolTip="Add _New Email" Foreground="#f80" />
         -->
         <Button Content=" Chk " Command="{Binding ChkDb4CngsCommand}"  ToolTip="Check DB for changes"  Foreground="#0a0" />
-        <Button Content=" Sve " Command="{Binding Save2DbCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
+        <Button Content=" Sve " Command="{Binding Save2DBaseCommand}"     ToolTip="Save changes to DB"    Foreground="#f80" />
 
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdEhist.Id}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Crrnt:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding CurrentEhist.Id}" FontWeight="Medium" /></TextBlock>

@@ -51,7 +51,7 @@ public partial class Page06VM : BaseDbVM
     }
 
     [RelayCommand]
-    async Task Save2DbMfiAsync()
+    async Task Save2DBaseMfiAsync()
     {
         try { await Bpr.ClickAsync(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbi); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; await Bpr.TickAsync(); }
     }
