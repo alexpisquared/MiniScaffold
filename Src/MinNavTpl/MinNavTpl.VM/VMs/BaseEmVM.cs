@@ -216,11 +216,16 @@ public partial class BaseEmVM : BaseDbVM
     async Task ReuseAsync(Email email, IConfigurationRoot cfg, string[] retries, bool cacheOnly)
     {
         var (_, exMsg, root) = await GenderApi.CallGenderApi(cfg, email.Fname, Synth, cacheOnly: cacheOnly);
-        email.ModifiedAt = DateTime.Now;
-        email.Country =
+        var newCountry =
             root is null ? (exMsg ?? retries[2]) :
             root?.country_of_origin.FirstOrDefault() is null ? (root?.errmsg ?? exMsg ?? retries[0]) :
             root?.country_of_origin.First().country_name ?? root?.errmsg ?? exMsg ?? retries[1];
+
+        if (email.Country != newCountry)
+        {
+            email.Country = newCountry;
+            email.ModifiedAt = DateTime.Now;
+        }
     }
 
     protected async Task GetDetailsForSelRowAsync(Email? email, IConfigurationRoot cfg, QstatsRlsContext dbq)
