@@ -4,8 +4,7 @@ public partial class BaseEmVM : BaseDbVM
 {
     bool _limitReached;
     protected List<string>? _badEmails;
-    public BaseEmVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, UserSettings stg, EmailOfIStore eml, EmailDetailVM evm, ISpeechSynth synth, int oid)
-        : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg, synth, oid)
+    public BaseEmVM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, UserSettings stg, EmailOfIStore eml, EmailDetailVM evm, ISpeechSynth synth, int oid) : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, oid)
     {
         EmailOfIStore = eml; //EmailOfIStore.Changed += EmailOfIStore_Chngd;
         EmailOfIVM = evm;
@@ -14,10 +13,6 @@ public partial class BaseEmVM : BaseDbVM
     public async override Task<bool> InitAsync()
     {
         await Task.Delay(22); // <== does not show up without this...............................
-        try
-        {
-        }
-        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); return false; }
 
         return await base.InitAsync();
     }

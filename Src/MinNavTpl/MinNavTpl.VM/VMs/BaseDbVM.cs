@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using MinNavTpl.Stores;
+
+namespace MinNavTpl.VM.VMs;
 public partial class BaseDbVM : BaseMinVM
 {
     readonly ISecurityForcer _secForcer;
@@ -10,7 +12,7 @@ public partial class BaseDbVM : BaseMinVM
     protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
     protected int _thisCampaignId;
-    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, UserSettings usrStgns, ISpeechSynth synth, int oid)
+    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, IsBusy__Store bzy, UserSettings usrStgns, ISpeechSynth synth, int oid)
     {
         IsDevDbg = VersionHelper.IsDbg;
 
@@ -32,6 +34,7 @@ public partial class BaseDbVM : BaseMinVM
         _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsync;
         _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsync;
         _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsync;
+        _IsBusy__Store = bzy; _IsBusy__Store.Changed += IsBusy__Store_ChngdAsync;
 
         _thisCampaignId = Dbq.Campaigns.Max(r => r.Id);
 
@@ -65,6 +68,7 @@ public partial class BaseDbVM : BaseMinVM
             _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
             _GSReportStore.Changed -= GSReportStore_ChngdAsync;
             _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
+            _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsync;
 
             return true;
         }
@@ -80,6 +84,7 @@ public partial class BaseDbVM : BaseMinVM
         _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
         _GSReportStore.Changed -= GSReportStore_ChngdAsync;
         _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
+        _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsync;
 
         base.Dispose();
     }
@@ -122,6 +127,7 @@ public partial class BaseDbVM : BaseMinVM
     }
 
     protected readonly LetDbChgStore _LetDbChgStore;
+    protected readonly IsBusy__Store _IsBusy__Store;
     protected readonly SrvrNameStore _SrvrNameStore;
     protected readonly DtBsNameStore _DtBsNameStore;
     protected readonly GSReportStore _GSReportStore;
@@ -141,6 +147,10 @@ public partial class BaseDbVM : BaseMinVM
     {
         if (LetDbChg != value) LetDbChg = value; await RefreshReloadAsync();
     }
+    async void IsBusy__Store_ChngdAsync(bool value)
+    {
+        if (IsBusy__ != value) IsBusy__ = value; await RefreshReloadAsync();
+    }
 
     [ObservableProperty] string? srvrName; partial void OnSrvrNameChanged(string? value)
     {
@@ -158,6 +168,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         _LetDbChgStore.Change(value);
     }
+    [ObservableProperty] bool isBusy__; partial void OnIsBusy__Changed(bool value)    {        _IsBusy__Store.Change(value);    }
 
     ADUser? _ct; public ADUser? CurentUser
     {

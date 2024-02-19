@@ -11,6 +11,7 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<GSReportStore>();
         _ = services.AddSingleton<EmailOfIStore>();
         _ = services.AddSingleton<LetDbChgStore>();
+        _ = services.AddSingleton<IsBusy__Store>();
 
         //tu: Start Page startup Page controller.
         if (VersionHelper.IsDbg) /*                               */ _ = services.AddSingleton<INavSvc, Page05NavSvc>(); // Compa
