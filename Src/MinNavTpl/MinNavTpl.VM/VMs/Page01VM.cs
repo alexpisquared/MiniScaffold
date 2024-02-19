@@ -27,9 +27,6 @@ public partial class Page01VM : BaseEmVM
                 r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
               (IncludeClosed == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))));
 
-            _ = PageCvs?.MoveCurrentToFirst();
-            await GetTopDetailAsync();
-
             GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
             Lgr.Log(LogLevel.Trace, GSReport);
 
@@ -37,6 +34,9 @@ public partial class Page01VM : BaseEmVM
             {
                 SearchText = Clipboard.GetText();
             }
+
+            _ = PageCvs?.MoveCurrentToFirst();
+            await GetTopDetailAsync();
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();

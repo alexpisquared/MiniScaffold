@@ -86,11 +86,10 @@ public partial class BaseEmVM : BaseDbVM
             }
             else
             {
-                GSReport += $"\tFAILED ■ ■ ■:  \n  {report1} \n  ";
-                Lgr.Log(LogLevel.Error, GSReport);
+                GSReport += $"\t ■ ■ ■ {report1} \n";
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; GSReport += $"FAILED. \n  {ex.Message} \n"; ex.Pop(Lgr); }
+        catch (Exception ex) { GSReport += $"FAILED  {ex.Message} \n"; ex.Pop(Lgr); }
     }
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 

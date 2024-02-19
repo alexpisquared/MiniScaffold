@@ -34,9 +34,6 @@ public partial class Page02VM : BaseEmVM
                   r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
                   r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-                _ = PageCvs?.MoveCurrentToFirst();
-                await GetTopDetailAsync();
-
                 GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec :loaded.";
                 Lgr.Log(LogLevel.Trace, $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ");
 
@@ -56,6 +53,9 @@ public partial class Page02VM : BaseEmVM
                         SearchText = Clipboard.GetText();
                     }
                 }
+
+                _ = PageCvs?.MoveCurrentToFirst();
+                await GetTopDetailAsync();
 
                 await Bpr.FinishAsync(8);
                 return await base.InitAsync();
