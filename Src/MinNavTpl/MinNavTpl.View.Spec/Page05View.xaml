@@ -76,8 +76,8 @@
         <DataGridTextColumn     Header=" Phones"    Binding="{Binding PhoneAgencyXrefs.Count}" IsReadOnly="True" />
         <DataGridTextColumn     Header=" Address"   Binding="{Binding Address}"   Width="180"/>
         <DataGridTextColumn     Header=" Note"      Binding="{Binding Note}"      Width="*" />
-        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
-        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" />
+        <DataGridTextColumn     Header=" Added"     Binding="{Binding AddedAt,    Converter={cnv:SmartDateConverter}}" IsReadOnly="True" Foreground="#dd0" />
+        <DataGridTextColumn     Header=" Modfd"     Binding="{Binding ModifiedAt, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" Foreground="#fb0" />
       </DataGrid.Columns>
     </DataGrid>
 

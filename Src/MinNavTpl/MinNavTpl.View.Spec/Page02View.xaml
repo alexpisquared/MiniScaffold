@@ -76,7 +76,7 @@
               Margin="2 8 2 3" CanUserAddRows="False" SelectionMode="Extended" RowHeight="22">
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"                                           Width="160" IsReadOnly="True" />
-        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        Foreground="#a7f" />
+        <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                        Foreground="#b8f" />
         <DataGridTemplateColumn Header=" Country">
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
@@ -91,10 +91,10 @@
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" />
+        <DataGridTextColumn Header=" Priority ▲ " Binding="{Binding NotifyPriority}"                               ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f70" />
         <DataGridTextColumn Header=" !Avail"      Binding="{Binding DoNotNotifyOnAvailableForCampaignId}"          IsReadOnly="False" ElementStyle="{StaticResource CenterAlignStyle}" />
-        <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100" Foreground="#f60" />
-        <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True"  />
+        <DataGridTextColumn Header=" Prm Ban Rsn" Binding="{Binding PermBanReason}"                                Width="100"       Foreground="#f50" />
+        <DataGridTextColumn Header=" Added"       Binding="{Binding AddedAt,  Converter={cnv:SmartDateConverter}}" IsReadOnly="True" Foreground="#dd0"  />
         <DataGridTextColumn Header=" Sent"        Binding="{Binding Ttl_Sent}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
         <DataGridTextColumn Header=" Last"        Binding="{Binding LastSent, Converter={cnv:SmartDateConverter}}" IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#0ac" />
         <DataGridTextColumn Header=" Rcvd"        Binding="{Binding Ttl_Rcvd}"                                     IsReadOnly="True" ElementStyle="{StaticResource CenterAlignStyle}" Foreground="#f3c" />
