@@ -1,9 +1,9 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page07VM : BaseEmVM
 {
-    public Page07VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
-//    : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg,           synth, 8990) { }
-      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, eml, evm, synth, 8880) { }
+    public Page07VM( ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
+//    : base(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, stg,           synth, 8990) { }
+      : base(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, eml, evm, synth, 8880) { }
     public async override Task<bool> InitAsync()
     {
         try

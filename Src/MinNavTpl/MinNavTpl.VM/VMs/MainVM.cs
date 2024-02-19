@@ -1,9 +1,11 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using MinNavTpl.Stores;
+
+namespace MinNavTpl.VM.VMs;
 public partial class MainVM : BaseMinVM
 {
     readonly bool _ctored;
     readonly NavigationStore _navigationStore;
-    public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore alw, UserSettings usr) : base()
+    public MainVM(NavBarVM navBarVM, NavigationStore navigationStore, ILogger lgr, IBpr bpr, IConfigurationRoot cfg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore alw, IsBusy__Store bzi, UserSettings usr) : base()
     {
         NavBarVM = navBarVM;
         _navigationStore = navigationStore;
@@ -20,6 +22,7 @@ public partial class MainVM : BaseMinVM
         GSReportStore = gsr; GSReportStore.Changed += GSReportStore_Chngd;
         EmailOfIStore = eml; EmailOfIStore.Changed += EmailOfIStore_Chngd;
         _letDbChStore = alw; _letDbChStore.Changed += LetDbChgStore_Chngd;
+        _IsBusy__Store = bzi; _IsBusy__Store.Changed += IsBusy__Store_Chngd;
 
         cfg[CfgName.ServerLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(SqlServrs.Add);
         cfg[CfgName.DtBsNmLst]?.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(DtBsNames.Add);
@@ -35,7 +38,7 @@ public partial class MainVM : BaseMinVM
         DtBsName = UsrStgns.DtBsName;
         EmailOfI = UsrStgns.EmailOfI;
         LetDbChg = UsrStgns.LetDbChg;
-
+        
         AppVerNumber = VersionHelper.CurVerStr;// fmt("0.M.d");
         AppVerToolTip = VersionHelper.CurVerStr;// YYMMDDHHmm;// CurVerStr("0.M.d.H.m");
 
@@ -56,6 +59,7 @@ public partial class MainVM : BaseMinVM
         GSReportStore.Changed -= GSReportStore_Chngd;
         EmailOfIStore.Changed -= EmailOfIStore_Chngd;
         _letDbChStore.Changed -= LetDbChgStore_Chngd;
+        _letDbChStore.Changed -= IsBusy__Store_Chngd;
 
         base.Dispose();
     }
@@ -92,6 +96,7 @@ public partial class MainVM : BaseMinVM
     }
 
     protected readonly LetDbChgStore _letDbChStore;
+    protected readonly IsBusy__Store _IsBusy__Store;
     public SrvrNameStore SrvrNameStore
     {
         get;
@@ -120,6 +125,7 @@ public partial class MainVM : BaseMinVM
         EmailOfI = emailOfI;   /* await RefreshReloadAsync(); */
     }
     void LetDbChgStore_Chngd(bool value) => LetDbChg = value; /* await RefreshReloadAsync(); */
+    void IsBusy__Store_Chngd(bool value) => IsBusy__ = value; /* await RefreshReloadAsync(); */
     string _qs = ""; public string SrvrName
     {
         get => _qs; set
@@ -153,6 +159,20 @@ public partial class MainVM : BaseMinVM
         get => _aw; set
         {
             if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Tick(); UsrStgns.LetDbChg = value; _letDbChStore.Change(value); }
+        }
+    }
+    [ObservableProperty] bool isBusy;// /*BusyBlur = value ? 8 : 0;*/  }
+    bool _bz; public bool IsBusy__
+    {
+        get => _bz; set
+        {
+            if (SetProperty(ref _bz, value, true))
+                //if (_loaded)
+                {
+                    IsBusy = value;
+                    Bpr.Tick(); 
+                    _IsBusy__Store.Change(value);
+                }
         }
     }
 
@@ -189,7 +209,6 @@ public partial class MainVM : BaseMinVM
     [ObservableProperty] int navAnmDirn;
     [ObservableProperty] Visibility isDevDbgViz = Visibility.Visible;
     [ObservableProperty] Visibility gSRepViz = Visibility.Visible;
-    [ObservableProperty] bool isBusy;// /*BusyBlur = value ? 8 : 0;*/  }
     [ObservableProperty] ObservableCollection<string?> validationMessages = [];
     bool _au; public bool IsAudible
     {

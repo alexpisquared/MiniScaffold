@@ -5,14 +5,11 @@ public partial class BaseDbVM : BaseMinVM
 {
     readonly ISecurityForcer _secForcer;
     bool _inited;
-    protected MainVM MainVM
-    {
-        get;
-    }
+    
     protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
     protected int _thisCampaignId;
-    public BaseDbVM(MainVM mainVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, IsBusy__Store bzy, UserSettings usrStgns, ISpeechSynth synth, int oid)
+    public BaseDbVM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, /*EmailOfIStore eml,*/ LetDbChgStore awd, IsBusy__Store bzi, UserSettings usrStgns, ISpeechSynth synth, int oid)
     {
         IsDevDbg = VersionHelper.IsDbg;
 
@@ -24,7 +21,6 @@ public partial class BaseDbVM : BaseMinVM
         Bpr = bpr;
         MainWin = (Window)win;
         UsrStgns = usrStgns;
-        MainVM = mainVM;
         Synth = synth;
         _secForcer = sec;
 
@@ -34,7 +30,7 @@ public partial class BaseDbVM : BaseMinVM
         _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsync;
         _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsync;
         _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsync;
-        _IsBusy__Store = bzy; _IsBusy__Store.Changed += IsBusy__Store_ChngdAsync;
+        _IsBusy__Store = bzi; _IsBusy__Store.Changed += IsBusy__Store_ChngdAsync;
 
         _thisCampaignId = Dbq.Campaigns.Max(r => r.Id);
 
@@ -228,7 +224,12 @@ public partial class BaseDbVM : BaseMinVM
 
         PageCvs?.Refresh();
     }
-    partial void OnIsBusyChanged(bool value) => MainVM.IsBusy = value; /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├──BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+    partial void OnIsBusyChanged(bool value)
+    {
+        IsBusy__ = value;
+        //MainVM.IsBusy = value; 
+        /*BusyBlur = value ? 8 : 0;*/    //Write($"TrcW:>         ├──BaseDbVM.IsBusy set to  {value,-5}  {(value ? "<<<<<<<<<<<<" : ">>>>>>>>>>>>")}\n");
+    }
 
     [RelayCommand]
     protected void ChkDb4Cngs()

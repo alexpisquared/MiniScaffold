@@ -1,8 +1,11 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
-    public Page02VM(MainVM mvm, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
-      : base(mvm, lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, eml, evm, synth, 8110) { }
+    public Page02VM(NavBarVM navBarVM,  ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
+      : base(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, eml, evm, synth, 8110)
+    {
+        NavBarVM = navBarVM;
+    }
     public async override Task<bool> InitAsync()
     {
         for (var i = 0; i < 26; i++)
@@ -122,9 +125,14 @@ public partial class Page02VM : BaseEmVM
         await Bpr.FinishAsync(8);
         var prev = GSReport;
         await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
-        MainVM.NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
+        NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
         GSReport = prev;
     }
 
     readonly int antiSpamSec = DevOps.IsDbg ? 5 : 118; // 2 min to better tell apart by the timestamps.
+
+    public NavBarVM NavBarVM
+    {
+        get;
+    }
 }
