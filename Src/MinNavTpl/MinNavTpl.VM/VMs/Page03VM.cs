@@ -201,11 +201,11 @@ public partial class Page03VM : BaseDbVM
                     else if (item is OL.DistListItem itm1)    /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
                     else if (item is OL.DocumentItem itm2)    /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
                     else if (item is OL.JournalItem itm3)     /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
-                    else if (item is OL.MeetingItem itm4)     /**/ { ReportOL += $" ? Meeting     {itm4.CreationTime:yyyy-MM-dd} {itm4.Subject} \t {OneLineAndTrunkate(itm4.Body)} \r\n"; }
+                    else if (item is OL.MeetingItem itm4)     /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm4); newEmailsAdded = rv.addedCount; report = rv.report0; }
                     else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
                     else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
                     else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
-                    else if (item is OL.MailItem mailItem)    /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, mailItem); newEmailsAdded = rv.newEmailsAddedCount; report = rv.reportLcl; }
+                    else if (item is OL.MailItem itm8)    /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm8); newEmailsAdded = rv.addedCount; report = rv.report0; }
                     else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); }
                 }
 #if DEBUG
@@ -223,7 +223,7 @@ public partial class Page03VM : BaseDbVM
         return report;
     }
 
-    async Task<(int newEmailsAddedCount, string reportLcl)> DoOneAsync(string folderName, int ttl, int newEmailsAddedCount, OL.MAPIFolder? rcvdDoneFolder, OL.MAPIFolder? sentDoneFolder, OL.MAPIFolder? deletedsFolder, string reportLcl, OL.MailItem ipmItem)
+    async Task<(int addedCount, string report0)> DoOneAsync(string folderName, int ttl, int addedCount, OL.MAPIFolder? rcvdDoneFolder, OL.MAPIFolder? sentDoneFolder, OL.MAPIFolder? deletedsFolder, string report0, OL.MeetingItem ipmItem)
     {
         try
         {
@@ -233,10 +233,10 @@ public partial class Page03VM : BaseDbVM
                 var isNew = await CheckDbInsertIfMissing_senderAsync(ipmItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, ipmItem.Subject, ipmItem.Body, ipmItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
                 if (isNew)
                 {
-                    newEmailsAddedCount++;
+                    addedCount++;
                 }
 
-                reportLcl += _oh.ReportLine(folderName, senderEmail, isNew);
+                report0 += _oh.ReportLine(folderName, senderEmail, isNew);
 
                 if (!string.IsNullOrEmpty(ipmItem.Body))
                 {
@@ -246,7 +246,7 @@ public partial class Page03VM : BaseDbVM
                     var ii = await FindInsertEmailsFromBodyAsync(ipmItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
                     if (ii.HasNewEmails)
                     {
-                        for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { newEmailsAddedCount++; reportLcl += _oh.ReportLine(folderName, ii.NewEmails[i], isNew); } }
+                        for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { addedCount++; report0 += _oh.ReportLine(folderName, ii.NewEmails[i], isNew); } }
                     }
                 }
 
@@ -259,10 +259,10 @@ public partial class Page03VM : BaseDbVM
                     isNew = email?.AddedAt == Now;
                     if (isNew)
                     {
-                        newEmailsAddedCount++;
+                        addedCount++;
                     }
 
-                    reportLcl += _oh.ReportLine(folderName, re.Address, isNew);
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
                 }
 
                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
@@ -276,9 +276,9 @@ public partial class Page03VM : BaseDbVM
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                     var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
-                    if (isNew) { newEmailsAddedCount++; }
+                    if (isNew) { addedCount++; }
 
-                    reportLcl += _oh.ReportLine(folderName, re.Address, isNew);
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
                 }
 
                 var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
@@ -288,9 +288,78 @@ public partial class Page03VM : BaseDbVM
                 OutlookHelper6.MoveIt(trgFolder, ipmItem);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {reportLcl}."); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}."); }
 
-        return (newEmailsAddedCount, reportLcl);
+        return (addedCount, report0);
+    }
+    async Task<(int addedCount, string report0)> DoOneAsync(string folderName, int ttl, int addedCount, OL.MAPIFolder? rcvdDoneFolder, OL.MAPIFolder? sentDoneFolder, OL.MAPIFolder? deletedsFolder, string report0, OL.MailItem ipmItem)
+    {
+        try
+        {
+            if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
+            {
+                var senderEmail = OutlookHelper6.FigureOutSenderEmail(ipmItem);
+                var isNew = await CheckDbInsertIfMissing_senderAsync(ipmItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, ipmItem.Subject, ipmItem.Body, ipmItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
+                if (isNew)
+                {
+                    addedCount++;
+                }
+
+                report0 += _oh.ReportLine(folderName, senderEmail, isNew);
+
+                if (!string.IsNullOrEmpty(ipmItem.Body))
+                {
+                    //await checkInsertEHistAsync(Dbq, ipmItem.Subject, ipmItem.Body, ipmItem.ReceivedTime, "R", em); //2022-10 - added next line, as it was missing functionality of inseing received boides to Hist table:
+
+                    var (first, last) = OutlookHelper6.FigureOutSenderFLName(ipmItem, senderEmail);
+                    var ii = await FindInsertEmailsFromBodyAsync(ipmItem.Body, senderEmail); //if it's via Indeed - name is in the SenderName. Otherwise, it maybe away redirect to a colleague.
+                    if (ii.HasNewEmails)
+                    {
+                        for (var i = 0; i < ii.NewEmails?.Length; i++) { if (!string.IsNullOrEmpty(ii.NewEmails[i])) { addedCount++; report0 += _oh.ReportLine(folderName, ii.NewEmails[i], isNew); } }
+                    }
+                }
+
+                Write($"\n{ttl,2})  rcvd: {ipmItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {ipmItem.Recipients.Count} rcpnts: (");
+                foreach (OL.Recipient re in ipmItem.Recipients)
+                {
+                    var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+
+                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
+                    isNew = email?.AddedAt == Now;
+                    if (isNew)
+                    {
+                        addedCount++;
+                    }
+
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
+                }
+
+                ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
+
+                OutlookHelper6.MoveIt(rcvdDoneFolder, ipmItem);
+            }
+            else if (folderName == OuFolder.qSent)
+            {
+                foreach (OL.Recipient re in ipmItem.Recipients) // must use ReplyAll for this to work
+                {
+                    var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+
+                    var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
+                    if (isNew) { addedCount++; }
+
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
+                }
+
+                var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+
+                ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
+
+                OutlookHelper6.MoveIt(trgFolder, ipmItem);
+            }
+        }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}."); }
+
+        return (addedCount, report0);
     }
 
     async Task<string> OutlookFolderToDb_FailsAsync(string folderName)
@@ -352,7 +421,7 @@ public partial class Page03VM : BaseDbVM
 
                             foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
                             {
-                                // banPremanentlyInDB(ref reportLcl, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
+                                // banPremanentlyInDB(ref report0, ref newBansAdded, emailFromBody, "Delivery failed (c) "); <== //todo: restore all %Delivery failed (c)%, since in the body usually alternative contacts are mentioned.
 
                                 if (await Dbq.Emails.FindAsync(emailFromBody) == null)
                                 {
@@ -508,7 +577,7 @@ public partial class Page03VM : BaseDbVM
                             if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
                         }
 
-                        rptLine += $"reportLcl\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
+                        rptLine += $"report0\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
                     }
                     else if (item is OL.MailItem mailItem)
                     {
@@ -598,6 +667,13 @@ public partial class Page03VM : BaseDbVM
 
         return len <= max ? body : (body[..max] + "...");
     }
+    async Task<bool> CheckDbInsertIfMissing_senderAsync(OL.MeetingItem mailItem, string senderEmail, string note)
+    {
+        //if (Dbq.Emails.Find(senderEmail) == null)
+        var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
+        var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
+        return isNew;
+    }
     async Task<bool> CheckDbInsertIfMissing_senderAsync(OL.MailItem mailItem, string senderEmail, string note)
     {
         //if (Dbq.Emails.Find(senderEmail) == null)
@@ -680,7 +756,7 @@ public partial class Page03VM : BaseDbVM
 
         WriteLine($"^^^^^^^^^^^^^^^^^^^^^^^^^");
     }
-    static void TestAllKeys(OL.ReportItem item) // body for reportLcl item ...is hard to find; need more time, but really, who cares. // Aug 2019
+    static void TestAllKeys(OL.ReportItem item) // body for report0 item ...is hard to find; need more time, but really, who cares. // Aug 2019
     {
         if (item.Body.Length > 0)
         {
@@ -793,7 +869,7 @@ theBody = GetNDRBody(MailItem)
 
 Function GetNDRBody(rItm As Object) As String
   Dim TheBody, TempFilePath As String
-  If (LCase(rItm.MessageClass) = "reportLcl.ipm.note.ndr") Then
+  If (LCase(rItm.MessageClass) = "report0.ipm.note.ndr") Then
       TheBody = rItm.Body
       If Len(TheBody) > 0 Then
           If Chr(Asc(Left(TheBody, 1))) = "?" Then
