@@ -28,7 +28,7 @@
         <MenuItem Header="[Re] _Reglr"       Command="{Binding DoReglrCommand}"  ToolTip="Check and add if new the Q folder"/>
         <MenuItem Header="[Re] _JunkM"       Command="{Binding DoJunkMCommand}"  ToolTip="Check and add if new the JunkMail folder"/>
         <MenuItem Header="[Re] _Fails"       Command="{Binding DoFailsCommand}"  ToolTip="Find trg emai in Q\Fails folder and ..."/>
-        <MenuItem Header="[Re] La_ter"       Command="{Binding DoLaterCommand}"  ToolTip="Find trg emai in Q\ToResend folder and scan body for alt/new emails."/>
+        <MenuItem Header="[Re] La_ter"       Command="{Binding DoLaterCommand}"  ToolTip="Find trg emai in Q\To-Resend folder and scan body for alt/new emails."/>
         <MenuItem Header="[Re] _DoneR"       Command="{Binding DoDoneRCommand}"  ToolTip="Scour DoneRcvd folder for missing emails in the bodies."/>
         <MenuItem Header="Ad_vanced"                                                                                                              Foreground="DarkOrange">
           <MenuItem Header="_Update Contacts"   Command="{Binding UpdateOLCommand}" ToolTip="Update Outlook contacts' bodies with notes from DB"  Foreground="DarkOrange" />

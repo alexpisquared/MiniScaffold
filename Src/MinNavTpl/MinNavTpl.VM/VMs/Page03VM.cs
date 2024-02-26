@@ -99,20 +99,19 @@ public partial class Page03VM : BaseDbVM
     {
         try
         {
-            var qF = _oh.GetItemsFromFolder(OuFolder.qFail).Count;
-            var qR = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count;
-            var qS = _oh.GetItemsFromFolder(OuFolder.qSent).Count;
-            var qL = _oh.GetItemsFromFolder(OuFolder.qLate).Count;
             var qSD = _oh.GetItemsFromFolder(OuFolder.qSentDone).Count;
             var qRD = _oh.GetItemsFromFolder(OuFolder.qRcvdDone).Count;
-            var ttl = qR + qS + qF + qL;
+            var ttl = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count +
+                      _oh.GetItemsFromFolder(OuFolder.qSent).Count +
+                      _oh.GetItemsFromFolder(OuFolder.qFail).Count + 
+                      _oh.GetItemsFromFolder(OuFolder.qLate).Count;
             if (ttl == 0)
             {
                 ReportOL += "Nothing new in Outlook to for DB.";
             }
             else
             {
-                ReportOL += $"Total {ttl} new items found (including {qL} OOF). Total sent/rcvd: {qSD} / {qRD} already.\n\n";
+                ReportOL += $"Total {ttl} new items found. Total sent/rcvd: {qSD} / {qRD} already.\n\n";
 
                 await Dbq.Emails.LoadAsync();
 
@@ -485,7 +484,7 @@ public partial class Page03VM : BaseDbVM
                             }
                             else
                             {
-                                throw new Exception("AP: //todo: ReportItem in Q\\ToResend !!!");
+                                throw new Exception("AP: //todo: ReportItem in Q\\To-Resend !!!");
                             }
                         }
                         else if (item is OL.MailItem mailItem)
