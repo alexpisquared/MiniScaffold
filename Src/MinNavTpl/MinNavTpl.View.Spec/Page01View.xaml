@@ -75,7 +75,7 @@
               SelectionChanged="dgPage_SelectionChanged" RowHeight="22">
       <!--IsSynchronizedWithCurrentItem="True"-->
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"     Width="200" IsReadOnly="True"  Foreground="#ccc" />
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"     Width="260" IsReadOnly="True"  Foreground="#ccc" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                 Foreground="#b8f" />
         <DataGridTemplateColumn Header=" Country"                                              >
           <DataGridTemplateColumn.CellTemplate>

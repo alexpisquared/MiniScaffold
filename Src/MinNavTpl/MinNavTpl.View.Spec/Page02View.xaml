@@ -76,7 +76,7 @@
     <DataGrid Grid.Row="1" ItemsSource="{Binding PageCvs}" lcl:DataGridExtensions.SelectedItems="{Binding SelectedEmails}" CurrentItem="{Binding CurrentEmail}" SelectedItem="{Binding SelectdEmail}" InitializingNewItem="OnInitNewItem" IsReadOnly="False" 
               Margin="2 8 2 3" CanUserAddRows="False" SelectionMode="Extended" RowHeight="22">
       <DataGrid.Columns>
-        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"    Width="160" IsReadOnly="True"  Foreground="#ccc" />
+        <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"    Width="260" IsReadOnly="True"  Foreground="#ccc" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                Foreground="#b8f" />
         <DataGridTemplateColumn Header=" Country">
           <DataGridTemplateColumn.CellTemplate>

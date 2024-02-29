@@ -1,7 +1,7 @@
 ﻿namespace MinNavTpl.VM.VMs;
 public partial class Page02VM : BaseEmVM
 {
-    public Page02VM(NavBarVM navBarVM,  ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
+    public Page02VM(NavBarVM navBarVM, ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, EmailOfIStore eml, LetDbChgStore awd, IsBusy__Store bzi, EmailDetailVM evm, ISpeechSynth synth)
       : base(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, eml, evm, synth, 8110)
     {
         NavBarVM = navBarVM;
@@ -113,11 +113,14 @@ public partial class Page02VM : BaseEmVM
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
     {
-        if (i > 1) await Task.Delay(antiSpamSec * 1000 + 100);
+        const int pauser = 3;
+        if (i > 1) await Task.Delay((antiSpamSec - pauser) * 1000 + 100);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,5} / {j} \t";
         await SendThisOneAsync(email.Id, email.Fname, i);
         Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9);
+        await Task.Delay(pauser);
+        Bpr.Tick();
     }
     async Task FinishJobAsync(TimeSpan totalTime, int i)
     {
