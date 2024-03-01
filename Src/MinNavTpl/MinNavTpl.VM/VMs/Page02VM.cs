@@ -113,14 +113,12 @@ public partial class Page02VM : BaseEmVM
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
     {
-        const int pauser = 3;
-        if (i > 1) await Task.Delay((antiSpamSec - pauser) * 1000 + 100);
+        if (i > 1) await Task.Delay(antiSpamSec * 1000 + 100);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,5} / {j} \t";
+        Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9); //keep here to save on Task.Delay() misworking.
+        
         await SendThisOneAsync(email.Id, email.Fname, i);
-        Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9);
-        await Task.Delay(pauser);
-        Bpr.Tick();
     }
     async Task FinishJobAsync(TimeSpan totalTime, int i)
     {

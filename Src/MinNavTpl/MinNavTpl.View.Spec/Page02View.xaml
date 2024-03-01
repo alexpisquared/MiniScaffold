@@ -78,14 +78,14 @@
       <DataGrid.Columns>
         <DataGridTextColumn Header=" Email (id)"  Binding="{Binding Id}"    Width="260" IsReadOnly="True"  Foreground="#ccc" />
         <DataGridTextColumn Header=" F. Name"     Binding="{Binding Fname}"                                Foreground="#b8f" />
-        <DataGridTemplateColumn Header=" Country">
+        <DataGridTemplateColumn Header=" Country" SortMemberPath="Country" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <lcl:DgColumnCountry />
             </DataTemplate>
           </DataGridTemplateColumn.CellTemplate>
         </DataGridTemplateColumn>
-        <DataGridTemplateColumn Header=" Phone"                                              Width="31" >
+        <DataGridTemplateColumn Header=" Phone"   SortMemberPath="Phone" Width="31" >
           <DataGridTemplateColumn.CellTemplate>
             <DataTemplate>
               <lcl:DgColumnPhone />
