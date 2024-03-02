@@ -151,7 +151,7 @@ public partial class MainVM : BaseMinVM
     {
         get => _em; set
         {
-            if (SetProperty(ref _em, value, true) && value is not null && _loaded) { Bpr.Tick(); EmailOfIStore.Change(value); UsrStgns.EmailOfI = value; }
+            if (SetProperty(ref _em, value, true) && value is not null && _loaded) { /*Bpr.Tick();*/ EmailOfIStore.Change(value); UsrStgns.EmailOfI = value; }
         }
     }
     bool _aw; public bool LetDbChg

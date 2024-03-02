@@ -14,7 +14,7 @@ public static class MvvmInitHelper
         _ = services.AddSingleton<IsBusy__Store>();
 
         //tu: Start Page startup Page controller.
-        if (VersionHelper.IsDbg) /*                               */ _ = services.AddSingleton<INavSvc, Page03NavSvc>(); // Ou2Db
+        if (VersionHelper.IsDbg) /*                               */ _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
         else if (Environment.GetCommandLineArgs().Contains("Email")) _ = services.AddSingleton<INavSvc, Page01NavSvc>(); // Agent
         else if (Environment.GetCommandLineArgs().Contains("Broad")) _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad   
         else if (Environment.GetCommandLineArgs().Contains("Ou2Db")) _ = services.AddSingleton<INavSvc, Page03NavSvc>(); // Ou2Db

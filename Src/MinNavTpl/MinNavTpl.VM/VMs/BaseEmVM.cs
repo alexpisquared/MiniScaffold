@@ -35,21 +35,22 @@ public partial class BaseEmVM : BaseDbVM
     [ObservableProperty][NotifyCanExecuteChangedFor(nameof(SendThisCommand))] string thisFName = "Sir/Madam";
     [ObservableProperty][NotifyPropertyChangedFor(nameof(GSReport))] Email? currentEmail; // demo only.
 
-    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; partial void OnSelectdEmailChanged(Email? value)
+    [ObservableProperty][NotifyCanExecuteChangedFor(nameof(DelCommand))] Email? selectdEmail; async partial void OnSelectdEmailChanged(Email? value)
     {
-        if (value is not null && _loaded)
-        {
-            Bpr.Tick();
-            UsrStgns.EmailOfI = value.Id;
-            EmailOfIStore.Change(value.Id);
-            ThisEmail = value.Id;
+        if (value is null || !_loaded) return;
 
-            _ = Task.Run(async () =>
-            {
-                await GetDetailsForSelRowAsync(value, Cfg, Dbq);
-                //PageCvs?.Refresh();
-            }).ContinueWith(_ => PageCvs?.Refresh(), TaskScheduler.FromCurrentSynchronizationContext()); //prevents from using up/down arrows to navigate thru the list.
+        //Bpr.Tick();
+        UsrStgns.EmailOfI = value.Id;
+        EmailOfIStore.Change(value.Id);
+        ThisEmail = value.Id;
+
+        if (((ListCollectionView?)PageCvs)?.ItemProperties[1].Name == "PhoneNumber") // Page07VM uses this property for the phone list - not the email list => skip the email row details fetching.
+        {
+            return;
         }
+
+        await GetDetailsForSelRowAsync(value, Cfg, Dbq);
+        PageCvs?.Refresh(); //prevents from using up/down arrows to navigate thru the list.
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
     [RelayCommand(CanExecute = nameof(CanSendThis))]

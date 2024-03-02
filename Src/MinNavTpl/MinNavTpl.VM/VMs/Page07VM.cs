@@ -48,39 +48,23 @@ public partial class Page07VM : BaseEmVM
 
     [ObservableProperty] Phone? selectdPhone; partial void OnSelectdPhoneChanged(Phone? value)
     {
-        if (value is not null && _loaded)
-        {
-            Bpr.Tick();
-
-            _ = Task.Run(async () => await GetEmailsForSelRowAsync(SelectdPhone)); // _ = Task.Run(GetDetailsForSelRowAsync);
-        }
-    } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
-
-    async Task GetEmailsForSelRowAsync(Phone? phone)
-    {
-        if (phone is null) // ??? || phone.Ttl_Sent is not null)
-        {
-            return;
-        }
+        if (value is null || !_loaded) return;
 
         var emails = Dbq.PhoneEmailXrefs.Local
-            .Where(x => x.PhoneId == phone.Id)
+            .Where(x => x.PhoneId == value.Id)
             .Join(Dbq.Emails.Local,
                 xref => xref.EmailId,
                 email => email.Id,
                 (xref, email) => email);
 
-        //var emls = Dbq.PhoneEmailXrefs.Local.Where(x => x.PhoneId == phone.Id).Select(x => x.EmailId).ToList();
-        //var emls2 = Dbq.Emails.Local.Where(x => emls.Contains(x.Id));
-
         EmailCvs = CollectionViewSource.GetDefaultView(emails.ToList()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.Phones.ToListAsync());
-        EmailCvs.SortDescriptions.Add(new SortDescription(nameof(Phone.AddedAt), ListSortDirection.Descending));
-        EmailCvs.Filter = obj => obj is not Phone r || r is null ||
-          string.IsNullOrEmpty(SearchText) ||
-            r.PhoneNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
-            r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
+        //EmailCvs.SortDescriptions.Add(new SortDescription(nameof(Phone.AddedAt), ListSortDirection.Descending));
+        //EmailCvs.Filter = obj => obj is not Phone r || r is null ||
+        //  string.IsNullOrEmpty(SearchText) ||
+        //    r.PhoneNumber.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+        //    r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-        await Task.Delay(2);
-        SelectdEmail = null;
+        SelectdEmail = null; // remove white highlight
+        Bpr.Tick();
     }
 }
