@@ -100,10 +100,14 @@ public partial class BaseEmVM : BaseDbVM
         await Bpr.ClickAsync();
         try
         {
-            ArgumentNullException.ThrowIfNull(SelectdEmail, nameof(SelectdEmail));
-            var rowsAffected = await Dbq.Emails.Where(r => r.Id == SelectdEmail.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = dbq.Emails.Local.Remove(email!);
-            GSReport += $" {rowsAffected}  rows deleted for \n {SelectdEmail.Id} ";
-            _ = Dbq.Emails.Local.Remove(SelectdEmail!); // ?? test saving ??
+            ArgumentNullException.ThrowIfNull(email, nameof(email));
+            //var rowsAffected = await Dbq.Emails.Where(r => r.Id == email.Id).ExecuteDeleteAsync(); //tu: delete rows - new ef7 way  <>  old way: _ = dbq.Emails.Local.Remove(email!);
+            //GSReport += $" {rowsAffected}  rows deleted for \n {email.Id} ";
+
+            foreach (var ehist in Dbq.Ehists.Where(r => r.EmailId == email.Id)) { _ = Dbq.Ehists.Remove(ehist); } // no .Local. to save on preloading the whole table into memory.
+            foreach (var phnxr in Dbq.PhoneEmailXrefs.Local.Where(r => r.EmailId == email.Id)) { _ = Dbq.PhoneEmailXrefs.Local.Remove(phnxr); }
+
+            _ = Dbq.Emails.Local.Remove(email!);
         }
         catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
     }
