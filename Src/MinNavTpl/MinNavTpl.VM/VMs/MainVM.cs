@@ -1,6 +1,4 @@
-﻿using MinNavTpl.Stores;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class MainVM : BaseMinVM
 {
     readonly bool _ctored;
@@ -38,7 +36,7 @@ public partial class MainVM : BaseMinVM
         DtBsName = UsrStgns.DtBsName;
         EmailOfI = UsrStgns.EmailOfI;
         LetDbChg = UsrStgns.LetDbChg;
-        
+
         AppVerNumber = VersionHelper.CurVerStr;// fmt("0.M.d");
         AppVerToolTip = VersionHelper.CurVerStr;// YYMMDDHHmm;// CurVerStr("0.M.d.H.m");
 
@@ -113,12 +111,9 @@ public partial class MainVM : BaseMinVM
     {
         get;
     }
-    void SrvrNameStore_Chngd(string val) => SrvrName = val;   /* await RefreshReloadAsync(); */
-    void DtBsNameStore_Chngd(string val) => DtBsName = val;   /* await RefreshReloadAsync(); */
-    void GSReportStore_Chngd(string val)
-    {
-        GSReport = val; /*await RefreshReloadAsync();*/
-    }
+    void SrvrNameStore_Chngd(string val) => SrvrName = val; /* await RefreshReloadAsync(); */
+    void DtBsNameStore_Chngd(string val) => DtBsName = val; /* await RefreshReloadAsync(); */
+    void GSReportStore_Chngd(string val) => GSReport = val; /* await RefreshReloadAsync(); */
     void EmailOfIStore_Chngd(string emailOfI, [CallerMemberName] string? cmn = "")
     {
         WriteLine($"■■ MAIN  {GetCaller(),20}  called by  {cmn,-22} {emailOfI,-22}  {(EmailOfI != emailOfI ? "==>Load as it were ..." : "==>----")}");
@@ -167,12 +162,11 @@ public partial class MainVM : BaseMinVM
         get => _bz; set
         {
             if (SetProperty(ref _bz, value, true))
-                //if (_loaded)
-                {
-                    IsBusy = value;
-                    Bpr.Tick(); 
-                    _IsBusy__Store.Change(value);
-                }
+            {
+                IsBusy = value;
+                Bpr.Tick();
+                _IsBusy__Store.Change(value);
+            }
         }
     }
 
