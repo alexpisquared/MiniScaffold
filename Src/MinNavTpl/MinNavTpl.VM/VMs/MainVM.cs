@@ -156,20 +156,17 @@ public partial class MainVM : BaseMinVM
             if (SetProperty(ref _aw, value, true) && _loaded) { Bpr.Tick(); UsrStgns.LetDbChg = value; _letDbChStore.Change(value); }
         }
     }
-    [ObservableProperty] bool isBusy;// /*BusyBlur = value ? 8 : 0;*/  }
     bool _bz; public bool IsBusy__
     {
         get => _bz; set
         {
             if (SetProperty(ref _bz, value, true))
             {
-                IsBusy = value;
                 Bpr.Tick();
                 _IsBusy__Store.Change(value);
             }
         }
     }
-
     string? _ds; public string DeploymntSrcExe
     {
         get => _ds ?? "??Deployment.DeplSrcExe??"; set => _ds = value;

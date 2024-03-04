@@ -265,7 +265,7 @@
                       <MenuItem Header="Toggle _Admin Mode " IsCheckable="True" IsChecked="{Binding IsAdmin}"       ToolTip="Temporary feature for quick dev-t only." />
                       -->
                       <MenuItem Header="_Experimental ..." />
-                      <MenuItem Header="Get _Busy "     IsCheckable="True" IsChecked="{Binding IsBusy}" ToolTip="Temporary feature for quick dev-t only." />
+                      <MenuItem Header="Get _Busy "     IsCheckable="True" IsChecked="{Binding IsBusy__}" ToolTip="Temporary feature for quick dev-t only." />
                       <MenuItem Header="A_utosave    "  IsCheckable="True" IsChecked="True" Unchecked="OnUnchecked" ToolTip="Autosave is On: no need to remember to save your changes." />
                       <Separator/>
                       <MenuItem Header="_Export to XML file" InputGestureText="Ctrl+X" />
@@ -301,7 +301,7 @@
                 <RowDefinition Height="*"/>
               </Grid.RowDefinitions>
 
-              <ContentControl Content="{Binding CurrentVM}" IsEnabled="{Binding IsBusy, Converter={cnv:ToBoolConverter InvertValue=True}}" Grid.Row="1" Padding="20" >
+              <ContentControl Content="{Binding CurrentVM}" IsEnabled="{Binding IsBusy__, Converter={cnv:ToBoolConverter InvertValue=True}}" Grid.Row="1" Padding="20" >
                 <ContentControl.Style>
                   <Style TargetType="ContentControl">
                     <Setter Property="RenderTransform">
@@ -336,14 +336,14 @@
             </Grid>
           </Grid>
 
-          <Grid x:Name="pnlIsBusy" Grid.Column="1" Margin="2,8,2,0" Cursor="Wait" Visibility="{Binding IsBusy, Converter={cnv:UniConverter}}" Background="{Binding IsAnimeOn, Converter={cnv:UniConverter BrushFalse={x:Null}, BrushTrue=#18f8}}">
+          <Grid x:Name="pnlIsBusy" Grid.Column="1" Margin="2,8,2,0" Cursor="Wait" Visibility="{Binding IsBusy__, Converter={cnv:UniConverter}}" Background="{Binding IsAnimeOn, Converter={cnv:UniConverter BrushFalse={x:Null}, BrushTrue=#18f8}}">
             <Grid.RowDefinitions>
               <RowDefinition Height="2*"/>
               <RowDefinition Height="1*"/>
               <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <!-- BE-194: -->
-            <TextBlock Grid.Row="1" Visibility="{Binding IsAnimeOn, Converter={cnv:UniConverter InvertValue=True}}" Text="{Binding IsBusy, Converter={cnv:UniConverter TextFalse='', TextTrue='loading...'}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="8"/>
+            <TextBlock Grid.Row="1" Visibility="{Binding IsAnimeOn, Converter={cnv:UniConverter InvertValue=True}}" Text="{Binding IsBusy__, Converter={cnv:UniConverter TextFalse='', TextTrue='loading...'}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="8"/>
             <Viewbox   Grid.Row="1" Visibility="{Binding IsAnimeOn, Converter={cnv:UniConverter InvertValue=False}}">
               <Grid>
                 <Grid.Style>
@@ -355,13 +355,13 @@
                       </Setter.Value>
                     </Setter>
                     <Style.Triggers>
-                      <DataTrigger Binding="{Binding IsBusy}" Value="True">
+                      <DataTrigger Binding="{Binding IsBusy__}" Value="True">
                         <DataTrigger.EnterActions>
                           <StopStoryboard BeginStoryboardName="sbDropOu"/>
                           <BeginStoryboard x:Name="sbDropIn" Storyboard="{StaticResource sbDropIn}"/>
                         </DataTrigger.EnterActions>
                       </DataTrigger>
-                      <DataTrigger Binding="{Binding IsBusy}" Value="False">
+                      <DataTrigger Binding="{Binding IsBusy__}" Value="False">
                         <DataTrigger.EnterActions>
                           <StopStoryboard BeginStoryboardName="sbDropIn"/>
                           <BeginStoryboard x:Name="sbDropOu" Storyboard="{StaticResource sbDropOu}"/>
@@ -371,7 +371,7 @@
                   </Style>
                 </Grid.Style>
 
-                <anm:GravityAnime IsBusy="{Binding IsBusy}" Prompt="{Binding BusyMessage, FallbackValue='Wait!  Loading...'}"/>
+                <anm:GravityAnime IsBusy="{Binding IsBusy__}" Prompt="{Binding BusyMessage, FallbackValue='Wait!  Loading...'}"/>
 
               </Grid>
             </Viewbox>
