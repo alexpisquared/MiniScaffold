@@ -158,7 +158,7 @@ public partial class Page03VM : BaseDbVM
                 var em = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ", DateTime.Now);
                 if (!isAnyNew)
                 {
-                    isAnyNew = em?.AddedAt == Now;
+                    isAnyNew = em.email1?.AddedAt == Now;
                 }
             }
         }
@@ -255,7 +255,7 @@ public partial class Page03VM : BaseDbVM
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                     var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
-                    isNew = email?.AddedAt == Now;
+                    isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
                         addedCount++;
@@ -275,9 +275,9 @@ public partial class Page03VM : BaseDbVM
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                     var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
-                    if (isNew) { addedCount++; }
+                    if (isNew == true) { addedCount++; }
 
-                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew == true);
                 }
 
                 var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
@@ -324,7 +324,7 @@ public partial class Page03VM : BaseDbVM
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                     var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
-                    isNew = email?.AddedAt == Now;
+                    isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
                         addedCount++;
@@ -344,9 +344,9 @@ public partial class Page03VM : BaseDbVM
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                     var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
-                    if (isNew) { addedCount++; }
+                    if (isNew == true) { addedCount++; }
 
-                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
+                    report0 += _oh.ReportLine(folderName, re.Address, isNew == true);
                 }
 
                 var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
@@ -394,7 +394,7 @@ public partial class Page03VM : BaseDbVM
                             {
                                 var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail ?? throw new ArgumentNullException(nameof(folderName), "#########%%%%%%%%"));
                                 var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, reportItem.Body, null, reportItem.CreationTime, "..banned upon delivery fail BUT not existed !!! ", "R");
-                                if (isNew) { newEmailsAdded++; }
+                                if (isNew == true) { newEmailsAdded++; }
                             }
                             else
                             {
@@ -426,7 +426,7 @@ public partial class Page03VM : BaseDbVM
                                 {
                                     var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
                                     var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..alt contact from Delvery-Fail body. ", "A");
-                                    if (isNew) { newEmailsAdded++; }
+                                    if (isNew == true) { newEmailsAdded++; }
                                 }
                             }
 
@@ -489,8 +489,8 @@ public partial class Page03VM : BaseDbVM
                         }
                         else if (item is OL.MailItem mailItem)
                         {
-                            var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
-                            if (isNew)
+                            bool? isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, OutlookHelper6.RemoveBadEmailParts(mailItem.SenderEmailAddress), "..was on vaction && not existed in DB ?!?! ");
+                            if (isNew == true)
                             {
                                 newEmailsAdded++;
                             }
@@ -501,7 +501,7 @@ public partial class Page03VM : BaseDbVM
                                 {
                                     var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, emailFromBody);
                                     isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, emailFromBody, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from I'm-Away body as alt contact ", "A");
-                                    if (isNew) { newEmailsAdded++; }
+                                    if (isNew == true) { newEmailsAdded++; }
                                 }
                             }
 
@@ -573,7 +573,7 @@ public partial class Page03VM : BaseDbVM
                         {
                             var (first, last) = OutlookHelper6.FigureOutSenderFLName(reportItem, senderEmail);
                             var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, reportItem.Subject, "under constr-n", null, reportItem.CreationTime, msg, "R");
-                            if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                            if (isNew == true) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
                         }
 
                         rptLine += $"report0\t{senderEmail,40}  {reportItem.CreationTime:yyyy-MM-dd}  {reportItem.Subject,-80} \t [no body - too slow and wrong]";
@@ -585,8 +585,8 @@ public partial class Page03VM : BaseDbVM
 
                         WriteLine($"   SentOn:{mailItem.SentOn:MM-dd HH:mm:ss}   Receiv:{mailItem.ReceivedTime - mailItem.SentOn:hh\\:mm\\:ss}   Creati:{(mailItem.CreationTime - mailItem.SentOn).TotalDays:N5}   LastMo:{(mailItem.LastModificationTime - mailItem.SentOn).TotalDays:N5}   Expiry:{(mailItem.ExpiryTime - mailItem.SentOn).TotalDays:N5}");
 
-                        var isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, msg);
-                        if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                        bool? isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, msg);
+                        if (isNew== true) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
 
                         foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
                         {
@@ -597,7 +597,7 @@ public partial class Page03VM : BaseDbVM
                             {
                                 var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(mailItem.Body, senderEmail);
                                 isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, "..from body. ", "R");
-                                if (isNew) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                                if (isNew == true) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
                             }
 
                             rptLine += $"body\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
@@ -610,13 +610,13 @@ public partial class Page03VM : BaseDbVM
                             var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
                             var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now);
-                            isNew = email?.AddedAt == Now;
-                            if (isNew)
+                            isNew = email.email1?.AddedAt == Now;
+                            if (isNew == true)
                             {
                                 newEmailsAdded++;
                             }
 
-                            rptLine += _oh.ReportLine(folderName, re.Address, isNew);
+                            rptLine += _oh.ReportLine(folderName, re.Address, isNew == true);
                         }
 
                         rptLine += $"mail\t{senderEmail,40}  {mailItem.CreationTime:yyyy-MM-dd}  {mailItem.Subject,-80}{OneLineAndTrunkate(mailItem.Body)}   ";
@@ -671,14 +671,14 @@ public partial class Page03VM : BaseDbVM
         //if (Dbq.Emails.Find(senderEmail) == null)
         var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
         var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
-        return isNew;
+        return isNew == true;
     }
     async Task<bool> CheckDbInsertIfMissing_senderAsync(OL.MailItem mailItem, string senderEmail, string note)
     {
         //if (Dbq.Emails.Find(senderEmail) == null)
         var (first, last) = OutlookHelper6.FigureOutSenderFLName(mailItem, senderEmail);
         var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, senderEmail, first, last, mailItem.Subject, mailItem.Body, mailItem.SentOn, mailItem.ReceivedTime, note, "R");
-        return isNew;
+        return isNew == true;
     }
     void BanPremanentlyInDB(ref string rv, ref int newBansAdded, string email, string rsn)
     {
