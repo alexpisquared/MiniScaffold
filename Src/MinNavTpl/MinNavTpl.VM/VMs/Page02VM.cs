@@ -116,8 +116,9 @@ public partial class Page02VM : BaseEmVM
         if (i > 1) await Task.Delay(antiSpamSec * 1000 + 100);
 
         GSReport += $"{DateTime.Now:HH:mm:ss.f} {i,5} / {j} \t";
-        Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9); //keep here to save on Task.Delay() misworking.
-        
+        if (i != j)
+            Synth.SpeakFreeFAF($"{i} down, {j - i} to go...", speakingRate1010: 6, volumePercent: 9); //keep here to save on misworking Task.Delay(..) .
+
         await SendThisOneAsync(email.Id, email.Fname, i);
     }
     async Task FinishJobAsync(TimeSpan totalTime, int i)
@@ -125,7 +126,7 @@ public partial class Page02VM : BaseEmVM
         Lgr.Log(LogLevel.Information, $"│  {totalTime,9:m\\:ss\\.fff}  /  {(i - 1)}  =  {(i <= 1 ? TimeSpan.Zero : totalTime / (i - 1)):m\\:ss\\.fff} sec/email");
         await Bpr.FinishAsync(8);
         var prev = GSReport;
-        await Synth.SpeakAsync($"Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
+        await Synth.SpeakAsync($"Broadcast is done. Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
         NavBarVM.NavigatePage03Command.Execute(null); //tu: ad hoc navigation
         GSReport = prev;
     }
