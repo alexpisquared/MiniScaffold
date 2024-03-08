@@ -34,7 +34,7 @@ public partial class Page02VM : BaseEmVM
                   r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
                   r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
-                GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec :loaded.";
+                GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec :loaded.\n";
                 Lgr.Log(LogLevel.Trace, $"╞══ Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec ");
 
                 if (Environment.GetCommandLineArgs().Contains("Broad") && (DateTimeOffset.Now - DevOps.AppStartedAt).TotalSeconds < antiSpamSec)
