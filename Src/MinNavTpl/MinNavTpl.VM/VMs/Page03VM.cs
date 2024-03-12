@@ -155,7 +155,7 @@ public partial class Page03VM : BaseDbVM
             if (!string.IsNullOrEmpty(newEmail[i]))
             {
                 var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
-                var em = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, $"..from body (sender: {originalSenderEmail}). ", DateTime.Now);
+                var em = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now);
                 if (!isAnyNew)
                 {
                     isAnyNew = em.email1?.AddedAt == Now;
@@ -254,7 +254,7 @@ public partial class Page03VM : BaseDbVM
                 {
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
+                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now);
                     isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
@@ -319,18 +319,18 @@ public partial class Page03VM : BaseDbVM
                 }
 
                 Write($"\n{ttl,2})  rcvd: {ipmItem.ReceivedTime:yyyy-MMM-dd}  {senderEmail,-40}     {ipmItem.Recipients.Count} rcpnts: (");
-                foreach (OL.Recipient re in ipmItem.Recipients)
+                foreach (OL.Recipient recipient in ipmItem.Recipients)
                 {
-                    var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
+                    var (first, last) = OutlookHelper6.FigureOutSenderFLName(recipient.Name, recipient.Address);
 
-                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. ", DateTime.Now);
+                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, recipient.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now);
                     isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
                         addedCount++;
                     }
 
-                    report0 += _oh.ReportLine(folderName, re.Address, isNew);
+                    report0 += _oh.ReportLine(folderName, recipient.Address, isNew);
                 }
 
                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");

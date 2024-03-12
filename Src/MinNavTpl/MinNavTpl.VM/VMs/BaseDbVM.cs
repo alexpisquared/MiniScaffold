@@ -103,7 +103,7 @@ public partial class BaseDbVM : BaseMinVM
     {
         if (LetDbChg)
         {
-            var (success, rowsSaved, report) = await dbq.TrySaveReportAsync($"{note} {cmn} calls ");
+            var (success, _, report) = await dbq.TrySaveReportAsync($"{note} {cmn} ->");
             if (!success)
             {
                 throw new Exception(report);
