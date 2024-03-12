@@ -157,7 +157,7 @@ public partial class BaseEmVM : BaseDbVM
     }
 
     [RelayCommand]
-    protected async Task GetTopDetailAsync()
+    protected async Task GetTopDetailAsync(int topRows = 8)
     {
         try
         {
@@ -165,7 +165,7 @@ public partial class BaseEmVM : BaseDbVM
 
             var prevPos = PageCvs.CurrentPosition;
 
-            for (var i = 0; i < 33 && PageCvs?.MoveCurrentToNext() == true; i++)
+            for (var i = 0; i < topRows && PageCvs?.MoveCurrentToNext() == true; i++)
             {
                 await GetDetailsForSelRowAsync(SelectdEmail, Cfg, Dbq);
             }
