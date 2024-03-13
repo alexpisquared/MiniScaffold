@@ -41,7 +41,7 @@ public partial class Page07VM : BaseEmVM
     [RelayCommand]
     void AddNewPhone()
     {
-        try { var newEml = new Phone { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Phone" : Clipboard.GetText() }; Dbq.Phones.Local.Add(newEml); SelectdPhone = newEml; } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        try { var newEml = new Phone { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText().Trim()) ? "New Phone" : Clipboard.GetText().Trim() }; Dbq.Phones.Local.Add(newEml); SelectdPhone = newEml; } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
     }
 
     [ObservableProperty] ICollectionView? emailCvs;

@@ -22,7 +22,7 @@ public static class MvvmInitHelper
         else if (Environment.GetCommandLineArgs().Contains("Phone")) _ = services.AddSingleton<INavSvc, Page07NavSvc>(); // Phone
         else if (Environment.GetCommandLineArgs().Contains("Leads")) _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
         else if (Environment.GetCommandLineArgs().Length > 4) /*  */ _ = services.AddSingleton<INavSvc, Page04NavSvc>(); // Leads
-        else if (Clipboard.ContainsText() && Clipboard.GetText().Length < 48 && RegexHelper.IsEmail(Clipboard.GetText())) _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad
+        else if (Clipboard.ContainsText() && Clipboard.GetText().Trim().Length < 48 && RegexHelper.IsEmail(Clipboard.GetText().Trim())) _ = services.AddSingleton<INavSvc, Page02NavSvc>(); // Broad
         else /*                                                   */ _ = services.AddSingleton<INavSvc, Page01NavSvc>(); // Agent
 
         _ = services.AddSingleton<ICompositeNavSvc, CompositeNavSvc>();

@@ -53,7 +53,7 @@ public partial class Page04VM : BaseDbVM
     {
         try
         {
-            var nl = new Lead { AddedAt = DateTime.Now, CampaignId = _thisCampaignId, Note = string.IsNullOrEmpty(Clipboard.GetText()) ? "New Lead" : Clipboard.GetText() };
+            var nl = new Lead { AddedAt = DateTime.Now, CampaignId = _thisCampaignId, Note = string.IsNullOrEmpty(Clipboard.GetText().Trim()) ? "New Lead" : Clipboard.GetText().Trim() };
             Dbq.Leads.Local.Add(nl);
 
             SelectdLead = nl;
