@@ -117,12 +117,14 @@
       </Grid.RowDefinitions>
 
       <StackPanel Orientation="Horizontal" Grid.ColumnSpan="33" Margin="5">
-        <TextBlock Text="{Binding Id, FallbackValue=abc@efg.com}" MinWidth="380"/>
+        <TextBlock Text="{Binding Id, FallbackValue=abc@efg.com}" MinWidth="320"/>
         <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
         <Button Content="Co_untry" Command="{Binding DataContext.CouCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Get country" Visibility="Collapsed" />
         <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
         <Label  Content="_Re-send after" Target="{Binding ElementName=tbRa}" Margin="5 0 0 0"/>
         <DatePicker                SelectedDate="{Binding ReSendAfter}" x:Name="tbRa" />
+        <Label  Content="Phone" Margin="5 0 0 0"/>
+        <TextBox Text="{Binding Phone}" Width="96" />
         <Button Content=" Delete " Command="{Binding DataContext.DelCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Delete from DB " Margin="88,0,0,0" Foreground="#f00" CommandParameter="{Binding DataContext.SelectdEmail, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" />
       </StackPanel>
 
