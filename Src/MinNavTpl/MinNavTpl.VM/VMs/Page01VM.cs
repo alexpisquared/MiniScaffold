@@ -36,7 +36,7 @@ public partial class Page01VM : BaseEmVM
             }
 
             _ = PageCvs?.MoveCurrentToFirst();
-            await GetTopDetailAsync(3);
+            await GetTopDetailAsync(26);
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();
