@@ -1,6 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:vm="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" 
-                    xmlns:vv="clr-namespace:MinNavTpl.VM.VMs;assembly=MinNavTpl.VM" 
                     xmlns:view_Main______________________="clr-namespace:MinNavTpl.View.Main"
                     xmlns:view_Spec______________________="clr-namespace:MinNavTpl.View.Spec;assembly=MinNavTpl.View.Spec"
                     >
@@ -16,22 +15,22 @@
   <DataTemplate DataType="{x:Type vm:Page02VM}">
     <view_Spec______________________:Page02View />
   </DataTemplate>
-  <DataTemplate DataType="{x:Type vv:Page03VM}">
+  <DataTemplate DataType="{x:Type vm:Page03VM}">
     <view_Spec______________________:Page03View/>
   </DataTemplate>
-  <DataTemplate DataType="{x:Type vv:Page04VM}">
+  <DataTemplate DataType="{x:Type vm:Page04VM}">
     <view_Spec______________________:Page04View/>
   </DataTemplate>
-  <DataTemplate DataType="{x:Type vv:Page05VM}">
+  <DataTemplate DataType="{x:Type vm:Page05VM}">
     <view_Spec______________________:Page05View/>
   </DataTemplate>
-  <DataTemplate DataType="{x:Type vv:Page06VM}">
+  <DataTemplate DataType="{x:Type vm:Page06VM}">
     <view_Spec______________________:Page06View/>
   </DataTemplate>
   <DataTemplate DataType="{x:Type vm:Page07VM}">
     <view_Spec______________________:Page07View />
   </DataTemplate>
-  <DataTemplate DataType="{x:Type vv:EmailDetailVM}">
+  <DataTemplate DataType="{x:Type vm:EmailDetailVM}">
     <view_Spec______________________:EmailDetailView/>
   </DataTemplate>
 </ResourceDictionary>

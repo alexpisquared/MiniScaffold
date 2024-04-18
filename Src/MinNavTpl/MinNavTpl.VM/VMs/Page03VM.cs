@@ -511,7 +511,7 @@ public partial class Page03VM : BaseDbVM
 
                                 var fnm = (await Dbq.Emails.FindAsync(mailItem.SenderEmailAddress))?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
                                 
-                                / //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
+                                //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
                                 
                                 var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
                                 if (scs)
