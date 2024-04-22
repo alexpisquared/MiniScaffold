@@ -1,9 +1,9 @@
 ﻿namespace MinNavTpl.VM.VMs;
-public partial class Page03VM : BaseDbVM
+public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, ISpeechSynth synth) : BaseDbVM(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, 8110)
 {
     readonly OutlookHelper6 _oh = new();
     int _newEmailsAdded = 0;
-    public Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, ISpeechSynth synth) : base(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, 8110) { }
+
     public async override Task<bool> InitAsync()
     {
         await DoReFaLaAsync(); return await base.InitAsync();
@@ -510,9 +510,13 @@ public partial class Page03VM : BaseDbVM
                                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
 
                                 var fnm = (await Dbq.Emails.FindAsync(mailItem.SenderEmailAddress))?.Fname ?? OutlookHelper6.FigureOutSenderFLName(mailItem, mailItem.SenderEmailAddress).first;
-                                
-                                //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
-                                
+
+#if DEBUG
+                                // //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
+#else
+                                / //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
+#endif
+
                                 var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
                                 if (scs)
                                 {
