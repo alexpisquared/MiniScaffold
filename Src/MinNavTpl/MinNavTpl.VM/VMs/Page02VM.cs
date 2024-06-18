@@ -42,13 +42,13 @@ public partial class Page02VM : BaseEmVM
                     await SendTopNAsync();
                 }
 
-                if (Clipboard.ContainsText() && Clipboard.GetText().Trim().Length < 48)
+                if (Clipboard.ContainsText())
                 {
-                    if (RegexHelper.IsEmail(Clipboard.GetText().Trim()))
+                    if (RegexHelper.IsEmail(Clipboard.GetText().Trim()) && Clipboard.GetText().Trim().Length < 64)
                     {
                         ThisEmail = Clipboard.GetText().Trim();
                     }
-                    else
+                    else if (Clipboard.GetText().Trim().Length < 16)
                     {
                         SearchText = Clipboard.GetText().Trim();
                     }
