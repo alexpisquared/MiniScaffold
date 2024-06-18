@@ -293,11 +293,12 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
     }
     async Task<(int addedCount, string report0)> DoOneAsync(string folderName, int ttl, int addedCount, OL.MAPIFolder? rcvdDoneFolder, OL.MAPIFolder? sentDoneFolder, OL.MAPIFolder? deletedsFolder, string report0, OL.MailItem ipmItem)
     {
+        string senderEmail = "unknown yet";
         try
         {
             if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
             {
-                var senderEmail = OutlookHelper6.FigureOutSenderEmail(ipmItem);
+                senderEmail = OutlookHelper6.FigureOutSenderEmail(ipmItem);
                 var isNew = await CheckDbInsertIfMissing_senderAsync(ipmItem, senderEmail, $"..from  {folderName}  folder. "); // checkInsertInotDbEMailAndEHistAsync(senderEmail, flNme.first, flNme.last, ipmItem.Subject, ipmItem.Body, ipmItem.ReceivedTime, $"..was a sender", "R");  //foreach (OL.Recipient r in item.Recipients) ... includes potential CC addresses but appears as NEW and gets added ..probably because of wrong direction recvd/sent.				
                 if (isNew)
                 {
@@ -356,7 +357,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 OutlookHelper6.MoveIt(trgFolder, ipmItem);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}.", Lgr); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {senderEmail}.  Report: {report0}.", Lgr); }
 
         return (addedCount, report0);
     }
@@ -388,7 +389,8 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                     {
                         if (item is OL.ReportItem reportItem)
                         {
-                            var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
+//here breaks!
+                                var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
                             var emr = await Dbq.Emails.FindAsync(senderEmail);
                             if (emr == null)
                             {
@@ -1030,4 +1032,33 @@ active
 
 3 years, 3 months ago
 
-*/
+
+//todo: Jun 2024:
+
+06-18 11:46:46.769 inf ┌──Page03VM         eo-ctor      PageRank:8110  
+06-18 11:46:53.552 err 0x8004010F   COMException at \g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs(359): OutlookFolderToDb_ReglrAsync()    try {  } catch (COMException ex) { ex.Log(); } // 0x8004010F    StoreActiveWindowScreenshotToFile?!?!?!  System.Runtime.InteropServices.COMException (0x8004010F): 0x8004010F
+   at Microsoft.Office.Interop.Outlook._MailItem.get_SenderEmailAddress()
+   at MinNavTpl.VM.VMs.Page03VM.DoOneAsync(String folderName, Int32 ttl, Int32 addedCount, MAPIFolder rcvdDoneFolder, MAPIFolder sentDoneFolder, MAPIFolder deletedsFolder, String report0, MailItem ipmItem) in C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs:line 359
+   at MinNavTpl.VM.VMs.Page03VM.OutlookFolderToDb_ReglrAsync(String folderName) in C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs:line 207
+
+06-18 11:47:48.183 err 0x8004010F   COMException at \g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs(359): OutlookFolderToDb_ReglrAsync()    try {  } catch (COMException ex) { ex.Log(); } // 0x8004010F    StoreActiveWindowScreenshotToFile?!?!?!  System.Runtime.InteropServices.COMException (0x8004010F): 0x8004010F
+   at Microsoft.Office.Interop.Outlook._MailItem.get_SenderEmailAddress()
+   at MinNavTpl.VM.VMs.Page03VM.DoOneAsync(String folderName, Int32 ttl, Int32 addedCount, MAPIFolder rcvdDoneFolder, MAPIFolder sentDoneFolder, MAPIFolder deletedsFolder, String report0, MailItem ipmItem) in C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs:line 359
+   at MinNavTpl.VM.VMs.Page03VM.OutlookFolderToDb_ReglrAsync(String folderName) in C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs:line 207
+
+06-18 11:48:33.555 err 0x8004010F   COMException at \g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs(391): OutlookFolderToDb_FailsAsync() New  unfinished Aug 2019:__ComObject.   try {  } catch (COMException ex) { ex.Log(); } // 0x8004010F    StoreActiveWindowScreenshotToFile?!?!?!  System.Runtime.InteropServices.COMException (0x8004010F): 0x8004010F
+   at Microsoft.Office.Interop.Outlook._ReportItem.get_PropertyAccessor()
+   at MinNavTpl.VM.VMs.Page03VM.OutlookFolderToDb_FailsAsync(String folderName) in C:\g\MiniScaffold\Src\MinNavTpl\MinNavTpl.VM\VMs\Page03VM.cs:line 391
+
+06-18 11:48:33.687 err ■175  System.Runtime.InteropServices.ExternalException (0x80004005): A generic error occurred in GDI+.
+   at System.Drawing.SafeNativeMethods.Gdip.CheckStatus(Int32 status)
+   at System.Drawing.Image.Save(String filename, ImageCodecInfo encoder, EncoderParameters encoderParams)
+   at System.Drawing.Image.Save(String filename, ImageFormat format)
+   at WpfUserControlLib.Services.GuiCapture.StoreActiveWindowScreenshotToFile(String shortNote, Boolean isNew) in C:\g\AAV.Shared\Src\NetLts\WpfUserControlLib\Services\GuiCapture.cs:line 21
+
+06-18 11:51:22.145 inf └──Page03VM         eo-wrap  
+06-18 11:51:22.173 inf └── 0.5h  v24.06.18.1120  Rls  RAZER1.RAZER1\alexp  .net:8.0.5  wai:WpfUseCtrLib.Secrets  fus:Yes  fac:  .\sqlexpress·QStatsRls·True·False·36000  SafeAudit  arg:[] 
+██  
+
+
+ */
