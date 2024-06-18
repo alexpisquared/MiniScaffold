@@ -1,4 +1,6 @@
-﻿namespace MinNavTpl;
+﻿using WpfUserControlLib.Extensions;
+
+namespace MinNavTpl;
 public partial class App : System.Windows.Application
 {
     readonly DateTimeOffset _appStarted = DateTimeOffset.Now;
@@ -25,28 +27,32 @@ public partial class App : System.Windows.Application
 
     protected async override void OnStartup(StartupEventArgs e)
     {
-        UnhandledExceptionHndlr.Logger = _serviceProvider.GetRequiredService<ILogger>();
-        Current.DispatcherUnhandledException += UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
-        EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox ?? new TextBox()).SelectAll(); }));
-        ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
+        try
+        {
+            UnhandledExceptionHndlrUI.Logger = _serviceProvider.GetRequiredService<ILogger>();
+            Current.DispatcherUnhandledException += UnhandledExceptionHndlrUI.OnCurrentDispatcherUnhandledException;
+            EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotFocusEvent, new RoutedEventHandler((s, re) => { (s as TextBox ?? new TextBox()).SelectAll(); }));
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(15000));
 
-        _serviceProvider.GetRequiredService<INavSvc>().NavigateAsync();
+            _serviceProvider.GetRequiredService<INavSvc>().NavigateAsync();
 
-        MainWindow = _serviceProvider.GetRequiredService<MainNavView>();
-        MainWindow.Show();
+            MainWindow = _serviceProvider.GetRequiredService<MainNavView>();
+            MainWindow.Show();
 
-        SafeAudit();
+            SafeAudit();
 
-        base.OnStartup(e);
+            base.OnStartup(e);
 
-        _serviceProvider.GetRequiredService<ILogger>().LogInformation($"│  {(DateTime.Now - _appStarted).TotalSeconds,4:N1}s  {_audit}");
+            _serviceProvider.GetRequiredService<ILogger>().LogInformation($"│  {(DateTime.Now - _appStarted).TotalSeconds,4:N1}s  {_audit}");
 
-        var mainVM = (MainVM)MainWindow.DataContext;  // mainVM.DeploymntSrcExe = Settings.Default.DeplSrcExe; //todo: for future only.    
-        _ = await mainVM.InitAsync();                 // blocking due to vesrion checker.
+            var mainVM = (MainVM)MainWindow.DataContext;  // mainVM.DeploymntSrcExe = Settings.Default.DeplSrcExe; //todo: for future only.    
+            _ = await mainVM.InitAsync();                 // blocking due to vesrion checker.
+        }
+        catch (Exception ex) { ex.Pop(); } // Jun 2024: ?: this is the only place where we can catch the exceptions that are not caught by the UnhandledExceptionHndlr.
     }
     protected async override void OnExit(ExitEventArgs e)
     {
-        if (Current is not null) Current.DispatcherUnhandledException -= UnhandledExceptionHndlr.OnCurrentDispatcherUnhandledException;
+        if (Current is not null) Current.DispatcherUnhandledException -= UnhandledExceptionHndlrUI.OnCurrentDispatcherUnhandledException;
         _serviceProvider.GetRequiredService<QstatsRlsContext>().Dispose();
 
         if (DateTime.Now == DateTime.Today) LogAllLevels(_serviceProvider.GetRequiredService<ILogger>());

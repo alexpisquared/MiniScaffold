@@ -48,6 +48,6 @@ public partial class Page01VM : BaseEmVM
     [RelayCommand]
     void AddNewEmail()
     {
-        try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText().Trim()) ? "New Email" : Clipboard.GetText().Trim() }; Dbq.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        try { var newEml = new Email { AddedAt = DateTime.Now, Notes = string.IsNullOrEmpty(Clipboard.GetText().Trim()) ? "New Email" : Clipboard.GetText().Trim() }; Dbq.Emails.Local.Add(newEml); SelectdEmail = newEml; } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
 }

@@ -57,7 +57,7 @@ public partial class Page04VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 
             SelectdLead = nl;
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     [RelayCommand]

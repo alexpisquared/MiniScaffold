@@ -108,20 +108,20 @@ public partial class BaseEmVM : BaseDbVM
 
             _ = Dbq.Emails.Local.Remove(email!);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
     static bool CanDel(Email? email) => email is not null; // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 
     [RelayCommand]
     protected void Nxt()
     {
-        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click(); try { WriteLine(PageCvs?.MoveCurrentToNext()); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     [RelayCommand]
     void OLk()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     [RelayCommand]
@@ -145,7 +145,7 @@ public partial class BaseEmVM : BaseDbVM
             SelectdEmail.ModifiedAt = DateTime.Now;
             Nxt();
         }
-        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     [RelayCommand]
@@ -174,7 +174,7 @@ public partial class BaseEmVM : BaseDbVM
 
             PageCvs?.Refresh();
         }
-        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \n  {ex.Message}"; ex.Pop(Lgr); }
     }
 
     protected async Task<string> SetCountryFromWebServiceTaskAsync(Email email, IConfigurationRoot cfg)
@@ -208,7 +208,7 @@ public partial class BaseEmVM : BaseDbVM
 
             return "";
         }
-        catch (Exception ex) { ex.Pop(); return $"FAILED. \n  {ex.Message}"; }
+        catch (Exception ex) { ex.Pop(Lgr); return $"FAILED. \n  {ex.Message}"; }
     }
 
     async Task ReuseAsync(Email email, IConfigurationRoot cfg, string[] retries, bool cacheOnly)

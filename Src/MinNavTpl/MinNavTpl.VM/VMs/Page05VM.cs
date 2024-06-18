@@ -81,7 +81,7 @@ public partial class Page05VM : BaseDbVM
             GSReport += $"Parallel.ForEach took  {sw.Elapsed:mm\\:ss}\n";
             ChkDb4Cngs();
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = false; }
     }
 

@@ -25,7 +25,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += $"{r1}{r2}";
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
@@ -39,7 +39,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             var (success, rowsSavedCnt, report) = await Dbq.TrySaveReportAsync("OutlookToDb.cs");
             ReportOL += rv;
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
@@ -55,7 +55,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             ReportOL += rv;
             WriteLine(rv);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
@@ -71,7 +71,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             ReportOL += rv;
             WriteLine(rv);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
@@ -87,13 +87,13 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             ReportOL += rv;
             WriteLine(rv);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
     void UpdateOL()
     {
-        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        Bpr.Click(); try { _ = MessageBox.Show("■"); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
     }
     async Task DoReFaLaAsync()
     {
@@ -141,7 +141,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 Synth.SpeakFreeFAF(s);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { await Bpr.FinishAsync(); }
     }
 
@@ -204,7 +204,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                     else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
                     else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
                     else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
-                    else if (item is OL.MailItem itm8)    /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm8); newEmailsAdded = rv.addedCount; report = rv.report0; }
+                    else if (item is OL.MailItem itm8)        /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm8); newEmailsAdded = rv.addedCount; report = rv.report0; }
                     else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); }
                 }
 #if DEBUG
@@ -216,7 +216,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             _newEmailsAdded += newEmailsAdded;
             report += OutlookHelper6.ReportSectionTtl(folderName, cnt, newEmailsAdded);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
         finally { WriteLine(""); }
 
         return report;
@@ -287,7 +287,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 OutlookHelper6.MoveIt(trgFolder, ipmItem);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}."); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}.", Lgr); }
 
         return (addedCount, report0);
     }
@@ -356,7 +356,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 OutlookHelper6.MoveIt(trgFolder, ipmItem);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}."); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}.", Lgr); }
 
         return (addedCount, report0);
     }
@@ -438,13 +438,13 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                             Debugger.Break();
                         }
                     }
-                    catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+                    catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}.", Lgr); }
                 }
 
                 items = _oh.GetItemsFromFolder(folderName);
             } while (prev != items.Count);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
 
         _newEmailsAdded += newEmailsAdded;
         report += OutlookHelper6.ReportSectionTtl(folderName, ttl, newBansAdded, newEmailsAdded);
@@ -505,7 +505,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                                 }
                             }
 
-                            if (Now > mailItem.ReceivedTime.AddDays(10)) // bad place ... but!
+                            if (Now > mailItem.ReceivedTime.AddDays(10)) //todo: bad place ... but!
                             {
                                 ArgumentNullException.ThrowIfNull(rcvdDoneFolder, "rcvdDoneFolder is nul @@@@@@@@@@@@@@@-");
 
@@ -514,7 +514,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 #if DEBUG
                                 // //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
 #else
-                                / //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
+                                // //todo: check for: not-agent, skip-for-this-campaign, sent-already, etc.
 #endif
 
                                 var scs = await QStatusBroadcaster.SendLetter_UpdateDb(true, mailItem.SenderEmailAddress, fnm);
@@ -534,13 +534,13 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                             throw new Exception("AP: Review this case of missing row: must be something wrong.");
                         }
                     }
-                    catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}."); }
+                    catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"New  unfinished Aug 2019:{item.GetType().Name}.", Lgr); }
                 }
 
                 itemsTempAway = _oh.GetItemsFromFolder(folderName);
             } while (prev != itemsTempAway.Count);
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
 
         _newEmailsAdded += newEmailsAdded;
         report += OutlookHelper6.ReportSectionTtl(folderName, ttl, newBansAdded, newEmailsAdded);
@@ -644,7 +644,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 
                     WriteLine($"{rptLine}");
                 }
-                catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($":{senderEmail}."); }
+                catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($":{senderEmail}.", Lgr); }
 
                 if (ttlProcessed % 10 == 0)
                 {
@@ -654,7 +654,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 
             ReportOL += $"\n ... found / current / ttl:  {newEmailsAdded} / {++ttlProcessed:N0} / {ttl:N0} ... \n";
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
 
         _newEmailsAdded += newEmailsAdded;
         report___ += OutlookHelper6.ReportSectionTtl(folderName, ttlProcessed, 0, newEmailsAdded);
