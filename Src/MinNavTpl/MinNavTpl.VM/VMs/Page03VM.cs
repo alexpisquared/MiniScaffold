@@ -59,6 +59,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
         finally { IsBusy = !true; await Bpr.FinishAsync(); }
     }
     [RelayCommand]
+    // [Obsolete] :why Copilot decides to mark it such?
     async Task DoLaterAsync()
     {
         IsBusy = !false; await Bpr.ClickAsync(); await Task.Delay(222);
@@ -163,10 +164,10 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             if (!string.IsNullOrEmpty(newEmail[i]))
             {
                 var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
-                var em = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now);
+                var (email1, _) = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now);
                 if (!isAnyNew)
                 {
-                    isAnyNew = em.email1?.AddedAt == Now;
+                    isAnyNew = email1?.AddedAt == Now;
                 }
             }
         }
@@ -208,11 +209,11 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                     else if (item is OL.DistListItem itm1)    /**/ { ReportOL += $" ? DistList    {itm1.CreationTime:yyyy-MM-dd} {itm1.Subject} \t {OneLineAndTrunkate(itm1.Body)} \r\n"; }
                     else if (item is OL.DocumentItem itm2)    /**/ { ReportOL += $" ? Document    {itm2.CreationTime:yyyy-MM-dd} {itm2.Subject} \t {OneLineAndTrunkate(itm2.Body)} \r\n"; }
                     else if (item is OL.JournalItem itm3)     /**/ { ReportOL += $" ? Journal     {itm3.CreationTime:yyyy-MM-dd} {itm3.Subject} \t {OneLineAndTrunkate(itm3.Body)} \r\n"; }
-                    else if (item is OL.MeetingItem itm4)     /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm4); newEmailsAdded = rv.addedCount; report = rv.report0; }
+                    else if (item is OL.MeetingItem itm4)     /**/ { var (addedCount, report0) = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm4); newEmailsAdded = addedCount; report = report0; }
                     else if (item is OL.MobileItem itm5)      /**/ { ReportOL += $" ? Mobile      {itm5.CreationTime:yyyy-MM-dd} {itm5.Subject} \t {OneLineAndTrunkate(itm5.Body)} \r\n"; }
                     else if (item is OL.NoteItem itm6)        /**/ { ReportOL += $" ? Note        {itm6.CreationTime:yyyy-MM-dd} {itm6.Subject} \t {OneLineAndTrunkate(itm6.Body)} \r\n"; }
                     else if (item is OL.TaskItem itm7)        /**/ { ReportOL += $" ? Task        {itm7.CreationTime:yyyy-MM-dd} {itm7.Subject} \t {OneLineAndTrunkate(itm7.Body)} \r\n"; }
-                    else if (item is OL.MailItem itm8)        /**/ { var rv = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm8); newEmailsAdded = rv.addedCount; report = rv.report0; }
+                    else if (item is OL.MailItem itm8)        /**/ { var (addedCount, report0) = await DoOneAsync(folderName, ttl, newEmailsAdded, rcvdDoneFolder, sentDoneFolder, deletedsFolder, report, itm8); newEmailsAdded = addedCount; report = report0; }
                     else if (Debugger.IsAttached)             /**/ { WriteLine($"AP: not procesed OL_type: {item.GetType().Name}"); Debugger.Break(); }
                 }
 #if DEBUG
@@ -301,7 +302,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
     }
     async Task<(int addedCount, string report0)> DoOneAsync(string folderName, int ttl, int addedCount, OL.MAPIFolder? rcvdDoneFolder, OL.MAPIFolder? sentDoneFolder, OL.MAPIFolder? deletedsFolder, string report0, OL.MailItem ipmItem)
     {
-        string senderEmail = "unknown yet";
+        var senderEmail = "unknown yet";
         try
         {
             if (folderName is OuFolder.qRcvd or OuFolder.qJunkMail)
@@ -461,6 +462,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
         return report;
     }
 
+    // [Obsolete] :why Copilot decides to mark it such?
     async Task<string> OutlookFolderToDb_LaterAsync(string folderName)
     {
         var report = "";
