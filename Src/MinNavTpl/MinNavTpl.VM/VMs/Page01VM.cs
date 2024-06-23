@@ -30,13 +30,13 @@ public partial class Page01VM : BaseEmVM
             GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} good / {Dbq.Emails.Local.Count:N0} total / {sw.Elapsed.TotalSeconds:N1} sec \n";
             Lgr.Log(LogLevel.Trace, GSReport);
 
-            if (Clipboard.ContainsText() && Clipboard.GetText().Trim().Length < 32)
+            if (Clipboard.ContainsText() && Clipboard.GetText().Trim().Length < 16)
             {
                 SearchText = Clipboard.GetText().Trim();
             }
 
             _ = PageCvs?.MoveCurrentToFirst();
-            await GetTopDetailAsync(26);
+            await GetTopDetailAsync(52);
 
             await Bpr.FinishAsync(8);
             return await base.InitAsync();

@@ -25,11 +25,11 @@ public partial class Page02VM : BaseEmVM
                 await Dbq.Phones.LoadAsync();
 
                 var emailQuery = // DevOps.IsDbg ? Dbq.Emails.Where(r => IncludeClosed || r.Id.Contains("reply.l") || r.Id.Contains("reply.f") || r.Id.Contains("reply.f")).OrderBy(r => r.LastAction) :
-                    Dbq.Emails.Where(r => IncludeClosed || Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true).OrderBy(r => r.NotifyPriority);
+                    Dbq.Emails.Where(r => IncludeClosed || (r.PermBanReason == null && Dbq.VEmailIdAvailProds.Select(r => r.Id).Contains(r.Id) == true)).
+                    OrderBy(r => r.NotifyPriority);
                 await emailQuery.LoadAsync(); //tmi: Lgr.Log(LogLevel.Trace, emailQuery.ToQueryString());
 
-                PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection()); //tu: ?? instead of .LoadAsync() / .Local.ToObservableCollection() ?? === PageCvs = CollectionViewSource.GetDefaultView(await Dbq.VEmailAvailProds.ToListAsync());
-                                                                                                          //redundant: PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
+                PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection());                //redundant: PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
                 PageCvs.Filter = obj => obj is not Email r || r is null || string.IsNullOrEmpty(SearchText) ||
                   r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
                   r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
@@ -55,7 +55,7 @@ public partial class Page02VM : BaseEmVM
                 }
 
                 _ = PageCvs?.MoveCurrentToFirst();
-                await GetTopDetailAsync(26);
+                await GetTopDetailAsync(52);
 
                 await Bpr.FinishAsync(8);
                 return await base.InitAsync();

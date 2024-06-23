@@ -103,7 +103,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             var qRD = _oh.GetItemsFromFolder(OuFolder.qRcvdDone).Count;
             var ttl = _oh.GetItemsFromFolder(OuFolder.qRcvd).Count +
                       _oh.GetItemsFromFolder(OuFolder.qSent).Count +
-                      _oh.GetItemsFromFolder(OuFolder.qFail).Count + 
+                      _oh.GetItemsFromFolder(OuFolder.qFail).Count +
                       _oh.GetItemsFromFolder(OuFolder.qLate).Count;
             if (ttl == 0)
             {
@@ -125,15 +125,23 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                     await Synth.SpeakAsync($"Done. {_newEmailsAdded} new emails found.");
                 }
 
-                var rowsSaved = await Dbq.Database.ExecuteSqlRawAsync(@"
-                    UPDATE EMail SET NotifyPriority = 
-	                        1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
-	                        ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
-                    WHERE   EMail.PermBanReason is null 
-                            AND (Notes NOT LIKE '#TopPriority#%') 
-                            AND NotifyPriority <> 
-                            1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
-                            ISNULL ((SELECT                                    (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) ");
+#if LongContract
+                var rowsSaved = await Dbq.Database.ExecuteSqlRawAsync("""
+                     UPDATE EMail SET NotifyPriority = 
+                             1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+                                                                ISNULL ((SELECT (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
+                     WHERE   EMail.PermBanReason is null 
+                             AND (Notes NOT LIKE '#TopPriority#%') 
+                             AND NotifyPriority <> 
+                             1000 * ISNULL ((SELECT (DATEDIFF(day, MAX(EmailedAt), GETDATE())) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), (DATEDIFF(day, AddedAt, GETDATE()))) /
+                                                                ISNULL ((SELECT (COUNT(*) + 1) FROM EHist WHERE (RecivedOrSent = 'R') AND (EMailID = EMail.ID) GROUP BY EMailID), 1) 
+                    """);
+#else
+                var rowsSaved = await Dbq.Database.ExecuteSqlRawAsync("""
+                     UPDATE EMail SET                       NotifyPriority =  dbo.DateToYYMMDD((SELECT MAX(EmailedAt) FROM EHist WHERE (RecivedOrSent = 'S') AND (EMailID = EMail.ID) GROUP BY EMailID)) 
+                     WHERE  EMail.PermBanReason is null AND NotifyPriority <> dbo.DateToYYMMDD((SELECT MAX(EmailedAt) FROM EHist WHERE (RecivedOrSent = 'S') AND (EMailID = EMail.ID) GROUP BY EMailID)) 
+                    """);
+#endif
 
                 var s = $"Done!   {rowsSaved} agents updated with new priorities.";
                 ReportOL += s;
@@ -389,8 +397,8 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                     {
                         if (item is OL.ReportItem reportItem)
                         {
-//here breaks!
-                                var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
+                            //here breaks!
+                            var senderEmail = reportItem.PropertyAccessor.GetProperty($"http://schemas.microsoft.com/mapi/proptag/0x0E04001E") as string; // https://stackoverflow.com/questions/25253442/non-delivery-reports-and-vba-script-in-outlook-2010
                             var emr = await Dbq.Emails.FindAsync(senderEmail);
                             if (emr == null)
                             {
@@ -595,7 +603,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                         WriteLine($"   SentOn:{mailItem.SentOn:MM-dd HH:mm:ss}   Receiv:{mailItem.ReceivedTime - mailItem.SentOn:hh\\:mm\\:ss}   Creati:{(mailItem.CreationTime - mailItem.SentOn).TotalDays:N5}   LastMo:{(mailItem.LastModificationTime - mailItem.SentOn).TotalDays:N5}   Expiry:{(mailItem.ExpiryTime - mailItem.SentOn).TotalDays:N5}");
 
                         bool? isNew = await CheckDbInsertIfMissing_senderAsync(mailItem, senderEmail, msg);
-                        if (isNew== true) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
+                        if (isNew == true) { newEmailsAdded++; ReportOL += $" * {senderEmail}\r\n"; }
 
                         foreach (var emailFromBody in RegexHelper.FindEmails(mailItem.Body))
                         {
