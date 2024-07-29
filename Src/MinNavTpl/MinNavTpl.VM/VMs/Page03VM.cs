@@ -164,7 +164,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             if (!string.IsNullOrEmpty(newEmail[i]))
             {
                 var (first, last) = OutlookHelper6.FigureOutFLNameFromBody(body, newEmail[i]);
-                var (email1, _) = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now);
+                var (email1, _) = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, newEmail[i], first, last, /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now, false);
                 if (!isAnyNew)
                 {
                     isAnyNew = email1?.AddedAt == Now;
@@ -263,7 +263,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 {
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now);
+                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now, false);
                     isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
@@ -333,7 +333,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 {
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(recipient.Name, recipient.Address);
 
-                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, recipient.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now);
+                    var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, recipient.Address, first, last, /*$"..was a CC of {senderEmail} on {ipmItem.SentOn:y-MM-dd HH:mm}. "*/null, DateTime.Now, false);
                     isNew = email.email1?.AddedAt == Now;
                     if (isNew)
                     {
@@ -628,7 +628,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                         {
                             var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                            var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now);
+                            var email = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, re.Address, first, last, $"..CC  {mailItem.SentOn:yyyy-MM-dd}  {++cnt,2}/{mailItem.Recipients.Count,-2}  by {senderEmail}. ", DateTime.Now, false);
                             isNew = email.email1?.AddedAt == Now;
                             if (isNew == true)
                             {

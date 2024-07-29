@@ -31,6 +31,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinNavTpl.View", "MinNavTpl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinNavTpl", "MinNavTpl\MinNavTpl.csproj", "{591E4436-37DE-4832-9EAC-E11A3B62CBD1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhoneAreaCoder", "..\..\..\AAV.Shared\Src\NetLts\PhoneAreaCoder\PhoneAreaCoder.csproj", "{1514541B-5E56-44B5-AA91-25306ECAD757}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -209,6 +211,18 @@ Global
 		{591E4436-37DE-4832-9EAC-E11A3B62CBD1}.Release|x64.Build.0 = Release|x64
 		{591E4436-37DE-4832-9EAC-E11A3B62CBD1}.Release|x86.ActiveCfg = Release|Any CPU
 		{591E4436-37DE-4832-9EAC-E11A3B62CBD1}.Release|x86.Build.0 = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|x64.Build.0 = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Debug|x86.Build.0 = Debug|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|x64.ActiveCfg = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|x64.Build.0 = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|x86.ActiveCfg = Release|Any CPU
+		{1514541B-5E56-44B5-AA91-25306ECAD757}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
