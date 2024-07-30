@@ -4,20 +4,19 @@ using CliWrap;
 namespace MinNavTpl.VM.VMs;
 public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, ISpeechSynth synth) : BaseDbVM(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, 8110)
 {
-    readonly OutlookHelper6 _oh = new();
+    OutlookHelper6 _oh;
     int _newEmailsAdded = 0;
-
     CancellationTokenSource? _cts;
 
     public async override Task<bool> InitAsync()
     {
-        var outlookProcesses = Process.GetProcessesByName("OUTLOOK");
-        if (outlookProcesses.Length <= 0)
+        if (Process.GetProcessesByName("OUTLOOK").Length <= 0)
         {
             _cts = new();
             _ = await AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts);
         }
 
+        _oh = new();
         await DoReFaLaAsync();
 
         return await base.InitAsync();
