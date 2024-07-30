@@ -24,6 +24,7 @@ public partial class Page01VM : BaseEmVM
             PageCvs.Filter = obj => obj is not Email r || r is null ||
               ((string.IsNullOrEmpty(SearchText) ||
                 r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                r.Fname?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
                 r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true) &&
               (IncludeClosed == true || (string.IsNullOrEmpty(r.PermBanReason) && _badEmails is not null && !_badEmails.Contains(r.Id))));
 

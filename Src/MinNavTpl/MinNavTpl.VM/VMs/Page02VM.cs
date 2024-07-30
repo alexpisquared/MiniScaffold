@@ -32,6 +32,7 @@ public partial class Page02VM : BaseEmVM
                 PageCvs = CollectionViewSource.GetDefaultView(Dbq.Emails.Local.ToObservableCollection());                //redundant: PageCvs.SortDescriptions.Add(new SortDescription(nameof(Email.AddedAt), ListSortDirection.Descending));
                 PageCvs.Filter = obj => obj is not Email r || r is null || string.IsNullOrEmpty(SearchText) ||
                   r.Id.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
+                  r.Fname?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true ||
                   r.Notes?.Contains(SearchText, StringComparison.OrdinalIgnoreCase) == true;
 
                 GSReport += $"Emails: {PageCvs?.Cast<Email>().Count():N0} / {sw.Elapsed.TotalSeconds:N1} sec :loaded.\n";

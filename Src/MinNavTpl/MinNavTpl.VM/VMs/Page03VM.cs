@@ -13,7 +13,8 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
         if (Process.GetProcessesByName("OUTLOOK").Length <= 0)
         {
             _cts = new();
-            _ = await AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts);
+            _ = AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts).ConfigureAwait(false); //tu: unblocking the await!!!
+            await Task.Delay(2500); // give it 2.5 seconds to start.
         }
 
         _oh = new();
@@ -25,9 +26,11 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
     {
         if (_cts is not null)
         {
+            await Synth.SpeakAsync("Hang on: Outlook is running. Closing it.");
             await _cts.CancelAsync();
             _cts.Dispose();
             _cts = null;
+            Synth.SpeakFAF("The Outlook is closed now. Carry on.");
         }
 
         return await base.WrapAsync();
