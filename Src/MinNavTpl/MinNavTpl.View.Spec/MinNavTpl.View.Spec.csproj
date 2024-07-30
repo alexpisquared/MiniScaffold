@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\NavigationDrawerControl\NavigationDrawerControl.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\WpfUserControlLib\WpfUserControlLib.csproj" />

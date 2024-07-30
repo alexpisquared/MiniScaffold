@@ -335,20 +335,20 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 {
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                    var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
+                    var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem.Subject, ipmItem.Body, ipmItem.SentOn, ipmItem.ReceivedTime, $"..from Sent folder. ", "S");
                     if (isNew == true) { addedCount++; }
 
                     report0 += _oh.ReportLine(folderName, re.Address, isNew == true);
                 }
 
-                var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+                var trgFolder = (ipmItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
 
                 ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
 
                 OutlookHelper6.MoveIt(trgFolder, ipmItem);
             }
         }
-        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem?.SenderEmailAddress}.  Report: {report0}.", Lgr); }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop($"senderEmail: {ipmItem.SenderEmailAddress}.  Report: {report0}.", Lgr); }
 
         return (addedCount, report0);
     }
@@ -405,13 +405,13 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
                 {
                     var (first, last) = OutlookHelper6.FigureOutSenderFLName(re.Name, re.Address);
 
-                    var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem?.Subject, ipmItem?.Body, ipmItem?.SentOn, ipmItem?.ReceivedTime, $"..from Sent folder. ", "S");
+                    var isNew = await new OutlookToDbWindowHelpers(Lgr).CheckInsert_EMail_EHist_Async(Dbq, re.Address, first, last, ipmItem.Subject, ipmItem.Body, ipmItem.SentOn, ipmItem.ReceivedTime, $"..from Sent folder. ", "S");
                     if (isNew == true) { addedCount++; }
 
                     report0 += _oh.ReportLine(folderName, re.Address, isNew == true);
                 }
 
-                var trgFolder = (ipmItem?.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
+                var trgFolder = (ipmItem.Subject ?? "").StartsWith(QStatusBroadcaster.Asu) ? deletedsFolder : sentDoneFolder; // delete Avali-ty broadcasts.
 
                 ArgumentNullException.ThrowIfNull(trgFolder, "MyStore is nul @@@@@@@@@@@@@@@-");
 

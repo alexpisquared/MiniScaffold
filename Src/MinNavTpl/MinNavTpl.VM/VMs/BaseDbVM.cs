@@ -5,7 +5,7 @@ public partial class BaseDbVM : BaseMinVM
 {
     readonly ISecurityForcer _secForcer;
     bool _inited;
-    
+
     protected bool _saving, _loading;
     protected readonly DateTime Now = DateTime.Now;
     protected int _thisCampaignId;
@@ -164,7 +164,10 @@ public partial class BaseDbVM : BaseMinVM
     {
         _LetDbChgStore.Change(value);
     }
-    [ObservableProperty] bool isBusy__; partial void OnIsBusy__Changed(bool value)    {        _IsBusy__Store.Change(value);    }
+    [ObservableProperty] bool isBusy__; partial void OnIsBusy__Changed(bool value)
+    {
+        _IsBusy__Store.Change(value);
+    }
 
     ADUser? _ct; public ADUser? CurentUser
     {
@@ -243,6 +246,17 @@ public partial class BaseDbVM : BaseMinVM
     [RelayCommand]
     protected async Task Save2DBaseAsync()
     {
-        try { Bpr.Click(); IsBusy = _saving = true; _ = await SaveLogReportOrThrowAsync(Dbq); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); } finally { IsBusy = _saving = false; Bpr.Tick(); }
+        try
+        {
+            await Bpr.ClickAsync();
+            IsBusy = _saving = true;
+            _ = await SaveLogReportOrThrowAsync(Dbq);
+            await Bpr.TickAsync();
+        }
+        catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; IsBusy = false; ex.Pop(Lgr); }
+        finally
+        {
+            IsBusy = _saving = false;
+        }
     }
 }
