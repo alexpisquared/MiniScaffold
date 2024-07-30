@@ -1,12 +1,64 @@
-﻿namespace MinNavTpl.VM.VMs;
+﻿using System.Text;
+using CliWrap;
+
+namespace MinNavTpl.VM.VMs;
 public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, ISpeechSynth synth) : BaseDbVM(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, 8110)
 {
     readonly OutlookHelper6 _oh = new();
     int _newEmailsAdded = 0;
 
+    CancellationTokenSource? _cts;
+
     public async override Task<bool> InitAsync()
     {
-        await DoReFaLaAsync(); return await base.InitAsync();
+        var outlookProcesses = Process.GetProcessesByName("OUTLOOK");
+        if (outlookProcesses.Length <= 0)
+        {
+            _cts = new();
+            _ = await AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts);
+        }
+
+        await DoReFaLaAsync();
+
+        return await base.InitAsync();
+    }
+    public async override Task<bool> WrapAsync()
+    {
+        if (_cts is not null)
+        {
+            await _cts.CancelAsync();
+            _cts.Dispose();
+            _cts = null;
+        }
+
+        return await base.WrapAsync();
+    }
+
+    async Task<(bool success, string rv, string er, TimeSpan runTime)> RunAsync(string exe, string[] args, int timeoutSec = 8) // https://www.youtube.com/watch?v=Pt-0KM5SxmI&t=418s
+    {
+        StringBuilder sbOut = new(), sbErr = new();
+
+        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(timeoutSec));
+
+        try
+        {
+            var commandResult = await Cli.Wrap(exe) //tu: process.start alternative
+              .WithArguments(args)
+              //.WithValidation(CommandResultValidation.None) gives error .. could by since no path.
+              .WithStandardOutputPipe(PipeTarget.ToStringBuilder(sbOut))
+              .WithStandardErrorPipe(PipeTarget.ToStringBuilder(sbErr))
+              .ExecuteAsync(cts.Token);
+
+            return (true, sbOut.ToString().Trim('\n').Trim('\r'), sbErr.ToString(), commandResult.RunTime);
+        }
+        catch (OperationCanceledException ex)
+        {
+            return (false, "", ex.Message, TimeSpan.MinValue);
+        }
+        catch (Exception ex)
+        {
+            return (false, "", ex.Message, TimeSpan.MinValue);
+        }
     }
 
     [ObservableProperty] string reportOL = "";
