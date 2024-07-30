@@ -26,11 +26,11 @@ public partial class BaseDbVM : BaseMinVM
 
         letDbChg = UsrStgns.LetDbChg;
 
-        _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_ChngdAsync;
-        _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsync;
-        _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsync;
-        _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsync;
-        _IsBusy__Store = bzi; _IsBusy__Store.Changed += IsBusy__Store_ChngdAsync;
+        _SrvrNameStore = svr; _SrvrNameStore.Changed += SrvrNameStore_ChngdAsyncVoid;
+        _DtBsNameStore = dbs; _DtBsNameStore.Changed += DtBsNameStore_ChngdAsyncVoid;
+        _GSReportStore = gsr; _GSReportStore.Changed += GSReportStore_ChngdAsyncVoid;
+        _LetDbChgStore = awd; _LetDbChgStore.Changed += LetDbChgStore_ChngdAsyncVoid;
+        _IsBusy__Store = bzi; _IsBusy__Store.Changed += IsBusy__Store_ChngdAsyncVoid;
 
         _thisCampaignId = Dbq.Campaigns.Max(r => r.Id);
 
@@ -60,11 +60,11 @@ public partial class BaseDbVM : BaseMinVM
                 }
             }
 
-            _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsync;
-            _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
-            _GSReportStore.Changed -= GSReportStore_ChngdAsync;
-            _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
-            _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsync;
+            _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsyncVoid;
+            _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsyncVoid;
+            _GSReportStore.Changed -= GSReportStore_ChngdAsyncVoid;
+            _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsyncVoid;
+            _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsyncVoid;
 
             return true;
         }
@@ -76,11 +76,11 @@ public partial class BaseDbVM : BaseMinVM
     }
     public override void Dispose()
     {
-        _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsync;
-        _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsync;
-        _GSReportStore.Changed -= GSReportStore_ChngdAsync;
-        _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsync;
-        _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsync;
+        _SrvrNameStore.Changed -= SrvrNameStore_ChngdAsyncVoid;
+        _DtBsNameStore.Changed -= DtBsNameStore_ChngdAsyncVoid;
+        _GSReportStore.Changed -= GSReportStore_ChngdAsyncVoid;
+        _LetDbChgStore.Changed -= LetDbChgStore_ChngdAsyncVoid;
+        _IsBusy__Store.Changed -= IsBusy__Store_ChngdAsyncVoid;
 
         base.Dispose();
     }
@@ -127,23 +127,23 @@ public partial class BaseDbVM : BaseMinVM
     protected readonly SrvrNameStore _SrvrNameStore;
     protected readonly DtBsNameStore _DtBsNameStore;
     protected readonly GSReportStore _GSReportStore;
-    async void SrvrNameStore_ChngdAsync(string val)
+    async void SrvrNameStore_ChngdAsyncVoid(string val)
     {
-        try { if (SrvrName != val) SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsync({val})"); }
+        try { if (SrvrName != val) SrvrName = val; await RefreshReloadAsync(); } catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; Lgr.LogError(ex, $"SrvrNameStore_ChngdAsyncVoid({val})"); }
     }
-    async void DtBsNameStore_ChngdAsync(string val)
+    async void DtBsNameStore_ChngdAsyncVoid(string val)
     {
         if (DtBsName != val) DtBsName = val; await RefreshReloadAsync();
     }
-    async void GSReportStore_ChngdAsync(string val)
+    async void GSReportStore_ChngdAsyncVoid(string val)
     {
         GSReport = val; await RefreshReloadAsync();
     }
-    async void LetDbChgStore_ChngdAsync(bool value)
+    async void LetDbChgStore_ChngdAsyncVoid(bool value)
     {
         if (LetDbChg != value) LetDbChg = value; await RefreshReloadAsync();
     }
-    async void IsBusy__Store_ChngdAsync(bool value)
+    async void IsBusy__Store_ChngdAsyncVoid(bool value)
     {
         if (IsBusy__ != value) IsBusy__ = value; await RefreshReloadAsync();
     }
