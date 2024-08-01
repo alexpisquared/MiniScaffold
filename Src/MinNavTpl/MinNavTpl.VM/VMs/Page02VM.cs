@@ -42,8 +42,7 @@ public partial class Page02VM : BaseEmVM
                 {
                     await SendTopNAsync();
                 }
-
-                if (Clipboard.ContainsText())
+                else if (Clipboard.ContainsText())
                 {
                     if (RegexHelper.IsEmail(Clipboard.GetText().Trim()) && Clipboard.GetText().Trim().Length < 64)
                     {
@@ -84,16 +83,15 @@ public partial class Page02VM : BaseEmVM
         GSReport += $"\nSending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ...\n... See you in {(antiSpamSec + 5) * (DailyDose - 1) / 60.0:N0} minutes.\n";
         await Synth.SpeakFreeAsync($"Sending top {DailyDose} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * (DailyDose - 1) / 60.0:N0} minutes.", speakingRate1010: 4, volumePercent: 26);
 
-        var start = Stopwatch.GetTimestamp();
-        var i = 0;
+        var lettersSent = 0;
         foreach (Email email in PageCvs ?? throw new ArgumentNullException("ex21: main page list is still NUL"))
         {
-            if (++i > DailyDose) { break; }
+            if (++lettersSent > DailyDose) { break; }
 
-            await SendAndReportOneAsync(i, DailyDose, email);
+            await SendAndReportOneAsync(lettersSent, DailyDose, email);
         }
 
-        await FinishJobAsync(Stopwatch.GetElapsedTime(start), i - 1);
+        await RunOutlookToDbPageAsync();
     }
 
     [RelayCommand]
@@ -102,14 +100,13 @@ public partial class Page02VM : BaseEmVM
         GSReport += $"\nSending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ...\n... See you in {(antiSpamSec + 5) * (SelectedEmails.Count - 1) / 60.0:N0} minutes.\n";
         await Synth.SpeakFreeAsync($"Sending top {SelectedEmails.Count} emails; anti spam pause is {antiSpamSec} seconds ... See you in {(antiSpamSec + 5) * (SelectedEmails.Count - 1) / 60.0:N0} minutes.", speakingRate1010: 4, volumePercent: 26);
 
-        var start = Stopwatch.GetTimestamp();
-        var i = 0;
+        var lettersSent = 0;
         foreach (var email in SelectedEmails ?? throw new ArgumentNullException("ex32: selected emails collection is still NUL"))
         {
-            await SendAndReportOneAsync(++i, SelectedEmails.Count, email);
+            await SendAndReportOneAsync(++lettersSent, SelectedEmails.Count, email);
         }
 
-        await FinishJobAsync(Stopwatch.GetElapsedTime(start), i);
+        await RunOutlookToDbPageAsync();
     }
 
     async Task SendAndReportOneAsync(int i, int j, Email email)
@@ -122,9 +119,8 @@ public partial class Page02VM : BaseEmVM
 
         await SendThisOneAsync(email.Id, email.Fname, i);
     }
-    async Task FinishJobAsync(TimeSpan totalTime, int i)
+    async Task RunOutlookToDbPageAsync()
     {
-        Lgr.Log(LogLevel.Information, $"│  {totalTime,9:m\\:ss\\.fff}  /  {(i - 1)}  =  {(i <= 1 ? TimeSpan.Zero : totalTime / (i - 1)):m\\:ss\\.fff} sec/email");
         await Bpr.FinishAsync(8);
         var prev = GSReport;
         await Synth.SpeakAsync($"Broadcast is done. Running Outlook-to-DB now (to avoid double sending!) ...", volumePercent: 3);
