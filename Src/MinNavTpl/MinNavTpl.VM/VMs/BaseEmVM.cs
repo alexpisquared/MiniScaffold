@@ -1,5 +1,4 @@
 ﻿namespace MinNavTpl.VM.VMs;
-
 public partial class BaseEmVM : BaseDbVM
 {
     bool _limitReached;
@@ -55,9 +54,7 @@ public partial class BaseEmVM : BaseDbVM
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
-        await Bpr.StartAsync(8);
-        await SendThisOneAsync(ThisEmail, ThisFName, 1);
-        await Bpr.FinishAsync(8);
+        await Bpr.StartAsync(8); await SendThisOneAsync(ThisEmail, ThisFName, 1); await Bpr.FinishAsync(8);
     }
     protected async Task SendThisOneAsync(string email, string? rawName, int count)
     {
@@ -93,6 +90,26 @@ public partial class BaseEmVM : BaseDbVM
         catch (Exception ex) { GSReport += $"FAILED  {ex.Message} \n"; ex.Pop(Lgr); }
     }
     bool CanSendThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
+
+    [RelayCommand(CanExecute = nameof(CanSaveThis))]
+    async Task SaveThisAsync()
+    {
+        await Bpr.StartAsync(8); await SaveThisOneAsync(ThisEmail, ThisFName, 1); await Bpr.FinishAsync(8);
+    }
+    protected async Task SaveThisOneAsync(string email, string? rawName, int count)
+    {
+        try
+        {
+            var fName = string.IsNullOrEmpty(rawName)
+                ? (FirstLastNameParser.ExtractFirstNameFromEmail(email) ?? ExtractFirstNameFromEmailUsingDb(email) ?? "Sirs")
+                : FirstLastNameParser.ToTitleCase(rawName);
+
+            var (email1, isNew) = await new OutlookToDbWindowHelpers(Lgr).CheckInsertEMailAsync(Dbq, email, fName, "", /*$"..from body (sender: {originalSenderEmail}). "*/null, DateTime.Now, false);
+            GSReport += $"{fName,-15}\t{email,-47}   {(isNew == false ? "already exists" : isNew == true ? "saved" : "failed to save somehow?...")}\n";
+        }
+        catch (Exception ex) { GSReport += $"FAILED  {ex.Message} \n"; ex.Pop(Lgr); }
+    }
+    bool CanSaveThis() => !(string.IsNullOrWhiteSpace(ThisEmail) && string.IsNullOrWhiteSpace(ThisFName));
 
     [RelayCommand(CanExecute = nameof(CanDel))]
     async Task DelAsync(Email? email)

@@ -119,7 +119,8 @@
       <Label   Content="_Mail to" Target="{Binding ElementName=tbMail}" />
       <TextBox Text="{Binding ThisEmail, FallbackValue='pigida@gmail.com', UpdateSourceTrigger=PropertyChanged}" Width="320" Margin="5" FontSize="16" ToolTip=""       x:Name="tbMail"  Foreground="#fcf" />
       <TextBox Text="{Binding ThisFName, FallbackValue='Sirs'}"             Width="110" Margin="5" FontSize="16" ToolTip="Fist name"               Foreground="#fcf" />
-      <Button Content="Send" Command="{Binding SendThisCommand}"                        Margin="5 5 90 5"        ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" />
+      <Button Content="Send" Command="{Binding SendThisCommand}"                        Margin="5 5  5 5"        ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" />
+      <Button Content="Save" Command="{Binding SaveThisCommand}"                        Margin="5 5 90 5"        ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#07f" />
 
       <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
       <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />

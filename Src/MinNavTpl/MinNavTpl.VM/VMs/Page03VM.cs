@@ -14,7 +14,8 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
         {
             _cts = new();
             _ = AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts).ConfigureAwait(false); //tu: unblocking the await!!!
-            await Task.Delay(2500); // give it 2.5 seconds to start.
+            await Synth.SpeakAsync("Hang on: Outlook is needed for letter sorting but it is not running. Launching it.");
+            await Task.Delay(5000); // give it 5 seconds to start.
         }
 
         _oh = new();
