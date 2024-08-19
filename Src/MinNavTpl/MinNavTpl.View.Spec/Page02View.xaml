@@ -116,11 +116,11 @@
     </DataGrid>
 
     <StackPanel Orientation="Horizontal" Grid.Row="3" HorizontalAlignment="Center" Margin="2" >
-      <Label   Content="_Mail to" Target="{Binding ElementName=tbMail}" />
-      <TextBox Text="{Binding ThisEmail, FallbackValue='pigida@gmail.com', UpdateSourceTrigger=PropertyChanged}" Width="320" Margin="5" FontSize="16" ToolTip=""       x:Name="tbMail"  Foreground="#fcf" />
-      <TextBox Text="{Binding ThisFName, FallbackValue='Sirs'}"             Width="110" Margin="5" FontSize="16" ToolTip="Fist name"               Foreground="#fcf" />
-      <Button Content="Send" Command="{Binding SendThisCommand}"                        Margin="5 5  5 5"        ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#d7f" />
-      <Button Content="Save" Command="{Binding SaveThisCommand}"                        Margin="5 5 90 5"        ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" Foreground="#07f" />
+      <Label   Content="_Mail to" Target="{Binding ElementName=tbMail}" ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" />
+      <TextBox Text="{Binding ThisEmail, FallbackValue='pigida@gmail.com', UpdateSourceTrigger=PropertyChanged}" Width="260" Margin="5" FontSize="16" x:Name="tbMail"  Foreground="#fcf" ToolTip="Copy  'Email FirstName'  to Clipboard and reload to see it here" />
+      <TextBox Text="{Binding ThisFName, FallbackValue='Sirs'}"  Margin="5" Width="110" FontSize="16" ToolTip="Fist name"               Foreground="#fcf" />
+      <Button Content="Send" Command="{Binding SendThisCommand}" Margin="5"                           ToolTip="Send and add to DB"      Foreground="#d7f" />
+      <Button Content="Add"  Command="{Binding SaveThisCommand}" Margin="5 5 90 5"                    ToolTip="Add email to DB sans sending"  Foreground="#07f" />
 
       <Button Content="!-_Agent" Command="{Binding DataContext.PBRCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Set PBR to 'Not an Agent'" />
       <Button Content="DNN Avl"  Command="{Binding DataContext.DNNCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}, Mode=FindAncestor}}" Width="78" ToolTip="Do Not Notify - Available for this Camp-n" />
