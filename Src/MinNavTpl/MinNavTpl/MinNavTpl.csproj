@@ -17,8 +17,8 @@
 
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.12.0" />
-    <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.38.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
+    <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.40.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -28,7 +28,7 @@
     <!--   ^^ needed here!!!
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />       seems OK without
     -->
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.62.0" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.63.0" />
     <PackageReference Include="System.Formats.Asn1" Version="8.0.1" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
     <PackageReference Include="System.Text.Json" Version="8.0.4" />

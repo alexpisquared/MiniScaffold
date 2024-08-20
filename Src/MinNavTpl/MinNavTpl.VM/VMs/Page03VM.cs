@@ -10,6 +10,20 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 
     public async override Task<bool> InitAsync()
     {
+        await CheckStartOutlookAsync().ConfigureAwait(false);   // must be before _oh = new(); 
+        _oh = new();                                            // must be after CheckStartOutlookAsync (creates Outlook in use tray icon)
+
+        await DoReFaLaAsync();
+
+        return await base.InitAsync();
+    }
+    public async override Task<bool> WrapAsync()
+    {
+        return await base.WrapAsync(); ;
+    }
+
+    private async Task CheckStartOutlookAsync()
+    {
         if (Process.GetProcessesByName("OUTLOOK").Length <= 0)
         {
             _cts = new();
@@ -17,24 +31,16 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             await Synth.SpeakAsync("Hang on: Outlook is needed for letter sorting but it is not running. Launching it.");
             await Task.Delay(5000); // give it 5 seconds to start.
         }
-
-        _oh = new();
-        await DoReFaLaAsync();
-
-        return await base.InitAsync();
     }
-    public async override Task<bool> WrapAsync()
+    private async Task CheckCloseOutlookAsync()
     {
         if (_cts is not null)
         {
-            await Synth.SpeakAsync("Hang on: Outlook is running. Closing it.");
             await _cts.CancelAsync();
-            _cts.Dispose();
+            _cts?.Dispose();
             _cts = null;
-            Synth.SpeakFAF("The Outlook is closed now. Carry on.");
+            await Synth.SpeakAsync("Hang on: closing the Outlook.");
         }
-
-        return await base.WrapAsync();
     }
 
     async Task<(bool success, string rv, string er, TimeSpan runTime)> RunAsync(string exe, string[] args, int timeoutSec = 8) // https://www.youtube.com/watch?v=Pt-0KM5SxmI&t=418s
@@ -206,7 +212,11 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
             }
         }
         catch (Exception ex) { GSReport += $"FAILED. \r\n  {ex.Message}"; ex.Pop(Lgr); }
-        finally { await Bpr.FinishAsync(); }
+        finally
+        {
+            await Bpr.FinishAsync();
+            await CheckCloseOutlookAsync();
+        }
     }
 
     async Task<TupleSubst> FindInsertEmailsFromBodyAsync(string body, string originalSenderEmail)
@@ -274,7 +284,7 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 #if DEBUG
             } while (false);
 #else
-      } while ((items = _oh.GetItemsFromFolder(folderName, "IPM.Note")).Count > 0); //not sure why, but it keeps skipping/missing items when  Move to OL folder, thus, this logic.
+            } while ((items = _oh.GetItemsFromFolder(folderName, "IPM.Note")).Count > 0); //not sure why, but it keeps skipping/missing items when  Move to OL folder, thus, this logic.
 #endif
 
             _newEmailsAdded += newEmailsAdded;
