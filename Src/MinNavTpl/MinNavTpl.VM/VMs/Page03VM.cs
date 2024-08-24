@@ -1,7 +1,4 @@
-﻿using System.Text;
-using CliWrap;
-
-namespace MinNavTpl.VM.VMs;
+﻿namespace MinNavTpl.VM.VMs;
 public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISecurityForcer sec, QstatsRlsContext dbq, IAddChild win, UserSettings stg, SrvrNameStore svr, DtBsNameStore dbs, GSReportStore gsr, LetDbChgStore awd, IsBusy__Store bzi, ISpeechSynth synth) : BaseDbVM(lgr, cfg, bpr, sec, dbq, win, svr, dbs, gsr, awd, bzi, stg, synth, 8110)
 {
     OutlookHelper6 _oh;
@@ -17,30 +14,25 @@ public partial class Page03VM(ILogger lgr, IConfigurationRoot cfg, IBpr bpr, ISe
 
         return await base.InitAsync();
     }
-    public async override Task<bool> WrapAsync()
-    {
-        return await base.WrapAsync(); ;
-    }
+    public async override Task<bool> WrapAsync() => await base.WrapAsync();
 
     private async Task CheckStartOutlookAsync()
     {
-        if (Process.GetProcessesByName("OUTLOOK").Length <= 0)
-        {
-            _cts = new();
-            _ = AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts).ConfigureAwait(false); //tu: unblocking the await!!!
-            await Synth.SpeakAsync("Hang on: Outlook is needed for letter sorting but it is not running. Launching it.");
-            await Task.Delay(5000); // give it 5 seconds to start.
-        }
+        if (Process.GetProcessesByName("OUTLOOK").Length > 0) return;
+
+        _cts = new();
+        _ = AltProcessRunner.RunAsync(@"C:\Program Files\Microsoft Office\root\Office16\OUTLOOK.EXE", _cts).ConfigureAwait(false); //tu: unblocking the await!!!
+        await Synth.SpeakAsync("Hang on: Launching Outlook needed for letter sorting since it is not running.");
+        await Task.Delay(5000); // give it 5 seconds to start.
     }
     private async Task CheckCloseOutlookAsync()
     {
-        if (_cts is not null)
-        {
-            await _cts.CancelAsync();
-            _cts?.Dispose();
-            _cts = null;
-            await Synth.SpeakAsync("Hang on: closing the Outlook.");
-        }
+        if (_cts is null) return;
+
+        await _cts.CancelAsync();
+        _cts?.Dispose();
+        _cts = null;
+        await Synth.SpeakAsync("Hang on: closing the Outlook.");
     }
 
     async Task<(bool success, string rv, string er, TimeSpan runTime)> RunAsync(string exe, string[] args, int timeoutSec = 8) // https://www.youtube.com/watch?v=Pt-0KM5SxmI&t=418s

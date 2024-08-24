@@ -50,3 +50,6 @@ global using static System.Diagnostics.Trace;
 global using Application = System.Windows.Application;
 //obal using System.Text.Json; //tu: new and very performant Json lib (Dec 2021)
 global using OL = Microsoft.Office.Interop.Outlook;
+global using System.Text;
+global using CliWrap;
+
