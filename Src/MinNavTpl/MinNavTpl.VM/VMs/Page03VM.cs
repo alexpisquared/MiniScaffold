@@ -1124,7 +1124,7 @@ active
    at WpfUserControlLib.Services.GuiCapture.StoreActiveWindowScreenshotToFile(String shortNote, Boolean isNew) in C:\g\AAV.Shared\Src\NetLts\WpfUserControlLib\Services\GuiCapture.cs:line 21
 
 06-18 11:51:22.145 inf └──Page03VM         eo-wrap  
-06-18 11:51:22.173 inf └── 0.5h  v24.06.18.1120  Rls  RAZER1.RAZER1\alexp  .net:8.0.5  wai:WpfUseCtrLib.Secrets  fus:Yes  fac:  .\sqlexpress·QStatsRls·True·False·36000  SafeAudit  arg:[] 
+06-18 11:51:22.173 inf └── 0.5h  v24.06.18.1120  Rls  RAZER1.RAZER1\alexp  .net:9.0.0  wai:WpfUseCtrLib.Secrets  fus:Yes  fac:  .\sqlexpress·QStatsRls·True·False·36000  SafeAudit  arg:[] 
 ██  
 
 
