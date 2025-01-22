@@ -6,12 +6,15 @@ public partial class NavBarVM : BaseMinVM
     readonly GSReportStore _GSReportStore;
     readonly LetDbChgStore __letDbChStore;
 
-    public NavBarVM(SrvrNameStore SrvrNameStore, DtBsNameStore DtBsNameStore, GSReportStore gsr, LetDbChgStore letDStore, Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, Page05NavSvc Page05NavSvc, Page06NavSvc Page06NavSvc, Page07NavSvc Page07NavSvc, EmailDetailNavSvc emlDtlNavSvc, UserSettings usrStgns)
+    public NavBarVM(
+        SrvrNameStore SrvrNameStore, DtBsNameStore DtBsNameStore, GSReportStore GSReportStore, LetDbChgStore LetDbChgStore, 
+        Page00NavSvc page00NavSvc, Page01NavSvc page01NavSvc, Page02NavSvc page02NavSvc, Page03NavSvc page03NavSvc, Page04NavSvc page04NavSvc, Page05NavSvc Page05NavSvc, Page06NavSvc Page06NavSvc, Page07NavSvc Page07NavSvc, EmailDetailNavSvc emlDtlNavSvc, 
+        UserSettings usrStgns)
     {
         _SrvrNameStore = SrvrNameStore;
         _DtBsNameStore = DtBsNameStore;
-        _GSReportStore = gsr;
-        __letDbChStore = letDStore;
+        _GSReportStore = GSReportStore;
+        __letDbChStore = LetDbChgStore;
 
         _SrvrNameStore.Changed += SrvrNameStore_Chngd;
         _DtBsNameStore.Changed += DtBsNameStore_Chngd;
