@@ -84,7 +84,7 @@ public partial class BaseEmVM : BaseDbVM
             else
             {
                 GSReport += $"\t ■ ■ ■ {report1} \n";
-                await Synth.SpeakAsync(report1, volumePercent: 100);
+                if (!VersionHelper.IsDbg) await Synth.SpeakAsync(report1, volumePercent: 100);
             }
         }
         catch (Exception ex) { GSReport += $"FAILED  {ex.Message} \n"; ex.Pop(Lgr); }
