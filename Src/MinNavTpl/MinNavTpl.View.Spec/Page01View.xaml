@@ -66,6 +66,8 @@
           <Run Text="     Slctd:" FontWeight="Light" /><Run Text="{Binding SelectdEmail.Id}" FontWeight="Medium" />
           <Run Text="     Crrnt:" FontWeight="Light" /><Run Text="{Binding CurrentEmail.Id}" FontWeight="Medium" />
         </TextBlock>
+
+        <Button Content="Send" Command="{Binding SendEmailPocCommand}" ToolTip="Send POC to pigida@gmail.com" Margin="20 0" Foreground="#ff0" />
       </StackPanel>
 
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->

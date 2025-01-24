@@ -63,6 +63,8 @@
 
         <TextBlock><Run Text="     Count:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding PageCvs.Count, Mode=OneWay}" FontWeight="Medium" /></TextBlock>
         <TextBlock><Run Text="     Slctd:" FontWeight="Light" /><Run Text=" "/><Run Text="{Binding SelectdPhone.Id}" FontWeight="Medium" /></TextBlock>
+
+        <Button Content="Send" Command="{Binding SendEmailPocCommand}" ToolTip="Send POC to pigida@gmail.com" Margin="20 0" Foreground="#ff0" />
       </StackPanel>
 
       <!--<TextBlock  Grid.Column="3" FontSize="16" Text="{Binding GSReport}" HorizontalAlignment="Center" TextWrapping="Wrap" d:Text="GSReport" Foreground="#1af"  />-->

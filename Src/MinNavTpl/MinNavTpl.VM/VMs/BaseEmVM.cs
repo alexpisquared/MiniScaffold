@@ -51,6 +51,8 @@ public partial class BaseEmVM : BaseDbVM
         PageCvs?.Refresh(); //prevents from using up/down arrows to navigate thru the list.
     } // https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/observableproperty
 
+    [RelayCommand] async Task SendEmailPocAsync() => await SendThisOneAsync("pigida@gmail.com", "Oleksa", 1);
+
     [RelayCommand(CanExecute = nameof(CanSendThis))]
     async Task SendThisAsync()
     {
@@ -122,6 +124,7 @@ public partial class BaseEmVM : BaseDbVM
             //GSReport += $" {rowsAffected}  rows deleted for \n {email.Id} ";
 
             foreach (var ehist in Dbq.Ehists.Where(r => r.EmailId == email.Id)) { _ = Dbq.Ehists.Remove(ehist); } // no .Local. to save on preloading the whole table into memory.
+
             foreach (var phnxr in Dbq.PhoneEmailXrefs.Local.Where(r => r.EmailId == email.Id)) { _ = Dbq.PhoneEmailXrefs.Local.Remove(phnxr); }
 
             _ = Dbq.Emails.Local.Remove(email!);
@@ -159,6 +162,7 @@ public partial class BaseEmVM : BaseDbVM
         try
         {
             if (SelectdEmail is null) { return; }
+
             SelectdEmail.PermBanReason = $" Not an Agent - {DateTime.Today:yyyy-MM-dd}. ";
             SelectdEmail.ModifiedAt = DateTime.Now;
             Nxt();
@@ -201,7 +205,7 @@ public partial class BaseEmVM : BaseDbVM
 
         if (_limitReached)
         {
-            if ((string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country))/* && email.Country != GenderApiConst.LimitReachedOld*/)
+            if (string.IsNullOrEmpty(email.Country) || GenderApiConst.Retries.Contains(email.Country)/* && email.Country != GenderApiConst.LimitReachedOld*/)
             {
                 await ReuseAsync(email, cfg, GenderApiConst.Retries, true);
             }
