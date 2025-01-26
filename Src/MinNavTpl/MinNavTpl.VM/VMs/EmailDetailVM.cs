@@ -35,7 +35,9 @@ public partial class EmailDetailVM : BaseDbVM
             //await Dbq.Ehists.Where(r => r.EmailId == EmailOfI).LoadAsync();
             Dbq.Emails.Where(r => r.Id == EmailOfI).Load();
             if (Dbq.Ehists.Any(r => r.EmailId == EmailOfI))
-                try { Dbq.Ehists.Where(r => r.EmailId == EmailOfI).Load(); }
+                try { Dbq.Ehists.Where(r => r.EmailId == EmailOfI)
+                        .Select(r => new { r.Id, r.EmailId, r.RecivedOrSent, r.SentOn, r.EmailedAt, LetterSubject = r.LetterSubject ?? string.Empty, r.LetterBody, r.Notes, r.AddedAt })
+                        .Load(); }
                 catch (Exception ex)
                 {
                     var sql = Dbq.Ehists.Where(r => r.EmailId == EmailOfI).ToQueryString(); // SELECT[e].[ID], [e].[AddedAt], [e].[EMailID], [e].[EmailedAt], [e].[LetterBody], [e].[LetterSubject], [e].[Notes], [e].[RecivedOrSent], [e].[SentOn] FROM[EHist] AS[e] WHERE[e].[EMailID] = 'jill.mellish@robertson.ca'
