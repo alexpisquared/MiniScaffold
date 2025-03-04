@@ -1,6 +1,12 @@
 ﻿using Emailing.NET6;
 using Microsoft.Extensions.Logging;
 
+// Define ANSI color escape sequences
+const string RESET = "\u001b[0m";
+const string GREEN = "\u001b[32m";
+const string RED = "\u001b[31m";
+const string CYAN = "\u001b[36m";
+
 Console.WriteLine("Hello...");
 var emailAddress = "pigida@hotmail.com";
 
@@ -13,16 +19,16 @@ var d = new Emailer2025(logger);
 if (DateTime.Now == DateTime.Today) _ = await d.Send(emailAddress, $"Subject: Test", $"Body");
 
 var (success, report) = await d.ListInboxItemsMatchingEmailAddress(emailAddress);
-Console.WriteLine($"{(success ? "Success:" : "FAILED!")}   {report}    {emailAddress}");
+Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}    {emailAddress}");
 
 do
 {
-    Console.WriteLine("Waiting for new email...");
+    Console.WriteLine($"{CYAN}Waiting for new email...{RESET}");
 
-    (success, report) = await d.StandByForNewEmailAndPlayWavFileWhenEmailArrives(@"C:\Windows\Media\Windows Notify Email.wav");
-    Console.WriteLine($"{(success ? "Success:" : "FAILED!")}   {report}");
+    (success, report) = await d.StandByForNewEmailAndPlayWavFileWhenEmailArrives();
+    Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}");
 
-    Console.WriteLine("Press any key to wait again or Escape to exit");
+    Console.WriteLine($"{CYAN}Press any key to wait again or Escape to exit{RESET}");
 } while (Console.ReadKey().Key != ConsoleKey.Escape);
 
-Console.WriteLine("Done!");
+Console.WriteLine($"{GREEN}Done!{RESET}");
