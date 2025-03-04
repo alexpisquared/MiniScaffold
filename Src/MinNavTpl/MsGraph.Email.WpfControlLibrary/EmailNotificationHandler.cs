@@ -19,7 +19,6 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
     private readonly GraphServiceClient _graphClient;
-    private readonly string _notificationUrl;
     private readonly Dispatcher _dispatcher;
     private CancellationTokenSource? _monitoringCts;
     private string _status = "Ready";
@@ -28,13 +27,11 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
     private string? _currentSubscriptionId;
     private Timer? _subscriptionRenewalTimer;
 
-    public EmailNotificationHandler(ILogger logger, IConfiguration configuration, GraphServiceClient graphClient,
-        string notificationUrl = "https://yourapp.com/api/notifications") // Replace with your actual notification URL
+    public EmailNotificationHandler(ILogger logger, IConfiguration configuration, GraphServiceClient graphClient)
     {
         _logger = logger;
         _configuration = configuration;
         _graphClient = graphClient;
-        _notificationUrl = notificationUrl;
         _dispatcher = System.Windows.Application.Current?.Dispatcher ?? Dispatcher.CurrentDispatcher;
     }
 
@@ -71,31 +68,19 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
     {
         try
         {
-            Status = "Creating subscription...";
-
-            var subscription = new Subscription
-            {
-                ChangeType = "created",
-                NotificationUrl = _notificationUrl,
-                Resource = "me/mailFolders('inbox')/messages",
-                ExpirationDateTime = DateTime.UtcNow.AddMinutes(15), // Subscriptions can be renewed
-                ClientState = _configuration["secretClientValue"]
-            };
-
-            var createdSubscription = await _graphClient.Subscriptions.PostAsync(subscription);
-            CurrentSubscriptionId = createdSubscription?.Id;
-
-            // Set up automatic renewal timer (5 minutes before expiration)
-            SetupSubscriptionRenewal(createdSubscription?.Id);
-
-            Status = $"Subscription created successfully.";
-            return (true, $"Subscription created. Id: {createdSubscription?.Id}");
+            Status = "Starting polling-based monitoring...";
+            
+            // Since we're using a WPF application, we'll use polling instead of webhooks
+            // Start monitoring with default parameters
+            var result = await StartMonitoringAsync();
+            
+            return result;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error creating subscription");
+            _logger.LogError(ex, "Error starting email monitoring");
             Status = $"Error: {ex.Message}";
-            return (false, $"Error creating subscription: {ex.Message}");
+            return (false, $"Error starting email monitoring: {ex.Message}");
         }
     }
 
