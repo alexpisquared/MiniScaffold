@@ -7,13 +7,13 @@ namespace MsGraph.Email;
 public class Emailer2025
 {
     const string appReg = "EmailAssistantAnyAndPersonal2_2024";
-    readonly ILogger _lgr;
+    readonly ILogger _logger;
     readonly IConfiguration _configuration;
     readonly GraphServiceClient _graphClient;
 
     public Emailer2025(ILogger lgr)
     {
-        _lgr = lgr;
+        _logger = lgr;
         _configuration = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build();
 
         var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
@@ -62,13 +62,13 @@ public class Emailer2025
 
             await _graphClient.Me.SendMail.PostAsync(new Microsoft.Graph.Me.SendMail.SendMailPostRequestBody { Message = message, SaveToSentItems = true });
 
-            _lgr.LogInformation($"sent to:  {emailAddress,-49} Subj: {msgSubject} \t (took {sw.Elapsed:m\\:ss\\.f})");
+            _logger.LogInformation($"sent to:  {emailAddress,-49} Subj: {msgSubject} \t (took {sw.Elapsed:m\\:ss\\.f})");
 
             return (true, "Success sending email.");
         }
         catch (Exception ex)
         {
-            _lgr.LogError(ex, emailAddress);
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, emailAddress);
             return (false, $"{ex.Message}\n{emailAddress}");
         }
     }
@@ -121,13 +121,13 @@ public class Emailer2025
                 _ = sb.AppendLine();
             }
 
-            _lgr.LogInformation($"Found {matchingMessages.Count()} emails matching {emailAddress} (took {sw.Elapsed:m\\:ss\\.f})");
+            _logger.LogInformation($"Found {matchingMessages.Count()} emails matching {emailAddress} (took {sw.Elapsed:m\\:ss\\.f})");
 
             return (true, sb.ToString());
         }
         catch (Exception ex)
         {
-            _lgr.LogError(ex, emailAddress);
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, emailAddress);
             return (false, $"Error searching inbox: {ex.Message}");
         }
     }
@@ -150,7 +150,7 @@ public class Emailer2025
             var lastCheckTime = DateTimeOffset.Now;
             var emailsFound = 0;
 
-            _lgr.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
+            _logger.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
 
             while (!localCancellationToken.IsCancellationRequested)
             {
@@ -186,7 +186,7 @@ public class Emailer2025
                             foreach (var msg in matchingMessages)
                             {
                                 var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
-                                _lgr.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
+                                _logger.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
                             }
 
                             for (var i = 0; i < 33; i++)
@@ -206,17 +206,17 @@ public class Emailer2025
                 }
                 catch (TaskCanceledException)
                 {
-                    _lgr.LogInformation($"Normal cancellation, just exit the loop.");
+                    _logger.LogInformation($"Normal cancellation, just exit the loop.");
                     break;
                 }
                 catch (Exception ex)
                 {
-                    _lgr.LogError(ex, $"Error while polling for new emails: {ex.Message}");
+                    Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
                     await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
                 }
             }
 
-            _lgr.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
+            _logger.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
             return (true, $"Email monitoring completed. Found {emailsFound} matching emails during {sw.Elapsed.TotalMinutes:F1} minutes of monitoring.");
         }
         catch (TaskCanceledException)
@@ -225,7 +225,7 @@ public class Emailer2025
         }
         catch (Exception ex)
         {
-            _lgr.LogError(ex, ex.Message);
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, ex.Message);
             return (false, $"Error monitoring emails: {ex.Message}");
         }
         finally

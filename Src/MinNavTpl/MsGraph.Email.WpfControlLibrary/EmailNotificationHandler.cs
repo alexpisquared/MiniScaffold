@@ -16,16 +16,16 @@ namespace MsGraph.Email;
 
 public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 {
-    private readonly ILogger _logger;
-    private readonly IConfiguration _configuration;
-    private readonly GraphServiceClient _graphClient;
-    private readonly Dispatcher _dispatcher;
-    private CancellationTokenSource? _monitoringCts;
-    private string _status = "Ready";
-    private bool _isMonitoring;
-    private ObservableCollection<EmailMessage> _recentEmails = new();
-    private string? _currentSubscriptionId;
-    private Timer? _subscriptionRenewalTimer;
+    readonly ILogger _logger;
+    readonly IConfiguration _configuration;
+    readonly GraphServiceClient _graphClient;
+    readonly Dispatcher _dispatcher;
+    CancellationTokenSource? _monitoringCts;
+    string _status = "Ready";
+    bool _isMonitoring;
+    ObservableCollection<EmailMessage> _recentEmails = new();
+    string? _currentSubscriptionId;
+    Timer? _subscriptionRenewalTimer;
 
     public EmailNotificationHandler(ILogger logger, IConfiguration configuration, GraphServiceClient graphClient)
     {
@@ -42,43 +42,36 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 
     public string Status
     {
-        get => _status;
-        set => SetProperty(ref _status, value);
+        get => _status; private set => SetProperty(ref _status, value);
     }
-
     public bool IsMonitoring
     {
-        get => _isMonitoring;
-        private set => SetProperty(ref _isMonitoring, value);
+        get => _isMonitoring; private set => SetProperty(ref _isMonitoring, value);
     }
-
     public ObservableCollection<EmailMessage> RecentEmails
     {
-        get => _recentEmails;
-        private set => SetProperty(ref _recentEmails, value);
+        get => _recentEmails; private set => SetProperty(ref _recentEmails, value);
     }
-
     public string? CurrentSubscriptionId
     {
-        get => _currentSubscriptionId;
-        private set => SetProperty(ref _currentSubscriptionId, value);
+        get => _currentSubscriptionId; private set => SetProperty(ref _currentSubscriptionId, value);
     }
-
+    
     public async Task<(bool success, string report)> CreateSubscriptionAsync()
     {
         try
         {
             Status = "Starting polling-based monitoring...";
-            
+
             // Since we're using a WPF application, we'll use polling instead of webhooks
             // Start monitoring with default parameters
             var result = await StartMonitoringAsync();
-            
+
             return result;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error starting email monitoring");
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error starting email monitoring");
             Status = $"Error: {ex.Message}";
             return (false, $"Error starting email monitoring: {ex.Message}");
         }
@@ -102,7 +95,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error renewing subscription");
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error renewing subscription");
             Status = $"Error: {ex.Message}";
             return (false, $"Error renewing subscription: {ex.Message}");
         }
@@ -182,7 +175,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Error while polling for emails");
+                        Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error while polling for emails");
                         _dispatcher.Invoke(() => Status = $"Error while polling: {ex.Message}");
                         await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 60)), _monitoringCts.Token);
                     }
@@ -195,7 +188,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         {
             IsMonitoring = false;
             Status = $"Error: {ex.Message}";
-            _logger.LogError(ex, "Error starting email monitoring");
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error starting email monitoring");
             return (false, $"Error starting email monitoring: {ex.Message}");
         }
     }
@@ -214,7 +207,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error stopping email monitoring");
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error stopping email monitoring");
             Status = $"Error: {ex.Message}";
             return (false, $"Error stopping email monitoring: {ex.Message}");
         }
@@ -262,7 +255,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"Error processing notification message ID: {notification.ResourceData.Id}");
+                        Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, $"Error processing notification message ID: {notification.ResourceData.Id}");
                     }
                 }
             }
@@ -271,12 +264,12 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error handling notifications");
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error handling notifications");
             return (false, $"Error handling notifications: {ex.Message}");
         }
     }
 
-    private void SetupSubscriptionRenewal(string? subscriptionId)
+    void SetupSubscriptionRenewal(string? subscriptionId)
     {
         if (string.IsNullOrEmpty(subscriptionId))
             return;
@@ -312,6 +305,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
     }
 }
 
+// MOQ recreation for now:
 public class NotificationCollection
 {
     public IEnumerable<Notification> Value
