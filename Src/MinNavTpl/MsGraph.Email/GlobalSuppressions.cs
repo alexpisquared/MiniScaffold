@@ -6,3 +6,4 @@
 using System.Diagnostics.CodeAnalysis;
 
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:Emailing.NET6.Emailer2025.StandByForNewEmailAndPlayWavFileWhenEmailArrives(System.String,System.Int32,System.String,System.Nullable{System.Threading.CancellationToken})~System.Threading.Tasks.Task{System.ValueTuple{System.Boolean,System.String}}")]
+[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:MsGraph.Email.Emailer2025.StandByForNewEmailAndPlayWavFileWhenEmailArrives(System.String,System.Int32,System.String,System.Nullable{System.Threading.CancellationToken})~System.Threading.Tasks.Task{System.ValueTuple{System.Boolean,System.String}}")]

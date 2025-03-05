@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
 using Microsoft.Graph.Models;
-namespace Emailing.NET6;
+namespace MsGraph.Email;
 public class Emailer2025
 {
     const string appReg = "EmailAssistantAnyAndPersonal2_2024";
@@ -95,11 +95,11 @@ public class Emailer2025
             var matchingMessages = messagesResponse.Value
                 .Where(msg =>
                     // Check sender
-                    (msg.From?.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true) ||
+                    msg.From?.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true ||
                     // Check recipients
-                    (msg.ToRecipients?.Any(r => r.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true) == true) ||
+                    msg.ToRecipients?.Any(r => r.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true) == true ||
                     // Check CC recipients
-                    (msg.CcRecipients?.Any(r => r.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true) == true)
+                    msg.CcRecipients?.Any(r => r.EmailAddress?.Address?.Contains(emailAddress, StringComparison.OrdinalIgnoreCase) == true) == true
                 )
                 .ToList();
 
@@ -108,17 +108,17 @@ public class Emailer2025
 
             // Build report string with matching messages
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"Found {matchingMessages.Count()} messages matching email address: {emailAddress}");
-            sb.AppendLine();
+            _ = sb.AppendLine($"Found {matchingMessages.Count()} messages matching email address: {emailAddress}");
+            _ = sb.AppendLine();
 
             foreach (var msg in matchingMessages)
             {
                 var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
-                sb.AppendLine($"Date: {receivedDate:yyyy-MM-dd HH:mm}");
-                sb.AppendLine($"From: {msg.From?.EmailAddress?.Name} <{msg.From?.EmailAddress?.Address}>");
-                sb.AppendLine($"Subject: {msg.Subject}");
-                sb.AppendLine($"Preview: {msg.BodyPreview?.Substring(0, Math.Min(msg.BodyPreview.Length, 100))}...");
-                sb.AppendLine();
+                _ = sb.AppendLine($"  Date     {receivedDate:yyyy-MM-dd HH:mm}");
+                _ = sb.AppendLine($"  From     {msg.From?.EmailAddress?.Name} <{msg.From?.EmailAddress?.Address}>");
+                _ = sb.AppendLine($"  Subject  {msg.Subject}");
+                _ = sb.AppendLine($"  Preview  {msg.BodyPreview?[..Math.Min(msg.BodyPreview.Length, 100)]}...");
+                _ = sb.AppendLine();
             }
 
             _lgr.LogInformation($"Found {matchingMessages.Count()} emails matching {emailAddress} (took {sw.Elapsed:m\\:ss\\.f})");
@@ -132,16 +132,19 @@ public class Emailer2025
         }
     }
 
-    public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 8, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
+    public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 150, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
     {
         var sw = Stopwatch.StartNew();
-        var soundPlayer = wavFilePath != null && File.Exists(wavFilePath)
+        var soundPlayer1 = wavFilePath != null && File.Exists(wavFilePath)
             ? new System.Media.SoundPlayer(wavFilePath)
             : new System.Media.SoundPlayer(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", "notify.wav"));
 
+        var soundPlayer2 = new System.Media.SoundPlayer(@"C:\Windows\Media\Alarm01.wav");
+
         try
         {
-            soundPlayer.LoadAsync(); // Preload the sound file
+            soundPlayer1.LoadAsync();
+            soundPlayer2.LoadAsync();
 
             var localCancellationToken = cancellationToken ?? CancellationToken.None;
             var lastCheckTime = DateTimeOffset.Now;
@@ -171,15 +174,13 @@ public class Emailer2025
                         var matchingMessages = messagesResponse.Value
                             .Where(msg =>
                                 string.IsNullOrEmpty(emailFilter) ||
-                                (msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true) ||
-                                (msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true)
+                                msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
+                                msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
                             )
                             .ToList();
 
                         if (matchingMessages.Count > 0)
                         {
-                            // Play sound notification
-                            soundPlayer.Play();
                             emailsFound += matchingMessages.Count;
 
                             foreach (var msg in matchingMessages)
@@ -187,16 +188,25 @@ public class Emailer2025
                                 var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
                                 _lgr.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
                             }
+
+                            for (var i = 0; i < 33; i++)
+                            {
+                                for (var j = 0; j < 3; j++)
+                                {
+                                    soundPlayer1.PlaySync();
+                                    soundPlayer2.PlaySync();
+                                }
+                                await Task.Delay(TimeSpan.FromSeconds(15), localCancellationToken);
+                            }
                         }
                     }
 
                     // Wait for the next polling interval
                     await Task.Delay(TimeSpan.FromSeconds(pollingIntervalSeconds), localCancellationToken);
-                     soundPlayer.Play();
                 }
                 catch (TaskCanceledException)
                 {
-                    // Normal cancellation, just exit the loop
+                    _lgr.LogInformation($"Normal cancellation, just exit the loop.");
                     break;
                 }
                 catch (Exception ex)
@@ -220,7 +230,7 @@ public class Emailer2025
         }
         finally
         {
-            soundPlayer.Dispose();
+            soundPlayer1.Dispose();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Emailing.NET6;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using MsGraph.Email;
 
 // Define ANSI color escape sequences
 const string RESET = "\u001b[0m";
@@ -19,7 +19,7 @@ var d = new Emailer2025(logger);
 if (DateTime.Now == DateTime.Today) _ = await d.Send(emailAddress, $"Subject: Test", $"Body");
 
 var (success, report) = await d.ListInboxItemsMatchingEmailAddress(emailAddress);
-Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}    {emailAddress}");
+Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}    {emailAddress}\n");
 
 do
 {
