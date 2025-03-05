@@ -1,10 +1,6 @@
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -12,7 +8,7 @@ using Microsoft.Graph;
 //using Microsoft.Graph.Beta.Models;
 using Microsoft.Graph.Models;
 
-namespace MsGraph.Email;
+namespace MsGraph.Email.WpfControlLibrary;
 
 public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 {
@@ -21,10 +17,6 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
     readonly GraphServiceClient _graphClient;
     readonly Dispatcher _dispatcher;
     CancellationTokenSource? _monitoringCts;
-    string _status = "Ready";
-    bool _isMonitoring;
-    ObservableCollection<EmailMessage> _recentEmails = new();
-    string? _currentSubscriptionId;
     Timer? _subscriptionRenewalTimer;
 
     public EmailNotificationHandler(ILogger logger, IConfiguration configuration, GraphServiceClient graphClient)
@@ -42,21 +34,21 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 
     public string Status
     {
-        get => _status; private set => SetProperty(ref _status, value);
-    }
+        get; private set => SetProperty(ref field, value);
+    } = "Ready";
     public bool IsMonitoring
     {
-        get => _isMonitoring; private set => SetProperty(ref _isMonitoring, value);
+        get; private set => SetProperty(ref field, value);
     }
     public ObservableCollection<EmailMessage> RecentEmails
     {
-        get => _recentEmails; private set => SetProperty(ref _recentEmails, value);
-    }
+        get; private set => SetProperty(ref field, value);
+    } = [];
     public string? CurrentSubscriptionId
     {
-        get => _currentSubscriptionId; private set => SetProperty(ref _currentSubscriptionId, value);
+        get; private set => SetProperty(ref field, value);
     }
-    
+
     public async Task<(bool success, string report)> CreateSubscriptionAsync()
     {
         try
@@ -136,8 +128,8 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
                             var matchingMessages = string.IsNullOrEmpty(emailFilter)
                                 ? messagesResponse.Value
                                 : messagesResponse.Value.Where(msg =>
-                                    (msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true) ||
-                                    (msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true)
+                                    msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
+                                    msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
                                 ).ToList();
 
                             if (matchingMessages.Any())
@@ -176,7 +168,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
                     catch (Exception ex)
                     {
                         Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, "Error while polling for emails");
-                        _dispatcher.Invoke(() => Status = $"Error while polling: {ex.Message}");
+                        _ = _dispatcher.Invoke(() => Status = $"Error while polling: {ex.Message}");
                         await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 60)), _monitoringCts.Token);
                     }
                 }
@@ -193,7 +185,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         }
     }
 
-    public async Task<(bool success, string report)> StopMonitoringAsync()
+    public (bool success, string report) StopMonitoring()
     {
         if (!IsMonitoring || _monitoringCts == null)
             return (true, "Not currently monitoring.");
@@ -280,7 +272,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
         // Create renewal timer - renew every 10 minutes
         _subscriptionRenewalTimer = new Timer(async _ =>
         {
-            await RenewSubscriptionAsync(subscriptionId);
+            _ = await RenewSubscriptionAsync(subscriptionId);
         }, null, TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(10));
     }
 
@@ -291,7 +283,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 
         field = value;
 
-        _dispatcher.InvokeAsync(() =>
+        _ = _dispatcher.InvokeAsync(() =>
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }, DispatcherPriority.DataBind);
@@ -308,7 +300,7 @@ public class EmailNotificationHandler : INotifyPropertyChanged, IDisposable
 // MOQ recreation for now:
 public class NotificationCollection
 {
-    public IEnumerable<Notification> Value
+    public IEnumerable<Notification>? Value
     {
         get;
         internal set;
@@ -317,7 +309,7 @@ public class NotificationCollection
 
 public class Notification
 {
-    public ResourceData ResourceData
+    public ResourceData? ResourceData
     {
         get;
         internal set;
@@ -326,7 +318,7 @@ public class Notification
 
 public class ResourceData : Dictionary<string, object>
 {
-    public string Id
+    public string? Id
     {
         get;
         internal set;
