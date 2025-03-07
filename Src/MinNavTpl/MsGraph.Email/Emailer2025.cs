@@ -132,105 +132,119 @@ public class Emailer2025
         }
     }
 
-    public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 150, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
+  public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 60, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
+  {
+    var sw = Stopwatch.StartNew();
+    var soundPlayer1 = wavFilePath != null && File.Exists(wavFilePath)
+        ? new System.Media.SoundPlayer(wavFilePath)
+        : new System.Media.SoundPlayer(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", "notify.wav"));
+
+    var soundPlayer2 = new System.Media.SoundPlayer(@"C:\Windows\Media\Alarm01.wav");
+
+    try
     {
-        var sw = Stopwatch.StartNew();
-        var soundPlayer1 = wavFilePath != null && File.Exists(wavFilePath)
-            ? new System.Media.SoundPlayer(wavFilePath)
-            : new System.Media.SoundPlayer(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", "notify.wav"));
+      soundPlayer1.LoadAsync();
+      soundPlayer2.LoadAsync();
 
-        var soundPlayer2 = new System.Media.SoundPlayer(@"C:\Windows\Media\Alarm01.wav");
+      var localCancellationToken = cancellationToken ?? CancellationToken.None;
+      var lastCheckTime = DateTimeOffset.Now;
+      var emailsFound = 0;
 
+      _logger.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
+
+      while (!localCancellationToken.IsCancellationRequested)
+      {
         try
         {
-            soundPlayer1.LoadAsync();
-            soundPlayer2.LoadAsync();
+          // For long-running operations, we need to ensure we have a fresh GraphClient with valid token
+          // Re-create the GraphClient before each request
+          var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("MicrosoftGraphClientId is missing in configuration");
+          var refreshedGraphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient;
 
-            var localCancellationToken = cancellationToken ?? CancellationToken.None;
-            var lastCheckTime = DateTimeOffset.Now;
-            var emailsFound = 0;
+          // Get messages from the inbox folder that arrived after our last check
+          var messagesResponse = await refreshedGraphClient.Me.MailFolders["inbox"].Messages.GetAsync(requestConfiguration =>
+          {
+            requestConfiguration.QueryParameters.Top = 25; // Limit results
+            requestConfiguration.QueryParameters.Select = ["subject", "receivedDateTime", "from", "id"];
+            requestConfiguration.QueryParameters.Filter = $"receivedDateTime gt {lastCheckTime.UtcDateTime:yyyy-MM-ddTHH:mm:ssZ}";
+            //requestConfiguration.QueryParameters.OrderBy = ["receivedDateTime desc"];
+          });
 
-            _logger.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
+          if (messagesResponse?.Value != null && messagesResponse.Value.Count > 0)
+          {
+            // Update last check time to now
+            lastCheckTime = DateTimeOffset.Now;
 
-            while (!localCancellationToken.IsCancellationRequested)
+            // Filter for matching emails
+            var matchingMessages = messagesResponse.Value
+                .Where(msg =>
+                    string.IsNullOrEmpty(emailFilter) ||
+                    msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
+                    msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
+                )
+                .ToList();
+
+            if (matchingMessages.Count > 0)
             {
-                try
-                {
-                    // Get messages from the inbox folder that arrived after our last check
-                    var messagesResponse = await _graphClient.Me.MailFolders["inbox"].Messages.GetAsync(requestConfiguration =>
-                    {
-                        requestConfiguration.QueryParameters.Top = 25; // Limit results
-                        requestConfiguration.QueryParameters.Select = ["subject", "receivedDateTime", "from", "id"];
-                        requestConfiguration.QueryParameters.Filter = $"receivedDateTime gt {lastCheckTime.UtcDateTime:yyyy-MM-ddTHH:mm:ssZ}";
-                        //requestConfiguration.QueryParameters.OrderBy = ["receivedDateTime desc"];
-                    });
+              emailsFound += matchingMessages.Count;
 
-                    if (messagesResponse?.Value != null && messagesResponse.Value.Count > 0)
-                    {
-                        // Update last check time to now
-                        lastCheckTime = DateTimeOffset.Now;
+              foreach (var msg in matchingMessages)
+              {
+                var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
+                _logger.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
+              }
 
-                        // Filter for matching emails
-                        var matchingMessages = messagesResponse.Value
-                            .Where(msg =>
-                                string.IsNullOrEmpty(emailFilter) ||
-                                msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
-                                msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
-                            )
-                            .ToList();
-
-                        if (matchingMessages.Count > 0)
-                        {
-                            emailsFound += matchingMessages.Count;
-
-                            foreach (var msg in matchingMessages)
-                            {
-                                var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
-                                _logger.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
-                            }
-
-                            for (var i = 0; i < 33; i++)
-                            {
-                                for (var j = 0; j < 3; j++)
-                                {
-                                    soundPlayer1.PlaySync();
-                                    soundPlayer2.PlaySync();
-                                }
-                                await Task.Delay(TimeSpan.FromSeconds(15), localCancellationToken);
-                            }
-                        }
-                    }
-
-                    // Wait for the next polling interval
-                    await Task.Delay(TimeSpan.FromSeconds(pollingIntervalSeconds), localCancellationToken);
-                }
-                catch (TaskCanceledException)
-                {
-                    _logger.LogInformation($"Normal cancellation, just exit the loop.");
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
-                    await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
-                }
+              await PlayNotificationSounds(soundPlayer1, soundPlayer2, localCancellationToken);
             }
+          }
 
-            _logger.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
-            return (true, $"Email monitoring completed. Found {emailsFound} matching emails during {sw.Elapsed.TotalMinutes:F1} minutes of monitoring.");
+          // Wait for the next polling interval
+          await Task.Delay(TimeSpan.FromSeconds(pollingIntervalSeconds), localCancellationToken);
         }
         catch (TaskCanceledException)
         {
-            return (true, $"Email monitoring was cancelled after {sw.Elapsed.TotalMinutes:F1} minutes.");
+          _logger.LogInformation($"Normal cancellation, just exit the loop.");
+          break;
         }
         catch (Exception ex)
         {
-            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, ex.Message);
-            return (false, $"Error monitoring emails: {ex.Message}");
+          Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
+          await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
         }
-        finally
+
+        Console.WriteLine($"\u001b[33m  {DateTime.Now:HH:mm:ss} \u001b[0m");
+
+      } // while (!localCancellationToken.IsCancellationRequested)
+
+      _logger.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
+      return (true, $"Email monitoring completed. Found {emailsFound} matching emails during {sw.Elapsed.TotalMinutes:F1} minutes of monitoring.");
+    }
+    catch (TaskCanceledException)
+    {
+      return (true, $"Email monitoring was cancelled after {sw.Elapsed.TotalMinutes:F1} minutes.");
+    }
+    catch (Exception ex)
+    {
+      Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, ex.Message);
+      return (false, $"Error monitoring emails: {ex.Message}");
+    }
+    finally
+    {
+      soundPlayer1.Dispose();
+    }
+  }
+
+    static async Task PlayNotificationSounds(System.Media.SoundPlayer soundPlayer1, System.Media.SoundPlayer soundPlayer2, CancellationToken localCancellationToken)
+    {
+        for (var i = 0; i < 33; i++)
         {
-            soundPlayer1.Dispose();
+            for (var j = 0; j < 3; j++)
+            {
+                soundPlayer1.PlaySync();
+                soundPlayer2.PlaySync();
+            }
+
+            await Task.Delay(TimeSpan.FromSeconds(15), localCancellationToken);
         }
     }
 }
