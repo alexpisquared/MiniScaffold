@@ -9,7 +9,7 @@ public class Emailer2025
     const string appReg = "EmailAssistantAnyAndPersonal2_2024";
     readonly ILogger _logger;
     readonly IConfiguration _configuration;
-    readonly GraphServiceClient _graphClient;
+    GraphServiceClient _graphClient;
 
     public Emailer2025(ILogger lgr)
     {
@@ -132,107 +132,101 @@ public class Emailer2025
         }
     }
 
-  public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 60, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
-  {
-    var sw = Stopwatch.StartNew();
-    var soundPlayer1 = wavFilePath != null && File.Exists(wavFilePath)
-        ? new System.Media.SoundPlayer(wavFilePath)
-        : new System.Media.SoundPlayer(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", "notify.wav"));
-
-    var soundPlayer2 = new System.Media.SoundPlayer(@"C:\Windows\Media\Alarm01.wav");
-
-    try
+    public async Task<(bool success, string report)> StandByForNewEmailAndPlayWavFileWhenEmailArrives(string? emailFilter = null, int pollingIntervalSeconds = 60, string? wavFilePath = @"C:\C\x\Gaming\TypeCatch\Assets\wav\Bad - Police.wav" /*"C:\Windows\Media\Windows Notify Email.wav"*/, CancellationToken? cancellationToken = null)
     {
-      soundPlayer1.LoadAsync();
-      soundPlayer2.LoadAsync();
+        var sw = Stopwatch.StartNew();
+        var soundPlayer1 = wavFilePath != null && File.Exists(wavFilePath)
+            ? new System.Media.SoundPlayer(wavFilePath)
+            : new System.Media.SoundPlayer(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "Media", "notify.wav"));
 
-      var localCancellationToken = cancellationToken ?? CancellationToken.None;
-      var lastCheckTime = DateTimeOffset.Now;
-      var emailsFound = 0;
+        var soundPlayer2 = new System.Media.SoundPlayer(@"C:\Windows\Media\Alarm01.wav");
 
-      _logger.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
-
-      while (!localCancellationToken.IsCancellationRequested)
-      {
         try
         {
-          // For long-running operations, we need to ensure we have a fresh GraphClient with valid token
-          // Re-create the GraphClient before each request
-          var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("MicrosoftGraphClientId is missing in configuration");
-          var refreshedGraphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient;
+            soundPlayer1.LoadAsync();
+            soundPlayer2.LoadAsync();
 
-          // Get messages from the inbox folder that arrived after our last check
-          var messagesResponse = await refreshedGraphClient.Me.MailFolders["inbox"].Messages.GetAsync(requestConfiguration =>
-          {
-            requestConfiguration.QueryParameters.Top = 25; // Limit results
-            requestConfiguration.QueryParameters.Select = ["subject", "receivedDateTime", "from", "id"];
-            requestConfiguration.QueryParameters.Filter = $"receivedDateTime gt {lastCheckTime.UtcDateTime:yyyy-MM-ddTHH:mm:ssZ}";
-            //requestConfiguration.QueryParameters.OrderBy = ["receivedDateTime desc"];
-          });
+            var localCancellationToken = cancellationToken ?? CancellationToken.None;
+            var lastCheckTime = DateTimeOffset.Now;
+            var emailsFound = 0;
 
-          if (messagesResponse?.Value != null && messagesResponse.Value.Count > 0)
-          {
-            // Update last check time to now
-            lastCheckTime = DateTimeOffset.Now;
+            _logger.LogInformation($"Starting to monitor inbox for emails matching '{emailFilter}'. Checking every {pollingIntervalSeconds} seconds...");
 
-            // Filter for matching emails
-            var matchingMessages = messagesResponse.Value
-                .Where(msg =>
-                    string.IsNullOrEmpty(emailFilter) ||
-                    msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
-                    msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
-                )
-                .ToList();
-
-            if (matchingMessages.Count > 0)
+            while (!localCancellationToken.IsCancellationRequested)
             {
-              emailsFound += matchingMessages.Count;
+                try
+                {
+                    // Get messages from the inbox folder that arrived after our last check
+                    var messagesResponse = await _graphClient.Me.MailFolders["inbox"].Messages.GetAsync(requestConfiguration =>
+                    {
+                        requestConfiguration.QueryParameters.Top = 25; // Limit results
+                        requestConfiguration.QueryParameters.Select = ["subject", "receivedDateTime", "from", "id"];
+                        requestConfiguration.QueryParameters.Filter = $"receivedDateTime gt {lastCheckTime.UtcDateTime:yyyy-MM-ddTHH:mm:ssZ}";
+                        //requestConfiguration.QueryParameters.OrderBy = ["receivedDateTime desc"];
+                    });
 
-              foreach (var msg in matchingMessages)
-              {
-                var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
-                _logger.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
-              }
+                    if (messagesResponse?.Value != null && messagesResponse.Value.Count > 0)
+                    {
+                        // Update last check time to now
+                        lastCheckTime = DateTimeOffset.Now;
 
-              await PlayNotificationSounds(soundPlayer1, soundPlayer2, localCancellationToken);
-            }
-          }
+                        // Filter for matching emails
+                        var matchingMessages = messagesResponse.Value
+                            .Where(msg =>
+                                string.IsNullOrEmpty(emailFilter) ||
+                                msg.From?.EmailAddress?.Address?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true ||
+                                msg.Subject?.Contains(emailFilter, StringComparison.OrdinalIgnoreCase) == true
+                            )
+                            .ToList();
 
-          // Wait for the next polling interval
-          await Task.Delay(TimeSpan.FromSeconds(pollingIntervalSeconds), localCancellationToken);
+                        if (matchingMessages.Count > 0)
+                        {
+                            emailsFound += matchingMessages.Count;
+
+                            foreach (var msg in matchingMessages)
+                            {
+                                var receivedDate = DateTime.Parse(msg.ReceivedDateTime?.ToString() ?? DateTime.Now.ToString());
+                                _logger.LogInformation($"New email received at {receivedDate:yyyy-MM-dd HH:mm}: {msg.Subject} from {msg.From?.EmailAddress?.Address}");
+                            }
+
+                            await PlayNotificationSounds(soundPlayer1, soundPlayer2, localCancellationToken);
+                        }
+                    }
+
+                    Console.WriteLine($"\u001b[38;2;250;180;250m{DateTime.Now:HH:mm:ss}\u001b[38;2;180;200;200m **\u001b[38;2;250;100;100m Wait \u001b[38;2;100;200;100m for \u001b[38;2;100;100;200m the next polling interval...\u001b[0m");
+                    await Task.Delay(TimeSpan.FromSeconds(pollingIntervalSeconds), localCancellationToken);
+                }
+                catch (TaskCanceledException)
+                {
+                    _logger.LogInformation($"Normal cancellation, just exit the loop.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000);
+                    _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
+                    await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
+                    _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(_configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("MicrosoftGraphClientId is missing in configuration")).DriveClient;
+                }
+            } // while (!localCancellationToken.IsCancellationRequested)
+
+            _logger.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
+            return (true, $"Email monitoring completed. Found {emailsFound} matching emails during {sw.Elapsed.TotalMinutes:F1} minutes of monitoring.");
         }
         catch (TaskCanceledException)
         {
-          _logger.LogInformation($"Normal cancellation, just exit the loop.");
-          break;
+            return (true, $"Email monitoring was cancelled after {sw.Elapsed.TotalMinutes:F1} minutes.");
         }
         catch (Exception ex)
         {
-          Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
-          await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
+            Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, ex.Message);
+            return (false, $"Error monitoring emails: {ex.Message}");
         }
-
-        Console.WriteLine($"\u001b[33m  {DateTime.Now:HH:mm:ss} \u001b[0m");
-
-      } // while (!localCancellationToken.IsCancellationRequested)
-
-      _logger.LogInformation($"Email monitoring stopped after {sw.Elapsed.TotalMinutes:F1} minutes. Found {emailsFound} matching emails.");
-      return (true, $"Email monitoring completed. Found {emailsFound} matching emails during {sw.Elapsed.TotalMinutes:F1} minutes of monitoring.");
+        finally
+        {
+            soundPlayer1.Dispose();
+        }
     }
-    catch (TaskCanceledException)
-    {
-      return (true, $"Email monitoring was cancelled after {sw.Elapsed.TotalMinutes:F1} minutes.");
-    }
-    catch (Exception ex)
-    {
-      Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000); _logger.LogError(ex, ex.Message);
-      return (false, $"Error monitoring emails: {ex.Message}");
-    }
-    finally
-    {
-      soundPlayer1.Dispose();
-    }
-  }
 
     static async Task PlayNotificationSounds(System.Media.SoundPlayer soundPlayer1, System.Media.SoundPlayer soundPlayer2, CancellationToken localCancellationToken)
     {
