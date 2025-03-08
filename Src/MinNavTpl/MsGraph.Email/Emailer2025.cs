@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
@@ -16,7 +16,7 @@ public class Emailer2025
         _logger = lgr;
         _configuration = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build();
 
-        var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("��MicrosoftGraphClientId is missing in configuration");
+        var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
 
         _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient;       //new GraphServiceClient(new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions { TenantId = "consumers", ClientId = clientId, RedirectUri = new Uri("http://localhost") }), ["Mail.Send", "Mail.Send.Shared", "User.Read"]); // Important: Use "consumers" for personal accounts //tu: this one keeps being INTERACTIVE!!! ASKS FOR LOGIN EVERY TIME!!! even on OLD GOOD ONE: EmailAssistantAnyAndPersonal2.
     }
@@ -201,12 +201,16 @@ public class Emailer2025
                     _logger.LogInformation($"Normal cancellation, just exit the loop.");
                     break;
                 }
+                catch (Microsoft.Graph.Models.ODataErrors.ODataError ex)
+                {
+                    _logger.LogWarning(ex, $"Error while polling for new emails: {ex.Error?.Message} ■ ■");
+                    _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(_configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("MicrosoftGraphClientId is missing in configuration")).DriveClient;
+                }
                 catch (Exception ex)
                 {
                     Console.Beep(4500, 1000); Console.Beep(5000, 1000); Console.Beep(5500, 1000);
-                    _logger.LogError(ex, $"Error while polling for new emails: {ex.Message}");
+                    _logger.LogError(ex, $"Error while polling for new emails: {ex.GetType().Name} - {ex.Message} ■");
                     await Task.Delay(TimeSpan.FromSeconds(Math.Min(pollingIntervalSeconds * 2, 300)), localCancellationToken); // Backoff on error
-                    _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(_configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("MicrosoftGraphClientId is missing in configuration")).DriveClient;
                 }
             } // while (!localCancellationToken.IsCancellationRequested)
 
@@ -236,6 +240,9 @@ public class Emailer2025
             {
                 soundPlayer1.PlaySync();
                 soundPlayer2.PlaySync();
+
+                if (localCancellationToken.IsCancellationRequested)
+                    return;
             }
 
             await Task.Delay(TimeSpan.FromSeconds(15), localCancellationToken);
