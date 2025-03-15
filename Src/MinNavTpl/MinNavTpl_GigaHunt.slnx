@@ -1,0 +1,76 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="ARM32" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="../../../AAV.Shared/Src/Db/Db.MinFinInv.PowerTools/Db.MinFinInv.PowerTools.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/Ambience/AmbienceLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/EfDbHelperLib/EfDbHelperLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/LibraryImportLib/LibraryImportLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/MsGraphLib/MsGraphLibVer1.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/NavigationDrawerControl/NavigationDrawerControl.csproj">
+    <Platform Solution="*|ARM32" Project="ARM32" />
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/PhoneAreaCoder/PhoneAreaCoder.csproj">
+    <Platform Solution="Debug|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/StandardContractsLib/StandardContractsLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/StandardLib/StandardLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AAV.Shared/Src/NetLts/WpfUserControlLib/WpfUserControlLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../AiGen/Sln1/MsGraphLibContract/MsGraphLibContract.csproj" />
+  <Project Path="../../../CI-DPL-IMP/Src/SharedLib/CI.LDAP.Lib/CI.LDAP.Lib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+    <Platform Solution="*|x86" Project="x86" />
+  </Project>
+  <Project Path="../../../GigaHunt/Src/sln/DB.QStats.Std/DB.QStats.Std.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../GigaHunt/Src/sln/Emailing.NET6/Emailing.NET6.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../Util/Src/GenderApiLib/GenderApiLib.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="../../../Util/Src/OpenVsOnTheCulpritLine/OpenVsOnTheCulpritLine.csproj">
+    <Platform Solution="Debug|x64" Project="x64" />
+  </Project>
+  <Project Path="MinNavTpl.Contract/MinNavTpl.Contract.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MinNavTpl.View.Spec/MinNavTpl.View.Spec.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MinNavTpl.View/MinNavTpl.View.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MinNavTpl.VM/MinNavTpl.VM.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MinNavTpl/MinNavTpl.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MsGraph.Email.ConsoleApp/MsGraph.Email.ConsoleApp.csproj" />
+  <Project Path="MsGraph.Email.WpfControlLibrary/MsGraph.Email.WpfControlLibrary.csproj" />
+  <Project Path="MsGraph.Email/MsGraph.Email.csproj" />
+</Solution>
