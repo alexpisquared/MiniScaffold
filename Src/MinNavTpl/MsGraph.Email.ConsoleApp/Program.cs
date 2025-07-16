@@ -190,7 +190,8 @@ while (true)
 static async Task SendInitialTestEmail(string emailAddress, Emailer2025 emailService)
 {
     Console.WriteLine($"{CYAN}Sending test email to {GREEN} {emailAddress} {RESET} ...");
-    _ = await emailService.Send(emailAddress, $"Subject: Rich HTML Test", emailBodyHtmlSample);
+    var (success, report) = await emailService.Send(emailAddress, $"Subject: Rich HTML Test", emailBodyHtmlSample);
+    Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}    {emailAddress}\n");
 }
 
 static async Task ListInboxItemsForEmail(string RESET, string GREEN, string RED, string emailAddress, Emailer2025 d)
