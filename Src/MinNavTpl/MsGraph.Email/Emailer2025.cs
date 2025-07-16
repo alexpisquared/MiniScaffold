@@ -16,7 +16,7 @@ public class Emailer2025
         _logger = lgr;
         _configuration = new ConfigurationBuilder().AddUserSecrets<Emailer2025>().Build();
 
-        var clientId = _configuration[$"{appReg}:ClientId"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
+        var clientId = _configuration[$"{appReg}:ClientId"] + "c03c03d0" ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
 
         _graphClient = new MsGraphLibVer1.MyGraphDriveServiceClient(clientId).DriveClient;       //new GraphServiceClient(new InteractiveBrowserCredential(new InteractiveBrowserCredentialOptions { TenantId = "consumers", ClientId = clientId, RedirectUri = new Uri("http://localhost") }), ["Mail.Send", "Mail.Send.Shared", "User.Read"]); // Important: Use "consumers" for personal accounts //tu: this one keeps being INTERACTIVE!!! ASKS FOR LOGIN EVERY TIME!!! even on OLD GOOD ONE: EmailAssistantAnyAndPersonal2.
     }
