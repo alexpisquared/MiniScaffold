@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using MsGraph.Email;
 
 const string RESET = "\u001b[0m";
@@ -6,164 +7,13 @@ const string GREEN = "\u001b[32m";
 const string RED = "\u001b[31m";
 const string CYAN = "\u001b[36m";
 const string DARKYELLOW = "\u001b[33m";
-const string emailAddress = "aPigida@cetaris.com";
-const string emailBodyHtmlSample =
-    """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #eef2f7;
-                margin: 0;
-                padding: 20px;
-                color: #333;
-            }
-            .container {
-                max-width: 700px;
-                margin: auto;
-                background: #ffffff;
-                border-radius: 12px;
-                box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
-                overflow: hidden;
-            }
-            .header {
-                background: linear-gradient(135deg, #4a90e2 0%, #50e3c2 100%);
-                color: white;
-                padding: 30px 20px;
-                text-align: center;
-            }
-            .header h1 {
-                margin: 0;
-                font-size: 28px;
-                font-weight: 600;
-            }
-            .content {
-                padding: 30px 40px;
-            }
-            .content h2 {
-                color: #2c3e50;
-                font-size: 22px;
-            }
-            .content p {
-                line-height: 1.7;
-                font-size: 16px;
-                color: #555;
-            }
-            .settings-table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 25px 0;
-            }
-            .settings-table th, .settings-table td {
-                border: 1px solid #dfe6e9;
-                padding: 15px;
-                text-align: left;
-            }
-            .settings-table th {
-                background-color: #f8f9fa;
-                color: #4a90e2;
-                font-size: 16px;
-                font-weight: 600;
-            }
-            .settings-table td {
-                font-size: 15px;
-                color: #2d3436;
-            }
-            .settings-table tr:nth-child(even) {
-                background-color: #fdfdfe;
-            }
-            .highlight {
-                color: #d9534f;
-                font-weight: bold;
-                font-style: italic;
-            }
-            .footer {
-                text-align: center;
-                padding: 25px;
-                font-size: 13px;
-                color: #888;
-                background-color: #f8f9fa;
-                border-top: 1px solid #dfe6e9;
-            }
-            .footer a {
-                color: #4a90e2;
-                text-decoration: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>Here is your SIM settings details</h1>
-            </div>
-            <div class="content">
-                <h2>Hello [Customer Name],</h2>
-                <p>Thank you for choosing our service! As requested, here are the configuration details for your new SIM card. Please use the following settings to set up your device for data and MMS access.</p>
-                
-                <table class="settings-table">
-                    <thead>
-                        <tr>
-                            <th>Setting</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>APN (Access Point Name)</td>
-                            <td>global.internet.com</td>
-                        </tr>
-                        <tr>
-                            <td>Username</td>
-                            <td>[Your Username]</td>
-                        </tr>
-                        <tr>
-                            <td>Password</td>
-                            <td><span class="highlight">Please see secure message</span></td>
-                        </tr>
-                        <tr>
-                            <td>MMSC</td>
-                            <td>http://mms.service.com/mms/wapenc</td>
-                        </tr>
-                        <tr>
-                            <td>MMS Proxy</td>
-                            <td>10.100.1.1</td>
-                        </tr>
-                        <tr>
-                            <td>MMS Port</td>
-                            <td>8080</td>
-                        </tr>
-                         <tr>
-                            <td>MCC (Mobile Country Code)</td>
-                            <td>310</td>
-                        </tr>
-                         <tr>
-                            <td>MNC (Mobile Network Code)</td>
-                            <td>260</td>
-                        </tr>
-                    </tbody>
-                </table>
 
-                <p>If you experience any issues, our support team is ready to help. You can reach us 24/7 via our <a href="#">Support Portal</a> or by calling 1-800-555-GIGA.</p>
-                <p>Best regards,<br><strong>The Connectivity Team</strong></p>
-            </div>
-            <div class="footer">
-                &copy; 2024 GigaConnect Inc. All rights reserved.<br>
-                <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-            </div>
-        </div>
-    </body>
-    </html>
-    """;
+ILogger logger = LoggerFactory.Create(builder => { _ = builder.AddConsole(); }).CreateLogger<Program>();
 
-using var loggerFactory = LoggerFactory.Create(builder => { _ = builder.AddConsole(); });
-
-ILogger logger = loggerFactory.CreateLogger<Program>();
-
-var emailService = new Emailer2025(logger);
+var _configuration = new ConfigurationBuilder().AddUserSecrets<Program>().Build();
+var _emailBodyHtml = _configuration[$"EmailDetails:emailBodyHtml"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
+var _emailAddress = _configuration[$"EmailDetails:emailAddress"] ?? throw new InvalidOperationException("¦·MicrosoftGraphClientId is missing in configuration");
+var _emailService = new Emailer2025(logger);
 
 while (true)
 {
@@ -179,18 +29,18 @@ while (true)
 
     switch (keyInfo.Key)
     {
-        case ConsoleKey.S: await SendInitialTestEmail(emailAddress, emailService); break;
-        case ConsoleKey.L: await ListInboxItemsForEmail(RESET, GREEN, RED, emailAddress, emailService); break;
-        case ConsoleKey.W: await WaitForNewEmailAndNotify(RESET, GREEN, RED, CYAN, emailService); break;
+        case ConsoleKey.S: await SendInitialTestEmail(_emailAddress, _emailBodyHtml, _emailService); break;
+        case ConsoleKey.L: await ListInboxItemsForEmail(RESET, GREEN, RED, _emailAddress, _emailService); break;
+        case ConsoleKey.W: await WaitForNewEmailAndNotify(RESET, GREEN, RED, CYAN, _emailService); break;
         case ConsoleKey.Escape: Console.WriteLine($"{GREEN}Done!{RESET}"); return;
         default: Console.WriteLine($"{RED}Invalid option. Please try again.{RESET}"); break;
     }
 }
 
-static async Task SendInitialTestEmail(string emailAddress, Emailer2025 emailService)
+static async Task SendInitialTestEmail(string emailAddress, string emailBodyHtmlSample, Emailer2025 emailService)
 {
     Console.WriteLine($"{CYAN}Sending test email to {GREEN} {emailAddress} {RESET} ...");
-    var (success, report) = await emailService.Send(emailAddress, $"Subject: Rich HTML Test", emailBodyHtmlSample);
+    var (success, report) = await emailService.Send(emailAddress, $"Subject: Rich HTML Test ▀▄▀▄▀▄▀▄", emailBodyHtmlSample);
     Console.WriteLine($"{(success ? $"{GREEN}Success:{RESET}" : $"{RED}FAILED!{RESET}")}   {report}    {emailAddress}\n");
 }
 
@@ -218,3 +68,12 @@ static async Task WaitForNewEmailAndNotify(string RESET, string GREEN, string RE
         Console.WriteLine($"{RED}Error: {ex.Message}{RESET}");
     }
 }
+/*
+{
+  "EmailDetails": {
+    "emailAddress": "aPigida@cetaris.com",
+    "emailBodyHtml": "<!DOCTYPE html>\n<html lang='en'>\n<head>\n    <meta charset='UTF-8'>\n    <meta name='viewport' content='width=device-width, initial-scale=1.0'>\n    <style>\n        body {\n            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n            background-color: #eef2f7;\n            margin: 0;\n            padding: 20px;\n            color: #333;\n        }\n        .container {\n            max-width: 700px;\n            margin: auto;\n            background: #ffffff;\n            border-radius: 12px;\n            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);\n            overflow: hidden;\n        }\n        .header {\n            background: linear-gradient(135deg, #4a90e2 0%, #50e3c2 100%);\n            color: white;\n            padding: 30px 20px;\n            text-align: center;\n        }\n        .header h1 {\n            margin: 0;\n            font-size: 28px;\n            font-weight: 600;\n        }\n        .content {\n            padding: 30px 40px;\n        }\n        .content h2 {\n            color: #2c3e50;\n            font-size: 22px;\n        }\n        .content p {\n            line-height: 1.7;\n            font-size: 16px;\n            color: #555;\n        }\n        .settings-table {\n            width: 100%;\n            border-collapse: collapse;\n            margin: 25px 0;\n        }\n        .settings-table th, .settings-table td {\n            border: 1px solid #dfe6e9;\n            padding: 15px;\n            text-align: left;\n        }\n        .settings-table th {\n            background-color: #f8f9fa;\n            color: #4a90e2;\n            font-size: 16px;\n            font-weight: 600;\n        }\n        .settings-table td {\n            font-size: 15px;\n            color: #2d3436;\n        }\n        .settings-table tr:nth-child(even) {\n            background-color: #fdfdfe;\n        }\n        .highlight {\n            color: #d9534f;\n            font-weight: bold;\n            font-style: italic;\n        }\n        .footer {\n            text-align: center;\n            padding: 25px;\n            font-size: 13px;\n            color: #888;\n            background-color: #f8f9fa;\n            border-top: 1px solid #dfe6e9;\n        }\n        .footer a {\n            color: #4a90e2;\n            text-decoration: none;\n        }\n    </style>\n</head>\n<body>\n    <div class='container'>\n        <div class='header'>\n            <h1>Here is your SIM settings details</h1>\n        </div>\n        <div class='content'>\n            <h2>Hello [Customer Name],</h2>\n            <p>Thank you for choosing our service! As requested, here are the configuration details for your new SIM card. Please use the following settings to set up your device for data and MMS access.</p>\n            \n            <table class='settings-table'>\n                <thead>\n                    <tr>\n                        <th>Setting</th>\n                        <th>Value</th>\n                    </tr>\n                </thead>\n                <tbody>\n                    <tr>\n                        <td>APN (Access Point Name)</td>\n                        <td>global.internet.com</td>\n                    </tr>\n                    <tr>\n                        <td>Username</td>\n                        <td>[Your Username]</td>\n                    </tr>\n                    <tr>\n                        <td>Password</td>\n                        <td><span class='highlight'>Please see secure message</span></td>\n                    </tr>\n                    <tr>\n                        <td>MMSC</td>\n                        <td>http://mms.service.com/mms/wapenc</td>\n                    </tr>\n                    <tr>\n                        <td>MMS Proxy</td>\n                        <td>10.100.1.1</td>\n                    </tr>\n                    <tr>\n                        <td>MMS Port</td>\n                        <td>8080</td>\n                    </tr>\n                     <tr>\n                        <td>MCC (Mobile Country Code)</td>\n                        <td>310</td>\n                    </tr>\n                     <tr>\n                        <td>MNC (Mobile Network Code)</td>\n                        <td>260</td>\n                    </tr>\n                </tbody>\n            </table>\n\n            <p>If you experience any issues, our support team is ready to help. You can reach us 24/7 via our <a href='#'>Support Portal</a> or by calling 1-800-555-GIGA.</p>\n            <p>Best regards,<br><strong>The Connectivity Team</strong></p>\n        </div>\n        <div class='footer'>\n            &copy; 2024 GigaConnect Inc. All rights reserved.<br>\n            <a href='#'>Privacy Policy</a> | <a href='#'>Terms of Service</a>\n        </div>\n    </div>\n</body>\n</html>"
+  },
+  "WhereAmI": "MsGraph.Email.ConsoleApp.csProj"
+}
+*/
