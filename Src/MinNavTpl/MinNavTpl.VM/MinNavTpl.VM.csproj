@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net9.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
@@ -9,20 +8,18 @@
     <Platforms>AnyCPU;x64</Platforms>
     <UserSecretsId>6d6a2d4a-6bcc-4bc8-ad84-90ffd8ecc772</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-    <PackageReference Include="CsvHelper" Version="33.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.2" />
-    <PackageReference Include="AutoMapper" Version="14.0.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.13.2">
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+    <PackageReference Include="AutoMapper" Version="16.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.14.15">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+    <PackageReference Include="System.Text.Json" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\Db\Db.MinFinInv.PowerTools\Db.MinFinInv.PowerTools.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\EfDbHelperLib\EfDbHelperLib.csproj" />
@@ -34,5 +31,4 @@
     <ProjectReference Include="..\..\..\..\Util\Src\GenderApiLib\GenderApiLib.csproj" />
     <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
   </ItemGroup>
-
 </Project>

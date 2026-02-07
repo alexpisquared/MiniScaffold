@@ -1,18 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net9.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+    <PackageReference Include="System.Text.Json" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\NavigationDrawerControl\NavigationDrawerControl.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
@@ -20,7 +17,6 @@
     <ProjectReference Include="..\MinNavTpl.Contract\MinNavTpl.Contract.csproj" />
     <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Page06View.xaml.cs">
       <SubType>Code</SubType>
@@ -29,7 +25,6 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <Page Update="EmailDetailView.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
@@ -45,5 +40,4 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-
 </Project>

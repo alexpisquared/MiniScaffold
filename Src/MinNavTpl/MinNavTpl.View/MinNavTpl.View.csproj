@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net9.0-windows8.0</TargetFramework>
+    <TargetFramework>net10.0-windows8.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="Assets\Box-blue-Info.ico" />
     <None Remove="Assets\Box-blue.ico" />
@@ -21,19 +19,17 @@
     <None Remove="Assets\Excel_16x16.png" />
     <None Remove="Assets\Save.png" />
   </ItemGroup>
-
   <ItemGroup>
     <!--
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     -->
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
     <PackageReference Include="SimpleModal.WPF" Version="1.0.0" />
-    <PackageReference Include="PasswordBoxMVVM" Version="1.0.5" />
+    <PackageReference Include="PasswordBoxMVVM" Version="2.0.0" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
-    <PackageReference Include="System.Text.Json" Version="9.0.2" />
+    <PackageReference Include="System.Text.Json" Version="10.0.2" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\NavigationDrawerControl\NavigationDrawerControl.csproj" />
     <ProjectReference Include="..\..\..\..\AAV.Shared\Src\NetLts\StandardContractsLib\StandardContractsLib.csproj" />
@@ -42,7 +38,6 @@
     <ProjectReference Include="..\MinNavTpl.View.Spec\MinNavTpl.View.Spec.csproj" />
     <ProjectReference Include="..\MinNavTpl.VM\MinNavTpl.VM.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <Resource Include="Assets\Box-blue-Info.ico" />
     <Resource Include="Assets\Box-blue.ico" />
@@ -56,9 +51,7 @@
     <Resource Include="Assets\Excel_16x16.png" />
     <Resource Include="Assets\Save.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Folder Include="Spec\" />
   </ItemGroup>
-
 </Project>

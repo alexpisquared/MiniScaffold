@@ -1,31 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net9.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
     <Nullable>enable</Nullable>
     <UseWinUI>true</UseWinUI>
     <EnableMsixTooling>true</EnableMsixTooling>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.3.230602002" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="2.0.9" />
-    <PackageReference Include="WinUIEx" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.2" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.1" />
+    <PackageReference Include="WinUIEx" Version="2.9.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\QStatsTS4WinUI.Behaviors\QStatsTS4WinUI.Behaviors.csproj" />
     <ProjectReference Include="..\QStatsTS4WinUI.Contracts\QStatsTS4WinUI.Contracts.csproj" />
     <ProjectReference Include="..\QStatsTS4WinUI.ViewModels\QStatsTS4WinUI.ViewModels.csproj" />
   </ItemGroup>
-
   <ItemGroup>
     <None Remove="BlankPage.xaml" />
     <None Remove="ContentGridDetailPage.xaml" />
@@ -37,7 +33,6 @@
     <None Remove="ListDetailsDetailControl.xaml" />
     <None Remove="ListDetailsPage.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <Page Update="Blank1Page.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
@@ -72,5 +67,4 @@
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
-
 </Project>
