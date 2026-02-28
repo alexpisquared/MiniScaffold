@@ -13,7 +13,7 @@
     <Content Include="MailBroadCast.FullCircle.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.17.1" />
+    <PackageReference Include="Azure.Identity" Version="1.18.0" />
     <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.48.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.3">
       <PrivateAssets>all</PrivateAssets>
