@@ -25,7 +25,7 @@
     <!--   ^^ needed here!!!
     <PackageReference Include="Microsoft.Office.Core" Version="12.0.0" />       seems OK without
     -->
-    <PackageReference Include="Microsoft.Identity.Client" Version="4.82.1" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.83.0" />
     <PackageReference Include="System.Formats.Asn1" Version="10.0.3" />
     <PackageReference Include="System.Private.Uri" Version="4.3.2" />
     <PackageReference Include="System.Text.Json" Version="10.0.3" />
