@@ -9,7 +9,7 @@
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\GigaHunt\Src\sln\DB.QStats.Std\DB.QStats.Std.csproj" />
