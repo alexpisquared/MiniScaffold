@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.1.3" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.WinUI.Managed" Version="3.0.1" />
-    <PackageReference Include="WinUIEx" Version="2.9.0" />
+    <PackageReference Include="WinUIEx" Version="2.9.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\QStatsTS4WinUI.Behaviors\QStatsTS4WinUI.Behaviors.csproj" />
