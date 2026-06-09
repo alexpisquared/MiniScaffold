@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="10.0.8" />
-    <PackageReference Include="Microsoft.Graph" Version="6.1.0" />
+    <PackageReference Include="Microsoft.Graph" Version="6.2.0" />
     <PackageReference Include="Azure.Identity" Version="1.21.0" />
     <PackageReference Include="System.Windows.Extensions" Version="10.0.8" />
   </ItemGroup>
