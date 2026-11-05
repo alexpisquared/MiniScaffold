@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <!--<TargetFramework>net11.0</TargetFramework>  <<<<<< :nogo!!! -->
     <TargetFramework>net11.0-windows8.010.0.19041.0</TargetFramework>
@@ -11,8 +11,8 @@
     <!--<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />-->
-    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.14" />
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
     <!--
     <PackageReference Include="WinUIEx" Version="1.8.0" />-->
   </ItemGroup>
