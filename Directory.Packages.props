@@ -9,7 +9,7 @@
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Animations" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
     <PackageVersion Include="CommunityToolkit.WinUI.UI.Controls.DataGrid" Version="7.1.2" />
-    <PackageVersion Include="CsvHelper" Version="34.0.0" />
+    <PackageVersion Include="CsvHelper" Version="34.1.0" />
     <PackageVersion Include="Microsoft.CognitiveServices.Speech" Version="1.53.1" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="11.0.0" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0" />
